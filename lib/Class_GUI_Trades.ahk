@@ -1304,80 +1304,17 @@
 
 		GuiControlGet, hiddenInfosWall, ,% GuiTrades_Controls["hTEXT_HiddenTradeInfos" tabName]
 
-		hiddenInfosArr := {}
+		tabInfos := {}
 		Loop, Parse, hiddenInfosWall, `n, `r
 		{
-			if RegExMatch(A_LoopField, "O)Buyer:" A_Tab "(.*)", buyerPat)
-				hiddenInfosArr.Buyer := buyerPat.1
-			else if RegExMatch(A_LoopField, "O)Item:" A_Tab "(.*)", itemPat)
-				hiddenInfosArr.Item := itemPat.1
-			else if RegExMatch(A_LoopField, "O)Price:" A_Tab "(.*)", pricePat)
-				hiddenInfosArr.Price := pricePat.1
-			else if RegExMatch(A_LoopField, "O)Stash:" A_Tab "(.*)", stashPat)
-				hiddenInfosArr.Stash := stashPat.1
-			else if RegExMatch(A_LoopField, "O)Time:" A_Tab "(.*)", timePat)
-				hiddenInfosArr.Time := timePat.1
-			else if RegExMatch(A_LoopField, "O)BuyerGuild:" A_Tab "(.*)", buyerGuildPat)
-				hiddenInfosArr.BuyerGuild := buyerGuildPat.1
-			else if RegExMatch(A_LoopField, "O)TimeStamp:" A_Tab "(.*)", timeStampPat)
-				hiddenInfosArr.TimeStamp := timeStampPat.1
-			else if RegExMatch(A_LoopField, "O)PID:" A_Tab "(.*)", pidPat)
-				hiddenInfosArr.PID := pidPat.1
-			else if RegExMatch(A_LoopField, "O)IsInArea:" A_Tab "(.*)", isInAreaPat)
-				hiddenInfosArr.IsInArea := isInAreaPat.1
-			else if RegExMatch(A_LoopField, "O)HasNewMessage:" A_Tab "(.*)", hasNewMessagePat)
-				hiddenInfosArr.HasNewMessage := hasNewMessagePat.1
-			else if RegExMatch(A_LoopField, "O)WithdrawTally:" A_Tab "(.*)", withdrawTallyPat)
-				hiddenInfosArr.WithdrawTally := withdrawTallyPat.1
-			else if RegExMatch(A_LoopField, "O)ItemName:" A_Tab "(.*)", itemNamePat)
-				hiddenInfosArr.ItemName := itemNamePat.1
-			else if RegExMatch(A_LoopField, "O)ItemLevel:" A_Tab "(.*)", itemLevelPat)
-				hiddenInfosArr.ItemLevel := itemLevelPat.1
-			else if RegExMatch(A_LoopField, "O)ItemQuality:" A_Tab "(.*)", itemQualityPat)
-				hiddenInfosArr.ItemQuality := itemQualityPat.1
-			else if RegExMatch(A_LoopField, "O)StashLeague:" A_Tab "(.*)", stashLeaguePat)
-				hiddenInfosArr.StashLeague := stashLeaguePat.1
-			else if RegExMatch(A_LoopField, "O)StashTab:" A_Tab "(.*)", stashTabPat)
-				hiddenInfosArr.StashTab := stashTabPat.1
-			else if RegExMatch(A_LoopField, "O)StashPosition:" A_Tab "(.*)", stashPositionPat)
-				hiddenInfosArr.StashPosition := stashPositionPat.1
-			else if RegExMatch(A_LoopField, "O)TimeYear:" A_Tab "(.*)", timeYearPat)
-				hiddenInfosArr.TimeYear := timeYearPat.1
-			else if RegExMatch(A_LoopField, "O)TimeMonth:" A_Tab "(.*)", timeMonthPat)
-				hiddenInfosArr.TimeMonth := timeMonthPat.1
-			else if RegExMatch(A_LoopField, "O)TimeDay:" A_Tab "(.*)", timeDayPat)
-				hiddenInfosArr.TimeDay := timeDayPat.1
-			else if RegExMatch(A_LoopField, "O)TimeHour:" A_Tab "(.*)", timeHourPat)
-				hiddenInfosArr.TimeHour := timeHourPat.1
-			else if RegExMatch(A_LoopField, "O)TimeMinute:" A_Tab "(.*)", timeMinPat)
-				hiddenInfosArr.TimeMinute := timeMinPat.1
-			else if RegExMatch(A_LoopField, "O)TimeSecond:" A_Tab "(.*)", timeSecPat)
-				hiddenInfosArr.TimeSecond := timeSecPat.1
-			else if RegExMatch(A_LoopField, "O)UniqueID:" A_Tab "(.*)", uniqueIDPat)
-				hiddenInfosArr.UniqueID := uniqueIDPat.1
-			else if RegExMatch(A_LoopField, "O)TradeVerify:" A_Tab "(.*)", tradeVerifyPat)
-				hiddenInfosArr.TradeVerify := tradeVerifyPat.1
-			else if RegExMatch(A_LoopField, "O)WhisperSite:" A_Tab "(.*)", whisperSitePat)
-				hiddenInfosArr.WhisperSite := whisperSitePat.1
-			else if RegExMatch(A_LoopField, "O)TradeVerifyInfos:" A_Tab "(.*)", tradeVerifyInfosPat)
-				hiddenInfosArr.TradeVerifyInfos := tradeVerifyInfosPat.1
-			else if RegExMatch(A_LoopField, "O)IsBuyerInvited:" A_Tab "(.*)", isBuyerInvitedPat)
-				hiddenInfosArr.IsBuyerInvited := isBuyerInvitedPat.1
-			else if RegExMatch(A_LoopField, "O)WhisperLang:" A_Tab "(.*)", whisperLangPat)
-				hiddenInfosArr.WhisperLang := whisperLangPat.1
-			else if RegExMatch(A_LoopField, "O)Other:" A_Tab "(.*)", otherPat) 
-				hiddenInfosArr.Other := otherPat.1
-			else if RegExMatch(A_LoopField, "O)OtherFull:" A_Tab "(.*)", otherFullPat) {
-				hiddenInfosArr.OtherFull := StrReplace(otherFullPat.1, "`n", "\n")
-				hiddenInfosArr.OtherFull := StrReplace(hiddenInfosArr.OtherFull, "`r", "\n")
+			if RegExMatch(A_LoopField, "O)(.*?):(.*)", matchPat) {
+				matchKey := matchPat.1, matchValue := matchPat.2
+				AutoTrimStr(matchKey, matchValue)
+				tabInfos[matchKey] := matchValue
 			}
 		}
 
-		tabContent := {}
-		for key, value in hiddenInfosArr
-			tabContent[key] := value
-
-		return tabContent
+		return tabInfos
 	}
 
 	SetTabContent(tabName, tabInfos="", isNewlyPushed=False, updateOnly=False, replaceTab=False) {
@@ -1390,108 +1327,73 @@
 		}
 
 		cTabCont := GUI_Trades.GetTabContent(tabName)
+		merged := ObjMerge(cTabCont, tabInfos), allSlots := ""
+		for key, value in merged
+			allSlots .= "," key
+		if ( SubStr(allSlots, 1, 1) = "," )
+			StringTrimLeft, allSlots, allSlots, 1
 
-		newTabBuyer 		:= updateOnly && !tabInfos.Buyer ? cTabCont.Buyer : tabInfos.Buyer
-		newTabItem 			:= updateOnly && !tabInfos.Item ? cTabCont.Item : tabInfos.Item
-		newTabPrice 		:= updateOnly && !tabInfos.Price ? cTabCont.Price : tabInfos.Price
-		newTabStash 		:= updateOnly && !tabInfos.Stash ? cTabCont.Stash : tabInfos.Stash
-		newTabOtherFull		:= updateOnly && !tabInfos.OtherFull ? cTabCont.OtherFull : tabInfos.OtherFull
-		newTabOtherFull		:= StrReplace(newTabOtherFull, "`n", "\n"), newTabOtherFull := StrReplace(newTabOtherFull, "`r", "\n")
-		; newTabOther 		:= RegExMatch( StrSplit(newTabOtherFull, "\n").1 , "O)\[\d+\:\d+\] \@(?:To|From)\: (.*)", outPat), newTabOther := outPat.1
-		numberOfMsgs := 0
-		otherSplit := StrSplit(newTabOtherFull, "\n"), numberOfMsgs := otherSplit.MaxIndex()
-		if (numberOfMsgs = 0 || numberOfMsgs=1 || numberOfMsgs="")
-			RegExMatch( StrSplit(newTabOtherFull, "\n").1 , "O)\[\d+\:\d+\] \@(?:To|From)\: (.*)", outPat), newTabOther := outPat.1
-		else
-			newTabOther 	:= numberOfMsgs " total messages. Click here to see."
+		for key,value in cTabCont
+			slots1 .= "," key
+		for key,value in tabInfos
+			slots2 .= "," key
 
-		newTabBuyerGuild	:= updateOnly && !tabInfos.BuyerGuild ? cTabCont.BuyerGuild : tabInfos.BuyerGuild
-		newTabTimeStamp 	:= updateOnly && !tabInfos.TimeStamp ? cTabCont.TimeStamp : tabInfos.TimeStamp
-		newTabPID 			:= updateOnly && !tabInfos.PID ? cTabCont.PID : tabInfos.PID
-		newTabIsInArea 		:= updateOnly && !tabInfos.IsInArea ? cTabCont.IsInArea : tabInfos.IsInArea
-		newTabHasNewMessage := updateOnly && !tabInfos.HasNewMessage ? cTabCont.HasNewMessage : tabInfos.HasNewMessage
-		newTabWithdrawTally := updateOnly && !tabInfos.WithdrawTally ? cTabCont.WithdrawTally : tabInfos.WithdrawTally
-		newTimeReceived 	:= updateOnly && !tabInfos.Time ? cTabCont.Time : tabInfos.Time
+		newContent := {}
+		Loop, Parse, allSlots,% ","
+		{
+			loopedKey := A_LoopField
+			currentValue := cTabCont[loopedKey]
+			newValue := tabInfos[loopedKey]
 
-		if RegExMatch(newTabStash, "O)(.*)\(Tab:(.*) / Pos:(.*)\)", newTabStashPat)
-			stashLeague := newTabStashPat.1, stashTab := newTabStashPat.2, stashPosition := newTabStashPat.3
-		else
-			stashLeague := newTabStash
+			finalValue := updateOnly && !newValue ? currentValue : newValue
+			AutoTrimStr(finalValue)
+			newContent[loopedKey] := finalValue
 
-		if RegExMatch(newTabItem, "O)(.*)\(Lvl:(.*) / Qual:(.*)\)", itemPat) { ; quality gem, get only gem name
-			itemName := itemPat.1, itemLevel := itemPat.2, itemQuality := itemPat.3
+			txt .= "Key: " loopedKey
+			. "`nCurrent: " currentValue
+			. "`nNew: " newValue
+			. "`nFinal: "  finalValue
+			. "`nUpdateOnly: " updateOnly
+			. "`n`n"
 		}
-		else if RegExMatch(newTabItem, "O)(.*)\(T(\d+)\)", itemPat) { ; map item, get only map name
-			itemName := itemPat.1, itemLevel := itemPat.2
-		}
-		else
-			itemName := newTabItem
+		if (newContent.OtherFull) { 
+			newOtherFull := StrReplace(newContent.OtherFull, "`n", "\n"), newOtherFull := StrReplace(newOtherFull, "`r", "\n")
+			numberOfMsgs := 0
+			otherSplit := StrSplit(newOtherFull, "\n"), numberOfMsgs := otherSplit.MaxIndex()
+			if (numberOfMsgs = 0 || numberOfMsgs=1 || numberOfMsgs="")
+				RegExMatch( StrSplit(newOtherFull, "\n").1 , "O)\[\d+\:\d+\] \@(?:To|From)\: (.*)", outPat), newOther := outPat.1
+			else
+				newOther := numberOfMsgs " total messages. Click here to see."
 
-		if RegExMatch(newTabTimeStamp, "O)(.*)/(.*)/(.*) (.*):(.*):(.*)", timeStampPat) {
-			timeYear := timeStampPat.1, timeMonth := timeStampPat.2, timeDay := timeStampPat.3
-			timeHour := timeStampPat.4, timeMin := timeStampPat.5, timeSec := timeStampPat.6
+			AutoTrimStr(newOtherFull, newOther)
+			newContent.OtherFull := newOtherFull, newContent.Other := newOther
 		}
-
-		newTabItemName 		:= updateOnly && !tabInfos.ItemName ? cTabCont.ItemName : itemName
-		newTabItemLevel 	:= updateOnly && !tabInfos.ItemLevel ? cTabCont.ItemLevel : itemLevel
-		newTabItemQuality 	:= updateOnly && !tabInfos.ItemQuality ? cTabCont.ItemQuality : itemQuality
-		newTabStashLeague 	:= updateOnly && !tabInfos.StashLeague ? cTabCont.StashLeague : stashLeague
-		newTaStashTab 		:= updateOnly && !tabInfos.StashTab ? cTabCont.StashTab : stashTab
-		newTabStashPosition := updateOnly && !tabInfos.StashPosition ? cTabCont.StashPosition : stashPosition
-		newTabUniqueID 		:= updateOnly && !tabInfos.UniqueID ? cTabCont.UniqueID : tabInfos.UniqueID
-		newTradeVerify 		:= updateOnly && !tabInfos.TradeVerify ? cTabCont.TradeVerify : tabInfos.TradeVerify
-		newWhisperSite 		:= updateOnly && !tabInfos.WhisperSite ? cTabCont.WhisperSite : tabInfos.WhisperSite
-		newTradeVerifyInfos := updateOnly && !tabInfos.TradeVerifyInfos ? cTabCont.TradeVerifyInfos : tabInfos.TradeVerifyInfos
-		newIsBuyerInvited 	:= updateOnly && !tabInfos.IsBuyerInvited ? cTabCont.IsBuyerInvited : tabInfos.IsBuyerInvited
-		newWhisperLang 		:= updateOnly && !tabInfos.WhisperLang ? cTabCont.WhisperLang : tabInfos.WhisperLang
 		
-		AutoTrimStr(newTabBuyer, newTabItem, newTabPrice, newTabStash, newTabOther, newTabBuyerGuild, newTabTimeStamp, newTabPID, newTabIsInArea, newTabHasNewMessage)
-		AutoTrimStr(newTabWithdrawTally, newTabItemName, newTabItemLevel, newTabItemQuality, newTabStashLeague, newTabStashTab, newTabStashPosition)
-		AutoTrimStr(newTabUniqueID, newTradeVerify, newWhisperSite, newTradeVerifyInfos, newIsBuyerInvited, newWhisperLang, newTimeReceived)
-				
-		hiddenInfosWall := ""
-		.		"Buyer:"			A_Tab newTabBuyer
-		. "`n"	"Item:"		 		A_Tab newTabItem
-		. "`n"	"Price:"			A_Tab newTabPrice
-		. "`n"	"Stash:"	 		A_Tab newTabStash
-		. "`n"	"Other:"	 		A_Tab newTabOther
-		. "`n"	"OtherFull:"	 	A_Tab newTabOtherFull
-		. "`n"	"Time:"				A_Tab newTimeReceived
-		. "`n"	"BuyerGuild:"		A_Tab newTabBuyerGuild
-		. "`n" 	"TimeStamp:"		A_Tab newTabTimeStamp
-		. "`n" 	"PID:"				A_Tab newTabPID
-		. "`n" 	"IsInArea:"	 		A_Tab newTabIsInArea
-		. "`n" 	"HasNewMessage:"	A_Tab newTabHasNewMessage
-		. "`n" 	"WithdrawTally:"	A_Tab newTabWithdrawTally
-		. "`n"	"ItemName:"			A_Tab newTabItemName
-		. "`n"	"ItemLevel:"		A_Tab newTabItemLevel
-		. "`n"	"ItemQuality:"		A_Tab newTabItemQuality
-		. "`n"	"StashLeague:"		A_Tab newTabStashLeague
-		. "`n"	"StashTab:"			A_Tab newTaStashTab
-		. "`n"	"StashPosition:"	A_Tab newTabStashPosition
-		. "`n"	"TimeYear:"			A_Tab timeYear
-		. "`n"	"TimeMonth:"		A_Tab timeMonth
-		. "`n"	"TimeDay:"			A_Tab timeDay
-		. "`n"	"TimeHour:"			A_Tab timeHour
-		. "`n"	"TimeMinute:"		A_Tab timeMin
-		. "`n"	"TimeSecond:"		A_Tab timeSec
-		. "`n"	"UniqueID:"			A_Tab newTabUniqueID
-		. "`n"	"TradeVerify:"		A_Tab newTradeVerify
-		. "`n"	"WhisperSite:"		A_Tab newWhisperSite
-		. "`n" 	"TradeVerifyInfos:"	A_Tab newTradeVerifyInfos
-		. "`n" 	"IsBuyerInvited:"	A_Tab newIsBuyerInvited
-		. "`n" 	"WhisperLang:"		A_Tab newWhisperLang
-
+		infosTxtWall := ""
+		for key, value in newContent
+			infosTxtWall .= "`n" key ":" value
+		if ( SubStr(infosTxtWall, 1, 1) = "`n" )
+			StringTrimLeft, infosTxtWall, infosTxtWall, 1
+		
+		visibleBuyer := newContent.Buyer
+		visibleItem := newContent.GemLevel && newContent.GemQuality ? newContent.Item " Lvl " newContent.GemLevle " " newContent.GemQuality "%)"
+			: newContent.GemLevel && !newContent.GemQuality ? newContent.Item " (Lvl " newContent.GemLevel ")"
+			: !newContent.GemLevel && newContent.GemQuality ? newContent.Item " (" newContent.GemQuality "%)"
+			: newContent.Item
+		visiblePrice := newContent.PriceCount " " newContent.PriceCurrency
+		visibleStash := newContent.StashTab ? newContent.StashTab " (" newContent.StashX "," newContent.tradeStashY ")"
+		visibleOther := newContent.Other
+			
 		visibleText := ""
-		. 		"Buyer:`t" newTabBuyer
-		. "`n" 	"Item:`t" newTabItem
-		. "`n"	"Price:`t" newTabPrice
-		. "`n"	"Stash:`t" newTabStash
-		. "`n"	"Other:`t" newTabOther
+		. 		"Buyer:`t" visibleBuyer
+		. "`n" 	"Item:`t" visibleItem
+		. "`n"	"Price:`t" visiblePrice
+		. "`n"	"Stash:`t" visibleStash
+		. "`n"	"Other:`t" visibleOther
 
 		GuiControl, Trades:,% GuiTrades_Controls["hTEXT_TradeInfos" tabName],% visibleText
-		GuiControl, Trades:,% GuiTrades_Controls["hTEXT_TradeReceivedTime" tabName],% newTimeReceived
-		GuiControl, Trades:,% GuiTrades_Controls["hTEXT_HiddenTradeInfos" tabName],% hiddenInfosWall
+		GuiControl, Trades:,% GuiTrades_Controls["hTEXT_TradeReceivedTime" tabName],% newContent.TimeReceived
+		GuiControl, Trades:,% GuiTrades_Controls["hTEXT_HiddenTradeInfos" tabName],% infosTxtWall
 
 		if (updateOnly=False && newTradeVerify)
 			GUI_Trades.SetTabVerifyColor(tabName, newTradeVerify)

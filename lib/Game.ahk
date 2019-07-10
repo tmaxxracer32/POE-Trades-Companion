@@ -700,20 +700,30 @@ Parse_GameLogs(strToParse) {
 			: (tradeLeague && tradeStashTab)?(tradeLeague " (Tab:" tradeStashTab " / Pos:" tradeStashLeftAndTop ")")
 			: (!tradeLeague && tradeStashTab) ? ("??? (Tab:" tradeStashTab " / Pos:" tradeStashLeftAndTop ")")
 			: (!tradeLeague) ? ("???")
-			: ("ERROR")
+			: ("")
 
-			timeStamp := A_YYYY "/" A_MM "/" A_DD " " A_Hour ":" A_Min ":" A_Sec
+			tradeLocation := (tradeLeague && !tradeStashTab)?(tradeLeague)
+			: (tradeLeague && tradeStashTab)?(tradeLeague " (Tab:" tradeStashTab " / Pos:" tradeStashLeftAndTop ")")
+			: (!tradeLeague && tradeStashTab) ? ("??? (Tab:" tradeStashTab " / Pos:" tradeStashLeftAndTop ")")
+			: (!tradeLeague) ? ("???")
+			: ("")
 
 			if (isWhisperReceived=True) {
-				currencyInfos := Get_CurrencyInfos(tradePrice, dontWriteLogs:=False)
-				currencyName := currencyInfos.Is_Listed?currencyInfos.Name : tradePrice
-				currencyCount := RegExReplace(tradePrice, "\D")
-				tradePrice := currencyInfos.Is_Listed ? currencyCount " " currencyName : tradePrice
-				tradeOther := tradeOther?"[" A_Hour ":" A_Min "] @From: " tradeOther : ""
+				RegExMatch(tradePrice, "O)(\d+.\d+|\d+) (.*)", tradePricePat), currencyCount := tradePricePat.1, currencyName := tradePricePat.2
+				currencyInfos := Get_CurrencyInfos(currencyName, dontWriteLogs:=False)
+				currencyName := currencyInfos.Is_Listed?currencyInfos.Name : currencyName	
+				tradeOther := tradeOther?"[" A_Hour ":" A_Min "] @From: " tradeOther : ""	
 				
-				tradeInfos := {Buyer:tradeBuyerName, Item:tradeItemFull, Price:tradePrice, Stash:tradeStashFull, OtherFull:tradeOther
-					,BuyerGuild:tradeBuyerGuild, TimeStamp:timeStamp,PID:instancePID, IsInArea:False, HasNewMessage:False, WithdrawTally:0, Time: A_Hour ":" A_Min
-					,WhisperSite:tradeRegExName, UniqueID:GUI_Trades.GenerateUniqueID(), TradeVerify:"Grey", WhisperLang:whisperLang}
+				tradeInfos := {Buyer:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessage:tradeOther
+				,PriceCurrency:currencyName, PriceCount:currencyCount
+				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, tradeStashY:tradeStashTop
+				,Guild:tradeBuyerGuild
+				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual
+				,TimeReceived:A_Hour ":" A_Min, TimeStamp:A_YYYY A_MM A_DD A_Hour A_Min A_Sec
+				,WhisperRegEx:tradeRegExName, WhisperLanguage:whisperLang
+				,GamePID:instancePID
+				,UniqueID:GUI_Trades.GenerateUniqueID()}
+				
 				err := Gui_Trades.PushNewTab(tradeInfos)
 
 				if !(err) {
