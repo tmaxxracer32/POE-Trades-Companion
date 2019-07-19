@@ -1,4 +1,18 @@
-﻿ObjMerge(obj1, obj2) {
+﻿ControlGetPos(ctrlHwnd) {
+	global
+	local X, Y, W, H
+	ControlGetPos, X, Y, W, H,, % "ahk_id " ctrlHwnd
+	return {X:X,Y:Y,W:W,H:H}
+}
+
+GetGlobalVar(var) {
+	global
+	local retValue
+	retValue := %var%
+	return retValue
+}
+
+ObjMerge(obj1, obj2) {
 /*  Modified version of ObjFullyClone to allow merging two objects
 	In case value exists both in obj1 and obj2, obj1 will be prioritary
 */
@@ -395,6 +409,10 @@ MsgBox(_opts="", _title="", _text="", _timeout="") {
 }
 
 Detect_HiddenWindows(state="") {
+	return DetectHiddenWindows(state)
+}
+
+DetectHiddenWindows(state="") {
 	static previousState
 	if (state = "" && previousState) {
 		DetectHiddenWindows, %previousState%
