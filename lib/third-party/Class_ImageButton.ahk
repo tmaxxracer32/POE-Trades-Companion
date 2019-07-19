@@ -324,19 +324,19 @@ Class ImageButton {
          && (FileExist(Option.2) || (DllCall("Gdi32.dll\GetObjectType", "Ptr", Option.2, "UInt") = OBJ_BITMAP))
             Image := Option.2
          Else {
-            If !(Option.2 + 0) && !This.HTML.HasKey(Option.2)
+            If !(Option.2 + 0) && !This.HTML.HasKey(Option.2) && (Option.2 != "0x000000")
                Return This.SetError("Invalid value for StartColor in Options[" . Index . "]!")
             BkgColor1 := This.GetARGB(Option.2)
             If (Option.3 = "")
                Option.3 := Option.2
-            If !(Option.3 + 0) && !This.HTML.HasKey(Option.3)
+            If !(Option.3 + 0) && !This.HTML.HasKey(Option.3) && (Option.3 != "0x000000")
                Return This.SetError("Invalid value for TargetColor in Options[" . Index . "]!")
             BkgColor2 := This.GetARGB(Option.3)
          }
          ; TextColor
          If (Option.4 = "")
             Option.4 := This.DefTxtColor
-         If !(Option.4 + 0) && !This.HTML.HasKey(Option.4)
+         If !(Option.4 + 0) && !This.HTML.HasKey(Option.4) && (Option.4 != "0x000000")
             Return This.SetError("Invalid value for TxtColor in Options[" . Index . "]!")
          TxtColor := This.GetARGB(Option.4)
          ; Rounded
@@ -350,13 +350,13 @@ Class ImageButton {
          ; GuiColor
          If (Option.6 = "")
             Option.6 := This.DefGuiColor
-         If !(Option.6 + 0) && !This.HTML.HasKey(Option.6)
+         If !(Option.6 + 0) && !This.HTML.HasKey(Option.6) && (Option.6 != "0x000000")
             Return This.SetError("Invalid value for GuiColor in Options[" . Index . "]!")
          GuiColor := This.GetARGB(Option.6)
          ; BorderColor
          BorderColor := ""
          If (Option.7 <> "") {
-            If !(Option.7 + 0) && !This.HTML.HasKey(Option.7)
+            If !(Option.7 + 0) && !This.HTML.HasKey(Option.7) && (Option.7 != "0x000000")
                Return This.SetError("Invalid value for BorderColor in Options[" . Index . "]!")
             BorderColor := 0xFF000000 | This.GetARGB(Option.7) ; BorderColor must be always opaque
          }
