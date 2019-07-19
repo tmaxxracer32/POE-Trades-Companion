@@ -89,6 +89,7 @@ Class GUI {
 		Gui%name%["Font"] := font
 		Gui%name%["Font_Size"] := size
 		Gui%name%["Font_Qual"] := qual
+		Gui%name%["Font_Quality"] := qual
 	}
 
 	Margin(name, xMargin, yMargin) {
@@ -212,35 +213,67 @@ Class GUI {
 
 		if (type = "ImageButton") {
 			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-				return "[GUI_" name "] " vHwnd ": " ImageButton.LastError "`n"
+				Gui%name%["ImageButton_Errors"] .= vHwnd ": " ImageButton.LastError "`n"
 		}
-
-
 	}
 
 	Show(name, opts="", title="") {
 		Gui, %name%:Show, %opts%, %title%
 	}
 
-	GetGlobal(guiName, type, key="") {
+	GetGlobal(guiName, type="", key="") {
 		global
 
-		if type in Controls,FontSettings,Submit
+		if type in Controls,Submit
 		{
 			if (key)
 				return Gui%guiName%_%Type%[key]
 
 			return Gui%guiName%_%Type%
 		}
+		else
+			return Gui%guiName%[key]
 
 	}
 	SetGlobal(guiName, type, key, value) {
 		global
 
-		if type in Controls,FontSettings,Submit
+		if type in Controls,Submit
 		{
 			if (Gui%guiName%_%Type%)
 				Gui%guiName%_%Type%[key] := value
 		}
+	}
+
+	GetControlPos(guiName, ctrlName) {
+		global
+		local X, Y, W, H
+		ControlGetPos, X, Y, W, H,, % "ahk_id " Gui%guiName%_Controls[ctrlName]
+		return {X:X,Y:Y,W:W,H:H}
+	}
+
+	MoveControl(guiName, ctrlName, x="", y="", w="", h="") { 
+		global
+		moveParams := x != "" ? moveParams " x" x : moveParams
+		moveParams := y != "" ? moveParams " h" y : moveParams
+		moveParams := w != "" ? moveParams " w" w : moveParams
+		moveParams := h != "" ? moveParams " h" h : moveParams
+		GuiControl, %guiName%:Move, Gui%guiName%_Controls[ctrlName],% moveParams
+	}
+
+	BindFunctionToControl(guiClass, guiName, ctrlName, funcName, params*) {
+		global
+		local __f
+
+		if (params.1)
+			__f := %guiClass%[funcName].Bind(guiClass, params*)
+		else
+			__f := %guiClass%[funcName].Bind(guiClass)
+		GuiControl, %guiName%:+g,% Gui%guiName%_Controls[ctrlName],% __f
+	}
+
+	SetDefault(guiName) {
+		global
+		Gui,%guiName%:Default
 	}
 }
