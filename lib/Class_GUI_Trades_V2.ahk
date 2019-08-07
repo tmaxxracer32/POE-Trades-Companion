@@ -2,67 +2,88 @@
 
 	; Gui.ImageButtonChangeCaption(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" btnNum], "TEXT", GuiTrades[_buyOrSell].Styles.SmallButton_Test, PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size, "")
 
-	CreateButtonImage(assets, width, height) {
+	CreateButtonImage(assets, sizes, debug=False) {
 		global SKIN
+		width := sizes.Width, height := sizes.Height
+		centerRatio := sizes.CenterRatio?sizes.CenterRatio:1
 
-		; Variables about paths
-		leftPic := assets.Left
-		rightPic := assets.Right
-		fillPic := assets.Fill
-		; Getting image sizes
-		leftimgSizes := GetImageSize(leftPic)
-		fillimgSizes := GetImageSize(fillPic)
-		rightimgSizes := GetImageSize(rightPic)
-		; Positions variables
-			; Left
-		leftImg_h_mult := height / leftimgSizes.H
-		leftImgW := Ceil(leftimgSizes.W * leftImg_h_mult), leftImgH := Ceil(leftimgSizes.H * leftImg_h_mult)
-			; Right
-		rightImg_h_mult := height / rightimgSizes.H
-		rightImgW := Ceil(rightimgSizes.W * rightImg_h_mult), rightImgH := Ceil(rightimgSizes.H * rightImg_h_mult)
-			; Fill
-		fillImg_h_mult := height / fillimgSizes.H
-		fillImgW := Ceil(fillimgSizes.W), fillImgH := Ceil(fillimgSizes.H * fillImg_h_mult)
-			; All
-		leftImgX := 0, leftImgY := 0
-		rightImgX := width-rightImgW, rightImgY := 0
-		fillImgX := 0, fillImgY := 0
+		; Declaring sizing + positionning
+		assets_infos := {}
+		for asset, imagePath in assets {
+			assets_infos[asset] := {}
+			assets_infos[asset].ImagePath := imagePath
+			assets_infos[asset].ImageSizes := GetImageSize(imagePath)
 
-		; Gdip functions
-		pBitmapNew := Gdip_CreateBitmap(width, height)
-		G := Gdip_GraphicsFromImage(pBitmapNew)
+			; Sizing
+			if IsIn(asset, "Left,Right") {
+				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
+				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
+			}
+			if (asset = "Center") {
+				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
+				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier * centerRatio), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier * centerRatio)
+			}
+			if (asset = "Fill") {
+				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
+				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
+			}
+
+			; Positionning
+			if IsIn(asset, "Left,Fill") {
+				assets_infos[asset].X_POS := 0, assets_infos[asset].Y_POS := 0
+			}
+			if (asset = "Right") {
+				assets_infos[asset].X_POS := width-assets_infos[asset].Width, assets_infos[asset].Y_POS := 0
+			}
+			if (asset = "Center") {
+				assets_infos[asset].X_POS := (width/2)-(assets_infos[asset].Width/2), assets_infos[asset].Y_POS := (height/2)-(assets_infos[asset].Height/2)
+			}
+		}
+
+		; Creating new final bitmap + graphics
+		pBitmapFinal := Gdip_CreateBitmap(width, height)
+		G := Gdip_GraphicsFromImage(pBitmapFinal)
 		Gdip_SetSmoothingMode(G, 4)
 		Gdip_SetInterpolationMode(G, 7)
-
-		pBitmapFileLeft := Gdip_CreateBitmapFromFile(leftPic)
-		pBitmapFileLeft := Gdip_ResizeBitmap(pBitmapFileLeft, "w" leftImgW " h" leftImgH, smooth:=False)
-
-		pBitmapFileRight := Gdip_CreateBitmapFromFile(rightPic)
-		pBitmapFileRight := Gdip_ResizeBitmap(pBitmapFileRight, "w" rightImgW " h" rightImgH, smooth:=False)
-		
-		pBitmapFilefill := Gdip_CreateBitmapFromFile(fillPic)
-		pBitmapFilefill := Gdip_ResizeBitmap(pBitmapFilefill, "w" fillImgW " h" fillImgH, smooth:=False)
-
-		Loop % width / fillimgSizes.W {
-			imgX := A_Index=1?fillImgX: fillImgX+(fillImgW*(A_Index-1))
-			Gdip_DrawImage(G, pBitmapFilefill, imgX, fillImgY, fillImgW, fillImgH, 0, 0, fillImgW, fillImgH)
+		; Creating bitmap for every element
+		bitMaps := {}
+		for asset, imagePath in assets {
+			bitMaps[asset] := Gdip_CreateBitmapFromFile(imagePath)
+			bitMaps[asset] := Gdip_ResizeBitmap(bitMaps[asset], "w" assets_infos[asset].Width " h" assets_infos[asset].Height, smooth:=False)
 		}
-		Gdip_DrawImage(G, pBitmapFileLeft,  leftImgX, leftImgY, leftImgW, leftImgH, 0, 0, leftImgW, leftImgH)
-		Gdip_DrawImage(G, pBitmapFileRight, rightImgX, fillImgX, rightImgW, rightImgH, 0, 0, rightImgW, rightImgH)
+		; Drawing bitmap on final bitmap
+		if (bitMaps.Fill) {
+			Loop % width / assets_infos.Fill.Width {
+				imgX := A_Index=1?assets_infos.Fill.X_POS: assets_infos.Fill.X_POS+(assets_infos.Fill.Width*(A_Index-1))
+				Gdip_DrawImage(G, bitMaps.Fill, imgX, assets_infos.Fill.Y_POS, assets_infos.Fill.Width, assets_infos.Fill.Height, 0, 0, assets_infos.Fill.Width, assets_infos.Fill.Height)
+			}
+		}
+		for bitMapName, bitMapValue in bitMaps
+			if IsIn(bitMapName, "Left,Right,Center")
+				Gdip_DrawImage(G, bitMaps[bitMapName], assets_infos[bitMapName].X_POS, assets_infos[bitMapName].Y_POS, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
 
-		hBitmap := Gdip_CreateHBITMAPFromBitmap(pBitmapNew)
-		
-		Gdip_DisposeImage(pBitmapNew), Gdip_DisposeImage(pBitmapFileLeft), Gdip_DisposeImage(pBitmapFileRight), Gdip_DisposeImage(pBitmapFilefill)
+		; Getting hBitmap
+		hBitmapFinal := Gdip_CreateHBITMAPFromBitmap(pBitmapFinal)
+
+		; Cleanup
+		for bitMapName, bitMapValue in bitMaps
+			Gdip_DisposeImage(bitMaps[bitMapName])
+		Gdip_DisposeImage(pBitmapFinal)
 		Gdip_DeleteGraphics(G)
 
-		;  Gui, Add, Picture,0xE hwndhMyPic
-		;  SetImage(hMyPic, hBitmap)
-		;  Gui, Show, AutoSize
-		;  Sleep 9999999999999
+		; Debug
+		if (Debug=True) {
+			Gui, NoName:New, hwndhGui
+			Gui, NoName:Add, Picture,0xE hwndhMyPic
+			SetImage(hMyPic, hBitmapFinal)
+			Gui, NoName:Show, AutoSize
+			WinWait, ahk_id %hGui%
+			WinWaitClose ahk_id %hGui%
+		}
 
-		return hBitmap
+		return hBitmapFinal
 	}
-
+	
 	Get_ButtonsRowsCount() {
 		global PROGRAM
 
@@ -1842,11 +1863,11 @@
 
 	Create_Style(ByRef styles, styleName, styleInfos) {
 		global SKIN
-		
-		normalImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.Left, Right:styleInfos.Right, Fill:styleInfos.Fill}, styleInfos.Width, styleInfos.Height)
-		hoverImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftHover, Right:styleInfos.RightHover, Fill:styleInfos.FillHover}, styleInfos.Width, styleInfos.Height)
-		ressImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftPress, Right:styleInfos.RightPress, Fill:styleInfos.FillPress}, styleInfos.Width, styleInfos.Height)
-		defaultimg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftDefault, Right:styleInfos.RightDefault, Fill:styleInfos.FillDefault}, styleInfos.Width, styleInfos.Height)		
+	
+		normalImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.Left, Right:styleInfos.Right, Fill:styleInfos.Fill}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		hoverImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftHover, Right:styleInfos.RightHover, Fill:styleInfos.FillHover}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		ressImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftPress, Right:styleInfos.RightPress, Fill:styleInfos.FillPress}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		defaultimg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftDefault, Right:styleInfos.RightDefault, Fill:styleInfos.FillDefault}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
 		
 		styles[styleName] := [ [0, normalImg, "", styleInfos.Color, "", styleInfos.ColorTransparency]
 						, [0, hoverImg, "", styleInfos.ColorHover, "", styleInfos.ColorTransparency]
