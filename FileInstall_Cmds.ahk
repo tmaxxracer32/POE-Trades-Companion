@@ -3477,6 +3477,131 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
 
 if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\ButtonGenericFill.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFill.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Path of Exile\ButtonGenericFill.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFill.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Path of Exile\ButtonGenericFill.png, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFill.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericFill.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFill.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericFill.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFill.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\ButtonGenericFillHover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillHover.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Path of Exile\ButtonGenericFillHover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillHover.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Path of Exile\ButtonGenericFillHover.png, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillHover.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericFillHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillHover.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericFillHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillHover.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\ButtonGenericFillPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillPress.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Path of Exile\ButtonGenericFillPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillPress.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Path of Exile\ButtonGenericFillPress.png, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillPress.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericFillPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillPress.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericFillPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericFillPress.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\ButtonGenericLeft.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericLeft.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Path of Exile\ButtonGenericLeft.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericLeft.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Path of Exile\ButtonGenericLeft.png, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericLeft.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericLeft.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericLeft.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericLeft.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericLeft.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\ButtonGenericRight.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericRight.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Path of Exile\ButtonGenericRight.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericRight.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Path of Exile\ButtonGenericRight.png, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericRight.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericRight.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericRight.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Path of Exile\ButtonGenericRight.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonGenericRight.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
+
+if (A_IsCompiled) {
 	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\ButtonHideout.png")
 	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\ButtonHideout.png"
 }
