@@ -176,6 +176,8 @@ Class GUI_Settings {
 		for key, value in PROGRAM.TRANSLATIONS.GUI_Settings.COLORS_TYPES
 			COLORS_TYPES[key] := value
 
+		global ACTIONS_WRITE := "WRITE_MSG,WRITE_THEN_GO_BACK,WRITE_TO_LAST_WHISPER,WRITE_TO_LAST_WHISPER_SENT,WRITE_TO_BUYER"
+
 		global ACTIONS_AVAILABLE := ""
 		. "-> " ACTIONS_SECTIONS.Simple
 		. "|" ACTIONS_TEXT_NAME.SEND_MSG
@@ -249,7 +251,7 @@ Class GUI_Settings {
 		GuiControl, Settings:+g,% GuiSettings_Controls.hBTN_CloseGUI,% __f
 
 		; * * Tab controls
-		allTabs := {Settings:["Main"], Customization:["Skins", "Buttons"], Hotkeys:["Basic", "Advanced"], Misc:["Updating", "About"]} ; Tabs and sub-tabs
+		allTabs := {Settings:["Main"], Customization:["Skins", "Buttons", "Interface"], Hotkeys:["Basic", "Advanced"], Misc:["Updating", "About"]} ; Tabs and sub-tabs
 		for tabName, nothing in allTabs {
 			for nothing, subTabName in allTabs[tabName]
 				allTabsList .= "|" tabName A_Space subTabName
@@ -686,6 +688,26 @@ Class GUI_Settings {
 		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+		*	TAB Customization Interface
+		*/
+		Gui, Settings:Tab, Customization Interface
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
+		; Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2, "Interface type: ")
+		; Gui.Add("Settings", "Checkbox", "xp y+2", "Tabs?")
+		; Gui.Add("Settings", "Checkbox", "xp y+2", "Slots?")
+		; Gui.Add("Settings", "Checkbox", "xp y+2", "Disabled?")
+
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+10 w200 R50 hwndhDDL_CustomizationInterfaceCustomizationInterfaceActionType", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationInterfaceActionContent")
+		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_ActionTypeTip")
+		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationInterfaceActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationInterfaceCustomizationInterfaceActionType", "Customization_Interface_OnActionTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceActionContent", "Customization_Interface_OnActionContentChange", doAgainAfter500ms:=True) 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationInterfaceActionsList", "Customization_Interface_OnListviewClick") 
+		
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB - ALL
 		*/
 		Gui, Settings:Tab
@@ -766,8 +788,473 @@ Class GUI_Settings {
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, Settings:,% ctrlHwnd
 
-			GUI_Settings.ContextMenu(ctrlHwnd, ctrlName)
+			if (ctrlHwnd = GuiSettings_Controls.hLV_CustomizationInterfaceActionsList)
+				GUI_Settings.Customization_Interface_OnListviewRightClick()
+			else
+				GUI_Settings.ContextMenu(ctrlHwnd, ctrlName)
 		return
+	}
+
+	Customization_Interface_LoadButtonActions(rowNum, btnNum) {
+		global PROGRAM, GuiSettings
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		btnSettings := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum]
+
+		Loop % LV_GetCount()
+			LV_Delete()
+		Loop {
+			actionType := btnSettings["Action_" A_Index "_Type"]
+			actionContent := btnSettings["Action_" A_Index "_Content"]
+			actionLongName := GUI_Settings.Get_ActionLongName_From_ShortName(actionType)
+			if (actionLongName) {
+				LV_Add("", A_Index, actionLongName, actionContent)
+			}
+			else break
+		}
+		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
+	}
+
+	Customization_Interface_SaveAllCurrentButtonActions() {
+		global PROGRAM, GuiSettings
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+
+		; Getting activated button variables
+		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
+		btnsCount := GuiSettings.CUSTOM_BUTTON_SELECTED_MAX
+		btnNum := GuiSettings.CUSTOM_BUTTON_SELECTED_NUM
+		; Couldnt save notification
+		if (!rowNum || !btnsCount || !btnNum) {
+			TrayNotifications.Show("", "COULDNT SAVE BUTTON")
+			return
+		}
+		; Getting existing actions count
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum
+		old_totalActions := 0
+		Loop {
+			actionExists := PROGRAM.SETTINGS[iniSection]["Action_" A_Index "_Type"]
+			if (actionExists)
+				old_totalActions++
+			else break
+		}
+		; Save new actions
+		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		new_totalActions := 0
+		for index, nothing in lvContent {
+			actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
+			INI.Set(PROGRAM.INI_FILE, iniSection, "Action_" index "_Type", actionShortName)
+			INI.Set(PROGRAM.INI_FILE, iniSection, "Action_" index "_Content", """" lvContent[index].ActionContent """")
+			new_totalActions++
+		}
+		; Deleting actions higher than new actions count
+		actionsToDelete := old_totalActions-new_totalActions, deleteIndex := new_totalActions+1
+		if (actionsToDelete > 0) {
+			Loop % actionsToDelete {
+				INI.Delete(PROGRAM.INI_FILE, iniSection, "Action_" deleteIndex "_Type")
+				INI.Delete(PROGRAM.INI_FILE, iniSection, "Action_" deleteIndex "_Content")
+				deleteIndex++
+			}
+		}
+
+		Declare_LocalSettings()
+	}
+
+	Customization_Interface_OnActionTypeChange() {
+		global GuiSettings_Controls
+		global ACTIONS_READONLY, ACTIONS_FORCED_CONTENT
+		actionTypeHwnd := GuiSettings_Controls.hDDL_CustomizationInterfaceCustomizationInterfaceActionType
+		actionContentHwnd := GuiSettings_Controls.hEDIT_ActionContent
+
+		; Get current action type & content
+		actionType := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType"), AutoTrimStr(actionType) ; Trim so space to separate sections is made empty
+		actionContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+		; Get infos concerning this action
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
+		SetEditCueBanner(actionContentHwnd, contentPlaceholder)
+		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_ActionTypeTip,% contentPlaceholder
+		ShowToolTip(contentPlaceholder)
+
+		; Avoid selecting actions with -> in name or empty
+		if IsContaining(actionType, "-> ") || (actionType = "") {
+			; Check if one arrow was being pressed
+			isUpPressed := GetKeyState("Up", "P"), isDownPressed := GetKeyState("Down", "P")
+			isLeftPressed := GetKeyState("Left", "P"), isRightPressed := GetKeyState("Right", "P")
+			; Retrieve the number of the ddl item
+			GuiControl, Settings:+AltSubmit,% actionTypeHwnd
+			chosenItemNum := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType")
+			GuiControl, Settings:-AltSubmit,% actionTypeHwnd
+			; Select whichever is next, based on arrow press
+			if (isUpPressed || isLeftPressed) {
+				if (chosenItemNum = 1)
+					GuiControl, Settings:Choose,% actionTypeHwnd,% 2
+				else {
+					pressDiff := (actionType="") ? 1 : 2 ; 1 = difference between empty space and previous action
+					GuiControl, Settings:Choose,% actionTypeHwnd,% chosenItemNum-pressDiff
+				}
+			}
+			else {
+				pressDiff := (actionType="") ? 2 : 1 ; 2 = difference between empty space and next action
+				GuiControl, Settings:Choose,% actionTypeHwnd,% chosenItemNum+pressDiff
+			}
+
+			; Start the function again
+			Sleep 10
+			GUI_Settings.Customization_Interface_OnActionTypeChange()
+			Return
+		}
+		; Make read only if action is supposed to be
+		if IsIn(actionShortName, ACTIONS_READONLY)
+			GuiControl, Settings:+ReadOnly,% actionContentHwnd
+		else
+			GuiControl, Settings:-ReadOnly,% actionContentHwnd
+		; Retrieve forced content if action is supposed to be
+		for sName, fContent in ACTIONS_FORCED_CONTENT {
+			if (sName = actionShortName) {
+				forcedContent := fContent
+				Break
+			}
+		}
+		; Set the forced content if contains any, otherwise make content empty
+		if (forcedContent)
+			GUI_Settings.Customization_Interface_SetActionContent(forcedContent)
+		else
+			GUI_Settings.Customization_Interface_SetActionContent("")
+
+		; Update currently selected action
+		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		if IsNum(selectedRow) && (selectedRow > 0) {
+			GUI_Settings.Customization_Interface_ListViewModifySelectedAction(actionType, "")
+		}
+	}
+	
+	
+	Customization_Interface_OnActionContentChange(doAgainAfter500ms=False) {
+		/* The doAgainAfter500ms trick allows to make sure that the function is ran correctly if the user typed way too fast somehow
+		*/
+		global PROGRAM, GuiSettings, GuiSettings_Controls
+
+		; Get current action type & content
+		actionType := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType"), AutoTrimStr(actionType)
+		actionContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+		; Get infos concerning this action
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		actionForcedContent := GUI_Settings.Get_ActionForcedContent_From_ActionShortName(actionShortName)
+
+		; GUI_Settings.TabCustomizationButtons_DisableSubroutines()
+
+		; Make sure that forced content is within string
+		if (actionForcedContent) {
+			strL := StrLen(actionForcedContent)
+			contentSubStr  := SubStr(actionContent, 1, strL)
+
+			if (contentSubStr != actionForcedContent) {
+				GUI_Settings.Customization_Interface_SetActionContent(actionForcedContent)
+				ShowToolTip("The string has to start with """ actionForcedContent """")
+				tipWarn := True, actionContent := actionForcedContent
+			}
+			else if (actionShortName = "SLEEP") {
+				AutoTrimStr(actionContent)
+
+				if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
+					GUI_Settings.Customization_Interface_SetActionContent(100)
+					ShowToolTip("This value can only be an integer.")
+					tipWarn := True, actionContent := 100
+				}
+				else if IsDigit(actionContent) && (actionContent > 1000) {
+					GUI_Settings.Customization_Interface_SetActionContent(1000)
+					ShowToolTip("Max value is 1000 milliseconds.")
+					tipWarn := True, actionContent := 1000
+				}
+			}
+		}
+
+		; Update currently selected action
+		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		if IsNum(selectedRow) && (selectedRow > 0) {
+			GUI_Settings.Customization_Interface_ListViewModifySelectedAction("", actionContent)
+		}
+
+		; Show a tooltip of current contet
+		if (!tipWarn) && (actionContent) && (actionContent != actionForcedContent)
+			ShowToolTip(actionContent)
+		
+		if (doAgainAfter500ms=True)
+			GoSub, GUI_Settings_Customization_Interface_OnActionContentChange_Timer
+
+		; GUI_Settings.TabCustomizationButtons_EnableSubroutines()
+	}
+
+	Customization_Interface_ListViewModifySelectedAction(actionType="", actionContent="") {
+		global PROGRAM, ACTIONS_WRITE
+		; Get informations about modifying this action
+		actionType := actionType?actionType: GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType")
+		actionContent := actionContent?actionContent: GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		; Get informations about the last action
+		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
+		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
+
+		; Prevent continuing if action isn't valid
+		if !(actionShortName) {
+			; MsgBox(4096, "Invalid action name", "Type: """ actionType """"
+			; . "`nContent: """ actionContent """"
+			; . "`nShort name: """ actionShortName """")
+			return
+		}
+		; Prevent adding action if it does a write/close action and the last action is write
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
+		&& IsIn(lastActionShortName, ACTIONS_WRITE) {
+			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsWrite, "%thisAction%", actionType)
+			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
+			MsgBox(4096, "", boxTxt)
+			return
+		}
+		; Prevent adding action if it does a write/close action and last action is close
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
+		&& IsIn(lastActionShortName, "CLOSE_TAB") {
+			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsCloseTab, "%thisAction%", actionType)
+			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
+			MsgBox(4096, "", boxTxt)
+			return
+		}
+		else {
+			LV_Modify(selectedRow, , selectedRow, actionType, actionContent) ; Replacing before last line with our action
+		}
+		
+		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
+		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+	}
+
+	Customization_Interface_OnListviewRightClick() {
+		global ACTIONS_TEXT_NAME, ACTIONS_FORCED_CONTENT
+		global GuiSettings, GuiSettings_Controls
+		try Menu, RMenu, DeleteAll
+		Menu, RMenu, Add, Add a new action, Customization_Interface_OnListviewRightClick_AddNewAction
+		Menu, RMenu, Add, Remove this action, Customization_Interface_OnListviewRightClick_RemoveSelectedAction
+		Menu, RMenu, Add
+		Menu, RMenu, Add, Move this action up, Customization_Interface_OnListviewRightClick_MoveSelectedActionUp
+		Menu, RMenu, Add, Move this action down, Customization_Interface_OnListviewRightClick_MoveSelectedActionDown
+
+		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		if (selectedRow = 1 || !selectedRow)
+			Menu, RMenu, Disable, Move this action up
+		if (selectedRow = LV_GetCount() || !selectedRow)
+			Menu, RMenu, Disable, Move this action down
+		if (!selectedRow)
+			Menu, RMenu, Disable, Remove this action
+		Menu, RMenu, Show
+		return
+
+		Customization_Interface_OnListviewRightClick_AddNewAction:
+			/*
+			GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+			actionType := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType"), AutoTrimStr(actionType)
+			actionContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+			if (actionType)
+			*/
+				GUI_Settings.Customization_Interface_AddNewAction(ACTIONS_TEXT_NAME.SEND_TO_BUYER, ACTIONS_FORCED_CONTENT.SEND_TO_BUYER)
+		return
+
+		Customization_Interface_OnListviewRightClick_RemoveSelectedAction:
+			selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+			if IsNum(selectedRow) && (selectedRow > 0) {
+				GUI_Settings.Customization_Interface_RemoveAction(selectedRow)
+			}
+		return
+
+		Customization_Interface_OnListviewRightClick_MoveSelectedActionUp:
+			selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+			GUI_Settings.Customization_Interface_MoveActionUp(selectedRow)
+		return
+		Customization_Interface_OnListviewRightClick_MoveSelectedActionDown:
+			selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+			GUI_Settings.Customization_Interface_MoveActionDown(selectedRow)
+		return
+	}
+
+	Customization_Interface_MoveActionUp(rowNum) {
+		global PROGRAM, GuiSettings_Controls, ACTIONS_WRITE
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+
+		; Get informations about modifying this action
+		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		actionType := lvContent[rowNum].ActionType, actionContent := lvContent[rowNum].ActionContent
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		actionNum := rowNum
+		; Get informations about the last action
+		lastActionType := lvContent[LV_GetCount()].ActionType, lastActionContent := lvContent[LV_GetCount()].ActionContent
+		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
+		lastActionNum := lvContent[LV_GetCount()].Num
+		
+		if IsIn(lastActionShortName, ACTIONS_WRITE)
+		&& (lastActionNum = actionNum) {
+			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveUpBcsItsWrite)
+			Return
+		}
+		else if (lastActionShortName = "CLOSE_TAB")
+		&& (lastActionNum = actionNum) {
+			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveUpBcsItsCloseTab)
+			Return
+		}
+
+		LV_Modify(rowNum-1, , rowNum-1, lvContent[rowNum].ActionType, lvContent[rowNum].ActionContent) ; Replacing above action with our action
+		LV_Modify(rowNum, , rowNum, lvContent[rowNum-1].ActionType, lvContent[rowNum-1].ActionContent) ; Replacing our action with action above
+
+		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+	}
+
+	Customization_Interface_MoveActionDown(rowNum) {
+		global PROGRAM, GuiSettings_Controls, ACTIONS_WRITE
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+
+		; Get informations about modifying this action
+		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		actionType := lvContent[rowNum].ActionType, actionContent := lvContent[rowNum].ActionContent
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		actionNum := rowNum
+		; Get informations about the last action
+		lastActionType := lvContent[LV_GetCount()].ActionType, lastActionContent := lvContent[LV_GetCount()].ActionContent
+		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
+		lastActionNum := lvContent[LV_GetCount()].Num
+
+		if IsIn(lastActionShortName, ACTIONS_WRITE)
+		&& (lastActionNum = actionNum+1) {
+			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveDownBcsLastIsWrite, "%lastAction%", lastActionType)
+			MsgBox(4096, "", boxTxt)
+			Return
+		}
+
+		else if (lastActionShortName = "CLOSE_TAB")
+		&& (lastActionNum = actionNum+1) {
+			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveDownBcsLastIsCloseTab, "%lastAction%", lastActionType)
+			MsgBox(4096, "", boxTxt)
+			Return
+		}
+
+		LV_Modify(rowNum+1, , rowNum+1, lvContent[rowNum].ActionType, lvContent[rowNum].ActionContent) ; Replacing under action with our action
+		LV_Modify(rowNum, , rowNum, lvContent[rowNum+1].ActionType, lvContent[rowNum+1].ActionContent) ; Replacing our action with action under
+
+		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+	}
+
+	Customization_Interface_GetListviewSelectedRow() {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		return LV_GetNext(0, "F")
+	}
+
+	Customization_Interface_RemoveAction(actionNum) {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+
+		newLvContent := {}
+		Loop % lvContent.Count() {
+			if (A_Index < actionNum) { ; If lower, just add it
+				newLvContent[A_Index] := ObjFullyClone(lvContent[A_Index])
+			}
+			else if (A_Index > actionNum) { ; If higher, add to index minus one
+				newLvContent[A_Index-1] := ObjFullyClone(lvContent[A_Index])
+				newLvContent[A_Index-1].Num := lvContent[A_Index].Num - 1
+			}
+			; notice we don't do anything if equal, effectively skipping
+		}
+		; Adding new action list
+		Loop % LV_GetCount()
+			LV_Delete()
+		Loop % newLvContent.Count()
+			LV_Add("", newLvContent[A_Index].Num, newLvContent[A_Index].ActionType, newLvContent[A_Index].ActionContent)
+
+		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
+		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+	}
+
+	Customization_Interface_GetListViewContent() {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+
+		content := {}
+		Loop % LV_GetCount() {			
+			LV_GetText(rowNum, A_Index, 1)
+			LV_GetText(actionType, A_Index, 2)
+			LV_GetText(actionContent, A_Index, 3)
+			content[A_Index] := {Num:rowNum, ActionType:actionType, ActionContent:actioncontent}
+		}
+		return content
+	}
+
+	Customization_Interface_AddNewAction(actionType, actionContent) {
+		global PROGRAM, ACTIONS_WRITE
+		global GuiSettings, GuiSettings_Controls
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
+		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
+		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+
+		; Prevent continuing if action isn't valid
+		if !(actionShortName) {
+			MsgBox(4096, "Invalid action name", "Type: """ actionType """"
+			. "`nContent: """ actionContent """"
+			. "`nShort name: """ actionShortName """")
+			return
+		}
+		; Prevent adding action if it does a write/close action and the last action is write
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
+		&& IsIn(lastActionShortName, ACTIONS_WRITE) {
+			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsWrite, "%thisAction%", actionType)
+			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
+			MsgBox(4096, "", boxTxt)
+			return
+		}
+		; Prevent adding action if it does a write/close action and last action is close
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
+		&& IsIn(lastActionShortName, "CLOSE_TAB") {
+			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsCloseTab, "%thisAction%", actionType)
+			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
+			MsgBox(4096, "", boxTxt)
+			return
+		}
+
+		; Decides where to add the new action
+		if IsIn(lastActionShortName, ACTIONS_WRITE ",CLOSE_TAB")
+			isLastCloseOrWrite := True
+		; Adding the new action
+		if (isLastCloseOrWrite) { ; Adding new blank action, then modifying list to accomodate and make new action previous to last
+			LV_Add("", LV_GetCount()+1, "", "") ; Adding new line
+			LV_Modify(LV_GetCount()-1, , LV_GetCount()-1, actionType, actionContent) ; Replacing before last line with our action
+			LV_Modify(LV_GetCount(), , LV_GetCount(), lastActionType, lastActionContent) ; Replacing last line with the old last action
+		}
+		else ; Just adding the new action at end of list
+			LV_Add("", LV_GetCount()+1, actionType, actionContent)
+
+		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
+		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+	}
+
+	Customization_Interface_AdjustListviewHeaders() {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		Loop 3
+			LV_ModifyCol(A_Index, "AutoHdr NoSort")
+	}
+
+	Customization_Interface_OnListviewClick(CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+
+		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		if (!selectedRow)
+			return
+
+		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		GUI_Settings.Customization_Interface_SetActionType(lvContent[selectedRow].ActionType)
+		GUI_Settings.Customization_Interface_SetActionContent(lvContent[selectedRow].ActionContent)
+	}
+
+	Customization_Interface_SetActionType(acType) {
+		global GuiSettings_Controls
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationInterfaceCustomizationInterfaceActionType,% acType
+	}
+	Customization_Interface_SetActionContent(acContent) {
+		global GuiSettings_Controls
+		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationInterfaceActionContent,% acContent
 	}
 
 	DragGui(GuiHwnd) {
@@ -785,7 +1272,8 @@ Class GUI_Settings {
 		Declare_SkinAssetsAndSettings()
 
 		Gui_TradesMinimized.Create()
-		Gui_Trades.RecreateGUI()
+		GUI_Trades_V2.RecreateGUI("Buy")
+		GUI_Trades_V2.RecreateGUI("Sell")
 		GUI_TradesBuyCompact.RecreateGUI()
 	}
 
@@ -983,13 +1471,13 @@ Class GUI_Settings {
 
 		if (CtrlName = "hCB_AllowClicksToPassThroughWhileInactive") {
 			if (trueFalse = "True") {
-				GUI_TradesBuyCompact.Enable_ClickThrough()
-				GUI_Trades.Enable_ClickThrough()
+				GUI_Trades_V2.Enable_ClickThrough("Buy")
+				GUI_Trades_V2.Enable_ClickThrough("Sell")
 				Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.Clickthrough
 			}
 			else {
-				GUI_TradesBuyCompact.Disable_ClickThrough()
-				GUI_Trades.Disable_ClickThrough()
+				GUI_Trades_V2.Disable_ClickThrough("Buy")
+				GUI_Trades_V2.Disable_ClickThrough("Sell")
 				Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.Clickthrough
 			}
 		}
@@ -1549,9 +2037,9 @@ Class GUI_Settings {
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Msg)
 		UpdateHotkeys()
 		Declare_SkinAssetsAndSettings()
-		Gui_TradesMinimized.Create()
-		Gui_Trades.RecreateGUI()
-		GUI_TradesBuyCompact.RecreateGUI()
+		; Gui_TradesMinimized.Create()
+		GUI_Trades_V2.RecreateGUI("Buy")
+		GUI_Trades_V2.RecreateGUI("Sell")
 	}
 
 	/* * On Change
@@ -3909,6 +4397,7 @@ Class GUI_Settings {
 	}
 
 	OnTabBtnClick(ClickedTab) {
+		global GuiTrades
 		global GuiSettings, GuiSettings_Controls
 		static prevSection, newSection
 
@@ -3939,6 +4428,13 @@ Class GUI_Settings {
 
 		if (ClickedTab = "Customization Buttons") {
 			GUI_Settings.TabCustomizationButtons_SetUserSettings()
+		}
+		if (ClickedTab = "Customization Interface") {
+			Gui, TradesSellPreview:+LastFound +AlwaysOnTop
+			Gui, TradesSellPreview:Show, x290 y30
+		}
+		else {
+			Gui, TradesSellPreview:Hide
 		}
 
 		; WinSet, Redraw, , A
@@ -4212,6 +4708,35 @@ Class GUI_Settings {
 		GUI_Settings.Redraw()
 	}
 }
+
+GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions:
+	global SaveAllCurrentButtonActions_Timer_After500ms
+	GUI_Settings.Customization_Interface_SaveAllCurrentButtonActions()
+	if (SaveAllCurrentButtonActions_Timer_After500ms=True) {
+		SaveAllCurrentButtonActions_Timer_After500ms := False
+		GoSub GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer_2
+	}
+return
+GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer:
+	global SaveAllCurrentButtonActions_Timer_After500ms
+	SaveAllCurrentButtonActions_Timer_After500ms := True
+	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, Delete
+	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, -500
+return
+GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer_2:
+	; Starts 500ms after saving to make sure save is ok
+	global SaveAllCurrentButtonActions_Timer_After500ms
+	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, Delete
+	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, -500
+return
+
+GUI_Settings_Customization_Interface_OnActionContentChange:
+	GUI_Settings.Customization_Interface_OnActionContentChange(doAgainAfter500ms:=False)
+return
+GUI_Settings_Customization_Interface_OnActionContentChange_Timer:
+	SetTimer, GUI_Settings_Customization_Interface_OnActionContentChange, Delete
+	SetTimer, GUI_Settings_Customization_Interface_OnActionContentChange, -500
+return
 
 GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub:
 	GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_SkinPreset,% "User Defined"

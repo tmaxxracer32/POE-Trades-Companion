@@ -123,7 +123,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 
 		IfMsgBox, Yes
 		{
-			GUI_Trades.SaveBackup()
+			GUI_Trades_V2.SaveBackup("Sell")
 			ReloadWithParams(" /MyDocuments=""" MyDocuments """", getCurrentParams:=True, asAdmin:=True)
 		}
 		else return
@@ -318,7 +318,7 @@ Monitor_GameLogs() {
 			SetTimer,% A_ThisFunc, 500
 			AppendToLogs("Monitoring logs file: """ logsFile """.")
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Dock")
-				GUI_Trades.DockMode_Cycle()
+				GUI_Trades_V2.DockMode_Cycle("Sell")
 			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Msg, "%file%", logsFile)
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Title, trayMsg)
 		}
@@ -335,7 +335,7 @@ Monitor_GameLogs() {
 	}
 }
 
-Parse_GameLogs(strToParse) {
+Parse_GameLogs(strToParse, preview=False) {
 	global PROGRAM, GuiTrades, LEAGUES, GuiTradesBuyCompact, GAME
 
 	; poe.trade
@@ -511,7 +511,7 @@ Parse_GameLogs(strToParse) {
 		for index, regexStr in allAreaJoinedRegEx {
 			if RegExMatch(parsedLogsMsg, "SO)" regexStr, joinedPat) {
 				instancePID := joinedPat.1, playerName := joinedPat.2
-				GUI_Trades.SetTabStyleJoinedArea(playerName)
+				GUI_Trades_V2.SetTabStyleJoinedArea("Sell", playerName)
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath) {
 					try
 						SoundPlay,% PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath
@@ -524,7 +524,7 @@ Parse_GameLogs(strToParse) {
 		for index, regexStr in allAreaLeftRegEx {
 			if RegExMatch(parsedLogsMsg, "SO)" regexStr, leftPat) {
 				instancePID := leftPat.1, playerName := leftPat.2
-				GUI_Trades.UnSetTabStyleJoinedArea(playerName)
+				GUI_Trades_V2.UnSetTabStyleJoinedArea("Sell", playerName)
 				break
 			}
 		}
@@ -714,17 +714,18 @@ Parse_GameLogs(strToParse) {
 				currencyName := currencyInfos.Is_Listed?currencyInfos.Name : currencyName	
 				tradeOther := tradeOther?"[" A_Hour ":" A_Min "] @From: " tradeOther : ""	
 				
-				tradeInfos := {Buyer:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessage:tradeOther
+				tradeInfos := {Buyer:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessageFull:tradeOther
 				,PriceCurrency:currencyName, PriceCount:currencyCount
-				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, tradeStashY:tradeStashTop
+				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, StashY:tradeStashTop
 				,Guild:tradeBuyerGuild
 				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual
 				,TimeReceived:A_Hour ":" A_Min, TimeStamp:A_YYYY A_MM A_DD A_Hour A_Min A_Sec
 				,WhisperRegEx:tradeRegExName, WhisperLanguage:whisperLang
 				,GamePID:instancePID
-				,UniqueID:GUI_Trades.GenerateUniqueID()}
+				,UniqueID:GUI_Trades_V2.GenerateUniqueID()}
 				
-				err := Gui_Trades.PushNewTab(tradeInfos)
+				guiName := preview=False?"Sell":"SellPreview"
+				err := GUI_Trades_V2.PushNewTab(guiName, tradeInfos)
 
 				if !(err) {
 					if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradingWhisperSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.TradingWhisperSFXPath) {
@@ -770,32 +771,40 @@ Parse_GameLogs(strToParse) {
 					}
 				}
 			}
-			else if (isWhisperSent=True) {
+			else if (isWhisperSent=True) {	
 				RegExMatch(tradePrice, "O)(\d+.\d+|\d+) (.*)", tradePricePat), currencyCount := tradePricePat.1, currencyName := tradePricePat.2
 				currencyInfos := Get_CurrencyInfos(currencyName, dontWriteLogs:=False)
 				currencyName := currencyInfos.Is_Listed?currencyInfos.Name : currencyName	
-				
 				tradeOther := tradeOther?"[" A_Hour ":" A_Min "] @To: " tradeOther : ""
-				tradeInfos := {Seller:tradeBuyerName, Item:tradeItemFull, Price:currencyCount, Currency:currencyName, Stash:tradeStashFull, AdditionalMsgFull:tradeOther
-					,TimeStamp:timeStamp, PID:instancePID, TimeSent: A_Hour ":" A_Min
-					,WhisperSite:tradeRegExName, UniqueID:GUI_TradesBuyCompact.GenerateUniqueID(), WhisperLang:whisperLang}
-				err := GUI_TradesBuyCompact.PushNewTab(tradeInfos)
+				
+				tradeInfos := {Seller:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessageFull:tradeOther
+				,PriceCurrency:currencyName, PriceCount:currencyCount
+				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, StashY:tradeStashTop
+				,Guild:tradeBuyerGuild
+				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual
+				,TimeSent:A_Hour ":" A_Min, TimeStamp:A_YYYY A_MM A_DD A_Hour A_Min A_Sec
+				,WhisperRegEx:tradeRegExName, WhisperLanguage:whisperLang
+				,GamePID:instancePID
+				,UniqueID:GUI_Trades_V2.GenerateUniqueID()}
+				
+				guiName := preview=False?"Buy":"BuyPreview"
+				err := GUI_Trades_V2.PushNewTab("Buy", tradeInfos, preview)
 			}
 		}
 		else if (parsedLogsMsg && !matchingRegEx && isWhisper=True) { ; No trading whisper match
 			; Add whisper to buyer's tab if existing
 			if (isWhisperReceived) {
 				Loop % GuiTrades.Tabs_Count {
-					tabInfos := Gui_Trades.GetTabContent(A_Index)
+					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
-						Gui_Trades.UpdateSlotContent(A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
-						GUI_Trades.SetTabStyleWhisperReceived(whispName)
+						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
+						GUI_Trades_V2.SetTabStyleWhisperReceived("Sell", whispName)
 					}
 				}
 				Loop % GuiTradesBuyCompact.Tabs_Count {
-					tabInfos := GUI_TradesBuyCompact.GetSlotContent(A_Index)
+					tabInfos := GUI_Trades_V2.GetSlotContent("Buy", A_Index)
 					if (tabInfos.Seller = whispName) {
-						GUI_TradesBuyCompact.UpdateSlotContent(A_Index, "AdditionalMsgFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMsgFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
 					}
 				}
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.RegularWhisperSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.RegularWhisperSFXPath) {
@@ -834,15 +843,15 @@ Parse_GameLogs(strToParse) {
 			}
 			else if (isWhisperSent) {
 				Loop % GuiTradesBuyCompact.Tabs_Count {
-					tabInfos := GUI_TradesBuyCompact.GetSlotContent(A_Index)
+					tabInfos := GUI_Trades_V2.GetSlotContent("Buy", A_Index)
 					if (tabInfos.Seller = whispName) {
-						GUI_TradesBuyCompact.UpdateSlotContent(A_Index, "AdditionalMsgFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMsgFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
 					}
 				}
 				Loop % GuiTrades.Tabs_Count {
-					tabInfos := GUI_Trades.GetTabContent(A_Index)
+					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
-						GUI_Trades.UpdateSlotContent(A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
 					}
 				}
 			}

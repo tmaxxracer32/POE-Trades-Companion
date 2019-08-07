@@ -1,5 +1,68 @@
 ﻿Class GUI_Trades_V2 {
 
+	; Gui.ImageButtonChangeCaption(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" btnNum], "TEXT", GuiTrades[_buyOrSell].Styles.SmallButton_Test, PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size, "")
+
+	CreateButtonImage(assets, width, height) {
+		global SKIN
+
+		; Variables about paths
+		leftPic := assets.Left
+		rightPic := assets.Right
+		fillPic := assets.Fill
+		; Getting image sizes
+		leftimgSizes := GetImageSize(leftPic)
+		fillimgSizes := GetImageSize(fillPic)
+		rightimgSizes := GetImageSize(rightPic)
+		; Positions variables
+			; Left
+		leftImg_h_mult := height / leftimgSizes.H
+		leftImgW := Ceil(leftimgSizes.W * leftImg_h_mult), leftImgH := Ceil(leftimgSizes.H * leftImg_h_mult)
+			; Right
+		rightImg_h_mult := height / rightimgSizes.H
+		rightImgW := Ceil(rightimgSizes.W * rightImg_h_mult), rightImgH := Ceil(rightimgSizes.H * rightImg_h_mult)
+			; Fill
+		fillImg_h_mult := height / fillimgSizes.H
+		fillImgW := Ceil(fillimgSizes.W), fillImgH := Ceil(fillimgSizes.H * fillImg_h_mult)
+			; All
+		leftImgX := 0, leftImgY := 0
+		rightImgX := width-rightImgW, rightImgY := 0
+		fillImgX := 0, fillImgY := 0
+
+		; Gdip functions
+		pBitmapNew := Gdip_CreateBitmap(width, height)
+		G := Gdip_GraphicsFromImage(pBitmapNew)
+		Gdip_SetSmoothingMode(G, 4)
+		Gdip_SetInterpolationMode(G, 7)
+
+		pBitmapFileLeft := Gdip_CreateBitmapFromFile(leftPic)
+		pBitmapFileLeft := Gdip_ResizeBitmap(pBitmapFileLeft, "w" leftImgW " h" leftImgH, smooth:=False)
+
+		pBitmapFileRight := Gdip_CreateBitmapFromFile(rightPic)
+		pBitmapFileRight := Gdip_ResizeBitmap(pBitmapFileRight, "w" rightImgW " h" rightImgH, smooth:=False)
+		
+		pBitmapFilefill := Gdip_CreateBitmapFromFile(fillPic)
+		pBitmapFilefill := Gdip_ResizeBitmap(pBitmapFilefill, "w" fillImgW " h" fillImgH, smooth:=False)
+
+		Loop % width / fillimgSizes.W {
+			imgX := A_Index=1?fillImgX: fillImgX+(fillImgW*(A_Index-1))
+			Gdip_DrawImage(G, pBitmapFilefill, imgX, fillImgY, fillImgW, fillImgH, 0, 0, fillImgW, fillImgH)
+		}
+		Gdip_DrawImage(G, pBitmapFileLeft,  leftImgX, leftImgY, leftImgW, leftImgH, 0, 0, leftImgW, leftImgH)
+		Gdip_DrawImage(G, pBitmapFileRight, rightImgX, fillImgX, rightImgW, rightImgH, 0, 0, rightImgW, rightImgH)
+
+		hBitmap := Gdip_CreateHBITMAPFromBitmap(pBitmapNew)
+		
+		Gdip_DisposeImage(pBitmapNew), Gdip_DisposeImage(pBitmapFileLeft), Gdip_DisposeImage(pBitmapFileRight), Gdip_DisposeImage(pBitmapFilefill)
+		Gdip_DeleteGraphics(G)
+
+		;  Gui, Add, Picture,0xE hwndhMyPic
+		;  SetImage(hMyPic, hBitmap)
+		;  Gui, Show, AutoSize
+		;  Sleep 9999999999999
+
+		return hBitmap
+	}
+
 	Get_ButtonsRowsCount() {
 		global PROGRAM
 
@@ -28,8 +91,71 @@
 
 		Return {Custom:customBtnsRowsCount, Special:specialsBtnRowsCount}
 	}
+
+	Preview_AddSmallButtonToSlot(_buyOrSell, slotNum) {
+		global GuiTrades, GuiTrades_Controls
+		guiName := "Trades" _buyOrSell "_Slot1"
+
+		GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallSlot" slotNum]
+		GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" slotNum]
+	}
+	Preview_CustomizeThisSmallButton(_buyOrSell, btnNum)  {
+		global PROGRAM, SKIN
+		global GuiTrades, GuiTrades_Controls
+		guiName := "Trades" _buyOrSell "_Slot1"
+
+		try Menu, RMenu, DeleteAll
+		Loop 5
+			Menu, RMenu, Add, %A_Index%, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Remove this button, Preview_CustomizeThisSmallButton_RemoveThisButton
+		Menu, RMenu, Show
+		return
+
+		Preview_CustomizeThisSmallButton_ChangeButtonStyle:
+			ctrlPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" btnNum])
+		return
+
+		Preview_CustomizeThisSmallButton_RemoveThisButton:
+			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" btnNum]
+			GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallSlot" btnNum]
+		return
+	}
+
+	Preview_AddCustomButtonsToRow(_buyOrSell, rowNum) {
+		global GuiTrades, GuiTrades_Controls
+		guiName := "Trades" _buyOrSell "_Slot1"
+
+		; Hiding the row button
+		GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowNum]
+		; Showing the 5 new buttons
+		Loop 5
+			GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" 5 "Num" A_Index]
+	}
+
+	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
+		global GuiTrades, GuiSettings
+		static prevBtn
+		guiName := "Trades" _buyOrSell "_Slot1"
+		thisBtn := "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum
+
+		GuiControl, %guiName%:,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn], EZEZ
+		
+		if (prevBtn) {
+			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn]
+			GUI_Settings.Customization_Interface_SaveAllCurrentButtonActions()
+		}
+		GuiControl, %guiName%:+Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn]
+		prevBtn := thisBtn
+
+		GuiSettings.CUSTOM_BUTTON_SELECTED_ROW := rowNum
+		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
+		GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := btnNum
+		GUI_Settings.Customization_Interface_LoadButtonActions(rowNum, btnNum)
+
+		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
+	}
 	
-	Create(_tabsToRender=50, _buyOrSell="", _tabsOrSlots="") {
+	Create(_tabsToRender=50, _buyOrSell="", _tabsOrSlots="", _preview=False) {
 		global PROGRAM, GAME, SKIN
         global GuiTrades, GuiTrades_Controls
         global GuiTradesBuy, GuiTradesBuy_Controls
@@ -52,9 +178,13 @@
 			return
 
         ; = = Init GUI Obj
+		if (_preview)
+			_buyOrSell .= "Preview"
         guiName := "Trades" _buyOrSell
         GUI_Trades_V2.Destroy(guiName)
-		Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000 +LabelGUI_Trades_V2_ +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
+		if (_preview=True)
+			Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +LabelGUI_Trades_V2_ +ParentSettings +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
+		else Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000 +LabelGUI_Trades_V2_ +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
         Gui.SetDefault(guiName)
         Gui%guiName%.Windows_DPI := windowsDPI
 
@@ -74,34 +204,44 @@
         oneTextLineSize := Get_TextCtrlSize("SomeText", Gui%guiName%.Font, Gui%guiName%.Font_Size, "", "R1").H
         twoTextLineSize := oneTextLineSize*2
         ; twoTextLineSize += ((10+12)*scaleMult) ; 10+12, based on ctrl pacing - TO_DO_V2 see if need change
-        TabContentSlot_W := guiWidth, TabcontentSlot_H := twoTextLineSize+(20*borderSize) ; 20 = spacing
+		TabContentSlot_H_Temp := twoTextLineSize+(20*borderSize) ; 20 = spacing
 
         if (_tabsOrSlots="Slots") {
             Gui%guiName%.Height_NoRow 		:= guiHeight_NoRow      := borderSize + (30*scaleMult) + borderSize ; 30=header
-            Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabcontentSlot_H + (borderSize) ; 22=header2
-            Gui%guiName%.Height_TwoRow	 	:= guiHeight_TwoRow     := guiHeight_OneRow + TabcontentSlot_H + (borderSize*2)
-            Gui%guiName%.Height_ThreeRow 	:= guiHeight_ThreeRow   := guiHeight_TwoRow + TabcontentSlot_H + (borderSize*2)
-            Gui%guiName%.Height_FourRow 	:= guiHeight_FourRow    := guiHeight_ThreeRow + TabcontentSlot_H + (borderSize*2)
+            Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabContentSlot_H_Temp + (borderSize) ; 22=header2
+			Gui%guiName%.Height_TwoRow	 	:= guiHeight_TwoRow     := guiHeight_OneRow + TabContentSlot_H_Temp + (borderSize*2)
+            Gui%guiName%.Height_ThreeRow 	:= guiHeight_ThreeRow   := guiHeight_TwoRow + TabContentSlot_H_Temp + (borderSize*2)
+            Gui%guiName%.Height_FourRow 	:= guiHeight_FourRow    := guiHeight_ThreeRow + TabContentSlot_H_Temp + (borderSize*2)
 
-            guiFullHeight := guiHeight_FourRow, guiFullWidth := scaleMult*(398+(2*borderSize))
+			Gui%guiName%.OneButtonsRow 		:= oneButtonsRow 		:= (25*scaleMult)
+			Gui%guiName%.TwoButtonsRow 		:= twoButtonsRow 		:= (oneButtonsRow*2)+(5*scaleMult)
+			Gui%guiName%.ThreeButtonsRow 	:= threeButtonsRow 		:= (twoButtonsRow*2)+((5*scaleMult)*2)
+
+            guiFullHeight := guiHeight_FourRow+threeButtonsRow+(5*scaleMult), guiFullWidth := scaleMult*(398+(2*borderSize))
             guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
             guiMinimizedHeight := (30+(borderSize*2))*scaleMult ; 30=Header
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
             upMost := borderSize, downMost := guiHeight+borderSize
+
+			
         }
         else if (_tabsOrSlots="Tabs") {
             Gui%guiName%.Height_NoRow 		:= guiHeight_NoRow      := borderSize + (30*scaleMult) + borderSize ; 30=header
-            Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabcontentSlot_H + (borderSize) ; 22=header2
-            Gui%guiName%.Height_TwoRow	 	:= guiHeight_TwoRow     := guiHeight_OneRow + TabcontentSlot_H + (borderSize*2)
-            Gui%guiName%.Height_ThreeRow 	:= guiHeight_ThreeRow   := guiHeight_TwoRow + TabcontentSlot_H + (borderSize*2)
-            Gui%guiName%.Height_FourRow 	:= guiHeight_FourRow    := guiHeight_ThreeRow + TabcontentSlot_H + (borderSize*2)
+            Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabContentSlot_H_Temp + (borderSize) ; 22=header2
 
-            guiFullHeight := guiHeight_FourRow, guiFullWidth := scaleMult*(398+(2*borderSize))
+			Gui%guiName%.OneButtonsRow 		:= oneButtonsRow 		:= (25*scaleMult)
+			Gui%guiName%.TwoButtonsRow 		:= twoButtonsRow 		:= oneButtonsRow+(25*scaleMult)+(5*scaleMult)
+			Gui%guiName%.ThreeButtonsRow 	:= threeButtonsRow 		:= twoButtonsRow+(25*scaleMult)+(5*scaleMult)+(5*scaleMult)
+
+            guiFullHeight := guiHeight_OneRow+threeButtonsRow+(5*scaleMult), guiFullWidth := scaleMult*(398+(2*borderSize))
             guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
             guiMinimizedHeight := (30+(borderSize*2))*scaleMult ; 30=Header
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
             upMost := borderSize, downMost := guiHeight+borderSize
+
+			TabContentSlot_H := guiHeight_OneRow + threeButtonsRow
         }
+		TabContentSlot_W := guiWidth
 
         ; = = Define general gui slots
         if (_guiMode="Slots") {
@@ -262,7 +402,9 @@
         if (_guiMode="Slots") {
             global GuiTradesBuySearch, GuiTradesBuySearch_Controls
             global GuiTradesSellSearch, GuiTradesSellSearch_Controls
-            Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +E0x08000000 +HwndhGui" guiName "Search")
+			if (_preview)
+            	Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +HwndhGui" guiName "Search")
+			else Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +E0x08000000 +HwndhGui" guiName "Search")
             Gui.SetDefault(guiName "Search")
             Gui.Margin(guiName "Search", 0, 0)
             Gui.Color(guiName "Search", "White")
@@ -272,7 +414,9 @@
             
             global GuiTradesBuySearchHidden, GuiTradesBuySearchHidden_Controls
             global GuiTradesSellSearchHidden, GuiTradesSellSearchHidden_Controls
-            Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +E0x08000000 +LastFound +HwndhGui" guiName "SearchHidden")
+			if (_preview)
+            	Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +HwndhGui" guiName "SearchHidden")
+			else Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +E0x08000000 +LastFound +HwndhGui" guiName "SearchHidden")
             Gui.SetDefault(guiName "SearchHidden")
             Gui.Margin(guiName "SearchHidden", 0, 0)
             Gui.Color(guiName "SearchHidden", "White")
@@ -325,40 +469,93 @@
         }
 
         Loop % _tabsToRender {
-			tabNum := A_Index
-            Gui.New(guiName "_Slot" tabNum, "-Caption -Border +AlwaysOnTop +Parent" guiName " +LabelGUI_Trades_V2_Slot_ +HwndhGui" guiName "_Slot" tabNum, "POE TC - Item Slot " tabNum)
-            Gui.SetDefault(guiName "_Slot" tabNum)
-			Gui.Margin(guiName "_Slot" tabNum, 0, 0)
-			Gui.Color(guiName "_Slot" tabNum, SKIN.Assets.Misc.Transparency_Color)
-			Gui.Font(guiName "_Slot" tabNum, Gui%guiName%.Font, Gui%guiName%.Font_Size, Gui%guiName%.Font_Quality)
+			tabNum := A_Index, slotGuiName := guiName "_Slot" tabNum
+            Gui.New(slotGuiName, "-Caption -Border +AlwaysOnTop +Parent" guiName " +LabelGUI_Trades_V2_Slot_ +HwndhGui" slotGuiName, "POE TC - Item Slot " tabNum)
+            Gui.SetDefault(slotGuiName)
+			Gui.Margin(slotGuiName, 0, 0)
+			Gui.Color(slotGuiName, SKIN.Assets.Misc.Transparency_Color)
+			Gui.Font(slotGuiName, Gui%guiName%.Font, Gui%guiName%.Font_Size, Gui%guiName%.Font_Quality)
 
-			Gui.Add(guiName "_Slot" tabNum, "Text", "x0 y0 w0 h0 BackgroundTrans Hidden hwndhTEXT_HiddenInfos", "")
+			Gui.Add(slotGuiName, "Text", "x0 y0 w0 h0 BackgroundTrans Hidden hwndhTEXT_HiddenInfos", "")
 
-			Gui.Add(guiName "_Slot" tabNum, "Picture", "x" BackgroundImg_X " y" BackgroundImg_Y " hwndhIMG_Background BackgroundTrans", SKIN.Assets.Misc.Background)
-			TilePicture(guiName "_Slot" tabNum, Gui%guiName%_Slot%tabNum%_Controls.hIMG_Background, BackgroundImg_W, BackgroundImg_H) ; Fill the background
+			Gui.Add(slotGuiName, "Picture", "x" BackgroundImg_X " y" BackgroundImg_Y " hwndhIMG_Background BackgroundTrans", SKIN.Assets.Misc.Background)
+			TilePicture(slotGuiName, Gui%guiName%_Slot%tabNum%_Controls.hIMG_Background, BackgroundImg_W, BackgroundImg_H) ; Fill the background
 			
-			Gui.Add(guiName "_Slot" tabNum, "Text", "x" ItemName_X " y" ItemName_Y " w" ItemName_W " R1 BackgroundTrans hwndhTEXT_ItemName c" SKIN.Settings.COLORS.Trade_Info_2)
-			Gui.Add(guiName "_Slot" tabNum, "Text", "x" SellerName_X " y" SellerName_Y " w" SellerName_W " R1 BackgroundTrans hwndhTEXT_SellerName c" SKIN.Settings.COLORS.Trade_Info_2)
-			Gui.Add(guiName "_Slot" tabNum, "Picture", "x" CurrencyImg_X " y" CurrencyImg_Y " w" CurrencyImg_W " h" CurrencyImg_H " 0xE BackgroundTrans  hwndhIMG_CurrencyIMG")
-			Gui.Add(guiName "_Slot" tabNum, "Text", "x" PriceCount_X " y" PriceCount_Y " w" PriceCount_W " R1 BackgroundTrans hwndhTEXT_PriceCount c" SKIN.Settings.COLORS.Trade_Info_2)
-			Gui.Add(guiName "_Slot" tabNum, "Text", "x" AdditionalMsg_X " y" AdditionalMsg_Y " w" AdditionalMsg_W " R1 BackgroundTrans  hwndhTEXT_AdditionalMessage c" SKIN.Settings.COLORS.Trade_Info_2)
-			Gui.Add(guiName "_Slot" tabNum, "Text", "x" Time_X " y" Time_Y " w" Time_W " R1 BackgroundTrans hwndhTEXT_TimeSent c" SKIN.Settings.COLORS.Trade_Info_2)
+			Gui.Add(slotGuiName, "Text", "x" ItemName_X " y" ItemName_Y " w" ItemName_W " R1 BackgroundTrans hwndhTEXT_ItemName c" SKIN.Settings.COLORS.Trade_Info_2)
+			Gui.Add(slotGuiName, "Text", "x" SellerName_X " y" SellerName_Y " w" SellerName_W " R1 BackgroundTrans hwndhTEXT_SellerName c" SKIN.Settings.COLORS.Trade_Info_2)
+			Gui.Add(slotGuiName, "Picture", "x" CurrencyImg_X " y" CurrencyImg_Y " w" CurrencyImg_W " h" CurrencyImg_H " 0xE BackgroundTrans  hwndhIMG_CurrencyIMG")
+			Gui.Add(slotGuiName, "Text", "x" PriceCount_X " y" PriceCount_Y " w" PriceCount_W " R1 BackgroundTrans hwndhTEXT_PriceCount c" SKIN.Settings.COLORS.Trade_Info_2)
+			Gui.Add(slotGuiName, "Text", "x" AdditionalMsg_X " y" AdditionalMsg_Y " w" AdditionalMsg_W " R1 BackgroundTrans  hwndhTEXT_AdditionalMessage c" SKIN.Settings.COLORS.Trade_Info_2)
+			Gui.Add(slotGuiName, "Text", "x" Time_X " y" Time_Y " w" Time_W " R1 BackgroundTrans hwndhTEXT_TimeSent c" SKIN.Settings.COLORS.Trade_Info_2)
             if (_guiMode="Slots")
-			    Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 
-            itemNamePos := Gui.GetControlPos(guiName "_Slot" tabNum, "hTEXT_ItemName")
+            itemNamePos := Gui.GetControlPos(slotGuiName, "hTEXT_ItemName")
 			if (_buyOrSell = "Buy") {
-				Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x" SmallButton_X " y" SmallButton_Y " w" SmallButton_W " h" SmallButton_H " hwndhBTN_WhisperSeller", "", Styles.Button_Whisper, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; write to seller
-				Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_HideoutSeller", "", Styles.Button_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; hideout seller
-				Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_KickSelfSeller", "", Styles.Button_Kick, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; thanks seller
-				Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_ThankSeller", "", Styles.Button_Thanks, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; kick self
+				Gui.Add(slotGuiName, "ImageButton", "x" SmallButton_X " y" SmallButton_Y " w" SmallButton_W " h" SmallButton_H " hwndhBTN_WhisperSeller", "", Styles.Button_Whisper, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; write to seller
+				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_HideoutSeller", "", Styles.Button_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; hideout seller
+				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_KickSelfSeller", "", Styles.Button_Kick, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; thanks seller
+				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_ThankSeller", "", Styles.Button_Thanks, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; kick self
 			}
+			if (_preview=True) {
+				Loop 5 {
+					xpos := A_Index=1?SmallButton_X:"+" SmallButton_Space, ypos := SmallButton_Y
+					if !IsObject(Styles.SmallButton_Test) {
+						GUI_Trades_V2.Create_Style(styles, "SmallButton_Test"
+							,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
+							,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, FillHover: SKIN.Assets.Button_Generic.Fill_Hover, ColorHover: SKIN.Settings.Colors.Button_Hover
+							,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, FillPress: SKIN.Assets.Button_Generic.Fill_Press, ColorPress: SKIN.Settings.Colors.Button_Press
+							,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
+							,Width:SmallButton_W, Height:SmallButton_H})
+					}
+					Gui.Add(slotGuiName, "ImageButton", "x" xpos " y" ypos " w" SmallButton_W " h" SmallButton_H " hwndhBTN_SmallSlot" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles.SmallButton_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+					Gui.Add(slotGuiName, "ImageButton", "xp yp wp hp hwndhBTN_SmallButton" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", "[ " A_Index " ]", Styles.SmallButton_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_SmallSlot" A_Index, "Preview_AddSmallButtonToSlot", _buyOrSell, A_Index) 
+					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_SmallButton" A_Index, "Preview_CustomizeThisSmallButton", _buyOrSell, A_Index) 
+				}
+
+				Loop 3 { ; Max 3 rows of buttons
+					rowNum := A_Index, rowX := 6, rowH := SmallButton_H, rowW := TabContentSlot_W-(5+5)
+					row1Y := SmallButton_Y+rowH+5, row2Y := row1Y+rowH+5, row3Y := row2Y+rowH+5, rowY := row%rowNum%Y
+
+					if !IsObject(Styles.CustomButtonRow_Test) {
+						GUI_Trades_V2.Create_Style(styles, "CustomButtonRow_Test"
+							,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
+							,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, FillHover: SKIN.Assets.Button_Generic.Fill_Hover, ColorHover: SKIN.Settings.Colors.Button_Hover
+							,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, FillPress: SKIN.Assets.Button_Generic.Fill_Press, ColorPress: SKIN.Settings.Colors.Button_Press
+							,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
+							,Width:rowW, Height:rowH})
+					}
+					Gui.Add(slotGuiName, "ImageButton", "x" rowX " y" rowY " w" rowW " h" rowH " hwndhBTN_CustomRowSlot" rowNum " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles.CustomButtonRow_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomRowSlot" rowNum, "Preview_AddCustomButtonsToRow", _buyOrSell, rowNum)
+					Loop 10 { ; Max 10 buttons per row
+						btnsCount := A_Index, spaceBetweenBtns := 0
+						btnWidth := (rowW/btnsCount), btnHeight := rowH
+
+						if !IsObject(Styles["CustomButtonRow" rowNum "Max" btnsCount]) {
+							GUI_Trades_V2.Create_Style(styles, "CustomButtonRow" rowNum "Max" btnsCount
+								,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
+								,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, FillHover: SKIN.Assets.Button_Generic.Fill_Hover, ColorHover: SKIN.Settings.Colors.Button_Hover
+								,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, FillPress: SKIN.Assets.Button_Generic.Fill_Press, ColorPress: SKIN.Settings.Colors.Button_Press
+								,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
+								,Width:btnWidth, Height:btnHeight})
+						}
+						Loop %btnsCount% {
+							btnX := A_Index=1?rowX:"+" spaceBetweenBtns, btnY := rowY
+							Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", "[ " A_Index " ]", Styles["CustomButtonRow" rowNum "Max" btnsCount], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+							Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, A_Index)
+						}
+					}
+				}
+				
+			}
+			/*
 			else if (_buyOrSell = "Sell") && (_tabsOrSlots="Tabs") {
 				; Adding special buttons
 				Loop 5 {
 					speX := A_Index=1?SmallButton_X:"+" SmallButton_Space, speY := SmallButton_Y
-					Gui.Add(guiName "_Slot" tabNum, "Button", "x" speX " y" speY " w" SmallButton_W " h" SmallButton_H " hwndhBTN_FakeSpecialBtn" A_Index " Hidden")
-					spe%A_Index%X := Gui.GetControlPos(guiName "_Slot" tabNum, "hBTN_FakeSpecialBtn" A_Index).X
+					Gui.Add(slotGuiName, "Button", "x" speX " y" speY " w" SmallButton_W " h" SmallButton_H " hwndhBTN_FakeSpecialBtn" A_Index " Hidden")
+					spe%A_Index%X := Gui.GetControlPos(slotGuiName, "hBTN_FakeSpecialBtn" A_Index).X
 				}
 				if (GUI_Trades_V2.Get_ButtonsRowsCount().Special > 0) {
 					Loop 5 { ; Max num of special btns
@@ -371,18 +568,18 @@
 							speNum := speNum?speNum+1:1
 							speX := spe%speSlot%X, speY := "p"
 							
-							Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x" speX " y" speY " w" SmallButton_W " h" SmallButton_H " hwndhBTN_Special" speIndex, "", speStyle, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-							; Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_Special" speIndex, "DoTradeButtonAction", _buyOrSell, speIndex, "Special") 
+							Gui.Add(slotGuiName, "ImageButton", "x" speX " y" speY " w" SmallButton_W " h" SmallButton_H " hwndhBTN_Special" speIndex, "", speStyle, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+							; Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_Special" speIndex, "DoTradeButtonAction", _buyOrSell, speIndex, "Special") 
 						}
 					}
 				}
 				; Adding custom buttons
 				Loop 3 {
-					Gui.Add(guiName "_Slot" tabNum, "Button", "x0 y+5 w0 h" CustomButton_H " hwndhBTN_FakeCustomBtn" A_Index " Hidden")
+					Gui.Add(slotGuiName, "Button", "x0 y+5 w0 h" CustomButton_H " hwndhBTN_FakeCustomBtn" A_Index " Hidden")
 				}
-				custTopY := Gui.GetControlPos(guiName "_Slot" tabNum, "hBTN_FakeCustomBtn1").Y
-				custMidY := Gui.GetControlPos(guiName "_Slot" tabNum, "hBTN_FakeCustomBtn2").Y
-				custBotY := Gui.GetControlPos(guiName "_Slot" tabNum, "hBTN_FakeCustomBtn3").Y
+				custTopY := Gui.GetControlPos(slotGuiName, "hBTN_FakeCustomBtn1").Y
+				custMidY := Gui.GetControlPos(slotGuiName, "hBTN_FakeCustomBtn2").Y
+				custBotY := Gui.GetControlPos(slotGuiName, "hBTN_FakeCustomBtn3").Y
 				if (GUI_Trades_V2.Get_ButtonsRowsCount().Custom > 0) {
 					Loop 9 { ; Max num of custom btns
 						custIndex := A_Index
@@ -396,12 +593,13 @@
 							custY := IsIn(custSlot, "1,2,3")?custTopY : IsIn(custSlot, "4,5,6")?custMidY : IsIn(custSlot, "7,8,9")?custBotY : ""
 							custW := custSize="Small"?CustomButtonOneThird_W : custSize="Medium"?CustomButtonTwoThird_W : custSize="Large"?CustomButtonThreeThird_W : ""
 
-							Gui.Add(guiName "_Slot" tabNum, "ImageButton", "x" custX " y" custY " w" custW " h" CustomButton_H " hwndhBTN_Custom" custSlot, custName, custStyle, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-							; Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_Custom" custSlot, "DoTradeButtonAction", _buyOrSell, custIndex, "Custom") 
+							Gui.Add(slotGuiName, "ImageButton", "x" custX " y" custY " w" custW " h" CustomButton_H " hwndhBTN_Custom" custSlot, custName, custStyle, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+							; Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_Custom" custSlot, "DoTradeButtonAction", _buyOrSell, custIndex, "Custom") 
 						}
 					}
 				}
 			}
+			*/
 			
             ; TO_DO_V2 add TradeVerify 
             ; Gui.Add(guiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerify" tabNum " BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
@@ -414,14 +612,14 @@
 			Gui%guiName%["Slot" tabNum "_Controls"] := Gui%guiName%_Slot%tabNum%_Controls
 
             if (_guiMode="Slots")
-                Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_CloseTab", "RemoveTab", _buyOrSell, tabNum) 
-            Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_WhisperSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "WhisperSeller") 
-            Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_HideoutSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "HideoutSeller") 
-            Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_KickSelfSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "KickSelfSeller") 
-            Gui.BindFunctionToControl("GUI_Trades_V2", guiName "_Slot" tabNum, "hBTN_ThankSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "ThankSeller") 
+                Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CloseTab", "RemoveTab", _buyOrSell, tabNum) 
+            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_WhisperSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "WhisperSeller") 
+            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_HideoutSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "HideoutSeller") 
+            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_KickSelfSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "KickSelfSeller") 
+            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_ThankSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "ThankSeller") 
 
-			; Gui.Show(guiName "_Slot" tabNum, "x0 y0 w" guiWidth+borderSize " h" TabContentSlot_H " Hide")	
-			Gui.Show(guiName "_Slot" tabNum, "AutoSize Hide")	
+			; Gui.Show(slotGuiName, "x0 y0 w" guiWidth+borderSize " h" TabContentSlot_H " Hide")	
+			Gui.Show(slotGuiName, "AutoSize Hide")	
 
             Gui%guiName%.ImageButton_Errors .= Gui%guiName%["Slot" tabNum].ImageButton_Errors
         }
@@ -453,11 +651,14 @@
             GuiTrades := {}
         if !IsObject(GuiTrades_Controls)
             GuiTrades_Controls := {}
-        GuiTrades[_buyOrSell] := Gui%guiName%, GuiTrades_Controls[_buyOrSell] := Gui%guiName%_Controls
+	    GuiTrades[_buyOrSell] := Gui%guiName%, GuiTrades_Controls[_buyOrSell] := Gui%guiName%_Controls
+		GuiTrades[_buyOrSell].Styles := styles
 
         savedXPos := PROGRAM.SETTINGS.SETTINGS_MAIN[_buyOrSell "_Pos_X"], savedYPos := PROGRAM.SETTINGS.SETTINGS_MAIN[_buyOrSell "_Pos_Y"]
         savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
-        Gui.Show(guiName, "x" savedXPos " y" savedYPos " h" guiFullHeight " w" guiFullWidth)
+		if (_preview)
+        	Gui.Show(guiName, "x0 y0 h" guiFullHeight " w" guiFullWidth " Hide")
+		else Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
         if (_guiMode="Slots") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " Hide")
             Gui.Show(guiName "SearchHidden", "x0 y0 w0 h0 NoActivate") ; Not hidden on purpose so it can work with ShellMessage to empty on click
@@ -466,22 +667,32 @@
 
         ; GUI_Trades_V2.Minimize(guiName)
 
-		OnMessage(0x200, "WM_MOUSEMOVE")
-        OnMessage(0x20A, "WM_MOUSEWHEEL")
-		OnMessage(0x201, "WM_LBUTTONDOWN")
-		OnMessage(0x202, "WM_LBUTTONUP")
+		if !(_preview) {
+			OnMessage(0x200, "WM_MOUSEMOVE")
+			OnMessage(0x20A, "WM_MOUSEWHEEL")
+			OnMessage(0x201, "WM_LBUTTONDOWN")
+			OnMessage(0x202, "WM_LBUTTONUP")
 
-        GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
-		if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
-			GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
+			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
+			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
+				GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
 
-		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
+			GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 
-		GUI_Trades_V2.EnableHotkeys(_buyOrSell)
+			GUI_Trades_V2.EnableHotkeys(_buyOrSell)
+		}
+
+		if (_preview) {
+			GuiTrades[_buyOrSell].Preview := True
+			OnMessage(0x201, "WM_LBUTTONDOWN_MOVE")
+			GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, 100)
+		}
 		Return
 
 		GUI_Trades_V2_ContextMenu:
-		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+			_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+			_buyOrSell .= IsContaining(A_Gui, "Preview") ? "Preview" : ""
+
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, %A_Gui%:Name,% ctrlHwnd
 			GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
@@ -495,6 +706,8 @@
 
 		GUI_Trades_V2_Slot_ContextMenu:
 			_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+			_buyOrSell .= IsContaining(A_Gui, "Preview") ? "Preview" : ""
+
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, %A_Gui%:Name,% ctrlHwnd
 			GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
@@ -502,7 +715,7 @@
     }
 
     ContextMenu(CtrlName, _buyOrSell) {
-		global PROGRAM, GuiTrades, GuiTrades_Controls
+		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings
 		iniFile := PROGRAM.INI_FILE
 		isSlot := GuiTrades[_buyOrSell].Is_Slots
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
@@ -513,28 +726,72 @@
 		else if (isTabs) {
 			thisSlotID := GuiTrades[_buyOrSell].Active_Tab
 		}
-		
 
-		; Creating the menu
-		try Menu, RClickMenu, DeleteAll
-		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition, GUI_Trades_V2_ContextMenu_LockPosition
-		if (_buyOrSell)
-			Menu, RClickMenu, Add, Expand upwards?, GUI_Trades_V2_ContextMenu_ExpandUpwardsToggle
-		Menu, RClickMenu, Add
-		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
-		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
-		Menu, RClickMenu, Add
-		Menu, RClickMenu, Add,% "Settings", GUI_Trades_V2_ContextMenu_OpenTrayMenu
-		; Check - Disable - etc
-		if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
-			Menu, RClickMenu, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
-		if (!GuiTrades[_buyOrSell].Tabs_Count)
-			Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs
-		if (!GuiTrades[_buyOrSell].Tabs_Count) || (isSlot && !thisSlotID)
-			Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem
-		; Show
-		Menu, RClickMenu, Show		
+		if IsContaining(A_Gui, "Preview") {
+			if RegExMatch(CtrlName, "iO)hBTN_CustomButtonRow(\d+?)Max(\d+)Num(\d+)", custonBtnPat) {
+				; msgbox % GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" 1 "Max" 5 "Num" 1]
+				rowNum := custonBtnPat.1, btnsCount := custonBtnPat.2, btnNum := custonBtnPat.3
+				guiName := "Trades" _buyOrSell "_Slot1"
+
+				try Menu, RMenu, DeleteAll
+				Menu, RMenu, Add, Add another button, GUI_Trades_V2_ContextMenu_AddOneButton
+				Menu, RMenu, Add, Remove one button, GUI_Trades_V2_ContextMenu_RemoveOneButton
+				Menu, RMenu, Show
+				return
+			}
+		}
+		else {
+			; Creating the menu
+			try Menu, RClickMenu, DeleteAll
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition, GUI_Trades_V2_ContextMenu_LockPosition
+			if (_buyOrSell)
+				Menu, RClickMenu, Add, Expand upwards?, GUI_Trades_V2_ContextMenu_ExpandUpwardsToggle
+			Menu, RClickMenu, Add
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
+			Menu, RClickMenu, Add
+			Menu, RClickMenu, Add,% "Settings", GUI_Trades_V2_ContextMenu_OpenTrayMenu
+			; Check - Disable - etc
+			if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
+				Menu, RClickMenu, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
+			if (!GuiTrades[_buyOrSell].Tabs_Count)
+				Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs
+			if (!GuiTrades[_buyOrSell].Tabs_Count) || (isSlot && !thisSlotID)
+				Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem
+			; Show
+			Menu, RClickMenu, Show		
+		}
 		Return
+
+		GUI_Trades_V2_ContextMenu_AddOneButton:
+			if (btnsCount=10)
+				return
+
+			Loop % btnsCount ; Hiding previous buttons
+				GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
+			Loop % btnsCount+1 ; Showing new ones
+				GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount+1 "Num" A_Index]
+
+			; Make sure new button is chosen
+			GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount+1, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
+		return
+
+		GUI_Trades_V2_ContextMenu_RemoveOneButton:
+			Loop % btnsCount ; Hiding previous buttons
+				GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
+
+			if (btnsCount=1) ; Show the row button bcs no buttons left
+				GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowNum]
+			else ; Show new buttons
+				Loop % btnsCount-1
+					GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount-1 "Num" A_Index]
+
+			; Make sure new button is chosen
+			if (btnsCount-1 >= GuiSettings.CUSTOM_BUTTON_SELECTED_NUM) ; We can still choose same one, bcs num still exists
+				GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount-1, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
+			else ; Choose last button, bcs our button doesn't exist anymore
+				GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount-1, btnsCount-1)
+		return
 
 		GUI_Trades_V2_ContextMenu_OpenTrayMenu:
 			Menu,Tray,Show
@@ -569,8 +826,6 @@
 		global PROGRAM
 		global GuiTrades, GuiTrades_Controls
 		static uniqueNum
-
-		msgbox % _buyOrSell " - " slotNum " - " btnType
 
 		if !IsNum(slotNum)
 			Return
@@ -685,7 +940,7 @@
 			Return "TabAlreadyExists"
 		
         ; If tabs limit is close, allocate more slots
-		if (tabsCount+1 >= tabsLimit) ; TO_DO re-enable
+		if (tabsCount+1 >= tabsLimit) && !IsContaining(_buyOrSell, "Preview")
 			GUI_Trades_V2.IncreaseTabsLimit(_buyOrSell)
 
         ; Putting infos to slot
@@ -1358,6 +1613,13 @@
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     */
 
+	RemoveButtonFocus(_buyOrSell) {
+		global GuiTrades
+		ControlFocus,,% "ahk_id " GuiTrades[_buyOrSell].Handle ; Remove focus
+		Loop % GuiTrades[_buyOrSell].Tabs_Count
+			ControlFocus,,% "ahk_id " GuiTrades[_buyOrSell]["Slot" A_Index].Handle
+	}
+
 	ScrollLeft(params*) {
         return GUI_Trades_V2.ScrollUp(params*)
     }
@@ -1578,6 +1840,20 @@
         }
 	}
 
+	Create_Style(ByRef styles, styleName, styleInfos) {
+		global SKIN
+		
+		normalImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.Left, Right:styleInfos.Right, Fill:styleInfos.Fill}, styleInfos.Width, styleInfos.Height)
+		hoverImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftHover, Right:styleInfos.RightHover, Fill:styleInfos.FillHover}, styleInfos.Width, styleInfos.Height)
+		ressImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftPress, Right:styleInfos.RightPress, Fill:styleInfos.FillPress}, styleInfos.Width, styleInfos.Height)
+		defaultimg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftDefault, Right:styleInfos.RightDefault, Fill:styleInfos.FillDefault}, styleInfos.Width, styleInfos.Height)		
+		
+		styles[styleName] := [ [0, normalImg, "", styleInfos.Color, "", styleInfos.ColorTransparency]
+						, [0, hoverImg, "", styleInfos.ColorHover, "", styleInfos.ColorTransparency]
+						, [0, ressImg, "", styleInfos.ColorPress, "", styleInfos.ColorTransparency]
+						, [0, defaultimg, "", styleInfos.ColorDefault, "", styleInfos.ColorTransparency] ]
+	}
+
     Get_Styles() {
         ; FINISHED_V2
 		global PROGRAM, SKIN
@@ -1652,6 +1928,9 @@
 		/*	Allow dragging the GUI
 		*/
 		global PROGRAM, GuiTrades
+		if IsContaining(_buyOrSell, "Preview")
+			return
+
 		if ( PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Window" && PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "False" ) {
 			PostMessage, 0xA1, 2,,,% "ahk_id " GuiTrades[_buyOrSell].Handle
 		}
