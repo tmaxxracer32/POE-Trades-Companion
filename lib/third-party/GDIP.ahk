@@ -29,6 +29,12 @@ Gdip_Shutdown(pToken="")
 }
 
 Gdip_CreateResizedHBITMAP_FromFile(file, NewWidth="", NewHeight="", PreserveAspectRatio=true) {
+	return Gdip_CreateResizedBITMAP_FromFile("hBitMap", file, NewWidth, NewHeight, PreserveAspectRatio)
+}
+Gdip_CreateResizedPBITMAP_FromFile(file, NewWidth="", NewHeight="", PreserveAspectRatio=true) {
+	return Gdip_CreateResizedBITMAP_FromFile("pBitMap", file, NewWidth, NewHeight, PreserveAspectRatio)
+}
+Gdip_CreateResizedBITMAP_FromFile(pBitMap_or_hBitMap, file, NewWidth="", NewHeight="", PreserveAspectRatio=true) {
 	; Credits to ResConImg from ahkon for the original code
 	; Dont forget to add 0xE to the picture control
 	pBitmapFile := Gdip_CreateBitmapFromFile(file)
@@ -52,12 +58,51 @@ Gdip_CreateResizedHBITMAP_FromFile(file, NewWidth="", NewHeight="", PreserveAspe
 	Gdip_SetInterpolationMode(graph, 7)
 	Gdip_DrawImage(graph, pBitmapFile, 0, 0, NewWidth, NewHeight)          ; Draw the original image onto the new bitmap
 
-	hBitmap := Gdip_CreateHBITMAPFromBitmap(pBitmap)
+	if (pBitMap_or_hBitMap="hBitMap")
+		hBitmap := Gdip_CreateHBITMAPFromBitmap(pBitmap)
 
 	Gdip_DisposeImage(pBitmapFile)                                          ; Delete the bitmap of the original image
-	Gdip_DisposeImage(pBitmap)                                              ; Delete the new bitmap
+	if (pBitMap_or_hBitMap="hBitMap")
+		Gdip_DisposeImage(pBitmap)                                          ; Delete the new bitmap
 	Gdip_DeleteGraphics(graph)                                              ; The graphics may now be deleted
-	return hBitmap
+
+	if (pBitMap_or_hBitMap="hBitMap")
+		return hBitmap
+	else return pBitmap
+}
+
+GetImageSize(ImageFullPath) {
+	; Credits to SKAN for the function
+	; autohotkey.com/board/topic/12001-finding-the-widthheight-of-a-picture/?p=204745
+	pBM := Gdip_CreateBitmapFromFile(ImageFullPath)				      ; Obtain GDI+ Handle  
+	w := Gdip_GetImageWidth(pBM), h := Gdip_GetImageHeight(pBM)   ; Get Dimensions
+	Gdip_DisposeImage(pBM)                                          ; Dispose image
+	return {W:w, H:h}
+}
+
+Gdip_ResizeBitmap(pBitmap, PercentOrWH, useSmoothInterpol=True, Dispose=True) {
+	; Credits to Learning one for the original function
+	; Modified version of the function by lemasato
+	; Added useSmoothInterpol param to remove the "washed out colors" bug when the resized bitmap is used as part to create bigger bitmap with Gdip_DrawImage()
+    Gdip_GetImageDimensions(pBitmap, origW, origH)
+    if PercentOrWH contains w,h
+    {
+        RegExMatch(PercentOrWH, "i)w(\d*)", w), RegExMatch(PercentOrWH, "i)h(\d*)", h)
+        NewWidth := w1, NewHeight := h1
+        NewWidth := (NewWidth = "") ? origW/(origH/NewHeight) : NewWidth
+        NewHeight := (NewHeight = "") ? origH/(origW/NewWidth) : NewHeight
+    }
+    else
+    NewWidth := origW*PercentOrWH/100, NewHeight := origH*PercentOrWH/100      
+    pBitmap2 := Gdip_CreateBitmap(NewWidth, NewHeight)
+    G2 := Gdip_GraphicsFromImage(pBitmap2)
+	if (useSmoothInterpol=True)
+		Gdip_SetSmoothingMode(G2, 4), Gdip_SetInterpolationMode(G2, 7)
+    Gdip_DrawImage(G2, pBitmap, 0, 0, NewWidth, NewHeight)
+    Gdip_DeleteGraphics(G2)
+    if (Dispose=True)
+        Gdip_DisposeImage(pBitmap)
+    return pBitmap2
 }
 
 
