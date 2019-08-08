@@ -518,22 +518,14 @@ Get_LocalSettings() {
 	iniFile := PROGRAM.INI_FILE
 	settingsObj := {}
 
-	Loop, Parse,% INI.Get(iniFile), "`n"
-	{
-		settingsObj[A_LoopField] := {}
-
-		arr := INI.Get(iniFile, A_LoopField,,1)
-		for key, value in arr {
-			isActionContent := RegExMatch(A_LoopField, "SETTINGS_CUSTOM_BUTTON_.*") && RegExMatch(key, "Action_.*_Content") ? True
-				: RegExMatch(A_LoopField, "SETTINGS_HOTKEY_ADV_.*") && RegExMatch(key, "Action_.*_Content") ? True
-				: RegExMatch(A_LoopField, "SETTINGS_HOTKEY_.*") && key="Content" ? True
-				: False
-
-			if (isActionContent) {
-				StringTrimLeft, value, value, 1
-				StringTrimRight, value, value, 1
+	settingsObj := class_EasyIni(iniFile)
+	for iniSection, nothing in settingsObj {
+		for iniKey, iniValue in settingsObj[iniSection] {
+			if RegExMatch(iniKey, "Action_.*_Content") || RegExMatch(iniKey, "Action_.*_Content") || (iniKey="Content") {
+				StringTrimLeft, iniValue, iniValue, 1
+				StringTrimRight, iniValue, iniValue, 1
+				settingsObj[iniSection][iniKey] := iniValue
 			}
-			settingsObj[A_LoopField][key] := value
 		}
 	}
 
@@ -774,14 +766,9 @@ Update_LocalSettings() {
 Declare_LocalSettings(settingsObj="") {
 	global PROGRAM
 
-	if (settingsObj = "")
+	if !IsObject(settingsObj)
 		settingsObj := Get_LocalSettings()
 
 	PROGRAM["SETTINGS"] := {}
-
-	for iniSection, nothing in settingsObj {
-		PROGRAM["SETTINGS"][iniSection] := {}
-		for iniKey, iniValue in settingsObj[iniSection]
-			PROGRAM["SETTINGS"][iniSection][iniKey] := iniValue
-	}
+	PROGRAM["SETTINGS"] := ObjFullyClone(settingsObj)
 }
