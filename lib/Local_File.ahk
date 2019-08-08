@@ -124,68 +124,55 @@ Get_LocalSettings_DefaultValues() {
 		settings.SETTINGS_CUSTOMIZATION_SKINS_UserDefined[key] := value
 
 
-	settings.SETTINGS_CUSTOM_BUTTON_1 													:= {}
-	settings.SETTINGS_CUSTOM_BUTTON_1.Name												:= "Ask to wait"
-	settings.SETTINGS_CUSTOM_BUTTON_1.Size												:= "Small"
-	settings.SETTINGS_CUSTOM_BUTTON_1.Slot												:= "1"
-	settings.SETTINGS_CUSTOM_BUTTON_1.Enabled											:= "True"
-	settings.SETTINGS_CUSTOM_BUTTON_1.Action_1_Type										:= "SEND_TO_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_1.Action_1_Content									:= """@%buyer% Busy in map/lab/boss/rota/etc, will msg back asap! - (%item% for %price%)"""
-	settings.SETTINGS_CUSTOM_BUTTON_1.Action_2_Type										:= "FORCE_MIN"
-	settings.SETTINGS_CUSTOM_BUTTON_1.Action_2_Content									:= """"""
-
-	settings.SETTINGS_CUSTOM_BUTTON_2 													:= {}
-	settings.SETTINGS_CUSTOM_BUTTON_2.Name												:= "Still interested?"
-	settings.SETTINGS_CUSTOM_BUTTON_2.Size												:= "Small"
-	settings.SETTINGS_CUSTOM_BUTTON_2.Slot												:= "2"
-	settings.SETTINGS_CUSTOM_BUTTON_2.Enabled											:= "True"
-	settings.SETTINGS_CUSTOM_BUTTON_2.Action_1_Type										:= "SEND_TO_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_2.Action_1_Content									:= """@%buyer% Hey, still interested in my %item% listed for %price%"""
-
-	settings.SETTINGS_CUSTOM_BUTTON_3 													:= {}
-	settings.SETTINGS_CUSTOM_BUTTON_3.Name												:= "Invite to Party"
-	settings.SETTINGS_CUSTOM_BUTTON_3.Size												:= "Small"
-	settings.SETTINGS_CUSTOM_BUTTON_3.Slot												:= "3"
-	settings.SETTINGS_CUSTOM_BUTTON_3.Enabled											:= "True"
-	settings.SETTINGS_CUSTOM_BUTTON_3.Action_1_Type										:= "INVITE_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_3.Action_1_Content									:= """/invite %buyer%"""
-	settings.SETTINGS_CUSTOM_BUTTON_3.Action_2_Type										:= "SEND_TO_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_3.Action_2_Content									:= """@%buyer% Ready to be picked up: %item% listed for %price%"""
-
-	settings.SETTINGS_CUSTOM_BUTTON_4 													:= {}
-	settings.SETTINGS_CUSTOM_BUTTON_4.Name												:= "Sold already"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Size												:= "Small"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Slot												:= "4"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Enabled											:= "True"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Action_1_Type										:= "SEND_TO_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Action_1_Content									:= """@%buyer% Sorry, my %item% listed for %price% is sold"""
-	settings.SETTINGS_CUSTOM_BUTTON_4.Action_2_Type										:= "IGNORE_SIMILAR_TRADE"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Action_2_Content									:= """"""
-	settings.SETTINGS_CUSTOM_BUTTON_4.Action_3_Type										:= "CLOSE_TAB"
-	settings.SETTINGS_CUSTOM_BUTTON_4.Action_3_Content									:= """"""
-
-	settings.SETTINGS_CUSTOM_BUTTON_5 													:= {}
-	settings.SETTINGS_CUSTOM_BUTTON_5.Name												:= "Thank you!"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Size												:= "Medium"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Slot												:= "5"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Enabled											:= "True"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_1_Type										:= "SEND_TO_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_1_Content									:= """@%buyer% Thank you & good luck!"""
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_2_Type										:= "KICK_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_2_Content									:= """/kick %buyer%"""
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_3_Type										:= "SAVE_TRADE_STATS"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_3_Content									:= """"""
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_4_Type										:= "CLOSE_TAB"
-	settings.SETTINGS_CUSTOM_BUTTON_5.Action_4_Content									:= """"""
-
-	Loop 4 {
-		index := 5+A_Index
-		settings["SETTINGS_CUSTOM_BUTTON_" index]										:= {}
-		settings["SETTINGS_CUSTOM_BUTTON_" index].Name 									:= "[ Untitled button ]"
-		settings["SETTINGS_CUSTOM_BUTTON_" index].Size 									:= "Small"
-		settings["SETTINGS_CUSTOM_BUTTON_" index].Slot 									:= index
-		settings["SETTINGS_CUSTOM_BUTTON_" index].Enabled 								:= "False"
+	; Custom buttons
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1 := {Buttons_Count:3}
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2 := {Buttons_Count:4}
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_3 := {Buttons_Count:0}
+	Loop 3 {
+		rowNum := A_Index		
+		Loop 10 {
+			btnNum := A_Index
+			settings["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum] := {Name:"Unnamed"}
+		}
 	}
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Name 				:= "Invite"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_1_Type		:= "INVITE_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_1_Content	:= """/invite %buyer%"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_2_Type 		:= "SEND_TO_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_2_Content 	:= """@%buyer% Ready to be picked up - (%item% for %price%)"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Name 				:= "Trade"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Action_1_Type		:= "TRADE_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Action_1_Content	:= """/tradewith %buyer%"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Name 				:= "Thanks"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_1_Type		:= "SEND_TO_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_1_Content	:= """@%buyer% Thank you & good luck!"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_2_Type		:= "KICK_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_2_Content	:= """/kick %buyer%"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_3_Type		:= "SAVE_TRADE_STATS"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_3_Content	:= """"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_4_Type		:= "CLOSE_TAB"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_4_Content	:= """"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Name 				:= "Busy"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Action_1_Type		:= "SEND_TO_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Action_1_Content 	:= """@%buyer% Busy for now, will invite asap - (%item% for %price%)"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_2.Name 				:= "?"
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Name 				:= "Ignore item"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_1_Type 		:= "IGNORE_SIMILAR_TRADE"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_1_Content 	:= """"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_2_Type 		:= "CLOSE_TAB"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_2_Content 	:= """"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Name 				:= "Sold"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Type 		:= "SEND_TO_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Content 	:= "Already sold, sorry - (%item% for %price%)"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_2_Type 		:= "CLOSE_TAB"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_2_Content 	:= """"""
 
 	settings.SETTINGS_SPECIAL_BUTTON_1													:= {} 
 	settings.SETTINGS_SPECIAL_BUTTON_1.Slot												:= "1"
@@ -350,7 +337,7 @@ LocalSettings_IsValueValid(iniSect, iniKey, iniValue) {
 		}
 	}
 
-	else if IsContaining(iniSect, "SETTINGS_CUSTOM_BUTTON_") {
+	else if IsContaining(iniSect, "SETTINGS_CUSTOM_BUTTON_") || IsContaining(iniSect, "SETTINGS_CUSTOM_BUTTON_ROW_") {
 		if (iniKey = "Name")
 			isValueValid := iniValue ? True : False	
 		else if (iniKey = "Size")
@@ -363,6 +350,8 @@ LocalSettings_IsValueValid(iniSect, iniKey, iniValue) {
 			isValueValid := True
 		else if RegExMatch(iniKey, "Action_.*_Content") ; TO_DO: Not sure
 			isValueValid := True
+		else if (iniKey = "Buttons_Count")
+			isValueValid := IsBetween(iniValue, 0, 10) ? True : False	
 	}
 
 	else if IsContaining(iniSect, "SETTINGS_SPECIAL_BUTTON_") {
@@ -460,10 +449,15 @@ Set_LocalSettings() {
 	Restore_LocalSettings("UPDATING", "FileName")
 	Restore_LocalSettings("UPDATING", "PID")
 
-	Loop 5 {
-		btnIndex := A_Index
-		for key, value in localSettings["SETTINGS_CUSTOM_BUTTON_" A_Index]
-			doesCustBtn%btnIndex%Exist := True
+	Loop 3 {
+		rowNum := A_Index
+		Loop % settingsDefaultValues["SETTINGS_CUSTOM_BUTTON_ROW_" A_Index].Buttons_Count {
+			btnNum := A_Index
+			for key, value in localSettings["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_Num" btnNum] {
+				doesCustomBtnRow%rowNum%Num%btnNum%Exist := True
+				Break
+			}
+		}
 	}
 
 	; Set the order to go through sections
@@ -484,10 +478,11 @@ Set_LocalSettings() {
 		for iniKey, defValue in settingsDefaultValues[iniSect] {
 			iniValue := localSettings[iniSect][iniKey]
 			isValueValid := LocalSettings_IsValueValid(iniSect, iniKey, iniValue)
-			if RegExMatch(iniSect, "O)SETTINGS_CUSTOM_BUTTON_(.*)", iniSectPat) && IsBetween(iniSectPat.1, 1, 5) {
-				iniSectNum := iniSectPat.1
+			if RegExMatch(iniSect, "O)SETTINGS_CUSTOM_BUTTON_ROW_(\d+)_NUM_(\d+)", iniSectPat) {
+				rowNum := iniSectPat.1, btnNum := iniSectPat.2
+
 				isValueValid := iniKey="Name"?isValueValid
-				: doesCustBtn%iniSectNum%Exist=True?True
+				: doesCustomBtnRow%rowNum%Num%btnNum%Exist=True?True
 				: False
 			}
 

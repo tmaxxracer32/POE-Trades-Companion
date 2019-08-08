@@ -10,21 +10,26 @@
 		; Declaring sizing + positionning
 		assets_infos := {}
 		for asset, imagePath in assets {
+			if !imagePath
+				Continue
+
 			assets_infos[asset] := {}
 			assets_infos[asset].ImagePath := imagePath
 			assets_infos[asset].ImageSizes := GetImageSize(imagePath)
 
 			; Sizing
+			scaleMultiplerFormula := assets_infos[asset].ImageSizes.W > assets_infos[asset].ImageSizes.H ? width / assets_infos[asset].ImageSizes.W : height / assets_infos[asset].ImageSizes.H
 			if IsIn(asset, "Left,Right") {
-				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
+				assets_infos[asset].Scale_Multiplier := scaleMultiplerFormula
 				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
 			}
 			if (asset = "Center") {
-				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
+				scaleBase := 
+				assets_infos[asset].Scale_Multiplier := scaleMultiplerFormula
 				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier * centerRatio), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier * centerRatio)
 			}
 			if (asset = "Fill") {
-				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
+				assets_infos[asset].Scale_Multiplier := scaleMultiplerFormula
 				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
 			}
 
@@ -43,11 +48,14 @@
 		; Creating new final bitmap + graphics
 		pBitmapFinal := Gdip_CreateBitmap(width, height)
 		G := Gdip_GraphicsFromImage(pBitmapFinal)
-		Gdip_SetSmoothingMode(G, 4)
-		Gdip_SetInterpolationMode(G, 7)
+		; Gdip_SetSmoothingMode(G, 4)
+		; Gdip_SetInterpolationMode(G, 7)
 		; Creating bitmap for every element
 		bitMaps := {}
 		for asset, imagePath in assets {
+			if (!imagePath)
+				Continue
+
 			bitMaps[asset] := Gdip_CreateBitmapFromFile(imagePath)
 			bitMaps[asset] := Gdip_ResizeBitmap(bitMaps[asset], "w" assets_infos[asset].Width " h" assets_infos[asset].Height, smooth:=False)
 		}
@@ -114,6 +122,7 @@
 	}
 
 	Preview_AddSmallButtonToSlot(_buyOrSell, slotNum) {
+		global PROGRAM, SKIN
 		global GuiTrades, GuiTrades_Controls
 		guiName := "Trades" _buyOrSell "_Slot1"
 
@@ -126,14 +135,27 @@
 		guiName := "Trades" _buyOrSell "_Slot1"
 
 		try Menu, RMenu, DeleteAll
-		Loop 5
-			Menu, RMenu, Add, %A_Index%, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Clipboard, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Whisper, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Invite, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Trade, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Kick, Preview_CustomizeThisSmallButton_ChangeButtonStyle
+		Menu, RMenu, Add, Thanks, Preview_CustomizeThisSmallButton_ChangeButtonStyle
 		Menu, RMenu, Add, Remove this button, Preview_CustomizeThisSmallButton_RemoveThisButton
 		Menu, RMenu, Show
 		return
 
 		Preview_CustomizeThisSmallButton_ChangeButtonStyle:
-			ctrlPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" btnNum])
+			styles := {}
+			img := "C:\Users\Masato\Documents\GitHub\POE-Trades-Companion\resources\skins\Path of Exile\Icon" A_ThisMenuItem ".png"
+			GUI_Trades_V2.Create_Style(styles, "SmallButton_Test"
+				,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Center: img,Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
+				,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, CenterHover: img,FillHover: SKIN.Assets.Button_Generic.Fill_Hover, ColorHover: SKIN.Settings.Colors.Button_Hover
+				,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, CenterPress: img,FillPress: SKIN.Assets.Button_Generic.Fill_Press, ColorPress: SKIN.Settings.Colors.Button_Press
+				,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, CenterDefault: img,FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
+				,Width:30, Height:25, CenterRatio: 0.60})
+
+			ImageButton.Create(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_SmallButton" btnNum], styles.SmallButton_Test, PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 		return
 
 		Preview_CustomizeThisSmallButton_RemoveThisButton:
@@ -143,14 +165,7 @@
 	}
 
 	Preview_AddCustomButtonsToRow(_buyOrSell, rowNum) {
-		global GuiTrades, GuiTrades_Controls
-		guiName := "Trades" _buyOrSell "_Slot1"
-
-		; Hiding the row button
-		GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowNum]
-		; Showing the 5 new buttons
-		Loop 5
-			GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" 5 "Num" A_Index]
+		GUI_Settings.Preview_AddOneButtonToRow(_buyOrSell, rowNum) 
 	}
 
 	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
@@ -158,8 +173,6 @@
 		static prevBtn
 		guiName := "Trades" _buyOrSell "_Slot1"
 		thisBtn := "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum
-
-		GuiControl, %guiName%:,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn], EZEZ
 		
 		if (prevBtn) {
 			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn]
@@ -171,7 +184,7 @@
 		GuiSettings.CUSTOM_BUTTON_SELECTED_ROW := rowNum
 		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
 		GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := btnNum
-		GUI_Settings.Customization_Interface_LoadButtonActions(rowNum, btnNum)
+		GUI_Settings.Customization_Interface_LoadButtonSettings(rowNum, btnNum)
 
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
 	}
@@ -520,7 +533,10 @@
 			}
 			if (_preview=True) {
 				Loop 5 {
-					xpos := A_Index=1?SmallButton_X:"+" SmallButton_Space, ypos := SmallButton_Y
+					btnNum := A_Index
+					xpos := btnNum=1?SmallButton_X:"+" SmallButton_Space, ypos := SmallButton_Y
+					btnType := PROGRAM.SETTINGS["SETTINGS_SPECIAL_BUTTON_" btnNum].Type
+
 					if !IsObject(Styles.SmallButton_Test) {
 						GUI_Trades_V2.Create_Style(styles, "SmallButton_Test"
 							,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
@@ -529,10 +545,18 @@
 							,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
 							,Width:SmallButton_W, Height:SmallButton_H})
 					}
-					Gui.Add(slotGuiName, "ImageButton", "x" xpos " y" ypos " w" SmallButton_W " h" SmallButton_H " hwndhBTN_SmallSlot" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles.SmallButton_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-					Gui.Add(slotGuiName, "ImageButton", "xp yp wp hp hwndhBTN_SmallButton" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", "[ " A_Index " ]", Styles.SmallButton_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_SmallSlot" A_Index, "Preview_AddSmallButtonToSlot", _buyOrSell, A_Index) 
-					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_SmallButton" A_Index, "Preview_CustomizeThisSmallButton", _buyOrSell, A_Index) 
+					if !IsObject(Styles["SmallButton_Test_" btnType]) {
+						GUI_Trades_V2.Create_Style(styles, "SmallButton_Test_" btnType
+							,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Center: SKIN.Assets.Icons[btnType], Color: SKIN.Settings.Colors.Button_Normal
+							,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, FillHover: SKIN.Assets.Button_Generic.Fill_Hover, CenterHover: SKIN.Assets.Icons[btnType], ColorHover: SKIN.Settings.Colors.Button_Hover
+							,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, FillPress: SKIN.Assets.Button_Generic.Fill_Press, CenterPress: SKIN.Assets.Icons[btnType], ColorPress: SKIN.Settings.Colors.Button_Press
+							,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, CenterDefault: SKIN.Assets.Icons[btnType], Color_Default: SKIN.Settings.Colors.Button_Hover
+							,Width:SmallButton_W, Height:SmallButton_H, CenterRatio:0.55})
+					}
+					Gui.Add(slotGuiName, "ImageButton", "x" xpos " y" ypos " w" SmallButton_W " h" SmallButton_H " hwndhBTN_SmallSlot" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles.SmallButton_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+					Gui.Add(slotGuiName, "ImageButton", "xp yp wp hp hwndhBTN_SmallButton" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", "", Styles["SmallButton_Test_" btnType], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_SmallSlot" btnNum, "Preview_AddSmallButtonToSlot", _buyOrSell, btnNum) 
+					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_SmallButton" btnNum, "Preview_CustomizeThisSmallButton", _buyOrSell, btnNum) 
 				}
 
 				Loop 3 { ; Max 3 rows of buttons
@@ -547,6 +571,7 @@
 							,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
 							,Width:rowW, Height:rowH})
 					}
+
 					Gui.Add(slotGuiName, "ImageButton", "x" rowX " y" rowY " w" rowW " h" rowH " hwndhBTN_CustomRowSlot" rowNum " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles.CustomButtonRow_Test, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomRowSlot" rowNum, "Preview_AddCustomButtonsToRow", _buyOrSell, rowNum)
 					Loop 10 { ; Max 10 buttons per row
@@ -563,12 +588,12 @@
 						}
 						Loop %btnsCount% {
 							btnX := A_Index=1?rowX:"+" spaceBetweenBtns, btnY := rowY
-							Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", "[ " A_Index " ]", Styles["CustomButtonRow" rowNum "Max" btnsCount], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+							btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_"  rowNum "_NUM_" A_Index].Name
+							Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", btnName, Styles["CustomButtonRow" rowNum "Max" btnsCount], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 							Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, A_Index)
 						}
 					}
 				}
-				
 			}
 			/*
 			else if (_buyOrSell = "Sell") && (_tabsOrSlots="Tabs") {
@@ -705,8 +730,9 @@
 
 		if (_preview) {
 			GuiTrades[_buyOrSell].Preview := True
-			OnMessage(0x201, "WM_LBUTTONDOWN_MOVE")
+			; OnMessage(0x201, "WM_LBUTTONDOWN_MOVE")
 			GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, 100)
+			GUI_Settings.SetPreviewPreferences(_buyOrSell)
 		}
 		Return
 
@@ -1864,10 +1890,10 @@
 	Create_Style(ByRef styles, styleName, styleInfos) {
 		global SKIN
 	
-		normalImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.Left, Right:styleInfos.Right, Fill:styleInfos.Fill}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
-		hoverImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftHover, Right:styleInfos.RightHover, Fill:styleInfos.FillHover}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
-		ressImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftPress, Right:styleInfos.RightPress, Fill:styleInfos.FillPress}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
-		defaultimg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftDefault, Right:styleInfos.RightDefault, Fill:styleInfos.FillDefault}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		normalImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.Left, Right:styleInfos.Right, Center:styleInfos.Center, Fill:styleInfos.Fill}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		hoverImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftHover, Right:styleInfos.RightHover, Center:styleInfos.CenterHover, Fill:styleInfos.FillHover}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		ressImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftPress, Right:styleInfos.RightPress, Center:styleInfos.CenterPress, Fill:styleInfos.FillPress}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		defaultimg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftDefault, Right:styleInfos.RightDefault, Center:styleInfos.CenterDefault, Fill:styleInfos.FillDefault}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
 		
 		styles[styleName] := [ [0, normalImg, "", styleInfos.Color, "", styleInfos.ColorTransparency]
 						, [0, hoverImg, "", styleInfos.ColorHover, "", styleInfos.ColorTransparency]
