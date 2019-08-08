@@ -159,6 +159,9 @@ Class GUI {
 			}
 
 		}
+		; Adding var name if hwnd provided but no var name
+		if (vHwnd)
+			pV := "v", vV := vHwnd
 
 		; Font special parameter
 		local hasFontParams := (SpecialParams.Font || SpecialParams.FontSize || SpecialParams.FontQual)?(True):(False)
@@ -215,6 +218,29 @@ Class GUI {
 			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
 				Gui%name%["ImageButton_Errors"] .= vHwnd ": " ImageButton.LastError "`n"
 		}
+	}
+
+	ImageButtonChangeCaption(btnHwnd, btnCaption, btnStyle, btnFontHandle="", btnFontSize="") {
+		; Set caption text
+		ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
+		; Make sure that caption is changed before continuing
+		triesBeforeSetAgain := 3
+		while (newCaption != btnCaption) {
+			ControlGetText, newCaption, , ahk_id %btnHwnd%
+			ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
+			/*
+			triesBeforeSetAgain--
+			if (triesBeforeSetAgain=0) {
+				triesBeforeSetAgain := 3
+				ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
+			}
+			*/
+			Sleep 1
+		}
+		; Calling imagebutton to set new caption
+		if !ImageButton.Create(btnHwnd, btnStyle, imageBtnFontHandle, imageBtnFontSize, "", debug:=True)
+			MsgBox % "Class_GUI.ahk: ImageButtonChangeCaption error."
+			. "`nError: " ImageButton.LastError
 	}
 
 	Show(name, opts="", title="") {
