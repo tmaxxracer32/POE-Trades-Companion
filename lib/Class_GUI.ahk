@@ -46,6 +46,7 @@ Class GUI {
 		Gui%name% := {}
 		Gui%name%_Controls := {}
 		Gui%name%_Submit := {}
+		Gui%name%_ControlFunctions := {}
 
 		if (title)
 			Gui%name%["Title"] := title
@@ -297,10 +298,31 @@ Class GUI {
 		global
 		local __f
 
-		if (params.1)
+		if IsObject(params) {
 			__f := %guiClass%[funcName].Bind(guiClass, params*)
-		else
+			Gui%guiName%_ControlFunctions[ctrlName] := {Function: funcName, Params: [params*]}
+		}
+		else {
 			__f := %guiClass%[funcName].Bind(guiClass)
+			Gui%guiName%_ControlFunctions[ctrlName] := {Function: funcName}
+		}
+		
+		GuiControl, %guiName%:+g,% Gui%guiName%_Controls[ctrlName],% __f
+	}
+
+	DisableControlFunction(guiClass, guiName, ctrlName) {
+		global
+		GuiControl, %guiName%:-g,% Gui%guiName%_Controls[ctrlName]
+	}
+
+	EnableControlFunction(guiClass, guiName, ctrlName) {
+		global
+
+		if IsObject(Gui%guiName%_ControlFunctions[ctrlName].Params)
+			__f := %guiClass%[Gui%guiName%_ControlFunctions[ctrlName].Function].Bind(guiclass, Gui%guiName%_ControlFunctions[ctrlName].Params*)
+		else
+			__f := %guiClass%[Gui%guiName%_ControlFunctions[ctrlName].Function].Bind(guiclass)
+			
 		GuiControl, %guiName%:+g,% Gui%guiName%_Controls[ctrlName],% __f
 	}
 
