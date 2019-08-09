@@ -220,6 +220,12 @@ Class GUI {
 		}
 	}
 
+	ImageButtonUpdate(btnHwnd, btnStyle, btnFontHandle="", btnFontSize="") {
+		if !ImageButton.Create(btnHwnd, btnStyle, imageBtnFontHandle, imageBtnFontSize)
+			MsgBox % "Class_GUI.ahk: ImageButtonChangeCaption error."
+			. "`nError: " ImageButton.LastError
+	}
+
 	ImageButtonChangeCaption(btnHwnd, btnCaption, btnStyle, btnFontHandle="", btnFontSize="") {
 		; Set caption text
 		ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
@@ -238,7 +244,7 @@ Class GUI {
 			Sleep 1
 		}
 		; Calling imagebutton to set new caption
-		if !ImageButton.Create(btnHwnd, btnStyle, imageBtnFontHandle, imageBtnFontSize, "", debug:=True)
+		if !ImageButton.Create(btnHwnd, btnStyle, imageBtnFontHandle, imageBtnFontSize)
 			MsgBox % "Class_GUI.ahk: ImageButtonChangeCaption error."
 			. "`nError: " ImageButton.LastError
 	}

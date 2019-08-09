@@ -135,18 +135,23 @@ Get_LocalSettings_DefaultValues() {
 			settings["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum] := {Name:"Unnamed"}
 		}
 	}
-
+	Loop 5
+		settings["SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_" A_Index] := {}
+		
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Name 				:= "Invite"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_1_Type		:= "INVITE_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_1_Content	:= """/invite %buyer%"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_2_Type 		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_2_Content 	:= """@%buyer% Ready to be picked up - (%item% for %price%)"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Name 				:= "Trade"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Action_1_Type		:= "TRADE_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Action_1_Content	:= """/tradewith %buyer%"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Name 				:= "Thanks"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_1_Type		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_1_Content	:= """@%buyer% Thank you & good luck!"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_2_Type		:= "KICK_BUYER"
@@ -157,22 +162,57 @@ Get_LocalSettings_DefaultValues() {
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_4_Content	:= """"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Name 				:= "Busy"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Action_1_Type		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Action_1_Content 	:= """@%buyer% Busy for now, will invite asap - (%item% for %price%)"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_2.Name 				:= "?"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_2.TextOrIcon 			:= "Text"
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Name 				:= "Ignore item"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_1_Type 		:= "IGNORE_SIMILAR_TRADE"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_1_Content 	:= """"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_2_Type 		:= "CLOSE_TAB"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_2_Content 	:= """"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Name 				:= "Sold"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Type 		:= "SEND_TO_BUYER"
-	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Content 	:= "Already sold, sorry - (%item% for %price%)"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Content 	:= """@%buyer% Already sold, sorry - (%item% for %price%)"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_2_Type 		:= "CLOSE_TAB"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_2_Content 	:= """"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.Icon 				:= "Whisper"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.TextOrIcon 			:= "Icon"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.Action_1_Type 		:= "WRITE_TO_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.Action_1_Content 	:= """@%buyer% """
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.Icon 				:= "Invite"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.TextOrIcon 			:= "Icon"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.Action_1_Type 		:= "INVITE_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.Action_1_Content 	:= """/invite %buyer%"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.Icon 				:= "Trade"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.TextOrIcon 			:= "Icon"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.Action_1_Type 		:= "TRADE_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.Action_1_Content 	:= """/tradewith %buyer%"""
+
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Icon 				:= "Kick"
+	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.TextOrIcon 			:= "Icon"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_1_Type 		:= "KICK_BUYER"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_1_Content 	:= """/kick %buyer%"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_2_Type 		:= "SAVE_TRADE_STATS"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_2_Content 	:= """"""
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_3_Type 		:= "CLOSE_TAB"
+	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_3_Content 	:= """"""
+
+	; settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_5.Name 				:= "Kick"
+	; settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_5.TextOrIcon 			:= "Text"
+	; settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_5.Action_1_Type 		:= "SEND_TO_BUYER"
+	; settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_5.Action_1_Content 	:= "Already sold, sorry - (%item% for %price%)"
+	; settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_5.Action_2_Type 		:= "CLOSE_TAB"
+	; settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_5.Action_2_Content 	:= """"""
 
 	settings.SETTINGS_SPECIAL_BUTTON_1													:= {} 
 	settings.SETTINGS_SPECIAL_BUTTON_1.Slot												:= "1"
@@ -352,6 +392,10 @@ LocalSettings_IsValueValid(iniSect, iniKey, iniValue) {
 			isValueValid := True
 		else if (iniKey = "Buttons_Count")
 			isValueValid := IsBetween(iniValue, 0, 10) ? True : False	
+		else if (iniKey = "TextOrIcon")
+			isValueValid := True
+		else if (iniKey = "Icon")
+			isValueValid := True
 	}
 
 	else if IsContaining(iniSect, "SETTINGS_SPECIAL_BUTTON_") {
@@ -496,6 +540,7 @@ Set_LocalSettings() {
 		}
 	}
 	; Show which values were restored to default
+	warnMsg := ""
 	if (warnMsg) {
 		Gui, ErrorLog:New, +AlwaysOnTop +ToolWindow +hwndhGuiErrorLog
 		Gui, ErrorLog:Add, Text, x10 y10,% "One or multiple ini entries were deemed invalid and were reset to their default value."
