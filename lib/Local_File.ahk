@@ -125,9 +125,9 @@ Get_LocalSettings_DefaultValues() {
 
 
 	; Custom buttons
-	settings.SETTINGS_CUSTOM_BUTTON_ROW_1 := {Buttons_Count:3}
-	settings.SETTINGS_CUSTOM_BUTTON_ROW_2 := {Buttons_Count:4}
-	settings.SETTINGS_CUSTOM_BUTTON_ROW_3 := {Buttons_Count:0}
+	btnsCount := [3,4,0,4]
+	Loop % btnsCount.Count()
+		settings["SETTINGS_CUSTOM_BUTTON_ROW_" A_Index] := {Buttons_Count:btnsCount[A_Index]}
 	Loop 3 {
 		rowNum := A_Index		
 		Loop 10 {
@@ -137,21 +137,18 @@ Get_LocalSettings_DefaultValues() {
 	}
 	Loop 5
 		settings["SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_" A_Index] := {}
-		
+
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Name 				:= "Invite"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_1_Type		:= "INVITE_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_1_Content	:= """/invite %buyer%"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_2_Type 		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_1.Action_2_Content 	:= """@%buyer% Ready to be picked up - (%item% for %price%)"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Name 				:= "Trade"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Action_1_Type		:= "TRADE_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_2.Action_1_Content	:= """/tradewith %buyer%"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Name 				:= "Thanks"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_1_Type		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_1_Content	:= """@%buyer% Thank you & good luck!"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_2_Type		:= "KICK_BUYER"
@@ -162,44 +159,36 @@ Get_LocalSettings_DefaultValues() {
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_1_NUM_3.Action_4_Content	:= """"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Name 				:= "Busy"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Action_1_Type		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_1.Action_1_Content 	:= """@%buyer% Busy for now, will invite asap - (%item% for %price%)"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_2.Name 				:= "?"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_2.TextOrIcon 			:= "Text"
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Name 				:= "Ignore item"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_1_Type 		:= "IGNORE_SIMILAR_TRADE"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_1_Content 	:= """"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_2_Type 		:= "CLOSE_TAB"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_3.Action_2_Content 	:= """"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Name 				:= "Sold"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.TextOrIcon 			:= "Text"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Type 		:= "SEND_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_1_Content 	:= """@%buyer% Already sold, sorry - (%item% for %price%)"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_2_Type 		:= "CLOSE_TAB"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_2_NUM_4.Action_2_Content 	:= """"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.Icon 				:= "Whisper"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.TextOrIcon 			:= "Icon"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.Action_1_Type 		:= "WRITE_TO_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_1.Action_1_Content 	:= """@%buyer% """
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.Icon 				:= "Invite"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.TextOrIcon 			:= "Icon"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.Action_1_Type 		:= "INVITE_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_2.Action_1_Content 	:= """/invite %buyer%"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.Icon 				:= "Trade"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.TextOrIcon 			:= "Icon"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.Action_1_Type 		:= "TRADE_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_3.Action_1_Content 	:= """/tradewith %buyer%"""
 
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Icon 				:= "Kick"
-	;settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.TextOrIcon 			:= "Icon"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_1_Type 		:= "KICK_BUYER"
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_1_Content 	:= """/kick %buyer%"""
 	settings.SETTINGS_CUSTOM_BUTTON_ROW_4_NUM_4.Action_2_Type 		:= "SAVE_TRADE_STATS"

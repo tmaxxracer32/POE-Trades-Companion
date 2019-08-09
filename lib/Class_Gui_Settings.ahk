@@ -716,14 +716,14 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationInterfaceButtonType Choose1", "Text|Icon")
 		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationInterfaceButtonName", "Button Name")
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationInterfaceButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationInterfaceCustomizationInterfaceActionType Choose1", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationInterfaceCustomizationInterfaceActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationInterfaceActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_ActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationInterfaceActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 
 		Loop 4 {
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationInterfaceButtonMinusRow" A_Index, "Preview_RemoveOneButtonFromRow", "SellPreview", A_Index)
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationInterfaceButtonPlusRow" A_Index, "Preview_AddOneButtonToRow", "SellPreview", A_Index)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationInterfaceButtonMinusRow" A_Index, "Preview_RemoveOneButtonFromRow", "SellPreview", A_Index, skipCreateStyle:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationInterfaceButtonPlusRow" A_Index, "Preview_AddOneButtonToRow", "SellPreview", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
 		}
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationInterfaceButtonType", "Customization_Interface_OnButtonTypeChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceButtonName", "Customization_Interface_OnButtonNameChange") 
@@ -821,8 +821,8 @@ Class GUI_Settings {
 		return
 	}
 
-	Preview_AddOneButtonToRow(_buyOrSell, rowNum) {
-		global GuiTrades, GuiSettings, GuiSettings_Controls
+	Preview_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle=False, dontActivateButton=False) {
+		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
 		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
 		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
 		guiName := "Trades" _buyOrSell "_Slot1"
@@ -840,18 +840,32 @@ Class GUI_Settings {
 			; Defaulting to show 1 buttons
 			GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := GuiSettings.CUSTOM_BUTTON_SELECTED_NUM?GuiSettings.CUSTOM_BUTTON_SELECTED_NUM:1
 		}
-		
+
 		Loop % btnsCount ; Hiding previous buttons
 			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
-		Loop % newBtnsCount ; Showing new ones
-			GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" A_Index]
+		Loop % newBtnsCount { ; Showing new ones
+			btnNum := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" btnNum]
+			btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Name
+			btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
+			styleName := "CustomButton_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
+			if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
+				style%styleName%DidntExist := True
+				GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.Styles, styleName, btnIcon?btnIcon:btnName)
+			}
+			if (style%styleName%DidntExist && btnIcon)
+				Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+			else if (style%styleName%DidntExist && btnName)
+				Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				
+			GuiControl, %guiName%:Show,% btnHwnd
+		}
 
 		; Make sure new button is chosen
-		if IsNum(rowNum) && IsNum(newBtnsCount)
+		if IsNum(rowNum) && IsNum(newBtnsCount) && (dontActivateButton=False)
 			GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, newBtnsCount, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 	}
-	Preview_RemoveOneButtonFromRow(_buyOrSell, rowNum) {
-		global GuiTrades, GuiSettings, GuiSettings_Controls
+	Preview_RemoveOneButtonFromRow(_buyOrSell, rowNum, skipCreateStyle=False) {
+		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
 		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
 		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
 		guiName := "Trades" _buyOrSell "_Slot1"
@@ -862,15 +876,30 @@ Class GUI_Settings {
 		GuiSettings["PreviewRow" rowNum "_Count"]--
 		newBtnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
 
-		Loop % btnsCount ; Hiding previous buttons
+		Loop % btnsCount ; Hiding previous buttons, skipCreateStyle=False
 			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
 
 		if (btnsCount=1) ; Show the row button bcs no buttons left
 			GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowNum]
-		else ; Show new buttons
-			Loop % newBtnsCount
-				GuiControl, %guiName%:Show,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" A_Index]
-		
+		else { ; Show new buttons
+			Loop % newBtnsCount {
+				btnNum := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" btnNum]
+				btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Name
+				btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
+				styleName := "CustomButton_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
+
+				if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
+					style%styleName%DidntExist := True
+					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.Styles, styleName, btnIcon?btnIcon:btnName)
+				}
+				if (style%styleName%DidntExist && btnIcon)
+					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				else if (style%styleName%DidntExist && btnName)
+					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+
+				GuiControl, %guiName%:Show,% btnHwnd
+			}
+		}
 
 		; Make sure new button is chosen
 		if (newBtnsCount >= GuiSettings.CUSTOM_BUTTON_SELECTED_NUM) && IsNum(rowNum) && IsNum(newBtnsCount) && (newBtnsCount > 0) { ; We can still choose same one, bcs num still exists
@@ -885,13 +914,13 @@ Class GUI_Settings {
 	SetPreviewPreferences(_buyOrSell) {
 		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings, GuiSettings_Controls
 
-		Loop 3 {
+		Loop 4 {
 			rowNum := A_Index
 			Loop % PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count {
-				GUI_Settings.Preview_AddOneButtonToRow(_buyOrSell, rowNum)
+				GUI_Settings.Preview_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
 			}
 		}
-		GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS.SETTINGS_CUSTOM_BUTTON_ROW_2.Buttons_Count, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
+		GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS.SETTINGS_CUSTOM_BUTTON_ROW_1.Buttons_Count, 1)
 	}
 
 	AdjustPreviewControls() {
@@ -917,7 +946,7 @@ Class GUI_Settings {
 		if (btnSettings.Name) {
 			GUI_Settings.Customization_Interface_ShowButtonNameControl()
 			GUI_Settings.Customization_Interface_SetButtonType("Text", noTrigger:=True)
-			GUI_Settings.Customization_Interface_SetButtonNameBoxContent(btnSettings.Name, noTrigger:=True)
+			GUI_Settings.Customization_Interface_SetButtonName(btnSettings.Name, noTrigger:=True)
 		}
 		else if (btnSettings.Icon) {
 			GUI_Settings.Customization_Interface_ShowButtonIconControl()
@@ -1066,9 +1095,13 @@ Class GUI_Settings {
 		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
 		Loop % btnMax {
 			if (btnNum <= A_Index) { ; Otherwise it can't exist, eg: Num3 can't exist if Max2
-				btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" A_Index "Num" btnNum]
-				btnStyle := GuiTrades[_buyOrSell].Styles["CustomButtonRow" rowNum "Max" A_Index "_Icon_" ddlContent]
-				Gui.ImageButtonUpdate(btnHwnd, btnStyle, PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
+				btnIcon := ddlContent
+				styleName := "CustomButton_Row" rowNum "Max" btnMax, styleName .= "_Icon_" btnIcon
+				if !IsObject(GuiTrades.Styles[styleName]) 
+					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Icon", GuiTrades.Styles, styleName, btnIcon)
+				else
+					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			}
 		}
 	}
@@ -1100,17 +1133,27 @@ Class GUI_Settings {
 		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
 		Loop % btnMax {
 			if (btnNum <= A_Index) { ; Otherwise it can't exist, eg: Num3 can't exist if Max2
-				btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" A_Index "Num" btnNum]
-				btnStyle := GuiTrades[_buyOrSell].Styles["CustomButtonRow" rowNum "Max" A_Index "_Text"]
-				Gui.ImageButtonChangeCaption(btnHwnd, editBoxContent, btnStyle, PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
+				btnName := editBoxContent
+				styleName := "CustomButton_Row" rowNum "Max" btnMax, styleName .= "_Text"
+				if !IsObject(GuiTrades.Styles[styleName])
+					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Text", GuiTrades.Styles, styleName, btnName)
+				else
+					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			}
 		}
 	}
-	Customization_Interface_SetButtonNameBoxContent(btnName, dontTriggerOnChange=False) {
+	Customization_Interface_SetButtonName(btnName, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
+		if (dontTriggerOnChange=True)
+			Gui.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceButtonName")
+
 		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationInterfaceButtonName,% btnName
+		
 		if (dontTriggerOnChange=False)
 			GUI_Settings.Customization_Interface_OnButtonNameChange()
+		else
+			Gui.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceButtonName")
 	}
 
 	Customization_Interface_OnActionTypeChange() {
