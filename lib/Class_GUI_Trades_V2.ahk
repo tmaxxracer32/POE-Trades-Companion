@@ -119,7 +119,7 @@
 	}
 
 	Preview_AddCustomButtonsToRow(_buyOrSell, rowNum) {
-		GUI_Settings.Preview_AddOneButtonToRow(_buyOrSell, rowNum) 
+		GUI_Settings.Customization_Selling_AddOneButtonToRow(_buyOrSell, rowNum) 
 	}
 
 	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
@@ -733,49 +733,26 @@
 			thisSlotID := GuiTrades[_buyOrSell].Active_Tab
 		}
 
-		if IsContaining(A_Gui, "Preview") {
-			if RegExMatch(CtrlName, "iO)hBTN_CustomButtonRow(\d+?)Max(\d+)Num(\d+)", custonBtnPat) {
-				; msgbox % GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" 1 "Max" 5 "Num" 1]
-				rowNum := custonBtnPat.1, btnsCount := custonBtnPat.2, btnNum := custonBtnPat.3
-				guiName := "Trades" _buyOrSell "_Slot1"
-
-				try Menu, RMenu, DeleteAll
-				Menu, RMenu, Add, Add another button, GUI_Trades_V2_ContextMenu_AddOneButton
-				Menu, RMenu, Add, Remove one button, GUI_Trades_V2_ContextMenu_RemoveOneButton
-				Menu, RMenu, Show
-				return
-			}
-		}
-		else {
-			; Creating the menu
-			try Menu, RClickMenu, DeleteAll
-			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition, GUI_Trades_V2_ContextMenu_LockPosition
-			if (_buyOrSell)
-				Menu, RClickMenu, Add, Expand upwards?, GUI_Trades_V2_ContextMenu_ExpandUpwardsToggle
-			Menu, RClickMenu, Add
-			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
-			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
-			Menu, RClickMenu, Add
-			Menu, RClickMenu, Add,% "Settings", GUI_Trades_V2_ContextMenu_OpenTrayMenu
-			; Check - Disable - etc
-			if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
-				Menu, RClickMenu, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
-			if (!GuiTrades[_buyOrSell].Tabs_Count)
-				Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs
-			if (!GuiTrades[_buyOrSell].Tabs_Count) || (isSlot && !thisSlotID)
-				Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem
-			; Show
-			Menu, RClickMenu, Show		
-		}
+		; Creating the menu
+		try Menu, RClickMenu, DeleteAll
+		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition, GUI_Trades_V2_ContextMenu_LockPosition
+		if (_buyOrSell)
+			Menu, RClickMenu, Add, Expand upwards?, GUI_Trades_V2_ContextMenu_ExpandUpwardsToggle
+		Menu, RClickMenu, Add
+		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
+		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
+		Menu, RClickMenu, Add
+		Menu, RClickMenu, Add,% "Settings", GUI_Trades_V2_ContextMenu_OpenTrayMenu
+		; Check - Disable - etc
+		if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
+			Menu, RClickMenu, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
+		if (!GuiTrades[_buyOrSell].Tabs_Count)
+			Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs
+		if (!GuiTrades[_buyOrSell].Tabs_Count) || (isSlot && !thisSlotID)
+			Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem
+		; Show
+		Menu, RClickMenu, Show		
 		Return
-
-		GUI_Trades_V2_ContextMenu_AddOneButton:
-			GUI_Settings.Preview_AddOneButtonToRow(_buyOrSell, rowNum)
-		return
-
-		GUI_Trades_V2_ContextMenu_RemoveOneButton:
-			GUI_Settings.Preview_RemoveOneButtonFromRow(_buyOrSell, rowNum)
-		return
 
 		GUI_Trades_V2_ContextMenu_OpenTrayMenu:
 			Menu,Tray,Show

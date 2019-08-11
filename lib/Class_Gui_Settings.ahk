@@ -695,16 +695,6 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Customization Selling
 
-		; Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2, "Row 1: ")
-		; Gui.Add("Settings", "Edit", "x+5 yp-3 w45 R1 ReadOnly")
-		; Gui.Add("Settings", "UpDown", "Range0-10")
-		; Gui.Add("Settings", "Text", "x" leftMost2 " y+13", "Row 2: ")
-		; Gui.Add("Settings", "Edit", "x+5 yp-3 w45 R1 ReadOnly")
-		; Gui.Add("Settings", "UpDown", "Range0-10")
-		; Gui.Add("Settings", "Text", "x" leftMost2 " y+13", "Row 3: ")
-		; Gui.Add("Settings", "Edit", "x+5 yp-3 w45 R1 ReadOnly")
-		; Gui.Add("Settings", "UpDown", "Range0-10")
-
 		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-")
 		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+")
 		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-")
@@ -720,12 +710,12 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_ActionTypeTip")
+		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationSellingActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 
 		Loop 4 {
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonMinusRow" A_Index, "Preview_RemoveOneButtonFromRow", "SellPreview", A_Index, skipCreateStyle:=False)
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonPlusRow" A_Index, "Preview_AddOneButtonToRow", "SellPreview", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonMinusRow" A_Index, "Customization_Selling_RemoveOneButtonFromRow", "SellPreview", A_Index, skipCreateStyle:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonPlusRow" A_Index, "Customization_Selling_AddOneButtonToRow", "SellPreview", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
 		}
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonType", "Customization_Selling_OnButtonTypeChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange") 
@@ -823,7 +813,7 @@ Class GUI_Settings {
 		return
 	}
 
-	Preview_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle=False, dontActivateButton=False) {
+	Customization_Selling_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle=False, dontActivateButton=False) {
 		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
 		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
 		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
@@ -866,7 +856,7 @@ Class GUI_Settings {
 		if IsNum(rowNum) && IsNum(newBtnsCount) && (dontActivateButton=False)
 			GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, newBtnsCount, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 	}
-	Preview_RemoveOneButtonFromRow(_buyOrSell, rowNum, skipCreateStyle=False) {
+	Customization_Selling_RemoveOneButtonFromRow(_buyOrSell, rowNum, skipCreateStyle=False) {
 		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
 		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
 		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
@@ -919,7 +909,7 @@ Class GUI_Settings {
 		Loop 4 {
 			rowNum := A_Index
 			Loop % PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count {
-				GUI_Settings.Preview_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
+				GUI_Settings.Customization_Selling_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
 			}
 		}
 		GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS.SETTINGS_CUSTOM_BUTTON_ROW_1.Buttons_Count, 1)
@@ -1171,7 +1161,7 @@ Class GUI_Settings {
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
 		SetEditCueBanner(actionContentHwnd, contentPlaceholder)
-		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_ActionTypeTip,% contentPlaceholder
+		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_CustomizationSellingActionTypeTip,% contentPlaceholder
 		ShowToolTip(contentPlaceholder)
 
 		; Avoid selecting actions with -> in name or empty
@@ -1556,107 +1546,26 @@ Class GUI_Settings {
 		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationSellingActionContent,% acContent
 	}
 
-	DragGui(GuiHwnd) {
-		PostMessage, 0xA1, 2,,,% "ahk_id " GuiHwnd
-	}
 
-	Close() {
-		global PROGRAM
-		Gui, Settings:Hide
 
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Msg)
 
-		UpdateHotkeys()
 
-		Declare_SkinAssetsAndSettings()
 
-		Gui_TradesMinimized.Create()
-		GUI_Trades_V2.RecreateGUI("Buy")
-		GUI_Trades_V2.RecreateGUI("Sell")
-		GUI_TradesBuyCompact.RecreateGUI()
-	}
 
-	OnPictureLinkClick(picName) {
-		global PROGRAM
 
-		urlLink := picName="Paypal"?PROGRAM.LINK_SUPPORT
-		: picName="Discord"?PROGRAM.LINK_DISCORD
-		: picName="Reddit"?PROGRAM.LINK_REDDIT
-		: picName="PoE"?PROGRAM.LINK_GGG
-		: picName="GitHub"?PROGRAM.LINK_GITHUB
-		: ""
 
-		if (urlLink)
-			Run,% urlLink
-	}
 
-	OnLanguageChange(lang) {
-		global PROGRAM, GuiSettings, GuiMyStats
-		static prevLang
-		prevLang := prevLang?prevLang:PROGRAM.SETTINGS.GENERAL.Language
 
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "Language", lang)
-		PROGRAM.SETTINGS.GENERAL.Language := lang
-		PROGRAM.TRANSLATIONS := GetTranslations(lang)
-		
-		TrayMenu() ; Re-creating tray menu
-		settingsWinExists := WinExist("ahk_id " GuiSettings.Handle)
-		if (settingsWinExists) {
-			if (lang = prevLang)
-				GUI_Settings.SetTranslation(lang)
-			else {
-				GUI_Settings.Create()
-				GUI_Settings.Show()
-			}
-		}
-		else
-			GUI_Settings.Create()
-		statsWinExists := WinExist("ahk_id " GuiMyStats.Handle)
-		if (statsWinExists)
-			GUI_MyStats.SetTranslation(lang)
 
-		prevLang := lang
-	}
 
-	Show(whichTab="") {
-		global PROGRAM, GuiSettings
 
-		hiddenWin := A_DetectHiddenWindows
-		DetectHiddenWindows, On
-		foundHwnd := WinExist("ahk_id " GuiSettings.Handle)
-		DetectHiddenWindows, %hiddenWin%
 
-		if (foundHwnd) {
-			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
-			Gui, Settings:Show, xCenter yCenter
-		}
-		else {
-			AppendToLogs("GUI_Settings.Show(" whichTab "): Non existent. Recreating.")
-			GUI_Settings.Create()
-			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
-			GUI_Settings.Show()
-		}
 
-		if (whichTab)
-			Gui_Settings.OnTabBtnClick(whichTab)
-		else
-			Gui_Settings.OnTabBtnClick("Settings Main")
-	}
 
-	ResetToDefaultSettings() {
-		global PROGRAM
 
-		boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_ConfirmResetToDefault, "%folder%", PROGRAM.MAIN_FOLDER)
-		MsgBox(4096+48+4, "", boxTxt)
 
-		IfMsgBox, Yes
-		{
-			iniFile := PROGRAM.INI_FILE
-			SplitPath, iniFile, fileName, folder
-			FileMove,% PROGRAM.INI_FILE,% folder "\" A_Now "_" fileName, 1
-			Reload()
-		}
-	}
+
+	
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	*	TAB SETTINGS MAIN FUNCTIONS
@@ -4660,6 +4569,108 @@ Class GUI_Settings {
 	*	GENERAL FUNCTIONS
 	*/
 
+	DragGui(GuiHwnd) {
+		PostMessage, 0xA1, 2,,,% "ahk_id " GuiHwnd
+	}
+
+	Close() {
+		global PROGRAM
+		Gui, Settings:Hide
+
+		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Msg)
+
+		UpdateHotkeys()
+
+		Declare_SkinAssetsAndSettings()
+
+		Gui_TradesMinimized.Create()
+		GUI_Trades_V2.RecreateGUI("Buy")
+		GUI_Trades_V2.RecreateGUI("Sell")
+		GUI_TradesBuyCompact.RecreateGUI()
+	}
+
+	OnPictureLinkClick(picName) {
+		global PROGRAM
+
+		urlLink := picName="Paypal"?PROGRAM.LINK_SUPPORT
+		: picName="Discord"?PROGRAM.LINK_DISCORD
+		: picName="Reddit"?PROGRAM.LINK_REDDIT
+		: picName="PoE"?PROGRAM.LINK_GGG
+		: picName="GitHub"?PROGRAM.LINK_GITHUB
+		: ""
+
+		if (urlLink)
+			Run,% urlLink
+	}
+
+	OnLanguageChange(lang) {
+		global PROGRAM, GuiSettings, GuiMyStats
+		static prevLang
+		prevLang := prevLang?prevLang:PROGRAM.SETTINGS.GENERAL.Language
+
+		INI.Set(PROGRAM.INI_FILE, "GENERAL", "Language", lang)
+		PROGRAM.SETTINGS.GENERAL.Language := lang
+		PROGRAM.TRANSLATIONS := GetTranslations(lang)
+		
+		TrayMenu() ; Re-creating tray menu
+		settingsWinExists := WinExist("ahk_id " GuiSettings.Handle)
+		if (settingsWinExists) {
+			if (lang = prevLang)
+				GUI_Settings.SetTranslation(lang)
+			else {
+				GUI_Settings.Create()
+				GUI_Settings.Show()
+			}
+		}
+		else
+			GUI_Settings.Create()
+		statsWinExists := WinExist("ahk_id " GuiMyStats.Handle)
+		if (statsWinExists)
+			GUI_MyStats.SetTranslation(lang)
+
+		prevLang := lang
+	}
+
+	Show(whichTab="") {
+		global PROGRAM, GuiSettings
+
+		hiddenWin := A_DetectHiddenWindows
+		DetectHiddenWindows, On
+		foundHwnd := WinExist("ahk_id " GuiSettings.Handle)
+		DetectHiddenWindows, %hiddenWin%
+
+		if (foundHwnd) {
+			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
+			Gui, Settings:Show, xCenter yCenter
+		}
+		else {
+			AppendToLogs("GUI_Settings.Show(" whichTab "): Non existent. Recreating.")
+			GUI_Settings.Create()
+			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
+			GUI_Settings.Show()
+		}
+
+		if (whichTab)
+			Gui_Settings.OnTabBtnClick(whichTab)
+		else
+			Gui_Settings.OnTabBtnClick("Settings Main")
+	}
+
+	ResetToDefaultSettings() {
+		global PROGRAM
+
+		boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_ConfirmResetToDefault, "%folder%", PROGRAM.MAIN_FOLDER)
+		MsgBox(4096+48+4, "", boxTxt)
+
+		IfMsgBox, Yes
+		{
+			iniFile := PROGRAM.INI_FILE
+			SplitPath, iniFile, fileName, folder
+			FileMove,% PROGRAM.INI_FILE,% folder "\" A_Now "_" fileName, 1
+			Reload()
+		}
+	}
+
 	Hotkey_OnSpecialKeyPress(CtrlHwnd, keyStr) {
 		global GuiSettings, GuiSettings_Controls
 
@@ -4735,6 +4746,14 @@ Class GUI_Settings {
 		}
 		else {
 			Gui, TradesSellPreview:Hide
+		}
+		if (ClickedTab = "Customization Buying") {
+			Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
+			Gui, TradesBuyPreview:Show, x200 y30
+			GUI_Settings.AdjustPreviewControls()
+		}
+		else {
+			Gui, TradesBuyPreview:Hide
 		}
 
 		; WinSet, Redraw, , A
@@ -5008,6 +5027,10 @@ Class GUI_Settings {
 		GUI_Settings.Redraw()
 	}
 }
+
+/*
+	Labels 
+*/
 
 GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions:
 	global SaveAllCurrentButtonActions_Timer_After500ms
