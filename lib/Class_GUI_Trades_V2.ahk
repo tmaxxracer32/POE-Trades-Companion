@@ -691,7 +691,10 @@
 			GuiTrades[_buyOrSell].Preview := True
 			; OnMessage(0x201, "WM_LBUTTONDOWN_MOVE")
 			GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, 100)
-			GUI_Settings.SetPreviewPreferences(_buyOrSell)
+			if IsContaining(_buyOrSell, "Sell")
+				GUI_Settings.Customization_Selling_SetPreviewPreferences(_buyOrSell)
+			else if IsContaining(_buyOrSell, "Buy")
+				GUI_Settings.Customization_Buying_SetPreviewPreferences(_buyOrSell)
 		}
 		Return
 

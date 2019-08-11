@@ -813,7 +813,7 @@ Class GUI_Settings {
 		return
 	}
 
-	Customization_Selling_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle=False, dontActivateButton=False) {
+	Customization_SellingBuying_AddOneButtonToRow(whichGui, _buyOrSell, rowNum, skipCreateStyle=False, dontActivateButton=False) {
 		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
 		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
 		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
@@ -823,7 +823,7 @@ Class GUI_Settings {
 		|| ( (rowNum=4) && (btnsCount=5))
 			return
 
-		GuiSettings["PreviewRow" rowNum "_Count"]++
+		GuiSettings["PreviewRow" rowNum "_Count"]++ ; new var for buy sell TO_DO
 		newBtnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
 
 		if (!btnsCount) {
@@ -856,6 +856,7 @@ Class GUI_Settings {
 		if IsNum(rowNum) && IsNum(newBtnsCount) && (dontActivateButton=False)
 			GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, newBtnsCount, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 	}
+	
 	Customization_Selling_RemoveOneButtonFromRow(_buyOrSell, rowNum, skipCreateStyle=False) {
 		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
 		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
@@ -903,56 +904,62 @@ Class GUI_Settings {
 				
 	}
 
-	SetPreviewPreferences(_buyOrSell) {
+	Customization_SellingBuying_SetPreviewPreferences(whichGui, _buyOrSell) {
 		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings, GuiSettings_Controls
 
 		Loop 4 {
 			rowNum := A_Index
-			Loop % PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count {
-				GUI_Settings.Customization_Selling_AddOneButtonToRow(_buyOrSell, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
+			iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
+			Loop % PROGRAM.SETTINGS[iniSection].Buttons_Count {
+				GUI_Settings.Customization_SellingBuying_AddOneButtonToRow(whichGui, _buyOrSell, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
 			}
 		}
-		GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS.SETTINGS_CUSTOM_BUTTON_ROW_1.Buttons_Count, 1)
+
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_1", iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
+		GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS[iniSection].Buttons_Count, 1)
 	}
 
-	AdjustPreviewControls() {
+	Customization_SellingBuying_AdjustPreviewControls(whichGui) {
 		global GuiTrades, GuiSettings_Controls
+		_buyOrSell := whichGui="Selling"?"SellPreview":whichGui="Buying"?"BuyPreview":""
 		Loop 4 {
 			rowIndex := A_Index
-			rowPos := ControlGetPos(GuiTrades["SellPreview"]["Slot1_Controls"]["hBTN_CustomRowSlot" rowIndex])
-			btnPos := ControlGetPos(GuiSettings_Controls["hBTN_CustomizationSellingButtonPlusRow" rowIndex])
-			guiPos := ControlGetPos(GuiTrades["SellPreview"].Handle)
+			rowPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowIndex])
+			btnPos := ControlGetPos(GuiSettings_Controls["hBTN_Customization" whichGui "ButtonPlusRow" rowIndex])
+			guiPos := ControlGetPos(GuiTrades[_buyOrSell].Handle)
 
 			if (rowPos.X && btnPos.X) {
 				minusX := guiPos.X+guiPos.W, plusX := minusX+btnPos.W, plusY := minusY := rowPos.Y
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_CustomizationSellingButtonPlusRow" rowIndex],% "x" plusX " y" plusY
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_CustomizationSellingButtonMinusRow" rowIndex],% "x" minusX " y" minusY
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichGui "ButtonPlusRow" rowIndex],% "x" plusX " y" plusY
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichGui "ButtonMinusRow" rowIndex],% "x" minusX " y" minusY
 			}
 		}
 	}
 
-	Customization_Selling_LoadButtonSettings(rowNum, btnNum) {
+	Customization_SellingBuying_LoadButtonSettings(whichGui, rowNum, btnNum) {
 		global PROGRAM, GuiSettings
-		btnSettings := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum]
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
+		btnSettings := PROGRAM.SETTINGS[iniSection]
 
 		if (btnSettings.Name) {
-			GUI_Settings.Customization_Selling_ShowButtonNameControl()
-			GUI_Settings.Customization_Selling_SetButtonType("Text", noTrigger:=True)
-			GUI_Settings.Customization_Selling_SetButtonName(btnSettings.Name, noTrigger:=True)
+			GUI_Settings.Customization_SellingBuying_ShowButtonNameControl(whichGui)
+			GUI_Settings.Customization_SellingBuying_SetButtonType(whichGui, "Text", noTrigger:=True)
+			GUI_Settings.Customization_SellingBuying_SetButtonName(whichGui, btnSettings.Name, noTrigger:=True)
 		}
 		else if (btnSettings.Icon) {
-			GUI_Settings.Customization_Selling_ShowButtonIconControl()
-			GUI_Settings.Customization_Selling_SetButtonType("Icon", noTrigger:=True)
-			GUI_Settings.Customization_Selling_SetButtonIcon(btnSettings.Icon, noTrigger:=True)
+			GUI_Settings.Customization_SellingBuying_ShowButtonIconControl(whichGui)
+			GUI_Settings.Customization_SellingBuying_SetButtonType(whichGui, "Icon", noTrigger:=True)
+			GUI_Settings.Customization_SellingBuying_SetButtonIcon(whichGui, btnSettings.Icon, noTrigger:=True)
 		}
 
-		GUI_Settings.Customization_Selling_LoadButtonActions(rowNum, btnNum)
+		GUI_Settings.Customization_SellingBuying_LoadButtonActions(whichGui, rowNum, btnNum)
 	}
 
-	Customization_Selling_LoadButtonActions(rowNum, btnNum) {
+	Customization_SellingBuying_LoadButtonActions(whichGui, rowNum, btnNum) {
 		global PROGRAM, GuiSettings
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
-		btnSettings := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum]
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
+		btnSettings := PROGRAM.SETTINGS[iniSection]
 
 		Loop % LV_GetCount()
 			LV_Delete()
@@ -965,12 +972,12 @@ Class GUI_Settings {
 			}
 			else break
 		}
-		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
+		GUI_Settings.Customization_SellingBuying_AdjustListviewHeaders(whichGui)
 	}
 
-	Customization_Selling_SaveAllCurrentButtonActions() {
+	Customization_SellingBuying_SaveAllCurrentButtonActions(whichGui) {
 		global PROGRAM, GuiSettings
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -985,7 +992,7 @@ Class GUI_Settings {
 			return
 		}
 		; Getting existing actions count
-		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
 		old_totalActions := 0
 		Loop {
 			actionExists := PROGRAM.SETTINGS[iniSection]["Action_" A_Index "_Type"]
@@ -994,7 +1001,7 @@ Class GUI_Settings {
 			else break
 		}
 		; Save new actions
-		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
+		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichGui)
 		new_totalActions := 0
 		for index, nothing in lvContent {
 			actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
@@ -1015,57 +1022,57 @@ Class GUI_Settings {
 		Declare_LocalSettings()
 	}
 
-	Customization_Selling_SetButtonType(btnType, dontTriggerOnChange=False) {
+	Customization_SellingBuying_SetButtonType(whichGui, btnType, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationSellingButtonType,% btnType
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls["hDDL_Customization" whichGui "ButtonType"],% btnType
 		if (dontTriggerOnChange=False)
-			GUI_Settings.Customization_Selling_OnButtonTypeChange()
+			GUI_Settings.Customization_SellingBuying_OnButtonTypeChange(whichGui)
 	}
 
-	Customization_Selling_ShowButtonNameControl() {
+	Customization_SellingBuying_ShowButtonNameControl(whichGui) {
 		global GuiSettings_Controls
-		GuiControl, Settings:Show,% GuiSettings_Controls.hEDIT_CustomizationSellingButtonName
-		GuiControl, Settings:Hide,% GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon
-	}
-	Customization_Selling_ShowButtonIconControl() {
-		global GuiSettings_Controls
-		GuiControl, Settings:Show,% GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon
-		GuiControl, Settings:Hide,% GuiSettings_Controls.hEDIT_CustomizationSellingButtonName
+		GuiControl, Settings:Show,% GuiSettings_Controls["hEDIT_Customization" whichGui "ButtonName"]
+		GuiControl, Settings:Hide,% GuiSettings_Controls["hDDL_Customization" whichGui "ButtonIcon"]
 	}
 
-	Customization_Selling_OnButtonTypeChange() {
+	Customization_SellingBuying_ShowButtonIconControl(whichGui) {
+		global GuiSettings_Controls
+		GuiControl, Settings:Show,% GuiSettings_Controls["hDDL_Customization" whichGui "ButtonIcon"]
+		GuiControl, Settings:Hide,% GuiSettings_Controls["hEDIT_Customization" whichGui "ButtonName"]
+	}
+
+	Customization_SellingBuying_OnButtonTypeChange(whichGui) {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
-		_buyOrSell := "SellPreview"
-		ddlHwnd := GuiSettings_Controls.hDDL_CustomizationSellingButtonType
-		ddlContent := GUI_Settings.Submit("hDDL_CustomizationSellingButtonType")
+		ddlHwnd := GuiSettings_Controls["hDDL_Customization" whichGui "ButtonType"]
+		ddlContent := GUI_Settings.Submit("hDDL_Customization" whichGui "ButtonType")
 
 		if (ddlContent = "Text") {
-			GUI_Settings.Customization_Selling_ShowButtonNameControl()
-			GUI_Settings.Customization_Selling_OnButtonNameChange()
+			GUI_Settings.Customization_SellingBuying_ShowButtonNameControl(whichGui)
+			GUI_Settings.Customization_SellingBuying_OnButtonNameChange(whichGui)
 		}
 		else if (ddlContent = "Icon") {
-			GUI_Settings.Customization_Selling_ShowButtonIconControl()
-			GUI_Settings.Customization_Selling_OnButtonIconChange()
+			GUI_Settings.Customization_SellingBuying_ShowButtonIconControl(whichGui)
+			GUI_Settings.Customization_SellingBuying_OnButtonIconChange(whichGui)
 		}
 		else {
-			MsgBox Something has gone wrong.`nCustomization_Selling_OnButtonTypeChange`n%ddlContent%
+			MsgBox Something has gone wrong.`nCustomization_SellingBuying_OnButtonTypeChange`n%ddlContent%
 		}
 	}
 
-	Customization_Selling_SetButtonIcon(btnIcon, dontTriggerOnChange=False) {
+	Customization_SellingBuying_SetButtonIcon(whichGui, btnIcon, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon,% btnIcon
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls["hDDL_Customization" whichGui "ButtonIcon"],% btnIcon
 		if (dontTriggerOnChange=False)
-			GUI_Settings.Customization_Selling_OnButtonIconChange()
+			GUI_Settings.Customization_SellingBuying_OnButtonIconChange(whichGui)
 	}
 
-	Customization_Selling_OnButtonIconChange() {
+	Customization_SellingBuying_OnButtonIconChange(whichGui) {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
-		_buyOrSell := "SellPreview"
-		ddlHwnd := GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon
-		ddlContent := GUI_Settings.Submit("hDDL_CustomizationSellingButtonIcon")
+		_buyOrSell := whichGui="Selling"?"SellPreview":whichGui="Buying"?"BuyPreview":""
+		ddlHwnd := GuiSettings_Controls["hDDL_Customization" whichGui "ButtonIcon"]
+		ddlContent := GUI_Settings.Submit("hDDL_Customization" whichGui "ButtonIcon")
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1080,7 +1087,7 @@ Class GUI_Settings {
 			return
 		}
 
-		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
 		INI.Set(PROGRAM.INI_FILE, iniSection, "Icon", ddlContent)
 		INI.Remove(PROGRAM.INI_FILE, iniSection, "Name")
 
@@ -1098,12 +1105,12 @@ Class GUI_Settings {
 		}
 	}
 
-	Customization_Selling_OnButtonNameChange() {
+	Customization_SellingBuying_OnButtonNameChange(whichGui) {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
-		_buyOrSell := "SellPreview"
-		editBoxHwnd := GuiSettings_Controls.hEDIT_CustomizationSellingButtonName
-		editBoxContent := GUI_Settings.Submit("hEDIT_CustomizationSellingButtonName")
+		_buyOrSell := whichGui="Selling"?"SellPreview":whichGui="Buying"?"BuyPreview":""
+		editBoxHwnd := GuiSettings_Controls["hEDIT_Customization" whichGui "ButtonName"]
+		editBoxContent := GUI_Settings.Submit("hEDIT_Customization" whichGui "ButtonName")
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1118,7 +1125,7 @@ Class GUI_Settings {
 			return
 		}
 
-		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum
+		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
 		INI.Set(PROGRAM.INI_FILE, iniSection, "Name", editBoxContent)
 		INI.Remove(PROGRAM.INI_FILE, iniSection, "Icon")
 
@@ -1135,33 +1142,34 @@ Class GUI_Settings {
 			}
 		}
 	}
-	Customization_Selling_SetButtonName(btnName, dontTriggerOnChange=False) {
+
+	Customization_SellingBuying_SetButtonName(whichGui, btnName, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
 		if (dontTriggerOnChange=True)
-			Gui.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName")
+			Gui.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_Customization" whichGui "ButtonName")
 
-		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationSellingButtonName,% btnName
+		GuiControl, Settings:,% GuiSettings_Controls["hEDIT_Customization" whichGui "ButtonName"],% btnName
 		
 		if (dontTriggerOnChange=False)
-			GUI_Settings.Customization_Selling_OnButtonNameChange()
+			GUI_Settings.Customization_SellingBuying_OnButtonNameChange()
 		else
-			Gui.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName")
+			Gui.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_Customization" whichGui "ButtonName")
 	}
 
-	Customization_Selling_OnActionTypeChange() {
+	Customization_SellingBuying_OnActionTypeChange(whichGui) {
 		global GuiSettings_Controls
 		global ACTIONS_READONLY, ACTIONS_FORCED_CONTENT
-		actionTypeHwnd := GuiSettings_Controls.hDDL_CustomizationSellingActionType
-		actionContentHwnd := GuiSettings_Controls.hEDIT_ActionContent
+		actionTypeHwnd := GuiSettings_Controls["hDDL_Customization" whichGui "ActionType"]
+		actionContentHwnd := GuiSettings_Controls["hEDIT_Customization" whichGui "ActionContent"]
 
 		; Get current action type & content
-		actionType := GUI_Settings.Submit("hDDL_CustomizationSellingActionType"), AutoTrimStr(actionType) ; Trim so space to separate sections is made empty
-		actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
+		actionType := GUI_Settings.Submit("hDDL_Customization" whichGui "ActionType"), AutoTrimStr(actionType) ; Trim so space to separate sections is made empty
+		actionContent := GUI_Settings.Submit("hEDIT_Customization" whichGui "ActionContent")
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
 		SetEditCueBanner(actionContentHwnd, contentPlaceholder)
-		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_CustomizationSellingActionTypeTip,% contentPlaceholder
+		GuiControl, Settings:,% GuiSettings_Controls["hTEXT_Customization" whichGui "ActionTypeTip"],% contentPlaceholder
 		ShowToolTip(contentPlaceholder)
 
 		; Avoid selecting actions with -> in name or empty
@@ -1171,7 +1179,7 @@ Class GUI_Settings {
 			isLeftPressed := GetKeyState("Left", "P"), isRightPressed := GetKeyState("Right", "P")
 			; Retrieve the number of the ddl item
 			GuiControl, Settings:+AltSubmit,% actionTypeHwnd
-			chosenItemNum := GUI_Settings.Submit("hDDL_CustomizationSellingActionType")
+			chosenItemNum := GUI_Settings.Submit("hDDL_Customization" whichGui "ActionType")
 			GuiControl, Settings:-AltSubmit,% actionTypeHwnd
 			; Select whichever is next, based on arrow press
 			if (isUpPressed || isLeftPressed) {
@@ -1189,7 +1197,7 @@ Class GUI_Settings {
 
 			; Start the function again
 			Sleep 10
-			GUI_Settings.Customization_Selling_OnActionTypeChange()
+			GUI_Settings.Customization_SellingBuying_OnActionTypeChange(whichGui)
 			Return
 		}
 		; Make read only if action is supposed to be
@@ -1206,25 +1214,25 @@ Class GUI_Settings {
 		}
 		; Set the forced content if contains any, otherwise make content empty
 		if (forcedContent)
-			GUI_Settings.Customization_Selling_SetActionContent(forcedContent)
+			GUI_Settings.Customization_SellingBuying_SetActionContent(whichGui, forcedContent)
 		else
-			GUI_Settings.Customization_Selling_SetActionContent("")
+			GUI_Settings.Customization_SellingBuying_SetActionContent(whichGui, "")
 
 		; Update currently selected action
-		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 		if IsNum(selectedRow) && (selectedRow > 0) {
-			GUI_Settings.Customization_Selling_ListViewModifySelectedAction(actionType, "")
+			GUI_Settings.Customization_SellingBuying_ListViewModifySelectedAction(whichGui, actionType, "")
 		}
 	}
 	
-	Customization_Selling_OnActionContentChange(doAgainAfter500ms=False) {
+	Customization_SellingBuying_OnActionContentChange(whichGui, doAgainAfter500ms=False) {
 		/* The doAgainAfter500ms trick allows to make sure that the function is ran correctly if the user typed way too fast somehow
 		*/
 		global PROGRAM, GuiSettings, GuiSettings_Controls
 
 		; Get current action type & content
-		actionType := GUI_Settings.Submit("hDDL_CustomizationSellingActionType"), AutoTrimStr(actionType)
-		actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
+		actionType := GUI_Settings.Submit("hDDL_Customization" whichGui "ActionType"), AutoTrimStr(actionType)
+		actionContent := GUI_Settings.Submit("hEDIT_Customization" whichGui "ActionContent")
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		actionForcedContent := GUI_Settings.Get_ActionForcedContent_From_ActionShortName(actionShortName)
@@ -1237,7 +1245,7 @@ Class GUI_Settings {
 			contentSubStr  := SubStr(actionContent, 1, strL)
 
 			if (contentSubStr != actionForcedContent) {
-				GUI_Settings.Customization_Selling_SetActionContent(actionForcedContent)
+				GUI_Settings.Customization_SellingBuying_SetActionContent(whichGui, actionForcedContent)
 				ShowToolTip("The string has to start with """ actionForcedContent """")
 				tipWarn := True, actionContent := actionForcedContent
 			}
@@ -1245,12 +1253,12 @@ Class GUI_Settings {
 				AutoTrimStr(actionContent)
 
 				if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
-					GUI_Settings.Customization_Selling_SetActionContent(100)
+					GUI_Settings.Customization_SellingBuying_SetActionContent(whichGui, 100)
 					ShowToolTip("This value can only be an integer.")
 					tipWarn := True, actionContent := 100
 				}
 				else if IsDigit(actionContent) && (actionContent > 1000) {
-					GUI_Settings.Customization_Selling_SetActionContent(1000)
+					GUI_Settings.Customization_SellingBuying_SetActionContent(whichGui, 1000)
 					ShowToolTip("Max value is 1000 milliseconds.")
 					tipWarn := True, actionContent := 1000
 				}
@@ -1258,28 +1266,32 @@ Class GUI_Settings {
 		}
 
 		; Update currently selected action
-		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 		if IsNum(selectedRow) && (selectedRow > 0) {
-			GUI_Settings.Customization_Selling_ListViewModifySelectedAction("", actionContent)
+			GUI_Settings.Customization_SellingBuying_ListViewModifySelectedAction(whichGui, "", actionContent)
 		}
 
 		; Show a tooltip of current contet
 		if (!tipWarn) && (actionContent) && (actionContent != actionForcedContent)
 			ShowToolTip(actionContent)
 		
-		if (doAgainAfter500ms=True)
-			GoSub, GUI_Settings_Customization_Selling_OnActionContentChange_Timer
+		if (doAgainAfter500ms=True) {
+			if (whichGui="Selling")
+				GoSub, GUI_Settings_Customization_Selling_OnActionContentChange_Timer
+			else if (whichGui="Buying")
+				GoSub, GUI_Settings_Customization_Buying_OnActionContentChange_Timer
+		}
 
 		; GUI_Settings.TabCustomizationButtons_EnableSubroutines()
 	}
 
-	Customization_Selling_ListViewModifySelectedAction(actionType="", actionContent="") {
+	Customization_SellingBuying_ListViewModifySelectedAction(whichGui, actionType="", actionContent="") {
 		global PROGRAM, ACTIONS_WRITE
 		; Get informations about modifying this action
-		actionType := actionType?actionType: GUI_Settings.Submit("hDDL_CustomizationSellingActionType")
-		actionContent := actionContent?actionContent: GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
+		actionType := actionType?actionType: GUI_Settings.Submit("hDDL_Customization" whichGui "ActionType")
+		actionContent := actionContent?actionContent: GUI_Settings.Submit("hEDIT_Customization" whichGui "ActionContent")
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 		; Get informations about the last action
 		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
 		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
@@ -1311,21 +1323,24 @@ Class GUI_Settings {
 			LV_Modify(selectedRow, , selectedRow, actionType, actionContent) ; Replacing before last line with our action
 		}
 		
-		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
-		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		GUI_Settings.Customization_SellingBuying_AdjustListviewHeaders(whichGui)
+		if (whichGui="Selling")
+			GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		else if (whichGui="Buying")
+			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Selling_OnListviewRightClick() {
+	Customization_SellingBuying_OnListviewRightClick(whichGui) {
 		global ACTIONS_TEXT_NAME, ACTIONS_FORCED_CONTENT
 		global GuiSettings, GuiSettings_Controls
 		try Menu, RMenu, DeleteAll
-		Menu, RMenu, Add, Add a new action, Customization_Selling_OnListviewRightClick_AddNewAction
-		Menu, RMenu, Add, Remove this action, Customization_Selling_OnListviewRightClick_RemoveSelectedAction
+		Menu, RMenu, Add, Add a new action, Customization_SellingBuying_OnListviewRightClick_AddNewAction
+		Menu, RMenu, Add, Remove this action, Customization_SellingBuying_OnListviewRightClick_RemoveSelectedAction
 		Menu, RMenu, Add
-		Menu, RMenu, Add, Move this action up, Customization_Selling_OnListviewRightClick_MoveSelectedActionUp
-		Menu, RMenu, Add, Move this action down, Customization_Selling_OnListviewRightClick_MoveSelectedActionDown
+		Menu, RMenu, Add, Move this action up, Customization_SellingBuying_OnListviewRightClick_MoveSelectedActionUp
+		Menu, RMenu, Add, Move this action down, Customization_SellingBuying_OnListviewRightClick_MoveSelectedActionDown
 
-		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 		if (selectedRow = 1 || !selectedRow)
 			Menu, RMenu, Disable, Move this action up
 		if (selectedRow = LV_GetCount() || !selectedRow)
@@ -1335,39 +1350,39 @@ Class GUI_Settings {
 		Menu, RMenu, Show
 		return
 
-		Customization_Selling_OnListviewRightClick_AddNewAction:
+		Customization_SellingBuying_OnListviewRightClick_AddNewAction:
 			/*
 			GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 			actionType := GUI_Settings.Submit("hDDL_CustomizationSellingActionType"), AutoTrimStr(actionType)
 			actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 			if (actionType)
 			*/
-				GUI_Settings.Customization_Selling_AddNewAction(ACTIONS_TEXT_NAME.SEND_TO_BUYER, ACTIONS_FORCED_CONTENT.SEND_TO_BUYER)
+				GUI_Settings.Customization_SellingBuying_AddNewAction(whichGui, ACTIONS_TEXT_NAME.SEND_TO_BUYER, ACTIONS_FORCED_CONTENT.SEND_TO_BUYER)
 		return
 
-		Customization_Selling_OnListviewRightClick_RemoveSelectedAction:
-			selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		Customization_SellingBuying_OnListviewRightClick_RemoveSelectedAction:
+			selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 			if IsNum(selectedRow) && (selectedRow > 0) {
-				GUI_Settings.Customization_Selling_RemoveAction(selectedRow)
+				GUI_Settings.Customization_SellingBuying_RemoveAction(whichGui, selectedRow)
 			}
 		return
 
-		Customization_Selling_OnListviewRightClick_MoveSelectedActionUp:
-			selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
-			GUI_Settings.Customization_Selling_MoveActionUp(selectedRow)
+		Customization_SellingBuying_OnListviewRightClick_MoveSelectedActionUp:
+			selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
+			GUI_Settings.Customization_SellingBuying_MoveActionUp(whichGui, selectedRow)
 		return
-		Customization_Selling_OnListviewRightClick_MoveSelectedActionDown:
-			selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
-			GUI_Settings.Customization_Selling_MoveActionDown(selectedRow)
+		Customization_SellingBuying_OnListviewRightClick_MoveSelectedActionDown:
+			selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
+			GUI_Settings.Customization_SellingBuying_MoveActionDown(whichGui, selectedRow)
 		return
 	}
 
-	Customization_Selling_MoveActionUp(rowNum) {
+	Customization_SellingBuying_MoveActionUp(whichGui, rowNum) {
 		global PROGRAM, GuiSettings_Controls, ACTIONS_WRITE
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 
 		; Get informations about modifying this action
-		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
+		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichGui)
 		actionType := lvContent[rowNum].ActionType, actionContent := lvContent[rowNum].ActionContent
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		actionNum := rowNum
@@ -1390,15 +1405,18 @@ Class GUI_Settings {
 		LV_Modify(rowNum-1, , rowNum-1, lvContent[rowNum].ActionType, lvContent[rowNum].ActionContent) ; Replacing above action with our action
 		LV_Modify(rowNum, , rowNum, lvContent[rowNum-1].ActionType, lvContent[rowNum-1].ActionContent) ; Replacing our action with action above
 
-		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		if (whichGui="Selling")
+			GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		else if (whichGui="Buying")
+			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Selling_MoveActionDown(rowNum) {
+	Customization_SellingBuying_MoveActionDown(whichGui, rowNum) {
 		global PROGRAM, GuiSettings_Controls, ACTIONS_WRITE
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 
 		; Get informations about modifying this action
-		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
+		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichGui)
 		actionType := lvContent[rowNum].ActionType, actionContent := lvContent[rowNum].ActionContent
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		actionNum := rowNum
@@ -1424,17 +1442,20 @@ Class GUI_Settings {
 		LV_Modify(rowNum+1, , rowNum+1, lvContent[rowNum].ActionType, lvContent[rowNum].ActionContent) ; Replacing under action with our action
 		LV_Modify(rowNum, , rowNum, lvContent[rowNum+1].ActionType, lvContent[rowNum+1].ActionContent) ; Replacing our action with action under
 
-		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		if (whichGui="Selling")
+			GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		else if (whichGui="Buying")
+			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Selling_GetListviewSelectedRow() {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+	Customization_SellingBuying_GetListviewSelectedRow(whichGui) {
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 		return LV_GetNext(0, "F")
 	}
 
-	Customization_Selling_RemoveAction(actionNum) {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
-		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
+	Customization_SellingBuying_RemoveAction(whichGui, actionNum) {
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
+		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichGui)
 
 		newLvContent := {}
 		Loop % lvContent.Count() {
@@ -1453,12 +1474,15 @@ Class GUI_Settings {
 		Loop % newLvContent.Count()
 			LV_Add("", newLvContent[A_Index].Num, newLvContent[A_Index].ActionType, newLvContent[A_Index].ActionContent)
 
-		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
-		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		GUI_Settings.Customization_SellingBuying_AdjustListviewHeaders(whichGui)
+		if (whichGui="Selling")
+			GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		else if (whichGui="Buying")
+			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Selling_GetListViewContent() {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+	Customization_SellingBuying_GetListViewContent(whichGui) {
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 
 		content := {}
 		Loop % LV_GetCount() {			
@@ -1470,14 +1494,14 @@ Class GUI_Settings {
 		return content
 	}
 
-	Customization_Selling_AddNewAction(actionType, actionContent) {
+	Customization_SellingBuying_AddNewAction(whichGui, actionType, actionContent) {
 		global PROGRAM, ACTIONS_WRITE
 		global GuiSettings, GuiSettings_Controls
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
 		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
-		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 
 		; Prevent continuing if action isn't valid
 		if !(actionShortName) {
@@ -1515,57 +1539,236 @@ Class GUI_Settings {
 		else ; Just adding the new action at end of list
 			LV_Add("", LV_GetCount()+1, actionType, actionContent)
 
-		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
-		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		GUI_Settings.Customization_SellingBuying_AdjustListviewHeaders(whichGui)
+		if (whichGui="Selling")
+			GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
+		else if (whichGui="Buying")
+			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Selling_AdjustListviewHeaders() {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+	Customization_SellingBuying_AdjustListviewHeaders(whichGui) {
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 		Loop 3
 			LV_ModifyCol(A_Index, "AutoHdr NoSort")
 	}
 
-	Customization_Selling_OnListviewClick(CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+	Customization_SellingBuying_OnListviewClick(whichGui, CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
+		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 
-		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichGui)
 		if (!selectedRow)
 			return
 
-		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
-		GUI_Settings.Customization_Selling_SetActionType(lvContent[selectedRow].ActionType)
-		GUI_Settings.Customization_Selling_SetActionContent(lvContent[selectedRow].ActionContent)
+		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichGui)
+		GUI_Settings.Customization_SellingBuying_SetActionType(whichGui, lvContent[selectedRow].ActionType)
+		GUI_Settings.Customization_SellingBuying_SetActionContent(whichGui, lvContent[selectedRow].ActionContent)
 	}
 
-	Customization_Selling_SetActionType(acType) {
+	Customization_SellingBuying_SetActionType(whichGui, actionType) {
 		global GuiSettings_Controls
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationSellingActionType,% acType
+		ctrlHwnd := GuiSettings_Controls["hDDL_Customization" whichGui "ActionType"]
+		GuiControl, Settings:ChooseString,% ctrlHwnd,% actionType
 	}
-	Customization_Selling_SetActionContent(acContent) {
+	
+
+	Customization_SellingBuying_SetActionContent(whichGui, actionContent) {
 		global GuiSettings_Controls
-		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationSellingActionContent,% acContent
+		ctrlHwnd := GuiSettings_Controls["hEDIT_Customization" whichGui "ActionContent"]
+		GuiControl, Settings:,% ctrlHwnd,% actionContent
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	Customization_Selling_SetActionType(params*) {
+		return this.Customization_SellingBuying_SetActionType("Selling", params*)
+	}
+	Customization_Buying_SetActionType(params*) {
+		return this.Customization_SellingBuying_SetActionType("Buying", params*)
+	}
+	Customization_Selling_SetActionContent(params*) {
+		return this.Customization_SellingBuying_SetActionContent("Selling", params*)
+	}
+	Customization_Buying_SetActionContent(params*) {
+		return this.Customization_SellingBuying_SetActionContent("Buying", params*)
+	}
+	Customization_Selling_OnListviewClick(params*) {
+		return this.Customization_SellingBuying_OnListviewClick("Selling", params*)
+	}
+	Customization_Buying_OnListviewClick(params*) {
+		return this.Customization_SellingBuying_OnListviewClick("Buying", params*)
+	}
+	Customization_Selling_AdjustListviewHeaders() {
+		return this.Customization_SellingBuying_AdjustListviewHeaders("Selling")
+	}
+	Customization_Buying_AdjustListviewHeaders() {
+		return this.Customization_SellingBuying_AdjustListviewHeaders("Buying")
+	}
+	Customization_Selling_AddNewAction(params*) {
+		return this.Customization_SellingBuying_AddNewAction("Selling", params*)
+	}
+	Customization_Buying_AddNewAction(params*) {
+		return this.Customization_SellingBuying_AddNewAction("Buying", params*)
+	}
+	Customization_Selling_GetListViewContent() {
+		return this.Customization_SellingBuying_GetListViewContent("Selling")
+	}
+	Customization_Buying_GetListViewContent() {
+		return this.Customization_SellingBuying_GetListViewContent("Buying")
+	}
+	Customization_Selling_RemoveAction(params*) {
+		return this.Customization_SellingBuying_RemoveAction("Selling", params*)
+	}
+	Customization_Buying_RemoveAction(params*) {
+		return this.Customization_SellingBuying_RemoveAction("Buying", params*)
+	}
+	Customization_Selling_GetListviewSelectedRow() {
+		return this.Customization_SellingBuying_GetListviewSelectedRow("Selling")
+	}
+	Customization_Buying_GetListviewSelectedRow() {
+		return this.Customization_SellingBuying_GetListviewSelectedRow("Buying")
+	}
+    Customization_Selling_MoveActionDown(params*) {
+		return this.Customization_SellingBuying_MoveActionDown("Selling", params*)
+	}
+	Customization_Buying_MoveActionDown(params*) {
+		return this.Customization_SellingBuying_MoveActionDown("Buy", params*)
+	}
+    Customization_Selling_MoveActionUp(params*) {
+		return this.Customization_SellingBuying_MoveActionUp("Selling", params*)
+	}
+	Customization_Buying_MoveActionUp(params*) {
+		return this.Customization_SellingBuying_MoveActionUp("Buying", params*)
+	}
+    Customization_Selling_OnListviewRightClick() {
+		return this.Customization_SellingBuying_OnListviewRightClick("Selling")
+	}
+	Customization_Buying_OnListviewRightClick() {
+		return this.Customization_SellingBuying_OnListviewRightClick("Buying")
+	}
+    Customization_Selling_ListViewModifySelectedAction(params*) {
+		return this.Customization_SellingBuying_ListViewModifySelectedAction("Selling", params*)
+	}
+	Customization_Buying_ListViewModifySelectedAction(params*) {
+		return this.Customization_SellingBuying_ListViewModifySelectedAction("Buying", params*)
+	}
+    Customization_Selling_OnActionContentChange(params*) {
+		return this.Customization_SellingBuying_OnActionContentChange("Selling", params*)
+	}
+	Customization_Buying_OnActionContentChange(params*) {
+		return this.Customization_SellingBuying_OnActionContentChange("Buying", params*)
+	}
+    Customization_Selling_OnActionTypeChange() {
+		return this.Customization_SellingBuying_OnActionTypeChange("Selling")
+	}
+	Customization_Buying_OnActionTypeChange() {
+		return this.Customization_SellingBuying_OnActionTypeChange("Buying")
+	}
+    Customization_Selling_SetButtonName(params*) {
+		return this.Customization_SellingBuying_SetButtonName("Selling", params*)
+	}
+	Customization_Buying_SetButtonName(params*) {
+		return this.Customization_SellingBuying_SetButtonName("Buying", params*)
+	}
+    Customization_Selling_OnButtonNameChange() {
+		return this.Customization_SellingBuying_OnButtonNameChange("Selling")
+	}
+	Customization_Buying_OnButtonNameChange() {
+		return this.Customization_SellingBuying_OnButtonNameChange("Buying")
+	}
+    Customization_Selling_OnButtonIconChange() {
+		return this.Customization_SellingBuying_OnButtonIconChange("Selling")
+	}
+	Customization_Buying_OnButtonIconChange() {
+		return this.Customization_SellingBuying_OnButtonIconChange("Buying")
+	}
+    Customization_Selling_SetButtonIcon(params*) {
+		return this.Customization_SellingBuying_SetButtonIcon("Selling", params*)
+	}
+	Customization_Buying_SetButtonIcon(params*) {
+		return this.Customization_SellingBuying_SetButtonIcon("Buying", params*)
+	}
+    Customization_Selling_OnButtonTypeChange() {
+		return this.Customization_SellingBuying_OnButtonTypeChange("Selling")
+	}
+	Customization_Buying_OnButtonTypeChange() {
+		return this.Customization_SellingBuying_OnButtonTypeChange("Buying")
+	}
+    Customization_Selling_ShowButtonNameControl() {
+		return this.Customization_SellingBuying_ShowButtonNameControl("Selling")
+	}
+	Customization_Buying_ShowButtonNameControl() {
+		return this.Customization_SellingBuying_ShowButtonNameControl("Buying")
+	}
+	Customization_Selling_ShowButtonIconControl() {
+		return this.Customization_SellingBuying_ShowButtonIconControl("Selling")
+	}
+	Customization_Buying_ShowButtonIconControl() {
+		return this.Customization_SellingBuying_ShowButtonIconControl("Buying")
+	}
+    Customization_Selling_SetButtonType(params*) {
+		return this.Customization_SellingBuying_SetButtonType("Selling", params*)
+	}
+	Customization_Buying_SetButtonType(params*) {
+		return this.Customization_SellingBuying_SetButtonType("Buying", params*)
+	}
+    Customization_Selling_SaveAllCurrentButtonActions() {
+		return this.Customization_SellingBuying_SaveAllCurrentButtonActions("Selling")
+	}
+	Customization_Buying_SaveAllCurrentButtonActions() {
+		return this.Customization_SellingBuying_SaveAllCurrentButtonActions("Buying")
+	}
+    Customization_Selling_LoadButtonActions(params*) {
+		return this.Customization_SellingBuying_LoadButtonActions("Selling", params*)
+	}
+	Customization_Buying_LoadButtonActions(params*) {
+		return this.Customization_SellingBuying_LoadButtonActions("Buying", params*)
+	}
+    Customization_Selling_LoadButtonSettings(params*) {
+		return this.Customization_SellingBuying_LoadButtonSettings("Selling", params*)
+	}
+	Customization_Buying_LoadButtonSettings(params*) {
+		return this.Customization_SellingBuying_LoadButtonSettings("Buying", params*)
+	}
+    Customization_Selling_AdjustPreviewControls() {
+		return this.Customization_SellingBuying_AdjustPreviewControls("Selling")
+	}
+	Customization_Buying_AdjustPreviewControls() {
+		return this.Customization_SellingBuying_AdjustPreviewControls("Buying")
+	}
+    Customization_Selling_SetPreviewPreferences(params*) {
+		return this.Customization_SellingBuying_SetPreviewPreferences("Selling", params*)
+	}
+	Customization_Buying_SetPreviewPreferences(params*) {
+		return this.Customization_SellingBuying_SetPreviewPreferences("Buying", params*)
+	}
+    Customization_Selling_AddOneButtonToRow(params*) {
+		return this.Customization_SellingBuying_AddOneButtonToRow("Selling", params*)
+	}
+	Customization_Buying_AddOneButtonToRow(params*) {
+		return this.Customization_SellingBuying_AddOneButtonToRow("Buying", params*)
+	}
 
 	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	*	TAB SETTINGS MAIN FUNCTIONS
@@ -4742,7 +4945,7 @@ Class GUI_Settings {
 		if (ClickedTab = "Customization Selling") {
 			Gui, TradesSellPreview:+LastFound +AlwaysOnTop
 			Gui, TradesSellPreview:Show, x200 y30
-			GUI_Settings.AdjustPreviewControls()
+			GUI_Settings.Customization_Selling_AdjustPreviewControls()
 		}
 		else {
 			Gui, TradesSellPreview:Hide
@@ -4750,7 +4953,7 @@ Class GUI_Settings {
 		if (ClickedTab = "Customization Buying") {
 			Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
 			Gui, TradesBuyPreview:Show, x200 y30
-			GUI_Settings.AdjustPreviewControls()
+			GUI_Settings.Customization_Buying_AdjustPreviewControls()
 		}
 		else {
 			Gui, TradesBuyPreview:Hide
@@ -5053,12 +5256,41 @@ GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer_2:
 	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -500
 return
 
+GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions:
+	global SaveAllCurrentButtonActions_Timer_After500ms
+	GUI_Settings.Customization_Buying_SaveAllCurrentButtonActions()
+	if (SaveAllCurrentButtonActions_Timer_After500ms=True) {
+		SaveAllCurrentButtonActions_Timer_After500ms := False
+		GoSub GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer_2
+	}
+return
+GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer:
+	global SaveAllCurrentButtonActions_Timer_After500ms
+	SaveAllCurrentButtonActions_Timer_After500ms := True
+	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, Delete
+	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -500
+return
+GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer_2:
+	; Starts 500ms after saving to make sure save is ok
+	global SaveAllCurrentButtonActions_Timer_After500ms
+	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, Delete
+	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -500
+return
+
 GUI_Settings_Customization_Selling_OnActionContentChange:
 	GUI_Settings.Customization_Selling_OnActionContentChange(doAgainAfter500ms:=False)
 return
 GUI_Settings_Customization_Selling_OnActionContentChange_Timer:
 	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, Delete
 	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, -500
+return
+
+GUI_Settings_Customization_Buying_OnActionContentChange:
+	GUI_Settings.Customization_Buying_OnActionContentChange(doAgainAfter500ms:=False)
+return
+GUI_Settings_Customization_Buying_OnActionContentChange_Timer:
+	SetTimer, GUI_Settings_Customization_Buying_OnActionContentChange, Delete
+	SetTimer, GUI_Settings_Customization_Buying_OnActionContentChange, -500
 return
 
 GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub:
