@@ -130,7 +130,7 @@
 		
 		if (prevBtn) {
 			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn]
-			GUI_Settings.Customization_Interface_SaveAllCurrentButtonActions()
+			GUI_Settings.Customization_Selling_SaveAllCurrentButtonActions()
 		}
 		GuiControl, %guiName%:+Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn]
 		prevBtn := thisBtn
@@ -138,7 +138,7 @@
 		GuiSettings.CUSTOM_BUTTON_SELECTED_ROW := rowNum
 		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
 		GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := btnNum
-		GUI_Settings.Customization_Interface_LoadButtonSettings(rowNum, btnNum)
+		GUI_Settings.Customization_Selling_LoadButtonSettings(rowNum, btnNum)
 
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
 	}

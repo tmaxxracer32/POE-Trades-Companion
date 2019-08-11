@@ -252,7 +252,7 @@ Class GUI_Settings {
 		GuiControl, Settings:+g,% GuiSettings_Controls.hBTN_CloseGUI,% __f
 
 		; * * Tab controls
-		allTabs := {Settings:["Main"], Customization:["Skins", "Buttons", "Interface"], Hotkeys:["Basic", "Advanced"], Misc:["Updating", "About"]} ; Tabs and sub-tabs
+		allTabs := {Settings:["Main"], Customization:["Skins", "Selling", "Buying"], Hotkeys:["Basic", "Advanced"], Misc:["Updating", "About"]} ; Tabs and sub-tabs
 		for tabName, nothing in allTabs {
 			for nothing, subTabName in allTabs[tabName]
 				allTabsList .= "|" tabName A_Space subTabName
@@ -432,6 +432,7 @@ Class GUI_Settings {
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB CUSTOMIZATION BUTTONS
 		*/
+		/*
 		Gui, Settings:Tab, Customization Buttons
 		Gui.Add("Settings", "GroupBox", "x" leftMost2 " y" upMost2 " cBlack w525 h" guiHeight-80, "Customization Buttons")
 		thisTabCtrlsList := ""
@@ -533,6 +534,7 @@ Class GUI_Settings {
 		GuiSettings.TabCustomizationButtons_Controls := thisTabCtrlsList
 		GUI_Settings.TabCustomizationButtons_SetAvailableActions()
 		GUI_Settings.TabCustomizationButtons_SetUserSettings()
+		*/
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB HOTKEYS BASIC
@@ -689,9 +691,9 @@ Class GUI_Settings {
 		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-		*	TAB Customization Interface
+		*	TAB Customization Selling
 		*/
-		Gui, Settings:Tab, Customization Interface
+		Gui, Settings:Tab, Customization Selling
 
 		; Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2, "Row 1: ")
 		; Gui.Add("Settings", "Edit", "x+5 yp-3 w45 R1 ReadOnly")
@@ -703,34 +705,34 @@ Class GUI_Settings {
 		; Gui.Add("Settings", "Edit", "x+5 yp-3 w45 R1 ReadOnly")
 		; Gui.Add("Settings", "UpDown", "Range0-10")
 
-		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationInterfaceButtonMinusRow1", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationInterfaceButtonPlusRow1", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationInterfaceButtonMinusRow2", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationInterfaceButtonPlusRow2", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationInterfaceButtonMinusRow3", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationInterfaceButtonPlusRow3", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationInterfaceButtonMinusRow4", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationInterfaceButtonPlusRow4", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+")
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationInterfaceButtonType Choose1", "Text|Icon")
-		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationInterfaceButtonName", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationInterfaceButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationInterfaceCustomizationInterfaceActionType Choose2", ACTIONS_AVAILABLE)
-		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationInterfaceActionContent")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_ActionTypeTip")
-		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationInterfaceActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 
 		Loop 4 {
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationInterfaceButtonMinusRow" A_Index, "Preview_RemoveOneButtonFromRow", "SellPreview", A_Index, skipCreateStyle:=False)
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationInterfaceButtonPlusRow" A_Index, "Preview_AddOneButtonToRow", "SellPreview", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonMinusRow" A_Index, "Preview_RemoveOneButtonFromRow", "SellPreview", A_Index, skipCreateStyle:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonPlusRow" A_Index, "Preview_AddOneButtonToRow", "SellPreview", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
 		}
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationInterfaceButtonType", "Customization_Interface_OnButtonTypeChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceButtonName", "Customization_Interface_OnButtonNameChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationInterfaceButtonIcon", "Customization_Interface_OnButtonIconChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationInterfaceCustomizationInterfaceActionType", "Customization_Interface_OnActionTypeChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceActionContent", "Customization_Interface_OnActionContentChange", doAgainAfter500ms:=True) 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationInterfaceActionsList", "Customization_Interface_OnListviewClick") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonType", "Customization_Selling_OnButtonTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonIcon", "Customization_Selling_OnButtonIconChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingActionType", "Customization_Selling_OnActionTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingActionContent", "Customization_Selling_OnActionContentChange", doAgainAfter500ms:=True) 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationSellingActionsList", "Customization_Selling_OnListviewClick") 
 		
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -814,8 +816,8 @@ Class GUI_Settings {
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, Settings:,% ctrlHwnd
 
-			if (ctrlHwnd = GuiSettings_Controls.hLV_CustomizationInterfaceActionsList)
-				GUI_Settings.Customization_Interface_OnListviewRightClick()
+			if (ctrlHwnd = GuiSettings_Controls.hLV_CustomizationSellingActionsList)
+				GUI_Settings.Customization_Selling_OnListviewRightClick()
 			else
 				GUI_Settings.ContextMenu(ctrlHwnd, ctrlName)
 		return
@@ -928,38 +930,38 @@ Class GUI_Settings {
 		Loop 4 {
 			rowIndex := A_Index
 			rowPos := ControlGetPos(GuiTrades["SellPreview"]["Slot1_Controls"]["hBTN_CustomRowSlot" rowIndex])
-			btnPos := ControlGetPos(GuiSettings_Controls["hBTN_CustomizationInterfaceButtonPlusRow" rowIndex])
+			btnPos := ControlGetPos(GuiSettings_Controls["hBTN_CustomizationSellingButtonPlusRow" rowIndex])
 			guiPos := ControlGetPos(GuiTrades["SellPreview"].Handle)
 
 			if (rowPos.X && btnPos.X) {
 				minusX := guiPos.X+guiPos.W, plusX := minusX+btnPos.W, plusY := minusY := rowPos.Y
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_CustomizationInterfaceButtonPlusRow" rowIndex],% "x" plusX " y" plusY
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_CustomizationInterfaceButtonMinusRow" rowIndex],% "x" minusX " y" minusY
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_CustomizationSellingButtonPlusRow" rowIndex],% "x" plusX " y" plusY
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_CustomizationSellingButtonMinusRow" rowIndex],% "x" minusX " y" minusY
 			}
 		}
 	}
 
-	Customization_Interface_LoadButtonSettings(rowNum, btnNum) {
+	Customization_Selling_LoadButtonSettings(rowNum, btnNum) {
 		global PROGRAM, GuiSettings
 		btnSettings := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum]
 
 		if (btnSettings.Name) {
-			GUI_Settings.Customization_Interface_ShowButtonNameControl()
-			GUI_Settings.Customization_Interface_SetButtonType("Text", noTrigger:=True)
-			GUI_Settings.Customization_Interface_SetButtonName(btnSettings.Name, noTrigger:=True)
+			GUI_Settings.Customization_Selling_ShowButtonNameControl()
+			GUI_Settings.Customization_Selling_SetButtonType("Text", noTrigger:=True)
+			GUI_Settings.Customization_Selling_SetButtonName(btnSettings.Name, noTrigger:=True)
 		}
 		else if (btnSettings.Icon) {
-			GUI_Settings.Customization_Interface_ShowButtonIconControl()
-			GUI_Settings.Customization_Interface_SetButtonType("Icon", noTrigger:=True)
-			GUI_Settings.Customization_Interface_SetButtonIcon(btnSettings.Icon, noTrigger:=True)
+			GUI_Settings.Customization_Selling_ShowButtonIconControl()
+			GUI_Settings.Customization_Selling_SetButtonType("Icon", noTrigger:=True)
+			GUI_Settings.Customization_Selling_SetButtonIcon(btnSettings.Icon, noTrigger:=True)
 		}
 
-		GUI_Settings.Customization_Interface_LoadButtonActions(rowNum, btnNum)
+		GUI_Settings.Customization_Selling_LoadButtonActions(rowNum, btnNum)
 	}
 
-	Customization_Interface_LoadButtonActions(rowNum, btnNum) {
+	Customization_Selling_LoadButtonActions(rowNum, btnNum) {
 		global PROGRAM, GuiSettings
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 		btnSettings := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum]
 
 		Loop % LV_GetCount()
@@ -973,12 +975,12 @@ Class GUI_Settings {
 			}
 			else break
 		}
-		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
+		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
 	}
 
-	Customization_Interface_SaveAllCurrentButtonActions() {
+	Customization_Selling_SaveAllCurrentButtonActions() {
 		global PROGRAM, GuiSettings
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1002,7 +1004,7 @@ Class GUI_Settings {
 			else break
 		}
 		; Save new actions
-		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
 		new_totalActions := 0
 		for index, nothing in lvContent {
 			actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
@@ -1023,57 +1025,57 @@ Class GUI_Settings {
 		Declare_LocalSettings()
 	}
 
-	Customization_Interface_SetButtonType(btnType, dontTriggerOnChange=False) {
+	Customization_Selling_SetButtonType(btnType, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationInterfaceButtonType,% btnType
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationSellingButtonType,% btnType
 		if (dontTriggerOnChange=False)
-			GUI_Settings.Customization_Interface_OnButtonTypeChange()
+			GUI_Settings.Customization_Selling_OnButtonTypeChange()
 	}
 
-	Customization_Interface_ShowButtonNameControl() {
+	Customization_Selling_ShowButtonNameControl() {
 		global GuiSettings_Controls
-		GuiControl, Settings:Show,% GuiSettings_Controls.hEDIT_CustomizationInterfaceButtonName
-		GuiControl, Settings:Hide,% GuiSettings_Controls.hDDL_CustomizationInterfaceButtonIcon
+		GuiControl, Settings:Show,% GuiSettings_Controls.hEDIT_CustomizationSellingButtonName
+		GuiControl, Settings:Hide,% GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon
 	}
-	Customization_Interface_ShowButtonIconControl() {
+	Customization_Selling_ShowButtonIconControl() {
 		global GuiSettings_Controls
-		GuiControl, Settings:Show,% GuiSettings_Controls.hDDL_CustomizationInterfaceButtonIcon
-		GuiControl, Settings:Hide,% GuiSettings_Controls.hEDIT_CustomizationInterfaceButtonName
+		GuiControl, Settings:Show,% GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon
+		GuiControl, Settings:Hide,% GuiSettings_Controls.hEDIT_CustomizationSellingButtonName
 	}
 
-	Customization_Interface_OnButtonTypeChange() {
+	Customization_Selling_OnButtonTypeChange() {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
 		_buyOrSell := "SellPreview"
-		ddlHwnd := GuiSettings_Controls.hDDL_CustomizationInterfaceButtonType
-		ddlContent := GUI_Settings.Submit("hDDL_CustomizationInterfaceButtonType")
+		ddlHwnd := GuiSettings_Controls.hDDL_CustomizationSellingButtonType
+		ddlContent := GUI_Settings.Submit("hDDL_CustomizationSellingButtonType")
 
 		if (ddlContent = "Text") {
-			GUI_Settings.Customization_Interface_ShowButtonNameControl()
-			GUI_Settings.Customization_Interface_OnButtonNameChange()
+			GUI_Settings.Customization_Selling_ShowButtonNameControl()
+			GUI_Settings.Customization_Selling_OnButtonNameChange()
 		}
 		else if (ddlContent = "Icon") {
-			GUI_Settings.Customization_Interface_ShowButtonIconControl()
-			GUI_Settings.Customization_Interface_OnButtonIconChange()
+			GUI_Settings.Customization_Selling_ShowButtonIconControl()
+			GUI_Settings.Customization_Selling_OnButtonIconChange()
 		}
 		else {
-			MsgBox Something has gone wrong.`nCustomization_Interface_OnButtonTypeChange`n%ddlContent%
+			MsgBox Something has gone wrong.`nCustomization_Selling_OnButtonTypeChange`n%ddlContent%
 		}
 	}
 
-	Customization_Interface_SetButtonIcon(btnIcon, dontTriggerOnChange=False) {
+	Customization_Selling_SetButtonIcon(btnIcon, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationInterfaceButtonIcon,% btnIcon
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon,% btnIcon
 		if (dontTriggerOnChange=False)
-			GUI_Settings.Customization_Interface_OnButtonIconChange()
+			GUI_Settings.Customization_Selling_OnButtonIconChange()
 	}
 
-	Customization_Interface_OnButtonIconChange() {
+	Customization_Selling_OnButtonIconChange() {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
 		_buyOrSell := "SellPreview"
-		ddlHwnd := GuiSettings_Controls.hDDL_CustomizationInterfaceButtonIcon
-		ddlContent := GUI_Settings.Submit("hDDL_CustomizationInterfaceButtonIcon")
+		ddlHwnd := GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon
+		ddlContent := GUI_Settings.Submit("hDDL_CustomizationSellingButtonIcon")
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1106,12 +1108,12 @@ Class GUI_Settings {
 		}
 	}
 
-	Customization_Interface_OnButtonNameChange() {
+	Customization_Selling_OnButtonNameChange() {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
 		_buyOrSell := "SellPreview"
-		editBoxHwnd := GuiSettings_Controls.hEDIT_CustomizationInterfaceButtonName
-		editBoxContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceButtonName")
+		editBoxHwnd := GuiSettings_Controls.hEDIT_CustomizationSellingButtonName
+		editBoxContent := GUI_Settings.Submit("hEDIT_CustomizationSellingButtonName")
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1143,28 +1145,28 @@ Class GUI_Settings {
 			}
 		}
 	}
-	Customization_Interface_SetButtonName(btnName, dontTriggerOnChange=False) {
+	Customization_Selling_SetButtonName(btnName, dontTriggerOnChange=False) {
 		global GuiSettings_Controls
 		if (dontTriggerOnChange=True)
-			Gui.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceButtonName")
+			Gui.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName")
 
-		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationInterfaceButtonName,% btnName
+		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationSellingButtonName,% btnName
 		
 		if (dontTriggerOnChange=False)
-			GUI_Settings.Customization_Interface_OnButtonNameChange()
+			GUI_Settings.Customization_Selling_OnButtonNameChange()
 		else
-			Gui.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationInterfaceButtonName")
+			Gui.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName")
 	}
 
-	Customization_Interface_OnActionTypeChange() {
+	Customization_Selling_OnActionTypeChange() {
 		global GuiSettings_Controls
 		global ACTIONS_READONLY, ACTIONS_FORCED_CONTENT
-		actionTypeHwnd := GuiSettings_Controls.hDDL_CustomizationInterfaceCustomizationInterfaceActionType
+		actionTypeHwnd := GuiSettings_Controls.hDDL_CustomizationSellingActionType
 		actionContentHwnd := GuiSettings_Controls.hEDIT_ActionContent
 
 		; Get current action type & content
-		actionType := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType"), AutoTrimStr(actionType) ; Trim so space to separate sections is made empty
-		actionContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+		actionType := GUI_Settings.Submit("hDDL_CustomizationSellingActionType"), AutoTrimStr(actionType) ; Trim so space to separate sections is made empty
+		actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
@@ -1179,7 +1181,7 @@ Class GUI_Settings {
 			isLeftPressed := GetKeyState("Left", "P"), isRightPressed := GetKeyState("Right", "P")
 			; Retrieve the number of the ddl item
 			GuiControl, Settings:+AltSubmit,% actionTypeHwnd
-			chosenItemNum := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType")
+			chosenItemNum := GUI_Settings.Submit("hDDL_CustomizationSellingActionType")
 			GuiControl, Settings:-AltSubmit,% actionTypeHwnd
 			; Select whichever is next, based on arrow press
 			if (isUpPressed || isLeftPressed) {
@@ -1197,7 +1199,7 @@ Class GUI_Settings {
 
 			; Start the function again
 			Sleep 10
-			GUI_Settings.Customization_Interface_OnActionTypeChange()
+			GUI_Settings.Customization_Selling_OnActionTypeChange()
 			Return
 		}
 		; Make read only if action is supposed to be
@@ -1214,25 +1216,25 @@ Class GUI_Settings {
 		}
 		; Set the forced content if contains any, otherwise make content empty
 		if (forcedContent)
-			GUI_Settings.Customization_Interface_SetActionContent(forcedContent)
+			GUI_Settings.Customization_Selling_SetActionContent(forcedContent)
 		else
-			GUI_Settings.Customization_Interface_SetActionContent("")
+			GUI_Settings.Customization_Selling_SetActionContent("")
 
 		; Update currently selected action
-		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 		if IsNum(selectedRow) && (selectedRow > 0) {
-			GUI_Settings.Customization_Interface_ListViewModifySelectedAction(actionType, "")
+			GUI_Settings.Customization_Selling_ListViewModifySelectedAction(actionType, "")
 		}
 	}
 	
-	Customization_Interface_OnActionContentChange(doAgainAfter500ms=False) {
+	Customization_Selling_OnActionContentChange(doAgainAfter500ms=False) {
 		/* The doAgainAfter500ms trick allows to make sure that the function is ran correctly if the user typed way too fast somehow
 		*/
 		global PROGRAM, GuiSettings, GuiSettings_Controls
 
 		; Get current action type & content
-		actionType := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType"), AutoTrimStr(actionType)
-		actionContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+		actionType := GUI_Settings.Submit("hDDL_CustomizationSellingActionType"), AutoTrimStr(actionType)
+		actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		actionForcedContent := GUI_Settings.Get_ActionForcedContent_From_ActionShortName(actionShortName)
@@ -1245,7 +1247,7 @@ Class GUI_Settings {
 			contentSubStr  := SubStr(actionContent, 1, strL)
 
 			if (contentSubStr != actionForcedContent) {
-				GUI_Settings.Customization_Interface_SetActionContent(actionForcedContent)
+				GUI_Settings.Customization_Selling_SetActionContent(actionForcedContent)
 				ShowToolTip("The string has to start with """ actionForcedContent """")
 				tipWarn := True, actionContent := actionForcedContent
 			}
@@ -1253,12 +1255,12 @@ Class GUI_Settings {
 				AutoTrimStr(actionContent)
 
 				if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
-					GUI_Settings.Customization_Interface_SetActionContent(100)
+					GUI_Settings.Customization_Selling_SetActionContent(100)
 					ShowToolTip("This value can only be an integer.")
 					tipWarn := True, actionContent := 100
 				}
 				else if IsDigit(actionContent) && (actionContent > 1000) {
-					GUI_Settings.Customization_Interface_SetActionContent(1000)
+					GUI_Settings.Customization_Selling_SetActionContent(1000)
 					ShowToolTip("Max value is 1000 milliseconds.")
 					tipWarn := True, actionContent := 1000
 				}
@@ -1266,9 +1268,9 @@ Class GUI_Settings {
 		}
 
 		; Update currently selected action
-		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 		if IsNum(selectedRow) && (selectedRow > 0) {
-			GUI_Settings.Customization_Interface_ListViewModifySelectedAction("", actionContent)
+			GUI_Settings.Customization_Selling_ListViewModifySelectedAction("", actionContent)
 		}
 
 		; Show a tooltip of current contet
@@ -1276,18 +1278,18 @@ Class GUI_Settings {
 			ShowToolTip(actionContent)
 		
 		if (doAgainAfter500ms=True)
-			GoSub, GUI_Settings_Customization_Interface_OnActionContentChange_Timer
+			GoSub, GUI_Settings_Customization_Selling_OnActionContentChange_Timer
 
 		; GUI_Settings.TabCustomizationButtons_EnableSubroutines()
 	}
 
-	Customization_Interface_ListViewModifySelectedAction(actionType="", actionContent="") {
+	Customization_Selling_ListViewModifySelectedAction(actionType="", actionContent="") {
 		global PROGRAM, ACTIONS_WRITE
 		; Get informations about modifying this action
-		actionType := actionType?actionType: GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType")
-		actionContent := actionContent?actionContent: GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+		actionType := actionType?actionType: GUI_Settings.Submit("hDDL_CustomizationSellingActionType")
+		actionContent := actionContent?actionContent: GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 		; Get informations about the last action
 		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
 		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
@@ -1319,21 +1321,21 @@ Class GUI_Settings {
 			LV_Modify(selectedRow, , selectedRow, actionType, actionContent) ; Replacing before last line with our action
 		}
 		
-		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
-		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
+		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Interface_OnListviewRightClick() {
+	Customization_Selling_OnListviewRightClick() {
 		global ACTIONS_TEXT_NAME, ACTIONS_FORCED_CONTENT
 		global GuiSettings, GuiSettings_Controls
 		try Menu, RMenu, DeleteAll
-		Menu, RMenu, Add, Add a new action, Customization_Interface_OnListviewRightClick_AddNewAction
-		Menu, RMenu, Add, Remove this action, Customization_Interface_OnListviewRightClick_RemoveSelectedAction
+		Menu, RMenu, Add, Add a new action, Customization_Selling_OnListviewRightClick_AddNewAction
+		Menu, RMenu, Add, Remove this action, Customization_Selling_OnListviewRightClick_RemoveSelectedAction
 		Menu, RMenu, Add
-		Menu, RMenu, Add, Move this action up, Customization_Interface_OnListviewRightClick_MoveSelectedActionUp
-		Menu, RMenu, Add, Move this action down, Customization_Interface_OnListviewRightClick_MoveSelectedActionDown
+		Menu, RMenu, Add, Move this action up, Customization_Selling_OnListviewRightClick_MoveSelectedActionUp
+		Menu, RMenu, Add, Move this action down, Customization_Selling_OnListviewRightClick_MoveSelectedActionDown
 
-		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 		if (selectedRow = 1 || !selectedRow)
 			Menu, RMenu, Disable, Move this action up
 		if (selectedRow = LV_GetCount() || !selectedRow)
@@ -1343,39 +1345,39 @@ Class GUI_Settings {
 		Menu, RMenu, Show
 		return
 
-		Customization_Interface_OnListviewRightClick_AddNewAction:
+		Customization_Selling_OnListviewRightClick_AddNewAction:
 			/*
-			GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
-			actionType := GUI_Settings.Submit("hDDL_CustomizationInterfaceCustomizationInterfaceActionType"), AutoTrimStr(actionType)
-			actionContent := GUI_Settings.Submit("hEDIT_CustomizationInterfaceActionContent")
+			GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+			actionType := GUI_Settings.Submit("hDDL_CustomizationSellingActionType"), AutoTrimStr(actionType)
+			actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 			if (actionType)
 			*/
-				GUI_Settings.Customization_Interface_AddNewAction(ACTIONS_TEXT_NAME.SEND_TO_BUYER, ACTIONS_FORCED_CONTENT.SEND_TO_BUYER)
+				GUI_Settings.Customization_Selling_AddNewAction(ACTIONS_TEXT_NAME.SEND_TO_BUYER, ACTIONS_FORCED_CONTENT.SEND_TO_BUYER)
 		return
 
-		Customization_Interface_OnListviewRightClick_RemoveSelectedAction:
-			selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		Customization_Selling_OnListviewRightClick_RemoveSelectedAction:
+			selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 			if IsNum(selectedRow) && (selectedRow > 0) {
-				GUI_Settings.Customization_Interface_RemoveAction(selectedRow)
+				GUI_Settings.Customization_Selling_RemoveAction(selectedRow)
 			}
 		return
 
-		Customization_Interface_OnListviewRightClick_MoveSelectedActionUp:
-			selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
-			GUI_Settings.Customization_Interface_MoveActionUp(selectedRow)
+		Customization_Selling_OnListviewRightClick_MoveSelectedActionUp:
+			selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+			GUI_Settings.Customization_Selling_MoveActionUp(selectedRow)
 		return
-		Customization_Interface_OnListviewRightClick_MoveSelectedActionDown:
-			selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
-			GUI_Settings.Customization_Interface_MoveActionDown(selectedRow)
+		Customization_Selling_OnListviewRightClick_MoveSelectedActionDown:
+			selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
+			GUI_Settings.Customization_Selling_MoveActionDown(selectedRow)
 		return
 	}
 
-	Customization_Interface_MoveActionUp(rowNum) {
+	Customization_Selling_MoveActionUp(rowNum) {
 		global PROGRAM, GuiSettings_Controls, ACTIONS_WRITE
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 
 		; Get informations about modifying this action
-		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
 		actionType := lvContent[rowNum].ActionType, actionContent := lvContent[rowNum].ActionContent
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		actionNum := rowNum
@@ -1398,15 +1400,15 @@ Class GUI_Settings {
 		LV_Modify(rowNum-1, , rowNum-1, lvContent[rowNum].ActionType, lvContent[rowNum].ActionContent) ; Replacing above action with our action
 		LV_Modify(rowNum, , rowNum, lvContent[rowNum-1].ActionType, lvContent[rowNum-1].ActionContent) ; Replacing our action with action above
 
-		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Interface_MoveActionDown(rowNum) {
+	Customization_Selling_MoveActionDown(rowNum) {
 		global PROGRAM, GuiSettings_Controls, ACTIONS_WRITE
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 
 		; Get informations about modifying this action
-		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
 		actionType := lvContent[rowNum].ActionType, actionContent := lvContent[rowNum].ActionContent
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		actionNum := rowNum
@@ -1432,17 +1434,17 @@ Class GUI_Settings {
 		LV_Modify(rowNum+1, , rowNum+1, lvContent[rowNum].ActionType, lvContent[rowNum].ActionContent) ; Replacing under action with our action
 		LV_Modify(rowNum, , rowNum, lvContent[rowNum+1].ActionType, lvContent[rowNum+1].ActionContent) ; Replacing our action with action under
 
-		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Interface_GetListviewSelectedRow() {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+	Customization_Selling_GetListviewSelectedRow() {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 		return LV_GetNext(0, "F")
 	}
 
-	Customization_Interface_RemoveAction(actionNum) {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
-		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
+	Customization_Selling_RemoveAction(actionNum) {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
+		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
 
 		newLvContent := {}
 		Loop % lvContent.Count() {
@@ -1461,12 +1463,12 @@ Class GUI_Settings {
 		Loop % newLvContent.Count()
 			LV_Add("", newLvContent[A_Index].Num, newLvContent[A_Index].ActionType, newLvContent[A_Index].ActionContent)
 
-		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
-		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
+		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Interface_GetListViewContent() {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+	Customization_Selling_GetListViewContent() {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 
 		content := {}
 		Loop % LV_GetCount() {			
@@ -1478,14 +1480,14 @@ Class GUI_Settings {
 		return content
 	}
 
-	Customization_Interface_AddNewAction(actionType, actionContent) {
+	Customization_Selling_AddNewAction(actionType, actionContent) {
 		global PROGRAM, ACTIONS_WRITE
 		global GuiSettings, GuiSettings_Controls
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
 		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
-		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 
 		; Prevent continuing if action isn't valid
 		if !(actionShortName) {
@@ -1523,35 +1525,35 @@ Class GUI_Settings {
 		else ; Just adding the new action at end of list
 			LV_Add("", LV_GetCount()+1, actionType, actionContent)
 
-		GUI_Settings.Customization_Interface_AdjustListviewHeaders()
-		GoSub, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer
+		GUI_Settings.Customization_Selling_AdjustListviewHeaders()
+		GoSub, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer
 	}
 
-	Customization_Interface_AdjustListviewHeaders() {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+	Customization_Selling_AdjustListviewHeaders() {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 		Loop 3
 			LV_ModifyCol(A_Index, "AutoHdr NoSort")
 	}
 
-	Customization_Interface_OnListviewClick(CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
-		GUI_Settings.SetDefaultListView("hLV_CustomizationInterfaceActionsList")
+	Customization_Selling_OnListviewClick(CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
+		GUI_Settings.SetDefaultListView("hLV_CustomizationSellingActionsList")
 
-		selectedRow := GUI_Settings.Customization_Interface_GetListviewSelectedRow()
+		selectedRow := GUI_Settings.Customization_Selling_GetListviewSelectedRow()
 		if (!selectedRow)
 			return
 
-		lvContent := GUI_Settings.Customization_Interface_GetListViewContent()
-		GUI_Settings.Customization_Interface_SetActionType(lvContent[selectedRow].ActionType)
-		GUI_Settings.Customization_Interface_SetActionContent(lvContent[selectedRow].ActionContent)
+		lvContent := GUI_Settings.Customization_Selling_GetListViewContent()
+		GUI_Settings.Customization_Selling_SetActionType(lvContent[selectedRow].ActionType)
+		GUI_Settings.Customization_Selling_SetActionContent(lvContent[selectedRow].ActionContent)
 	}
 
-	Customization_Interface_SetActionType(acType) {
+	Customization_Selling_SetActionType(acType) {
 		global GuiSettings_Controls
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationInterfaceCustomizationInterfaceActionType,% acType
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_CustomizationSellingActionType,% acType
 	}
-	Customization_Interface_SetActionContent(acContent) {
+	Customization_Selling_SetActionContent(acContent) {
 		global GuiSettings_Controls
-		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationInterfaceActionContent,% acContent
+		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_CustomizationSellingActionContent,% acContent
 	}
 
 	DragGui(GuiHwnd) {
@@ -4726,7 +4728,7 @@ Class GUI_Settings {
 		if (ClickedTab = "Customization Buttons") {
 			GUI_Settings.TabCustomizationButtons_SetUserSettings()
 		}
-		if (ClickedTab = "Customization Interface") {
+		if (ClickedTab = "Customization Selling") {
 			Gui, TradesSellPreview:+LastFound +AlwaysOnTop
 			Gui, TradesSellPreview:Show, x200 y30
 			GUI_Settings.AdjustPreviewControls()
@@ -5007,33 +5009,33 @@ Class GUI_Settings {
 	}
 }
 
-GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions:
+GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions:
 	global SaveAllCurrentButtonActions_Timer_After500ms
-	GUI_Settings.Customization_Interface_SaveAllCurrentButtonActions()
+	GUI_Settings.Customization_Selling_SaveAllCurrentButtonActions()
 	if (SaveAllCurrentButtonActions_Timer_After500ms=True) {
 		SaveAllCurrentButtonActions_Timer_After500ms := False
-		GoSub GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer_2
+		GoSub GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer_2
 	}
 return
-GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer:
+GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer:
 	global SaveAllCurrentButtonActions_Timer_After500ms
 	SaveAllCurrentButtonActions_Timer_After500ms := True
-	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, Delete
+	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -500
 return
-GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions_Timer_2:
+GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer_2:
 	; Starts 500ms after saving to make sure save is ok
 	global SaveAllCurrentButtonActions_Timer_After500ms
-	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Customization_Interface_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, Delete
+	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -500
 return
 
-GUI_Settings_Customization_Interface_OnActionContentChange:
-	GUI_Settings.Customization_Interface_OnActionContentChange(doAgainAfter500ms:=False)
+GUI_Settings_Customization_Selling_OnActionContentChange:
+	GUI_Settings.Customization_Selling_OnActionContentChange(doAgainAfter500ms:=False)
 return
-GUI_Settings_Customization_Interface_OnActionContentChange_Timer:
-	SetTimer, GUI_Settings_Customization_Interface_OnActionContentChange, Delete
-	SetTimer, GUI_Settings_Customization_Interface_OnActionContentChange, -500
+GUI_Settings_Customization_Selling_OnActionContentChange_Timer:
+	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, Delete
+	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, -500
 return
 
 GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub:
