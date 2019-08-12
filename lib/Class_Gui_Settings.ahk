@@ -2105,9 +2105,7 @@ Class GUI_Settings {
 		skinColorSettings := Ini.Get(PROGRAM.SKINS_FOLDER "\" skinName "\Settings.ini", "COLORS",,1)
 
 		skinDefSettings := { Skin:skinName, Font:skinFontSettings.Name, FontSize:skinFontSettings.Size
-			,FontQuality:skinFontSettings.Quality, ScalingPercentage:100, UseRecommendedFontSettings:True }
-		for iniKey, iniValue in skinColorSettings
-			skinDefSettings["Color_" iniKey] := iniValue
+			,FontQuality:skinFontSettings.Quality, ScalingPercentage:100, UseRecommendedFontSettings:True, Colors: skinColorSettings }
 
 		Return skinDefSettings
 	}
