@@ -119,18 +119,20 @@
 	}
 
 	Preview_AddCustomButtonsToRow(_buyOrSell, rowNum) {
-		GUI_Settings.Customization_Selling_AddOneButtonToRow(_buyOrSell, rowNum) 
+		whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
+		GUI_Settings.Customization_SellingBuying_AddOneButtonToRow(whichTab, rowNum) 
 	}
 
 	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
 		global GuiTrades, GuiSettings
 		static prevBtn
+		whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
 		guiName := "Trades" _buyOrSell "_Slot1"
 		thisBtn := "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum
 		
 		if (prevBtn) {
 			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn]
-			GUI_Settings.Customization_Selling_SaveAllCurrentButtonActions()
+			GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions(whichTab)
 		}
 		GuiControl, %guiName%:+Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn]
 		prevBtn := thisBtn
@@ -138,12 +140,12 @@
 		GuiSettings.CUSTOM_BUTTON_SELECTED_ROW := rowNum
 		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
 		GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := btnNum
-		GUI_Settings.Customization_Selling_LoadButtonSettings(rowNum, btnNum)
+		GUI_Settings.Customization_SellingBuying_LoadButtonSettings(whichTab, rowNum, btnNum)
 
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
 	}
 	
-	Create(_tabsToRender=50, _buyOrSell="", _tabsOrSlots="", _preview=False) {
+	Create(_tabsToRender=50, _buyOrSell="", _guiMode="", _isPreview=False) {
 		global PROGRAM, GAME, SKIN
         global GuiTrades, GuiTrades_Controls
         global GuiTradesBuy, GuiTradesBuy_Controls
@@ -152,14 +154,13 @@
 		static Styles, StylesData
         scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100
         windowsDPI := Get_DpiFactor()
-        _guiMode := _tabsOrSlots
         _tabsToRender := IsNum(_tabsToRender)?_tabsToRender:50
         if !IsIn(_buyOrSell, "Buy,Sell") {
             MsgBox(4096, "", "ERROR NOT Buy OR Sell: " _buyOrSell)
             return
         }
-        if !IsIn(_tabsOrSlots, "Tabs,Slots") {
-            MsgBox(4096, "", "ERROR NOT Tabs OR Slots: " _tabsOrSlots)
+        if !IsIn(_guiMode, "Tabs,Slots") {
+            MsgBox(4096, "", "ERROR NOT Tabs OR Slots: " _guiMode)
             return
         }
 
@@ -167,11 +168,11 @@
 			return
 
         ; = = Init GUI Obj
-		if (_preview)
+		if (_isPreview)
 			_buyOrSell .= "Preview"
         guiName := "Trades" _buyOrSell
         GUI_Trades_V2.Destroy(guiName)
-		if (_preview=True)
+		if (_isPreview=True)
 			Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +LabelGUI_Trades_V2_ +ParentSettings +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
 		else Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000 +LabelGUI_Trades_V2_ +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
         Gui.SetDefault(guiName)
@@ -195,7 +196,7 @@
         ; twoTextLineSize += ((10+12)*scaleMult) ; 10+12, based on ctrl pacing - TO_DO_V2 see if need change
 		TabContentSlot_H_Temp := twoTextLineSize+(20*borderSize) ; 20 = spacing
 
-        if (_tabsOrSlots="Slots") {
+        if (_guiMode="Slots") {
             Gui%guiName%.Height_NoRow 		:= guiHeight_NoRow      := borderSize + (30*scaleMult) + borderSize ; 30=header
             Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabContentSlot_H_Temp + (borderSize) ; 22=header2
 			Gui%guiName%.Height_TwoRow	 	:= guiHeight_TwoRow     := guiHeight_OneRow + TabContentSlot_H_Temp + (borderSize*2)
@@ -214,7 +215,7 @@
 
 			
         }
-        else if (_tabsOrSlots="Tabs") {
+        else if (_guiMode="Tabs") {
             Gui%guiName%.Height_NoRow 		:= guiHeight_NoRow      := borderSize + (30*scaleMult) + borderSize ; 30=header
             Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabContentSlot_H_Temp + (borderSize) ; 22=header2
 
@@ -392,7 +393,7 @@
         if (_guiMode="Slots") {
             global GuiTradesBuySearch, GuiTradesBuySearch_Controls
             global GuiTradesSellSearch, GuiTradesSellSearch_Controls
-			if (_preview)
+			if (_isPreview)
             	Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +HwndhGui" guiName "Search")
 			else Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +E0x08000000 +HwndhGui" guiName "Search")
             Gui.SetDefault(guiName "Search")
@@ -404,7 +405,7 @@
             
             global GuiTradesBuySearchHidden, GuiTradesBuySearchHidden_Controls
             global GuiTradesSellSearchHidden, GuiTradesSellSearchHidden_Controls
-			if (_preview)
+			if (_isPreview)
             	Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +HwndhGui" guiName "SearchHidden")
 			else Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +E0x08000000 +LastFound +HwndhGui" guiName "SearchHidden")
             Gui.SetDefault(guiName "SearchHidden")
@@ -488,7 +489,7 @@
 				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_ThankSeller", "", Styles.Button_Thanks, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; kick self
 			}
 
-			if (_preview=True) {
+			if (_isPreview=True) {
 
 				Loop 4 { ; Max 4 rows
 					rowNum := A_Index
@@ -510,7 +511,7 @@
 						btnNum := A_Index, spaceBetweenBtns := 0
 						btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
 						btnWidth := (rowW/btnsCount), btnHeight := rowH
-						btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Name
+						btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Text
 						btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
 						styleName := "CustomButton_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
@@ -536,7 +537,7 @@
 							btnNum := A_Index, spaceBetweenBtns := 0
 							btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
 							btnWidth := (rowW/btnsCount), btnHeight := rowH
-							btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Name
+							btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Text
 							btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
 
 							if !IsObject(StylesData["CustomButton_Row" rowNum "Max" btnsCount "_Text"])
@@ -555,7 +556,7 @@
 				}
 			}
 			/*
-			else if (_buyOrSell = "Sell") && (_tabsOrSlots="Tabs") {
+			else if (_buyOrSell = "Sell") && (_guiMode="Tabs") {
 				; Adding special buttons
 				Loop 5 {
 					speX := A_Index=1?SmallButton_X:"+" SmallButton_Space, speY := SmallButton_Y
@@ -661,18 +662,18 @@
 
         savedXPos := PROGRAM.SETTINGS.SETTINGS_MAIN[_buyOrSell "_Pos_X"], savedYPos := PROGRAM.SETTINGS.SETTINGS_MAIN[_buyOrSell "_Pos_Y"]
         savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
-		if (_preview)
+		if (_isPreview)
         	Gui.Show(guiName, "x0 y0 h" guiFullHeight " w" guiFullWidth " Hide")
 		else Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
         if (_guiMode="Slots") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " Hide")
             Gui.Show(guiName "SearchHidden", "x0 y0 w0 h0 NoActivate") ; Not hidden on purpose so it can work with ShellMessage to empty on click
         }
-        Gui%guiName%.Is_Created := True		
+        GuiTrades[_buyOrSell].Is_Created := True		
 
         ; GUI_Trades_V2.Minimize(guiName)
 
-		if !(_preview) {
+		if !(_isPreview) {
 			OnMessage(0x200, "WM_MOUSEMOVE")
 			OnMessage(0x20A, "WM_MOUSEWHEEL")
 			OnMessage(0x201, "WM_LBUTTONDOWN")
@@ -687,14 +688,13 @@
 			GUI_Trades_V2.EnableHotkeys(_buyOrSell)
 		}
 
-		if (_preview) {
+		if (_isPreview) {
 			GuiTrades[_buyOrSell].Preview := True
-			; OnMessage(0x201, "WM_LBUTTONDOWN_MOVE")
 			GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, 100)
-			if IsContaining(_buyOrSell, "Sell")
-				GUI_Settings.Customization_Selling_SetPreviewPreferences(_buyOrSell)
-			else if IsContaining(_buyOrSell, "Buy")
-				GUI_Settings.Customization_Buying_SetPreviewPreferences(_buyOrSell)
+			if IsContaining(_buyOrSell, "Buy")
+				GUI_Settings.Customization_SellingBuying_SetPreviewPreferences("Buying")
+			else
+				GUI_Settings.Customization_SellingBuying_SetPreviewPreferences("Selling")
 		}
 		Return
 
