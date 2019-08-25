@@ -423,6 +423,74 @@ Class GUI_Settings {
 		GUI_Settings.TabCustomizationSkins_SetUserSettings()
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+		*	TAB Customization Selling
+		*/
+		Gui, Settings:Tab, Customization Selling
+
+		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+")
+
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
+		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationSellingActionTypeTip")
+		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+
+		Loop 4 {
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonMinusRow" A_Index, "Customization_Selling_RemoveOneButtonFromRow", A_Index, skipCreateStyle:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonPlusRow" A_Index, "Customization_Selling_AddOneButtonToRow", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
+		}
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonType", "Customization_Selling_OnButtonTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonIcon", "Customization_Selling_OnButtonIconChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingActionType", "Customization_Selling_OnActionTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingActionContent", "Customization_Selling_OnActionContentChange", doAgainAfter500ms:=True) 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationSellingActionsList", "Customization_Selling_OnListviewClick") 
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+		*	TAB Customization Buying
+		*/
+		Gui, Settings:Tab, Customization Buying
+
+		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow2", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow2", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow3", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow3", "+")
+		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow4", "-")
+		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4", "+")
+
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName", "Button Name")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationBuyingActionContent")
+		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
+		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+
+		Loop 4 {
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationBuyingButtonMinusRow" A_Index, "Customization_Buying_RemoveOneButtonFromRow", A_Index, skipCreateStyle:=False)
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationBuyingButtonPlusRow" A_Index, "Customization_Buying_AddOneButtonToRow", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
+		}
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingButtonType", "Customization_Buying_OnButtonTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingButtonName", "Customization_Buying_OnButtonNameChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingButtonIcon", "Customization_Buying_OnButtonIconChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingActionType", "Customization_Buying_OnActionTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingActionContent", "Customization_Buying_OnActionContentChange", doAgainAfter500ms:=True) 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationBuyingActionsList", "Customization_Buying_OnListviewClick") 
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB HOTKEYS BASIC
 		*/
 		Gui, Settings:Tab, Hotkeys Basic
@@ -574,42 +642,7 @@ Class GUI_Settings {
 		ctrlSize := Get_ControlCoords("Settings", GuiSettings_Controls.hGB_About)
 		Gui.Add("Settings", "Edit", "x" leftMost2 " y" upMost2+125 " w525 h" guiHeight-80-ctrlSize.H-ctrlSize.Y+15 " ReadOnly Center hwndhEDIT_HallOfFame", "Hall of Fame`nThank you for your support!`n`n" "[Hall of Fame loading]")
 
-		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
-
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-		*	TAB Customization Selling
-		*/
-		Gui, Settings:Tab, Customization Selling
-
-		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+")
-
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
-		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE)
-		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationSellingActionTypeTip")
-		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
-
-		Loop 4 {
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonMinusRow" A_Index, "Customization_Selling_RemoveOneButtonFromRow", A_Index, skipCreateStyle:=False)
-			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonPlusRow" A_Index, "Customization_Selling_AddOneButtonToRow", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
-		}
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonType", "Customization_Selling_OnButtonTypeChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonIcon", "Customization_Selling_OnButtonIconChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingActionType", "Customization_Selling_OnActionTypeChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingActionContent", "Customization_Selling_OnActionContentChange", doAgainAfter500ms:=True) 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationSellingActionsList", "Customization_Selling_OnListviewClick") 
-		
+		GUI_Settings.TabMiscAbout_UpdateAllOfFame()		
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB - ALL
@@ -3688,8 +3721,8 @@ Class GUI_Settings {
 		prevLang := lang
 	}
 
-	Show(whichTab="") {
-		global PROGRAM, GuiSettings
+	Show(whichTab="Settings Main") {
+		global PROGRAM, GuiSettings, GuiTrades
 
 		hiddenWin := A_DetectHiddenWindows
 		DetectHiddenWindows, On
@@ -3698,7 +3731,17 @@ Class GUI_Settings {
 
 		if (foundHwnd) {
 			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
+			if !(GuiTrades.SellPreview.Handle) {
+				GUI_Trades_V2.Create(1, buyOrSell:="Sell", slotsOrTab:="Tabs", preview:=True)
+				Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @From SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
+			}
+			if !(GuiTrades.BuyPreview.Handle) {
+				GUI_Trades_V2.Create(1, buyOrSell:="Buy", slotsOrTab:="Slots", preview:=True)
+				Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @To SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
+			}
 			Gui, Settings:Show, xCenter yCenter
+
+			Gui_Settings.OnTabBtnClick(whichTab)
 		}
 		else {
 			AppendToLogs("GUI_Settings.Show(" whichTab "): Non existent. Recreating.")
@@ -3706,11 +3749,6 @@ Class GUI_Settings {
 			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
 			GUI_Settings.Show()
 		}
-
-		if (whichTab)
-			Gui_Settings.OnTabBtnClick(whichTab)
-		else
-			Gui_Settings.OnTabBtnClick("Settings Main")
 	}
 
 	ResetToDefaultSettings() {

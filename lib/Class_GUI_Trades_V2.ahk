@@ -532,58 +532,7 @@
 					}
 				}
 			}
-			/*
-			else if (_buyOrSell = "Sell") && (_guiMode="Tabs") {
-				; Adding special buttons
-				Loop 5 {
-					speX := A_Index=1?SmallButton_X:"+" SmallButton_Space, speY := SmallButton_Y
-					Gui.Add(slotGuiName, "Button", "x" speX " y" speY " w" SmallButton_W " h" SmallButton_H " hwndhBTN_FakeSpecialBtn" A_Index " Hidden")
-					spe%A_Index%X := Gui.GetControlPos(slotGuiName, "hBTN_FakeSpecialBtn" A_Index).X
-				}
-				if (GUI_Trades_V2.Get_ButtonsRowsCount().Special > 0) {
-					Loop 5 { ; Max num of special btns
-						speIndex := A_Index
-						speSettings := INI.Get(PROGRAM.SETTINGS_FILE, "SETTINGS_SPECIAL_BUTTON_" speIndex,,1)
-						speSlot := speSettings.Slot, speType := speSettings.Type, speEnabled := speSettings.Enabled="True"?True:False
-						speStyle := Styles["Button_" speType]
-
-						if (speEnabled) {
-							speNum := speNum?speNum+1:1
-							speX := spe%speSlot%X, speY := "p"
-							
-							Gui.Add(slotGuiName, "ImageButton", "x" speX " y" speY " w" SmallButton_W " h" SmallButton_H " hwndhBTN_Special" speIndex, "", speStyle, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-							; Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_Special" speIndex, "DoTradeButtonAction", _buyOrSell, speIndex, "Special") 
-						}
-					}
-				}
-				; Adding custom buttons
-				Loop 3 {
-					Gui.Add(slotGuiName, "Button", "x0 y+5 w0 h" CustomButton_H " hwndhBTN_FakeCustomBtn" A_Index " Hidden")
-				}
-				custTopY := Gui.GetControlPos(slotGuiName, "hBTN_FakeCustomBtn1").Y
-				custMidY := Gui.GetControlPos(slotGuiName, "hBTN_FakeCustomBtn2").Y
-				custBotY := Gui.GetControlPos(slotGuiName, "hBTN_FakeCustomBtn3").Y
-				if (GUI_Trades_V2.Get_ButtonsRowsCount().Custom > 0) {
-					Loop 9 { ; Max num of custom btns
-						custIndex := A_Index
-						custSettings := INI.Get(PROGRAM.SETTINGS_FILE, "SETTINGS_CUSTOM_BUTTON_" custIndex,,1)
-						custSlot := custSettings.Slot, custSize := custSettings.Size, custName := custSettings.Name, custEnabled := custSettings.Enabled="True"?True:False
-						custStyle := custSize="Small"?Styles.Button_OneThird : custSize="Medium"?Styles.Button_TwoThird : custSize="Large"?Styles.Button_ThreeThird : ""
-
-						if (custEnabled) {
-							custNum := custNum?custNum+1:1
-							custX := IsIn(custSlot, "1,4,7")?CustomButtonLeft_X : IsIn(custSlot, "2,5,8")?CustomButtonMiddle_X : IsIn(custSlot, "3,6,9")?CustomButtonRight_X : ""
-							custY := IsIn(custSlot, "1,2,3")?custTopY : IsIn(custSlot, "4,5,6")?custMidY : IsIn(custSlot, "7,8,9")?custBotY : ""
-							custW := custSize="Small"?CustomButtonOneThird_W : custSize="Medium"?CustomButtonTwoThird_W : custSize="Large"?CustomButtonThreeThird_W : ""
-
-							Gui.Add(slotGuiName, "ImageButton", "x" custX " y" custY " w" custW " h" CustomButton_H " hwndhBTN_Custom" custSlot, custName, custStyle, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-							; Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_Custom" custSlot, "DoTradeButtonAction", _buyOrSell, custIndex, "Custom") 
-						}
-					}
-				}
-			}
-			*/
-			
+					
 			Gui%guiName%["Slot" tabNum] := Gui%guiName%_Slot%tabNum% ; adding gui array to our main gui array as a sub array
 			Gui%guiName%["Slot" tabNum "_Controls"] := Gui%guiName%_Slot%tabNum%_Controls
 
@@ -871,7 +820,6 @@
 		existingTabID := GUI_Trades_V2.IsTabAlreadyExisting(_buyOrSell, infos)
 		if (existingTabID)
 			Return "TabAlreadyExists"
-		
         ; If tabs limit is close, allocate more slots
 		if (tabsCount+1 >= tabsLimit) && !IsContaining(_buyOrSell, "Preview")
 			GUI_Trades_V2.IncreaseTabsLimit(_buyOrSell)

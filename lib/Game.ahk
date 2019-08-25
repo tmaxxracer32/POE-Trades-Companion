@@ -788,7 +788,7 @@ Parse_GameLogs(strToParse, preview=False) {
 				,UniqueID:GUI_Trades_V2.GenerateUniqueID()}
 				
 				guiName := preview=False?"Buy":"BuyPreview"
-				err := GUI_Trades_V2.PushNewTab("Buy", tradeInfos, preview)
+				err := GUI_Trades_V2.PushNewTab(guiName, tradeInfos)
 			}
 		}
 		else if (parsedLogsMsg && !matchingRegEx && isWhisper=True) { ; No trading whisper match
