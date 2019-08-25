@@ -1,9 +1,11 @@
 ﻿IsUpdateAvailable() {
 	global PROGRAM
-	iniFile := PROGRAM.INI_FILE
+	if !IsObject(PROGRAM.SETTINGS)
+		Declare_LocalSettings()
 
-	useBeta := INI.Get(iniFile, "UPDATING", "UseBeta"), useBeta := useBeta="True"?True:False
-	INI.Set(iniFile, "UPDATING", "LastUpdateCheck", A_Now)
+	useBeta := PROGRAM.SETTINGS.UPDATING.UseBeta, useBeta := useBeta="True"?True:False
+	PROGRAM.SETTINGS.UPDATING.LastUpdateCheck := A_Now
+	Save_LocalSettings()
 
 	recentRels := GitHubAPI_GetRecentReleases(PROGRAM.GITHUB_USER, PROGRAM.GITHUB_REPO)
 	if !(recentRels) {
@@ -26,9 +28,9 @@
 	}
 	stableTag := latestStable.tag_name, betaTag := latestBeta.tag_name
 
-	INI.Set(iniFile, "UPDATING", "LatestStable", stableTag)
-	INI.Set(iniFile, "UPDATING", "LatestBeta", betaTag)
-	Declare_LocalSettings()
+	PROGRAM.SETTINGS.UPDATING.LatestStable := stableTag
+	PROGRAM.SETTINGS.UPDATING.LatestBeta := betaTag
+	Save_LocalSettings()
 
 	; Determine if stable or beta is better
 	stableSplit := StrSplit(stableTag, "."), stable_main := stableSplit.1, stable_patch := stableSplit.2, stable_fix := stableSplit.3
@@ -99,10 +101,11 @@
 
 UpdateCheck(checkType="normal", notifOrBox="notif") {
 	global PROGRAM, SPACEBAR_WAIT
-	iniFile := PROGRAM.INI_FILE
+	if !IsObject(PROGRAM.SETTINGS)
+		Declare_LocalSettings()
 
-	autoupdate := INI.Get(iniFile, "UPDATING", "DownloadUpdatesAutomatically")
-	lastUpdateCheck := INI.Get(iniFile, "UPDATING", "LastUpdateCheck")
+	autoupdate := PROGRAM.SETTINGS.UPDATING.DownloadUpdatesAutomatically
+	lastUpdateCheck := PROGRAM.SETTINGS.UPDATING.DownloadUpdatesAutomatically.LastUpdateCheck
 	if (checkType="forced") ; Fake the last update check, so it's higher than set limit
 		lastUpdateCheck := 1994042612310000
 
@@ -227,7 +230,8 @@ DownloadAndRunUpdater(dl="") {
 			LoadFonts()
 			return
 		}
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "ShowChangelog", "True")
+		PROGRAM.SETTINGS.GENERAL.ShowChangelog := "True"
+		Save_LocalSettings()
 		FileRemoveDir,% A_ScriptDir "_backup", 1
 		FileRemoveDir,% updateFolder, 1
 		Reload()
@@ -245,14 +249,15 @@ DownloadAndRunUpdater(dl="") {
 
 Run_Updater(downloadLink) {
 	global PROGRAM
-	iniFile := PROGRAM.INI_FILE
 
-	INI.Set(iniFile, "UPDATING", "LastUpdate", A_Now)
+	PROGRAM.SETTINGS.UPDATING.LastUpdate := A_Now
+	Save_LocalSettings()
+
 	Run,% PROGRAM.UPDATER_FILENAME 
 	. " /Name=""" PROGRAM.NAME  """"
 	. " /File_Name=""" A_ScriptDir "\" PROGRAM.NAME ".exe" """"
 	. " /Local_Folder=""" PROGRAM.MAIN_FOLDER """"
-	. " /Ini_File=""" PROGRAM.INI_FILE """"
+	. " /Ini_File=""" PROGRAM.SETTINGS_FILE_OLD """" ; TO_DO_V2 change to json stuff?
 	. " /NewVersion_Link=""" downloadLink """"
 	ExitApp
 }

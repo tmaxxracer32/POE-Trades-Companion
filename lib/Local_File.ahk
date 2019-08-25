@@ -1,10 +1,20 @@
-﻿Set_LocalSettings() {
+﻿LocalSettings_CreateFileIfNotExisting() {
+	global PROGRAM
+	settingsFile := PROGRAM.SETTINGS_FILE
+
+	if !FileExist(settingsFile) {
+		defaultSettings := Get_LocalSettings_DefaultValues()
+		Save_LocalSettings(defaultSettings)
+	}
+}
+
+Set_LocalSettings() {
 	global PROGRAM
 	settingsFile := PROGRAM.SETTINGS_FILE
 	; Set default settings if first time running
 	defaultSettings := Get_LocalSettings_DefaultValues()
 	if !FileExist(settingsFile) {
-		Save_LocalSettings(defaultSettings)
+		LocalSettings_CreateFileIfNotExisting()
 		return
 	}
 	LocalSettings_VerifyValuesValidity()
@@ -109,6 +119,21 @@ Update_LocalSettings() {
 	defaultSettings := Get_LocalSettings_DefaultValues()
 	localSettings.UPDATING.Version := defaultSettings.UPDATING.Version
 	Save_LocalSettings(localSettings)
+
+	; Import old settings if accepted
+	oldIni := MyDocuments "\AutoHotkey\POE Trades Companion\Preferences.ini"
+	if FileExist(oldIni) {
+		hasAsked := INI.Get(PROGRAM.SETTINGS_FILE_OLD, "GENERAL", "HasAskedForImport")
+		INI.Set(PROGRAM.SETTINGS_FILE_OLD, "GENERAL", "HasAskedForImport", "True")
+		if (hasAsked != "True") {
+			AppendToLogs("Showing import pre1.13 settings GUI.")
+			GUI_ImportPre1dot13Settings.Show()
+			global GuiImportPre1dot13Settings
+			WinWait,% "ahk_id " GuiImportPre1dot13Settings.Handle
+			WinWaitClose,% "ahk_id " GuiImportPre1dot13Settings.Handle
+			AppendToLogs("Successfully closed pre1.13 settings GUI.")
+		}
+	}
 
 	; All of those are old and related to the ini file. After updating the ini, we will convert values into JSON
 	if FileExist(iniFile) {
@@ -934,6 +959,5 @@ Declare_LocalSettings(settingsObj="") {
 	if !IsObject(settingsObj)
 		settingsObj := Get_LocalSettings()
 
-	PROGRAM["SETTINGS"] := {}
-	PROGRAM["SETTINGS"] := ObjFullyClone(settingsObj)
+	PROGRAM.SETTINGS := {}, PROGRAM.SETTINGS := ObjFullyClone(settingsObj)
 }

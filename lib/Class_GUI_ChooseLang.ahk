@@ -94,8 +94,9 @@
 		global PROGRAM, GuiChooseLang
 
 		lang := GuiChooseLang.ChoosenLang != "" ? GuiChooseLang.ChoosenLang : "english"
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "Language", lang)
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "AskForLanguage", "False")
+		PROGRAM.SETTINGS.GENERAL.Language := lang
+		PROGRAM.SETTINGS.GENERAL.AskForLanguage := "False"
+		Save_LocalSettings()
 		PROGRAM.TRANSLATIONS := GetTranslations(lang)
 
 		GUI_ChooseLang.Destroy()
@@ -106,9 +107,9 @@
 		static prevLang
 		prevLang := prevLang?prevLang:PROGRAM.SETTINGS.GENERAL.Language
 
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "Language", lang)
 		PROGRAM.SETTINGS.GENERAL.Language := lang
 		PROGRAM.TRANSLATIONS := GetTranslations(lang)
+		Save_LocalSettings()
 		
 		GuiChooseLang.ChoosenLang := lang
 		GUI_ChooseLang.SetTranslation(lang)

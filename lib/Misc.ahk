@@ -247,10 +247,9 @@ Replace_TradeVariables(string) {
 
 Get_SkinAssetsAndSettings() {
 	global PROGRAM
-	iniFile := PROGRAM.INI_FILE
 
-	presetName := INI.Get(iniFile, "SETTINGS_CUSTOMIZATION_SKINS",, 1).Preset
-	skinName := INI.Get(iniFile, "SETTINGS_CUSTOMIZATION_SKINS",, 1).Skin
+	presetName := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Preset
+	skinName := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Skin
 	skinFolder := PROGRAM.SKINS_FOLDER "\" skinName
 	skinAssetsFile := PROGRAM.SKINS_FOLDER "\" skinName "\Assets.ini"
 	skinSettingsFile := PROGRAM.SKINS_FOLDER "\" skinName "\Settings.ini"

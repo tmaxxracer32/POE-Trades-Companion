@@ -69,14 +69,13 @@
 
 Tray_ToggleDisableBuyInterface() {
 	global PROGRAM
-	iniFile := PROGRAM.INI_FILE
 
 	isTrue := PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface="True"?True:False
 	newToggle := isTrue?"False":"True"
 	Menu, Tray,% newToggle="True"?"Check":"Uncheck", Disable buy interface?
 
-	INI.Set(iniFile, "SETTINGS_MAIN", "DisableBuyInterface", newToggle)
 	PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface := newToggle
+	Save_LocalSettings()
 
 	if (newToggle="True")
 		GUI_TradesBuyCompact.Destroy()
@@ -149,18 +148,17 @@ Tray_ToggleClickthrough() {
 }
 Tray_ToggleLockPosition(toggle="") {
 	global PROGRAM
-	iniFile := PROGRAM.INI_FILE
 
 	if ( (toggle = "") || (toggle = A_ThisMenuItem) ) && (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
 	|| (toggle = "Uncheck") {
-		INI.Set(iniFile, "SETTINGS_MAIN", "TradesGUI_Locked", "False")
 		PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked := "False"
+		Save_LocalSettings()
 		Menu, Tray, Uncheck,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
 	}
 	else if ( (toggle = "") || (toggle = A_ThisMenuItem) ) && (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "False")
 	|| (toggle = "Check") {
-		INI.Set(iniFile, "SETTINGS_MAIN", "TradesGUI_Locked", "True")
 		PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked := "True"
+		Save_LocalSettings()
 		Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
 	}
 }

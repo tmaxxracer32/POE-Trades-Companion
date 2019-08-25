@@ -124,7 +124,7 @@ Class GUI_ImportPre1dot13Settings {
         oldHistoryFilePath := MyDocuments "\AutoHotkey\POE Trades Companion\Trades_History.ini"
         newHistoryFilePath := PROGRAM.TRADES_HISTORY_FILE
         oldSettingsFilePath := MyDocuments "\AutoHotkey\POE Trades Companion\Preferences.ini"
-        newSettingsFilePath := PROGRAM.INI_FILE
+        newSettingsFilePath := PROGRAM.SETTINGS_FILE_OLD
 
         ; Rename old prefs file, to avoid detecing again
         if FileExist(oldSettingsFilePath) {

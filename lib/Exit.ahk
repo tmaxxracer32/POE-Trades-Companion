@@ -14,15 +14,15 @@ Close_PreviousInstance() {
 *		  and closing if a match is found
 */
 	global PROGRAM, RUNTIME_PARAMETERS
-	iniFile := PROGRAM.INI_FILE
 
 	if ( RUNTIME_PARAMETERS.NoReplace = 1 ) {
 		Return
 	}
 
-	prevPID := INI.Get(iniFile, "UPDATING", "PID")
-	prevPName := INI.Get(iniFile, "UPDATING", "FileProcessName")
-	prevHwnd := INI.Get(iniFile, "UPDATING", "ScriptHwnd")
+	localSettings := Get_LocalSettings()	
+	prevPID := localSettings.UPDATING.PID
+	prevPName := localSettings.UPDATING.FileProcessName
+	prevHwnd := localSettings.UPDATING.ScriptHwnd
 
 	Process, Exist, %prevPID%
 	existingPID := ErrorLevel

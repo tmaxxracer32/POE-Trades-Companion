@@ -565,7 +565,7 @@
 				if (GUI_Trades_V2.Get_ButtonsRowsCount().Special > 0) {
 					Loop 5 { ; Max num of special btns
 						speIndex := A_Index
-						speSettings := INI.Get(PROGRAM.INI_FILE, "SETTINGS_SPECIAL_BUTTON_" speIndex,,1)
+						speSettings := INI.Get(PROGRAM.SETTINGS_FILE, "SETTINGS_SPECIAL_BUTTON_" speIndex,,1)
 						speSlot := speSettings.Slot, speType := speSettings.Type, speEnabled := speSettings.Enabled="True"?True:False
 						speStyle := Styles["Button_" speType]
 
@@ -588,7 +588,7 @@
 				if (GUI_Trades_V2.Get_ButtonsRowsCount().Custom > 0) {
 					Loop 9 { ; Max num of custom btns
 						custIndex := A_Index
-						custSettings := INI.Get(PROGRAM.INI_FILE, "SETTINGS_CUSTOM_BUTTON_" custIndex,,1)
+						custSettings := INI.Get(PROGRAM.SETTINGS_FILE, "SETTINGS_CUSTOM_BUTTON_" custIndex,,1)
 						custSlot := custSettings.Slot, custSize := custSettings.Size, custName := custSettings.Name, custEnabled := custSettings.Enabled="True"?True:False
 						custStyle := custSize="Small"?Styles.Button_OneThird : custSize="Medium"?Styles.Button_TwoThird : custSize="Large"?Styles.Button_ThreeThird : ""
 
@@ -725,7 +725,6 @@
 
     ContextMenu(CtrlName, _buyOrSell) {
 		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings
-		iniFile := PROGRAM.INI_FILE
 		isSlot := GuiTrades[_buyOrSell].Is_Slots
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 		if (isSlot) {
@@ -1286,7 +1285,7 @@
 
     ResetPosition(_buyOrSell, dontWrite=False) {
 		global PROGRAM, GuiTrades
-		iniFile := PROGRAM.INI_FILE
+		guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 
 		gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)	
 		; gtmPos := GUI_TradesMinimized.GetPosition()
@@ -1312,11 +1311,10 @@
 			; if (GuiTrades.Is_Minimized)
 				; Gui, TradesMinimized:Show,% "NoActivate x0 y0"
 			; else
-			Gui, TradesBuyCompact:Show,% "NoActivate x0 y0"
+			Gui, Trades%_buyOrSell%:Show,% "NoActivate x0 y0"
 			
 			if !(dontWrite) {
-				INI.Set(iniFile, "SETTINGS_MAIN", _buyOrSell "_Pos_X", 0)
-				INI.Set(iniFile, "SETTINGS_MAIN", _buyOrSell "_Pos_Y", 0)
+				PROGRAM.SETTINGS[guiIniSection].Pos_X := 0, PROGRAM.SETTINGS[guiIniSection].Pos_Y := 0
 			}
 		}
 	}
@@ -1941,13 +1939,14 @@
 
 	SavePosition(_buyOrSell) {
 		global PROGRAM, GuiTrades
+		guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 
 		gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
 		if !IsNum(gtPos.X) || !IsNum(gtPos.Y)
 			Return
 
-		INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", _buyOrSell "_Pos_X", gtPos.X)
-		INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", _buyOrSell "_Pos_Y", gtPos.Y)
+		PROGRAM.SETTINGS[guiIniSection].Pos_X := gtPos.X, PROGRAM.SETTINGS[guiIniSection].Pos_Y := gtPos.Y
+		Save_LocalSettings()
 	}
 
 	GetPosition(_buyOrSell) {

@@ -3,7 +3,7 @@
 
 	quote := """"
 
-	FileRead, prefs,% PROGRAM.INI_FILE
+	FileRead, prefs,% PROGRAM.SETTINGS_FILE
 	RegExMatch(prefs, "iO)PushBulletToken=(.*)(`n|`r)", out)
 	
 	out := out.1

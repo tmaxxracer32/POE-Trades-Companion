@@ -815,16 +815,17 @@ Class GUI_Settings {
 
 	Customization_SellingBuying_AddOneButtonToRow(whichGui, _buyOrSell, rowNum, skipCreateStyle=False, dontActivateButton=False) {
 		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
-		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
-		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
+		GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"] := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]?GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]:0
+		btnsCount := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]
+		guiIniSection := whichGui="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		guiName := "Trades" _buyOrSell "_Slot1"
 		
 		if ( IsBetween(rowNum, 1, 3) && (btnsCount=10) )
 		|| ( (rowNum=4) && (btnsCount=5))
 			return
 
-		GuiSettings["PreviewRow" rowNum "_Count"]++ ; new var for buy sell TO_DO
-		newBtnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
+		GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]++ ; new var for buy sell TO_DO
+		newBtnsCount := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]
 
 		if (!btnsCount) {
 			; Hiding the row button
@@ -837,8 +838,8 @@ Class GUI_Settings {
 			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
 		Loop % newBtnsCount { ; Showing new ones
 			btnNum := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" btnNum]
-			btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Name
-			btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
+			btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
+			btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 			styleName := "CustomButton_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 			if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
 				style%styleName%DidntExist := True
@@ -859,15 +860,16 @@ Class GUI_Settings {
 	
 	Customization_Selling_RemoveOneButtonFromRow(_buyOrSell, rowNum, skipCreateStyle=False) {
 		global PROGRAM, GuiTrades, GuiSettings, GuiSettings_Controls
-		GuiSettings["PreviewRow" rowNum "_Count"] := GuiSettings["PreviewRow" rowNum "_Count"]?GuiSettings["PreviewRow" rowNum "_Count"]:0
-		btnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
+		GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"] := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]?GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]:0
+		btnsCount := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]
+		guiIniSection := whichGui="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		guiName := "Trades" _buyOrSell "_Slot1"
 		
 		if (!btnsCount)
 			return
 
-		GuiSettings["PreviewRow" rowNum "_Count"]--
-		newBtnsCount := GuiSettings["PreviewRow" rowNum "_Count"]
+		GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]--
+		newBtnsCount := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]
 
 		Loop % btnsCount ; Hiding previous buttons, skipCreateStyle=False
 			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
@@ -877,8 +879,8 @@ Class GUI_Settings {
 		else { ; Show new buttons
 			Loop % newBtnsCount {
 				btnNum := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" btnNum]
-				btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Name
-				btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
+				btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
+				btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 				styleName := "CustomButton_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
 				if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
@@ -977,6 +979,7 @@ Class GUI_Settings {
 
 	Customization_SellingBuying_SaveAllCurrentButtonActions(whichGui) {
 		global PROGRAM, GuiSettings
+		guiIniSection := whichGui="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		GUI_Settings.SetDefaultListView("hLV_Customization" whichGui "ActionsList")
 
 		; Getting activated button variables
@@ -991,35 +994,14 @@ Class GUI_Settings {
 			. "`nNum: " btnNum)
 			return
 		}
-		; Getting existing actions count
-		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
-		old_totalActions := 0
-		Loop {
-			actionExists := PROGRAM.SETTINGS[iniSection]["Action_" A_Index "_Type"]
-			if (actionExists)
-				old_totalActions++
-			else break
-		}
 		; Save new actions
 		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichGui)
-		new_totalActions := 0
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"] := {}
 		for index, nothing in lvContent {
 			actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
-			INI.Set(PROGRAM.INI_FILE, iniSection, "Action_" index "_Type", actionShortName)
-			INI.Set(PROGRAM.INI_FILE, iniSection, "Action_" index "_Content", """" lvContent[index].ActionContent """")
-			new_totalActions++
+			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"][index] := {Content: lvContent[index].ActionContent, Type: actionShortName}
 		}
-		; Deleting actions higher than new actions count
-		actionsToDelete := old_totalActions-new_totalActions, deleteIndex := new_totalActions+1
-		if (actionsToDelete > 0) {
-			Loop % actionsToDelete {
-				INI.Remove(PROGRAM.INI_FILE, iniSection, "Action_" deleteIndex "_Type")
-				INI.Remove(PROGRAM.INI_FILE, iniSection, "Action_" deleteIndex "_Content")
-				deleteIndex++
-			}
-		}
-
-		Declare_LocalSettings()
+		Save_LocalSettings()
 	}
 
 	Customization_SellingBuying_SetButtonType(whichGui, btnType, dontTriggerOnChange=False) {
@@ -1073,6 +1055,7 @@ Class GUI_Settings {
 		_buyOrSell := whichGui="Selling"?"SellPreview":whichGui="Buying"?"BuyPreview":""
 		ddlHwnd := GuiSettings_Controls["hDDL_Customization" whichGui "ButtonIcon"]
 		ddlContent := GUI_Settings.Submit("hDDL_Customization" whichGui "ButtonIcon")
+		guiIniSection := whichGui="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1087,9 +1070,9 @@ Class GUI_Settings {
 			return
 		}
 
-		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
-		INI.Set(PROGRAM.INI_FILE, iniSection, "Icon", ddlContent)
-		INI.Remove(PROGRAM.INI_FILE, iniSection, "Name")
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon := ddlContent
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Name")
+		Save_LocalSettings()
 
 		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
 		Loop % btnMax {
@@ -1111,6 +1094,7 @@ Class GUI_Settings {
 		_buyOrSell := whichGui="Selling"?"SellPreview":whichGui="Buying"?"BuyPreview":""
 		editBoxHwnd := GuiSettings_Controls["hEDIT_Customization" whichGui "ButtonName"]
 		editBoxContent := GUI_Settings.Submit("hEDIT_Customization" whichGui "ButtonName")
+		guiIniSection := whichGui="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1125,9 +1109,9 @@ Class GUI_Settings {
 			return
 		}
 
-		iniSection := "SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum, iniSection .= whichGui="Selling"?"_SELL":whichGui="Buying"?"_BUY":""
-		INI.Set(PROGRAM.INI_FILE, iniSection, "Name", editBoxContent)
-		INI.Remove(PROGRAM.INI_FILE, iniSection, "Icon")
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Name := editBoxContent
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Icon")
+		Save_LocalSettings()
 
 		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
 		Loop % btnMax {
@@ -1578,172 +1562,172 @@ Class GUI_Settings {
 	}
 
 	Customization_Selling_SetActionType(params*) {
-		return this.Customization_SellingBuying_SetActionType("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_SetActionType("Selling", params*)
 	}
 	Customization_Buying_SetActionType(params*) {
-		return this.Customization_SellingBuying_SetActionType("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_SetActionType("Buying", params*)
 	}
 	Customization_Selling_SetActionContent(params*) {
-		return this.Customization_SellingBuying_SetActionContent("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_SetActionContent("Selling", params*)
 	}
 	Customization_Buying_SetActionContent(params*) {
-		return this.Customization_SellingBuying_SetActionContent("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_SetActionContent("Buying", params*)
 	}
 	Customization_Selling_OnListviewClick(params*) {
-		return this.Customization_SellingBuying_OnListviewClick("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_OnListviewClick("Selling", params*)
 	}
 	Customization_Buying_OnListviewClick(params*) {
-		return this.Customization_SellingBuying_OnListviewClick("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_OnListviewClick("Buying", params*)
 	}
 	Customization_Selling_AdjustListviewHeaders() {
-		return this.Customization_SellingBuying_AdjustListviewHeaders("Selling")
+		return GUI_Settings.Customization_SellingBuying_AdjustListviewHeaders("Selling")
 	}
 	Customization_Buying_AdjustListviewHeaders() {
-		return this.Customization_SellingBuying_AdjustListviewHeaders("Buying")
+		return GUI_Settings.Customization_SellingBuying_AdjustListviewHeaders("Buying")
 	}
 	Customization_Selling_AddNewAction(params*) {
-		return this.Customization_SellingBuying_AddNewAction("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_AddNewAction("Selling", params*)
 	}
 	Customization_Buying_AddNewAction(params*) {
-		return this.Customization_SellingBuying_AddNewAction("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_AddNewAction("Buying", params*)
 	}
 	Customization_Selling_GetListViewContent() {
-		return this.Customization_SellingBuying_GetListViewContent("Selling")
+		return GUI_Settings.Customization_SellingBuying_GetListViewContent("Selling")
 	}
 	Customization_Buying_GetListViewContent() {
-		return this.Customization_SellingBuying_GetListViewContent("Buying")
+		return GUI_Settings.Customization_SellingBuying_GetListViewContent("Buying")
 	}
 	Customization_Selling_RemoveAction(params*) {
-		return this.Customization_SellingBuying_RemoveAction("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_RemoveAction("Selling", params*)
 	}
 	Customization_Buying_RemoveAction(params*) {
-		return this.Customization_SellingBuying_RemoveAction("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_RemoveAction("Buying", params*)
 	}
 	Customization_Selling_GetListviewSelectedRow() {
-		return this.Customization_SellingBuying_GetListviewSelectedRow("Selling")
+		return GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow("Selling")
 	}
 	Customization_Buying_GetListviewSelectedRow() {
-		return this.Customization_SellingBuying_GetListviewSelectedRow("Buying")
+		return GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow("Buying")
 	}
     Customization_Selling_MoveActionDown(params*) {
-		return this.Customization_SellingBuying_MoveActionDown("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_MoveActionDown("Selling", params*)
 	}
 	Customization_Buying_MoveActionDown(params*) {
-		return this.Customization_SellingBuying_MoveActionDown("Buy", params*)
+		return GUI_Settings.Customization_SellingBuying_MoveActionDown("Buy", params*)
 	}
     Customization_Selling_MoveActionUp(params*) {
-		return this.Customization_SellingBuying_MoveActionUp("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_MoveActionUp("Selling", params*)
 	}
 	Customization_Buying_MoveActionUp(params*) {
-		return this.Customization_SellingBuying_MoveActionUp("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_MoveActionUp("Buying", params*)
 	}
     Customization_Selling_OnListviewRightClick() {
-		return this.Customization_SellingBuying_OnListviewRightClick("Selling")
+		return GUI_Settings.Customization_SellingBuying_OnListviewRightClick("Selling")
 	}
 	Customization_Buying_OnListviewRightClick() {
-		return this.Customization_SellingBuying_OnListviewRightClick("Buying")
+		return GUI_Settings.Customization_SellingBuying_OnListviewRightClick("Buying")
 	}
     Customization_Selling_ListViewModifySelectedAction(params*) {
-		return this.Customization_SellingBuying_ListViewModifySelectedAction("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_ListViewModifySelectedAction("Selling", params*)
 	}
 	Customization_Buying_ListViewModifySelectedAction(params*) {
-		return this.Customization_SellingBuying_ListViewModifySelectedAction("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_ListViewModifySelectedAction("Buying", params*)
 	}
     Customization_Selling_OnActionContentChange(params*) {
-		return this.Customization_SellingBuying_OnActionContentChange("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_OnActionContentChange("Selling", params*)
 	}
 	Customization_Buying_OnActionContentChange(params*) {
-		return this.Customization_SellingBuying_OnActionContentChange("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_OnActionContentChange("Buying", params*)
 	}
     Customization_Selling_OnActionTypeChange() {
-		return this.Customization_SellingBuying_OnActionTypeChange("Selling")
+		return GUI_Settings.Customization_SellingBuying_OnActionTypeChange("Selling")
 	}
 	Customization_Buying_OnActionTypeChange() {
-		return this.Customization_SellingBuying_OnActionTypeChange("Buying")
+		return GUI_Settings.Customization_SellingBuying_OnActionTypeChange("Buying")
 	}
     Customization_Selling_SetButtonName(params*) {
-		return this.Customization_SellingBuying_SetButtonName("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_SetButtonName("Selling", params*)
 	}
 	Customization_Buying_SetButtonName(params*) {
-		return this.Customization_SellingBuying_SetButtonName("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_SetButtonName("Buying", params*)
 	}
     Customization_Selling_OnButtonNameChange() {
-		return this.Customization_SellingBuying_OnButtonNameChange("Selling")
+		return GUI_Settings.Customization_SellingBuying_OnButtonNameChange("Selling")
 	}
 	Customization_Buying_OnButtonNameChange() {
-		return this.Customization_SellingBuying_OnButtonNameChange("Buying")
+		return GUI_Settings.Customization_SellingBuying_OnButtonNameChange("Buying")
 	}
     Customization_Selling_OnButtonIconChange() {
-		return this.Customization_SellingBuying_OnButtonIconChange("Selling")
+		return GUI_Settings.Customization_SellingBuying_OnButtonIconChange("Selling")
 	}
 	Customization_Buying_OnButtonIconChange() {
-		return this.Customization_SellingBuying_OnButtonIconChange("Buying")
+		return GUI_Settings.Customization_SellingBuying_OnButtonIconChange("Buying")
 	}
     Customization_Selling_SetButtonIcon(params*) {
-		return this.Customization_SellingBuying_SetButtonIcon("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_SetButtonIcon("Selling", params*)
 	}
 	Customization_Buying_SetButtonIcon(params*) {
-		return this.Customization_SellingBuying_SetButtonIcon("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_SetButtonIcon("Buying", params*)
 	}
     Customization_Selling_OnButtonTypeChange() {
-		return this.Customization_SellingBuying_OnButtonTypeChange("Selling")
+		return GUI_Settings.Customization_SellingBuying_OnButtonTypeChange("Selling")
 	}
 	Customization_Buying_OnButtonTypeChange() {
-		return this.Customization_SellingBuying_OnButtonTypeChange("Buying")
+		return GUI_Settings.Customization_SellingBuying_OnButtonTypeChange("Buying")
 	}
     Customization_Selling_ShowButtonNameControl() {
-		return this.Customization_SellingBuying_ShowButtonNameControl("Selling")
+		return GUI_Settings.Customization_SellingBuying_ShowButtonNameControl("Selling")
 	}
 	Customization_Buying_ShowButtonNameControl() {
-		return this.Customization_SellingBuying_ShowButtonNameControl("Buying")
+		return GUI_Settings.Customization_SellingBuying_ShowButtonNameControl("Buying")
 	}
 	Customization_Selling_ShowButtonIconControl() {
-		return this.Customization_SellingBuying_ShowButtonIconControl("Selling")
+		return GUI_Settings.Customization_SellingBuying_ShowButtonIconControl("Selling")
 	}
 	Customization_Buying_ShowButtonIconControl() {
-		return this.Customization_SellingBuying_ShowButtonIconControl("Buying")
+		return GUI_Settings.Customization_SellingBuying_ShowButtonIconControl("Buying")
 	}
     Customization_Selling_SetButtonType(params*) {
-		return this.Customization_SellingBuying_SetButtonType("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_SetButtonType("Selling", params*)
 	}
 	Customization_Buying_SetButtonType(params*) {
-		return this.Customization_SellingBuying_SetButtonType("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_SetButtonType("Buying", params*)
 	}
     Customization_Selling_SaveAllCurrentButtonActions() {
-		return this.Customization_SellingBuying_SaveAllCurrentButtonActions("Selling")
+		return GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions("Selling")
 	}
 	Customization_Buying_SaveAllCurrentButtonActions() {
-		return this.Customization_SellingBuying_SaveAllCurrentButtonActions("Buying")
+		return GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions("Buying")
 	}
     Customization_Selling_LoadButtonActions(params*) {
-		return this.Customization_SellingBuying_LoadButtonActions("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_LoadButtonActions("Selling", params*)
 	}
 	Customization_Buying_LoadButtonActions(params*) {
-		return this.Customization_SellingBuying_LoadButtonActions("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_LoadButtonActions("Buying", params*)
 	}
     Customization_Selling_LoadButtonSettings(params*) {
-		return this.Customization_SellingBuying_LoadButtonSettings("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_LoadButtonSettings("Selling", params*)
 	}
 	Customization_Buying_LoadButtonSettings(params*) {
-		return this.Customization_SellingBuying_LoadButtonSettings("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_LoadButtonSettings("Buying", params*)
 	}
     Customization_Selling_AdjustPreviewControls() {
-		return this.Customization_SellingBuying_AdjustPreviewControls("Selling")
+		return GUI_Settings.Customization_SellingBuying_AdjustPreviewControls("Selling")
 	}
 	Customization_Buying_AdjustPreviewControls() {
-		return this.Customization_SellingBuying_AdjustPreviewControls("Buying")
+		return GUI_Settings.Customization_SellingBuying_AdjustPreviewControls("Buying")
 	}
     Customization_Selling_SetPreviewPreferences(params*) {
-		return this.Customization_SellingBuying_SetPreviewPreferences("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_SetPreviewPreferences("Selling", params*)
 	}
 	Customization_Buying_SetPreviewPreferences(params*) {
-		return this.Customization_SellingBuying_SetPreviewPreferences("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_SetPreviewPreferences("Buying", params*)
 	}
     Customization_Selling_AddOneButtonToRow(params*) {
-		return this.Customization_SellingBuying_AddOneButtonToRow("Selling", params*)
+		return GUI_Settings.Customization_SellingBuying_AddOneButtonToRow("Selling", params*)
 	}
 	Customization_Buying_AddOneButtonToRow(params*) {
-		return this.Customization_SellingBuying_AddOneButtonToRow("Buying", params*)
+		return GUI_Settings.Customization_SellingBuying_AddOneButtonToRow("Buying", params*)
 	}
 
 	
@@ -1825,42 +1809,27 @@ Class GUI_Settings {
 
 	TabSettingsMain_OnPushBulletTokenChange() {
 		global PROGRAM
-		iniFile := PROGRAM.INI_FILE
-
-		val := GUI_Settings.Submit("hEDIT_PushBulletToken")
-		INI.Set(iniFile, "SETTINGS_MAIN", "PushBulletToken", val)
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletToken := GUI_Settings.Submit("hEDIT_PushBulletToken")
+		Save_LocalSettings()
 	}
 	TabSettingsMain_OnPoeAccountsListChange() {
 		global PROGRAM
-		iniFile := PROGRAM.INI_FILE
-
-		val := GUI_Settings.Submit("hEDIT_PoeAccounts")
-		INI.Set(iniFile, "SETTINGS_MAIN", "PoeAccounts", val)
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts := GUI_Settings.Submit("hEDIT_PoeAccounts")
+		Save_LocalSettings()
 	}
 
 	TabSettingsMain_ToggleClickthroughCheckbox() {
 		global PROGRAM, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
-		ctrlName := "hCB_AllowClicksToPassThroughWhileInactive"
-		iniKey := SubStr(ctrlName, 5)
 
-		cbVal := GUI_Settings.Submit(ctrlName)
-		trueFalse := cbVal=0?"False":cbVal=1?"True":cbVal
+		cbVal := GUI_Settings.Submit("hCB_AllowClicksToPassThroughWhileInactive"),	trueFalse := cbVal=0?"False":cbVal=1?"True":cbVal
+		newCbVal := !cbVal, newTrueFalse := newCbVal=0?"False":newCbVal=1?"True":newCbVal
 
-		newCbVal := !cbVal
-		newTrueFalse := newCbVal=0?"False":newCbVal=1?"True":newCbVal
-
-		GuiControl, Settings:,% GuiSettings_Controls[ctrlName],% newCbVal
-		; INI.Set(iniFile, "SETTINGS_MAIN", iniKey, newTrueFalse)
-		; Declare_LocalSettings()
-		GUI_Settings.TabSettingsMain_OnCheckboxToggle(ctrlName)
+		GuiControl, Settings:,% GuiSettings_Controls["hCB_AllowClicksToPassThroughWhileInactive"],% newCbVal
+		GUI_Settings.TabSettingsMain_OnCheckboxToggle("hCB_AllowClicksToPassThroughWhileInactive")
 	}
 
 	TabSettingsMain_OnCheckboxToggle(CtrlName) {	
 		global PROGRAM
-		iniFile := PROGRAM.INI_FILE
 
 		if IsIn(CtrlName, "hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToBottomLeft,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs"
 		. ",hCB_AutoMinimizeOnAllTabsClosed,hCB_AutoMaximizeOnFirstNewTab,hCB_TradingWhisperSFXToggle,hCB_BuyerJoinedAreaSFXToggle"
@@ -1874,11 +1843,9 @@ Class GUI_Settings {
 			Return
 		}
 
-		val := GUI_Settings.Submit(CtrlName)
-		trueFalse := val=0?"False":val=1?"True":val
-
-		INI.Set(iniFile, "SETTINGS_MAIN", iniKey, trueFalse)
-		Declare_LocalSettings()
+		val := GUI_Settings.Submit(CtrlName), trueFalse := val=0?"False":val=1?"True":val
+		PROGRAM.SETTINGS.SETTINGS_MAIN[iniKey] := trueFalse
+		Save_LocalSettings()
 
 		if (CtrlName = "hCB_AllowClicksToPassThroughWhileInactive") {
 			if (trueFalse = "True") {
@@ -1896,8 +1863,6 @@ Class GUI_Settings {
 
 	TabSettingsMain_OnSFXBrowse(CtrlName) {
 		global PROGRAM, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
-		programName := PROGRAM.NAME
 
 		FileSelectFile, soundFile, ,% PROGRAM.SFX_FOLDER,% PROGRAM.NAME " - Select an audio file",Audio (*.wav; *.mp3)
 		if (!soundFile || ErrorLevel)
@@ -1920,13 +1885,12 @@ Class GUI_Settings {
 			Return
 		}
 
-		INI.Set(iniFile, "SETTINGS_MAIN", iniKey, soundFile)
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.SETTINGS_MAIN[iniKey] := soundFile
+		Save_LocalSettings()
 	}
 
 	TabSettingsMain_OnTransparencySliderMove(CtrlName) {
 		global PROGRAM, GuiTrades, GuiTradesBuyCompact
-		iniFile := PROGRAM.INI_FILE
 		transValue := GUI_Settings.Submit(CtrlName)
 
 		if IsIn(CtrlName, "hSLIDER_TabsOpenTransparency,hSLIDER_NoTabsTransparency")
@@ -1937,8 +1901,8 @@ Class GUI_Settings {
 			Return
 		}
 
-		INI.Set(iniFile, "SETTINGS_MAIN", iniKey, transValue)
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.SETTINGS_MAIN[iniKey] := transValue
+		Save_LocalSettings()
 
 		Gui, Trades:+LastFound
 		WinSet, Transparent,% (255/100)*transValue
@@ -2015,7 +1979,7 @@ Class GUI_Settings {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
 
 		sMode := Gui_Settings.Submit("hDDL_SendMsgMode")
-		INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", "SendMsgMode", sMode)
+		PROGRAM.SETTINGS.SETTINGS_MAIN.SendMsgMode := sMode
 
 		tipMsg := sMode="SendInput"?"SendInput: This is the fastest."
 			. "`nPresses all keys from the message individually."
@@ -2037,7 +2001,7 @@ Class GUI_Settings {
 		GuiControl, Settings:Move,% GuiSettings_Controls.hTXT_SendMessagesModeTip,% "w" txtSize.W " h" txtSize.H
 		GuiControl, Settings:,% GuiSettings_Controls.hTXT_SendMessagesModeTip,% tipMsg
 
-		Declare_LocalSettings()
+		Save_LocalSettings()
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -2263,7 +2227,6 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_ShowColorPicker() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		colType := GUI_Settings.Submit("hDDL_ChangeableFontColorTypes")
 		typeShortName := GUI_Settings.Get_ColorTypeShortName_From_LongName(colType)
@@ -2281,48 +2244,43 @@ Class GUI_Settings {
 		GuiControl, Settings:+Background%MyColor%,% GuiSettings_Controls.hPROGRESS_ColorSquarePreview
 		if (!ErrorLevel && MyColor != presetSettings["Color_" typeShortName]) {
 			GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_SkinPreset,% "User Defined"
-			INI.Set(iniFile, "SETTINGS_CUSTOMIZATION_SKINS_UserDefined", "Color_" typeShortName, MyColor)
+			PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined.COLORS[typeShortName] := MyColor
 			GUI_Settings.TabCustomizationSkins_SaveSettings()
-			Declare_LocalSettings()
+			Save_LocalSettings()
 		}
 	}
 
 	TabCustomizationSkins_SaveDefaultSkinSettings_To_UserDefined(skinName) {
 		global PROGRAM
-		iniFile := PROGRAM.INI_FILE
 
 		if !(skinName)
 			skinName := Gui_Settings.Submit(hLB_SkinBase)
 
-		skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(skinName)
-
 		skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(GUI_Settings.Submit("hLB_SkinBase"))
 		for key, value in skinDefSettings {
 			if InStr(key, "Color_") {
-				INI.Set(iniFile, "SETTINGS_CUSTOMIZATION_SKINS_UserDefined", key, skinDefSettings[key])
+				PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined.COLORS[key] := skinDefSettings[key]
 			}
 		}
+		Save_LocalSettings()
 	}
 
 	TabCustomizationSkins_SaveSettings(saveAsUserDefined=False) {
 		global PROGRAM
 		global GuiSettings, GuiSettings_Controls, GuiSettings_Submit
-		iniFile := PROGRAM.INI_FILE
 
 		GUI_Settings.Submit()
 		sub := GuiSettings_Submit
 
 		iniSection := (saveAsUserDefined)?("SETTINGS_CUSTOMIZATION_SKINS_UserDefined"):("SETTINGS_CUSTOMIZATION_SKINS")
 
-		INI.Set(iniFile, iniSection, "Preset", sub.hDDL_SkinPreset)
-		INI.Set(iniFile, iniSection, "Skin", sub.hLB_SkinBase)
-		INI.Set(iniFile, iniSection, "Font", sub.hLB_SkinFont)
-		INI.Set(iniFile, iniSection, "ScalingPercentage", sub.hEDIT_SkinScalingPercentage)
-		INI.Set(iniFile, iniSection, "FontSize", sub.hEDIT_SkinFontSize)
-		INI.Set(iniFile, iniSection, "FontQuality", sub.hEDIT_SkinFontQuality)
-		toggle := sub.hCB_UseRecommendedFontSettings
-		toggle := toggle=0?"False":toggle=1?"True":toggle
-		INI.Set(iniFile, iniSection, "UseRecommendedFontSettings", toggle)
+		PROGRAM.SETTINGS[iniSection].Preset := sub.hDDL_SkinPreset
+		PROGRAM.SETTINGS[iniSection].Skin := sub.hLB_SkinBase
+		PROGRAM.SETTINGS[iniSection].Font := sub.hLB_SkinFont
+		PROGRAM.SETTINGS[iniSection].ScalingPercentage := sub.hEDIT_SkinScalingPercentage
+		PROGRAM.SETTINGS[iniSection].FontSize := sub.hEDIT_SkinFontSize
+		PROGRAM.SETTINGS[iniSection].FontQuality := sub.hEDIT_SkinFontQuality
+		PROGRAM.SETTINGS[iniSection].UseRecommendedFontSettings := sub.hCB_UseRecommendedFontSettings=0?"False":"True"
 
 		if (saveAsUserDefined) {
 			skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(sub.hLB_SkinBase)
@@ -2331,13 +2289,13 @@ Class GUI_Settings {
 				if InStr(key, "Color_") {
 					presetVal := skinDefSettings[key], userVal := userSkinSettings[key]
 					iniValue := IsHex(userVal) && (StrLen(userVal) = 8) ? userVal : presetVal
-					
-					INI.Set(iniFile, iniSection, key, iniValue)
+
+					PROGRAM.SETTINGS[iniSecttion][key] := iniValue
 				}
 			}
 		}
 
-		Declare_LocalSettings()
+		Save_LocalSettings()
 
 		if (saveAsUserDefined=True)
 			Return
@@ -2417,7 +2375,6 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_SetFontSettingsState(state) {
 		global PROGRAM, GuiSettings_Controls 
-		iniFile := PROGRAM.INI_FILE
 
 		enableOrDisable := (state=1 || state = "Disable")?("Disable")
 		: (state=0 || state = "Enable")?("Enable")
@@ -2456,7 +2413,6 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_OnFontChange() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		if (GuiSettings.Is_Changing_Preset)
 			Return
@@ -2473,7 +2429,6 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_OnSkinChange() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		if (GuiSettings.Is_Changing_Preset)
 			Return
@@ -2498,7 +2453,6 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_OnScalePercentageChange() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		if (GuiSettings.Is_Changing_Preset)
 			Return
@@ -2514,12 +2468,11 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_OnFontQualityChange() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		if (GuiSettings.Is_Changing_Preset)
 			Return
 
-		fontQual := GUI_Settings.Submit("hEDIT_SkinFontQuality")
+		; fontQual := GUI_Settings.Submit("hEDIT_SkinFontQuality")
 		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_SkinPreset,% "User Defined"
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 
@@ -2528,12 +2481,11 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_OnFontSizeChange() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		if (GuiSettings.Is_Changing_Preset)
 			Return
 
-		fontSize := GUI_Settings.Submit("hEDIT_SkinFontSize")
+		; fontSize := GUI_Settings.Submit("hEDIT_SkinFontSize")
 		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_SkinPreset,% "User Defined"
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 
@@ -2543,12 +2495,11 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_OnRecommendedFontSettingsToggle() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		if (GuiSettings.Is_Changing_Preset)
 			Return
 
-		cbState := GUI_Settings.Submit("hCB_UseRecommendedFontSettings")
+		; cbState := GUI_Settings.Submit("hCB_UseRecommendedFontSettings")
 		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hDDL_SkinPreset,% "User Defined"
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 
@@ -4036,7 +3987,6 @@ Class GUI_Settings {
 
 	TabHotkeysAdvanced_OnHotkeyProfileChange(_which) {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		which := _which
 		if (which = "") {
@@ -4078,9 +4028,9 @@ Class GUI_Settings {
 			: hkInfos.Name ; TO_DO; If field is empty, cant remove actions using contextmenu
 						   ; Actually this is fine as it forces user to set a name
 		AutoTrimStr(hkName)
-	
-		INI.Set(PROGRAM.Ini_File, "SETTINGS_HOTKEY_ADV_" hkInfos.Num, "Name", hkName)
-		Declare_LocalSettings()
+
+		PROGRAM.SETTINGS.HOTKEYS[hkInfos.Num].Name := hkName
+		Save_LocalSettings()
 
 		GUI_Settings.TabHotkeysAdvanced_UpdateRegisteredHotkeysList()
 	}
@@ -4091,8 +4041,8 @@ Class GUI_Settings {
 		if !(hkInfos.Num > 0)
 			Return
 
-		INI.Set(PROGRAM.Ini_File, "SETTINGS_HOTKEY_ADV_" hkInfos.Num, "Hotkey", hkInfos.Hotkey)	
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.HOTKEYS[hkInfos.Num].Hotkey := hkInfos.Hotkey
+		Save_LocalSettings()
 
 		if (hkInfos.Hotkey_Type = "Manual")
 			GuiControl, Settings:,% GuiSettings_Controls.hHK_HotkeyAdvHotkey,% hkInfos.Hotkey
@@ -4312,7 +4262,6 @@ Class GUI_Settings {
 
 	TabHotkeysAdvanced_AddNewHotkeyProfile() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 
 		InputBox, newHkProf,% PROGRAM.Name,% "Input a new profile name:", , 250, 150
 		if (!newHKProf)
@@ -4323,10 +4272,11 @@ Class GUI_Settings {
 			if !(PROGRAM.SETTINGS["SETTINGS_HOTKEY_ADV_" loopIndex].Name)
 				Break
 		}
-		INI.Set(iniFile, "SETTINGS_HOTKEY_ADV_" loopIndex, "Name", newHKProf)
-		INI.Set(iniFile, "SETTINGS_HOTKEY_ADV_" loopIndex, "Hotkey", "")
-		INI.Set(iniFile, "SETTINGS_HOTKEY_ADV_" loopIndex, "Hotkey_Type", "Easy")
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.HOTKEYS[loopIndex] := {}
+		PROGRAM.SETTINGS.HOTKEYS[loopIndex].Name := newHKProf
+		PROGRAM.SETTINGS.HOTKEYS[loopIndex].Hotkey := ""
+		PROGRAM.SETTINGS.HOTKEYS[loopIndex].Hotkey_Type := "Easy" ; TO_DO_V2 wtf? workaround pls
+		Save_LocalSettings()
 
 		GUI_Settings.TabHotkeysAdvanced_UpdateRegisteredHotkeysList()
 		GUI_Settings.TabHotkeysAdvanced_DisableSubroutines()
@@ -4338,7 +4288,6 @@ Class GUI_Settings {
 	
 	TabHotkeysAdvanced_DeleteCurrentHotkeyProfile() {
 		global GuiSettings, GuiSettings_Controls, PROGRAM
-		iniFile := PROGRAM.INI_FILE
 
 		selectedProfile := GUI_Settings.TabHotkeysAdvanced_GetActiveHotkeyProfileInfos()
 		hkStr := Transform_AHKHotkeyString_Into_ReadableHotkeyString(selectedProfile.Hotkey)
@@ -4348,53 +4297,43 @@ Class GUI_Settings {
 		IfMsgBox, Yes
 		{
 			hkProfiles := GUI_Settings.TabHotkeysAdvanced_GetHotkeyProfiles()
+			hkSettingsCopy := ObjFullyClone(PROGRAM.SETTINGS.HOTKEYS)
 			
 			diff := hkProfiles.Profiles_Count-selectedProfile.Num
 			if (diff) {
 				fromNum := selectedProfile.Num+1, toNum := selectedProfile.Num
 				Loop % diff {
-					INI.Rename(iniFile, "SETTINGS_HOTKEY_ADV_" fromNum, "", "SETTINGS_HOTKEY_ADV_" toNum)
+					PROGRAM.SETTINGS.HOTKEYS[toNum] := {}, PROGRAM.SETTINGS.HOTKEYS[toNum] := hkSettingsCopy[fromNum]
 					fromNum++, toNum++
 				}
 			}
 			else {
-				INI.Remove(iniFile, "SETTINGS_HOTKEY_ADV_" selectedProfile.Num)
+				PROGRAM.SETTINGS.HOTKEYS.Remove([selectedProfile.Num])
 			}
 
-			Declare_LocalSettings()
+			Save_LocalSettings()
 			GUI_Settings.TabHotkeysAdvanced_UpdateRegisteredHotkeysList()
 		}
 	}
 
 	TabHotkeysAdvanced_SaveSelectedHotkeyActions() {
 		global GuiSettings, GuiSettings_Controls, PROGRAM
-		iniFile := PROGRAM.INI_FILE
 
 		GUI_Settings.SetDefaultListView("hLV_HotkeyAdvActionsList")
 		hkInfos := GUI_Settings.TabHotkeysAdvanced_GetActiveHotkeyProfileInfos()
-		iniSect := "SETTINGS_HOTKEY_ADV_" hkInfos.Num
 
 		if !(hkInfos.Num > 0)
 			Return
 
-		Loop {
-			iniLineExists := INI.Get(iniFile, iniSect, "Action_" A_Index "_Type")
-			iniLineExists := (iniLineExists = "ERROR")?(False):(True)
-			if (iniLineExists) {
-				INI.Remove(iniFile, iniSect, "Action_" A_Index "_Type")
-				INI.Remove(iniFile, iniSect, "Action_" A_Index "_Content")
-			}
-			else Break
-		}
+		PROGRAM.SETTINGS.HOTKEYS[hkInfos.Num].Actions := {}
 		Loop % LV_GetCount() {
 			LV_GetText(retrievedRowType, A_Index, 2)
 			LV_GetText(retrievedRowContent, A_Index, 3)
 			acShort := GUI_Settings.Get_ActionShortName_From_LongName(retrievedRowType)
 
-			INI.Set(iniFile, iniSect, "Action_" A_Index "_Type", acShort)
-			INI.Set(iniFile, iniSect, "Action_" A_Index "_Content", """" retrievedRowContent """")
+			PROGRAM.SETTINGS.HOTKEYS[hkInfos.Num].Actions[A_Index] := {Type: """" retrievedRowContent """", Content: acShort}
 		}
-		Declare_LocalSettings()
+		Save_LocalSettings()
 	}
 
 	TabHotkeysAdvanced_AddAction(whatDo, whichPos) {
@@ -4551,8 +4490,7 @@ Class GUI_Settings {
 	}
 
 	TabHotkeysAdvanced_ShowHKTypeMenu() {
-		global GuiSettings, TabHotkeysAdvanced_SetHkType, PROGRAM
-		iniFile := PROGRAM.INI_FILE
+		global PROGRAM, GuiSettings, TabHotkeysAdvanced_SetHkType
 
 		try Menu, HKTypeMenu, DeleteAll
 		Menu, HKTypeMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.RMENU_HkModeEasy, HkTypeMenu_Easy
@@ -4566,8 +4504,8 @@ Class GUI_Settings {
 			if !IsNum(hkInfos.Num)
 				return
 
-			iniSect := "SETTINGS_HOTKEY_ADV_" hkInfos.Num
-			INI.Set(iniFile, iniSect, "Hotkey_Type", "Easy")
+			PROGRAM.SETTINGS.HOTKEYS[hkInfos.Num].Hotkey_Type := "Easy"
+			Save_LocalSettings()			
 		return
 		HKTypeMenu_Manual:
 			hkInfos := GUI_Settings.TabHotkeysAdvanced_GetActiveHotkeyProfileInfos()
@@ -4575,8 +4513,8 @@ Class GUI_Settings {
 			if !IsNum(hkInfos.Num)
 				return
 
-			iniSect := "SETTINGS_HOTKEY_ADV_" hkInfos.Num
-			INI.Set(iniFile, iniSect, "Hotkey_Type", "Manual")
+			PROGRAM.SETTINGS.HOTKEYS[hkInfos.Num].Hotkey_Type := "Manual"
+			Save_LocalSettings()
 		return
 	}
 	TabHotkeysAdvanced_SetHkType(which) {
@@ -4685,15 +4623,14 @@ Class GUI_Settings {
 
 	TabMiscUpdating_OnCheckboxToggle(CtrlName) {
 		global PROGRAM
-		iniFile := PROGRAM.INI_FILE
 
 		iniKey := SubStr(CtrlName, 5)
 
 		val := GUI_Settings.Submit(CtrlName)
 		val := val=0?"False":val=1?"True":val
 
-		INI.Set(iniFile, "UPDATING", iniKey, val)
-		Declare_LocalSettings()
+		PROGRAM.SETTINGS.UPDATING[iniKey] := val
+		Save_LocalSettings()
 	}
 
 	TabMiscUpdating_CheckForUpdates() {
@@ -4706,7 +4643,6 @@ Class GUI_Settings {
 
 	TabMiscUpdating_OnCheckForUpdatesDDLChange(CtrlName, CtrlHwnd) {
 		global PROGRAM, GuiSettings_Controls
-		iniFile := PROGRAM.INI_FILE
 	
 		ddlVal := GUI_Settings.Submit(CtrlName)
 		valStr := ddlVal=1 ? "OnStartOnly"
@@ -4714,7 +4650,8 @@ Class GUI_Settings {
 			: ddlVal=3 ? "OnStartAndEveryDay"
 			: "OnStartAndEveryFiveHours"
 
-		INI.Set(iniFile, "UPDATING", "CheckForUpdatePeriodically", valStr)
+		PROGRAM.SETTINGS.UPDATING.CheckForUpdatePeriodically := valStr
+		Save_LocalSettings()
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -4809,8 +4746,8 @@ Class GUI_Settings {
 		static prevLang
 		prevLang := prevLang?prevLang:PROGRAM.SETTINGS.GENERAL.Language
 
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "Language", lang)
 		PROGRAM.SETTINGS.GENERAL.Language := lang
+		Save_LocalSettings()
 		PROGRAM.TRANSLATIONS := GetTranslations(lang)
 		
 		TrayMenu() ; Re-creating tray menu
@@ -4865,9 +4802,9 @@ Class GUI_Settings {
 
 		IfMsgBox, Yes
 		{
-			iniFile := PROGRAM.INI_FILE
+			settingsFile := PROGRAM.SETTINGS_FILE
 			SplitPath, iniFile, fileName, folder
-			FileMove,% PROGRAM.INI_FILE,% folder "\" A_Now "_" fileName, 1
+			FileMove,% settingsFile,% folder "\" A_Now "_" fileName, 1
 			Reload()
 		}
 	}
@@ -4971,7 +4908,6 @@ Class GUI_Settings {
 
 	ContextMenu(CtrlHwnd, CtrlName) {
 		global PROGRAM, GuiSettings
-		iniFile := PROGRAM.INI_FILE
 
 		; = = CUSTOMIZATION BUTTONS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		if IsIn(CtrlHwnd, GuiSettings.CustomButtons_HandlesList) {

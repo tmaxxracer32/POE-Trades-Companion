@@ -66,7 +66,7 @@ DisableHotkeys() {
 
 EnableHotkeys() {
 	global PROGRAM, POEGameGroup
-	programName := PROGRAM.NAME, iniFilePath := PROGRAM.INI_FILE
+	programName := PROGRAM.NAME
 	Set_TitleMatchMode("RegEx")
 
 	PROGRAM.HOTKEYS := {}

@@ -67,17 +67,11 @@
 	return returnObj
 }
 
-Declare_GameSettings(settingsObj) {
+Declare_GameSettings(settingsObj="") {
 	global GAME
 
-	GAME["SETTINGS"] := {}
+	if !IsObject(settingsObj)
+		settingsObj := Get_GameSettings()
 
-	; for iniSection, nothing in settingsObj {
-		; GAME["SETTINGS"][iniSection] := {}
-		; for iniKey, iniValue in settingsObj[iniSection]
-			; GAME["SETTINGS"][iniSection][iniKey] := iniValue
-	; }
-
-	for iniKey, iniValue in settingsObj
-		GAME["SETTINGS"][iniKey] := iniValue
+	GAME.SETTINGS := {}, GAME.SETTINGS := ObjFullyClone(settingsObj)
 }
