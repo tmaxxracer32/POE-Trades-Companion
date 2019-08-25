@@ -246,10 +246,8 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Progress", "xp yp wp hp Background359cfc") ; Title bar background
 		Gui.Add("Settings", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - " PROGRAM.TRANSLATIONS.TrayMenu.Settings) ; Title bar text
 		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
-		__f := GUI_Settings.DragGui.bind(GUI_Settings, GuiSettings.Handle)
-		GuiControl, Settings:+g,% GuiSettings_Controls.hTEXT_HeaderGhost,% __f
-		__f := GUI_Settings.Close.bind(GUI_Settings)
-		GuiControl, Settings:+g,% GuiSettings_Controls.hBTN_CloseGUI,% __f
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_HeaderGhost", "DragGui", GuiSettings.Handle)
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CloseGUI", "Close")
 
 		; * * Tab controls
 		allTabs := {Settings:["Main"], Customization:["Skins", "Selling", "Buying"], Hotkeys:["Basic", "Advanced"], Misc:["Updating", "About"]} ; Tabs and sub-tabs
@@ -270,36 +268,31 @@ Class GUI_Settings {
 		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x" leftMost " y" tabFirstItemY " w" tabSectionW " h" tabSectionH " hwndhBTN_SectionSettings", "Settings", Style_Section, PROGRAM.FONTS["Segoe UI"], 8)
 		for index, subTab in allTabs.Settings {
 			imageBtnLog .= Gui.Add("Settings", "ImageButton", "xp y+0 w" tabButtonW " h" tabButtonH " hwndhBTN_TabSettings" subTab, allTabs.Settings[index], Style_Tab, PROGRAM.FONTS["Segoe UI"], 8)
-			__f := GUI_Settings.OnTabBtnClick.bind(GUI_Settings, "Settings " allTabs.Settings[index])
-			GuiControl, Settings:+g,% GuiSettings_Controls["hBTN_TabSettings" subTab],% __f
 			GuiSettings.Tabs_Controls["Settings_" allTabs.Settings[index]] := GuiSettings_Controls["hBTN_TabSettings" subTab]
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_TabSettings" subTab, "OnTabBtnClick", "Settings " allTabs.Settings[index])
 		}
 		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x" leftMost " y+10 w" tabSectionW " h" tabSectionH " hwndhBTN_SectionCustomization", "Customization", Style_Section, PROGRAM.FONTS["Segoe UI"], 8)
 		for index, subTab in allTabs.Customization {
 			imageBtnLog .= Gui.Add("Settings", "ImageButton", "xp y+0 w" tabButtonW " h" tabButtonH " hwndhBTN_TabCustomization" subTab, allTabs.Customization[index], Style_Tab, PROGRAM.FONTS["Segoe UI"], 8)
-			__f := GUI_Settings.OnTabBtnClick.bind(GUI_Settings, "Customization " allTabs.Customization[index])
-			GuiControl, Settings:+g,% GuiSettings_Controls["hBTN_TabCustomization" subTab],% __f
 			GuiSettings.Tabs_Controls["Customization_" allTabs.Customization[index]] := GuiSettings_Controls["hBTN_TabCustomization" subTab]
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_TabCustomization" subTab, "OnTabBtnClick", "Customization " allTabs.Customization[index])
 		}
 		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x" leftMost " y+10 w" tabSectionW " h" tabSectionH " hwndhBTN_SectionHotkeys", "Hotkeys", Style_Section, PROGRAM.FONTS["Segoe UI"], 8)
 		for index, subTab in allTabs.Hotkeys {
 			imageBtnLog .= Gui.Add("Settings", "ImageButton", "xp y+0 w" tabButtonW " h" tabButtonH " hwndhBTN_TabHotkeys" subTab, allTabs.Hotkeys[index], Style_Tab, PROGRAM.FONTS["Segoe UI"], 8)
-			__f := GUI_Settings.OnTabBtnClick.bind(GUI_Settings, "Hotkeys " allTabs.Hotkeys[index])
-			GuiControl, Settings:+g,% GuiSettings_Controls["hBTN_TabHotkeys" subTab],% __f
 			GuiSettings.Tabs_Controls["Hotkeys_" allTabs.Hotkeys[index]] := GuiSettings_Controls["hBTN_TabHotkeys" subTab]
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_TabHotkeys" subTab, "OnTabBtnClick", "Hotkeys " allTabs.Hotkeys[index])
 		}
 		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x" leftMost " y+10 w" tabSectionW " h" tabSectionH " hwndhBTN_SectionMisc", "Misc", Style_Section, PROGRAM.FONTS["Segoe UI"], 8)
 		for index, subTab in allTabs.Misc {
 			imageBtnLog .= Gui.Add("Settings", "ImageButton", "xp y+0 w" tabButtonW " h" tabButtonH " hwndhBTN_TabMisc" subTab, allTabs.Misc[index], Style_Tab, PROGRAM.FONTS["Segoe UI"], 8)
-			__f := GUI_Settings.OnTabBtnClick.bind(GUI_Settings, "Misc " allTabs.Misc[index])
-			GuiControl, Settings:+g,% GuiSettings_Controls["hBTN_TabMisc" subTab],% __f
 			GuiSettings.Tabs_Controls["Misc_" allTabs.Misc[index]] := GuiSettings_Controls["hBTN_TabMisc" subTab]
+			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_TabMisc" subTab, "OnTabBtnClick", "Misc " allTabs.Misc[index])
 		}
 
 
 		Gui.Add("Settings", "ImageButton", "x" leftMost " y+35 w" tabSectionW " h" tabSectionH " hwndhBTN_ResetToDefaultSettings", "RESET SETTINGS`nTO DEFAULT", Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
-		__f := GUI_Settings.ResetToDefaultSettings.bind(GUI_Settings)
-		GuiControl, Settings:+g,% GuiSettings_Controls.hBTN_ResetToDefaultSettings,% __f
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_ResetToDefaultSettings", "ResetToDefaultSettings")
 
 		/* * * * * * * * * * *
 		*	TAB SETTINGS MAIN
@@ -634,25 +627,16 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Picture", "xp-45 yp w40 h40 hwndhIMG_PoE", PROGRAM.IMAGES_FOLDER "\PoE.png")
 		Gui.Add("Settings", "Picture", "xp-45 yp w40 h40 hwndhIMG_GitHub", PROGRAM.IMAGES_FOLDER "\GitHub.png")
 
-		__f := GUI_Settings.OnLanguageChange.bind(GUI_Settings, "english")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_FlagUK"],% __f
-		__f := GUI_Settings.OnLanguageChange.bind(GUI_Settings, "french")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_FlagFrance"],% __f
-		__f := GUI_Settings.OnLanguageChange.bind(GUI_Settings, "chinese_simplified")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_FlagChina"],% __f
-		__f := GUI_Settings.OnLanguageChange.bind(GUI_Settings, "chinese_traditional")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_FlagTaiwan"],% __f
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagUK", "OnLanguageChange", "english")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagFrance", "OnLanguageChange", "french")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagChina", "OnLanguageChange", "chinese_simplified")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagTaiwan", "OnLanguageChange", "chinese_traditional")
 
-		__f := GUI_Settings.OnPictureLinkClick.bind(GUI_Settings, "Paypal")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_Paypal"],% __f
-		__f := GUI_Settings.OnPictureLinkClick.bind(GUI_Settings, "Discord")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_Discord"],% __f
-		__f := GUI_Settings.OnPictureLinkClick.bind(GUI_Settings, "Reddit")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_Reddit"],% __f
-		__f := GUI_Settings.OnPictureLinkClick.bind(GUI_Settings, "PoE")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_PoE"],% __f
-		__f := GUI_Settings.OnPictureLinkClick.bind(GUI_Settings, "GitHub")
-		GuiControl, Settings:+g,% GuiSettings_Controls["hIMG_GitHub"],% __f
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_Paypal", "OnPictureLinkClick", "Paypal")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_Discord", "OnPictureLinkClick", "Discord")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_Reddit", "OnPictureLinkClick", "Reddit")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_PoE", "OnPictureLinkClick", "PoE")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_GitHub", "OnPictureLinkClick", "GitHub")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
