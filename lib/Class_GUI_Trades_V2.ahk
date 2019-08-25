@@ -88,35 +88,6 @@
 
 		return hBitmapFinal
 	}
-	
-	Get_ButtonsRowsCount() {
-		global PROGRAM
-
-		customBtnBiggestSlot := 0
-		Loop 9 {
-			customBtnSettings := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_" A_Index]
-			if (customBtnSettings.Enabled = "True") {
-				customBtnBiggestSlot := customBtnSettings.Slot > customBtnBiggestSlot ? customBtnSettings.Slot : customBtnBiggestSlot
-			}
-		}
-
-		specialsBtnRowsCount := 0
-		Loop 5 {
-			specialBtnSettings := PROGRAM.SETTINGS["SETTINGS_SPECIAL_BUTTON_" A_Index]
-			if (specialBtnSettings.Enabled = "True") {
-				specialsBtnRowsCount := 1
-			}
-		}
-		
-		customBtnsRowsCount := customBtnBiggestSlot = 0 ? "0"
-			: IsIn(customBtnBiggestSlot, "1,2,3") ? 1
-			: IsIn(customBtnBiggestSlot, "4,5,6") ? 2
-			: IsIn(customBtnBiggestSlot, "7,8,9") ? 3
-			: "ERROR"
-		specialsBtnRowsCount := specialsBtnRowsCount
-
-		Return {Custom:customBtnsRowsCount, Special:specialsBtnRowsCount}
-	}
 
 	Preview_AddCustomButtonsToRow(_buyOrSell, rowNum) {
 		whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
@@ -193,45 +164,43 @@
         borderSize := Floor(1*scaleMult), borderSize := borderSize >= 1 ? borderSize : 1
         oneTextLineSize := Get_TextCtrlSize("SomeText", Gui%guiName%.Font, Gui%guiName%.Font_Size, "", "R1").H
         twoTextLineSize := oneTextLineSize*2
-        ; twoTextLineSize += ((10+12)*scaleMult) ; 10+12, based on ctrl pacing - TO_DO_V2 see if need change
-		TabContentSlot_H_Temp := twoTextLineSize+(20*borderSize) ; 20 = spacing
+		TabContentSlot_H_Temp := twoTextLineSize+(20*borderSize)
+
+		guiIniSection := IsContaining(_buyOrSell, "Sell")?"SELL_INTERFACE":"BUY_INTERFACE"
+		buttonRowsCount := IsContaining(_buyOrSell, "Preview") ? 3
+			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_3.Buttons_Count ? 3
+			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_2.Buttons_Count ? 2
+			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_1.Buttons_Count ? 1
+			: 0
 
         if (_guiMode="Slots") {
-            Gui%guiName%.Height_NoRow 		:= guiHeight_NoRow      := borderSize + (30*scaleMult) + borderSize ; 30=header
-            Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabContentSlot_H_Temp + (borderSize) ; 22=header2
-			Gui%guiName%.Height_TwoRow	 	:= guiHeight_TwoRow     := guiHeight_OneRow + TabContentSlot_H_Temp + (borderSize*2)
-            Gui%guiName%.Height_ThreeRow 	:= guiHeight_ThreeRow   := guiHeight_TwoRow + TabContentSlot_H_Temp + (borderSize*2)
-            Gui%guiName%.Height_FourRow 	:= guiHeight_FourRow    := guiHeight_ThreeRow + TabContentSlot_H_Temp + (borderSize*2)
+			Gui%guiName%.Height_Minimized	:= guiMinimizedHeight 	:= (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
+			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
+			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
+			Gui%guiName%.Height_Maximized_TwoSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+(TabContentSlot_H_Temp*2)+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
+			Gui%guiName%.Height_Maximized_ThreeSlot := ( guiMinimizedHeight+(22*scaleMult)+(TabContentSlot_H_Temp*3)+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
+			Gui%guiName%.Height_Maximized_FourSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+(TabContentSlot_H_Temp*4)+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
+			Gui%guiName%.Slot_Height		:= TabContentSlot_H 	:= guiFullHeight-guiMinimizedHeight-(22*scaleMult)
+			Gui%guiName%.Height 			:= guiMinimizedHeight
+			Gui%guiName%.Width 				:= guiFullWidth 		:= (398*scaleMult)+(2*borderSize)
 
-			Gui%guiName%.OneButtonsRow 		:= oneButtonsRow 		:= (25*scaleMult)
-			Gui%guiName%.TwoButtonsRow 		:= twoButtonsRow 		:= (oneButtonsRow*2)+(5*scaleMult)
-			Gui%guiName%.ThreeButtonsRow 	:= threeButtonsRow 		:= (twoButtonsRow*2)+((5*scaleMult)*2)
-
-            guiFullHeight := guiHeight_FourRow+threeButtonsRow+(5*scaleMult), guiFullWidth := scaleMult*(398+(2*borderSize))
-            guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
-            guiMinimizedHeight := (30+(borderSize*2))*scaleMult ; 30=Header
+			guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
             upMost := borderSize, downMost := guiHeight+borderSize
-
-			
+			TabContentSlot_W := guiWidth-(15*scaleMult) ; 15=CloseTabVertical_W
         }
         else if (_guiMode="Tabs") {
-            Gui%guiName%.Height_NoRow 		:= guiHeight_NoRow      := borderSize + (30*scaleMult) + borderSize ; 30=header
-            Gui%guiName%.Height_OneRow	 	:= guiHeight_OneRow     := guiHeight_NoRow + (22*scaleMult) + TabContentSlot_H_Temp + (borderSize) ; 22=header2
+            Gui%guiName%.Height_Minimized	:= guiMinimizedHeight 	:= (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
+			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
+			Gui%guiName%.Slot_Height		:= TabContentSlot_H 	:= guiFullHeight-guiMinimizedHeight-(22*scaleMult)
+			Gui%guiName%.Height 			:= guiMinimizedHeight
+			Gui%guiName%.Width 				:= guiFullWidth 		:= (398*scaleMult)+(2*borderSize)
 
-			Gui%guiName%.OneButtonsRow 		:= oneButtonsRow 		:= (25*scaleMult)
-			Gui%guiName%.TwoButtonsRow 		:= twoButtonsRow 		:= oneButtonsRow+(25*scaleMult)+(5*scaleMult)
-			Gui%guiName%.ThreeButtonsRow 	:= threeButtonsRow 		:= twoButtonsRow+(25*scaleMult)+(5*scaleMult)+(5*scaleMult)
-
-            guiFullHeight := guiHeight_OneRow+threeButtonsRow+(5*scaleMult), guiFullWidth := scaleMult*(398+(2*borderSize))
-            guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
-            guiMinimizedHeight := (30+(borderSize*2))*scaleMult ; 30=Header
+			guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
             upMost := borderSize, downMost := guiHeight+borderSize
-
-			TabContentSlot_H := guiHeight_OneRow + threeButtonsRow
+			TabContentSlot_W := guiWidth
         }
-		TabContentSlot_W := guiWidth
 
         ; = = Define general gui slots
         if (_guiMode="Slots") {
@@ -288,7 +257,7 @@
 
         BackgroundImg_X := 0, BackgroundImg_Y := 0, BackgroundImg_W := Ceil(TabContentSlot_W*windowsDPI)*scaleMult, BackgroundImg_H := Ceil(TabcontentSlot_H*windowsDPI)*scaleMult
 
-        CloseTabVertical_W := 15*scaleMult, CloseTabVertical_H := TabcontentSlot_H, CloseTabVertical_X := rightMost-CloseTabVertical_W, CloseTabVertical_Y := 0
+        CloseTabVertical_W := 15*scaleMult, CloseTabVertical_H := TabContentSlot_H, CloseTabVertical_X := rightMost-CloseTabVertical_W, CloseTabVertical_Y := 0
 
         firstRowX := leftMost+(5*scaleMult), firstRowY := upMost+(5*scaleMult), firstRowW := (guiWidth/2)-(5*scaleMult)-CloseTabVertical_W ; 5= spacing
         secondRowX := firstRowX, secondRowY := firstRowY+oneTextLineSize+(5*scaleMult) ; 5= spacing
@@ -312,7 +281,7 @@
 		CustomButtonLeft_X := leftMost+(5*scaleMult), CustomButtonMiddle_X := CustomButtonLeft_X+CustomButtonOneThird_W+(5*scaleMult), CustomButtonRight_X := CustomButtonMiddle_X+CustomButtonOneThird_W+(5*scaleMult)
 		CustomButton_H := 25*scaleMult
 
-        TradeVerify_W := 10*scaleMult, TradeVerify_H := TradeVerify_W, TradeVerify_X := TimeSlot_X-5-TradeVerify_W, TradeVerify_Y := TimeSlot_Y+3
+        TradeVerify_W := 10*scaleMult, TradeVerify_H := TradeVerify_W, TradeVerify_X := Time_X-5-TradeVerify_W, TradeVerify_Y := Time_Y+3
 
         ; = = Getting ready to create the GUI
 		Gui%guiName%.Active_Tab := 0
@@ -320,10 +289,6 @@
 		Gui%guiName%.Tabs_Limit := _tabsToRender
 		Gui%guiName%.Max_Tabs_Per_Row := maxTabsToShow
 		Gui%guiName%.Is_Created := False
-		Gui%guiName%.Height := guiMinimizedHeight
-        Gui%guiName%.Height_Maximized := guiFullHeight
-		Gui%guiName%.Height_Minimized := guiMinimizedHeight
-		Gui%guiName%.Width := guiFullWidth
         Gui%guiName%.Is_Tabs := _guiMode="Tabs"?True:False
         Gui%guiName%.Is_Slots := _guiMode="Slots"?True:False
 
@@ -331,22 +296,29 @@
 			Styles := GUI_Trades_V2.Get_Styles(), StylesData := {}
 
         ; = = Borders
-        if (_guiMode="Slots")
-            borders := [ {Name:"Top", X:0, Y:0, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Left", X:0, Y:0, W:borderSize, H:guiFullHeight}
-                        ,{Name:"Right", X:guiFullWidth-borderSize, Y:0, W:borderSize, H:guiFullHeight}
-                        ,{Name:"Bottom_Minimized", X:0, Y:Header_Y+Header_H, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Bottom_OneSlot", X:0, Y:guiHeight_OneRow-borderSize, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Bottom_TwoSlots", X:0, Y:guiHeight_TwoRow-borderSize, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Bottom_ThreeSlots", X:0, Y:guiHeight_ThreeRow-borderSize, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Bottom_FourSlots", X:0, Y:guiHeight_FourRow-borderSize, W:guiFullWidth, H:borderSize} ]
-        else if (_guiMode="Tabs")
-            borders := [ {Name:"Top", X:0, Y:0, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Left", X:0, Y:0, W:borderSize, H:guiFullHeight}
-                        ,{Name:"Right", X:guiFullWidth-borderSize, Y:0, W:borderSize, H:guiFullHeight}
-                        ,{Name:"Bottom_Minimized", X:0, Y:Header_Y+Header_H, W:guiFullWidth, H:borderSize}
-                        ,{Name:"Bottom_OneSlot", X:0, Y:guiHeight_OneRow-borderSize, W:guiFullWidth, H:borderSize} ]
+        if (_guiMode="Slots") {
+            bordersObj := { Top: {X:0, Y:0, W:guiFullWidth, H:borderSize}
+				,Left: {X:0, Y:0, W:borderSize, H:guiFullHeight}
+				,Right: {X:guiFullWidth-borderSize, Y:0, W:borderSize, H:guiFullHeight}
+				,Bottom_Minimized: {X:0, Y:Header_Y+Header_H, W:guiFullWidth, H:borderSize}
+				,Bottom_Maximized_OneSlot: {X:0, Y:Gui%guiName%.Height_Maximized_OneSlot-borderSize, W:guiFullWidth, H:borderSize}
+				,Bottom_Maximized_TwoSlots: {X:0, Y:Gui%guiName%.Height_Maximized_TwoSlot-borderSize, W:guiFullWidth, H:borderSize}
+				,Bottom_Maximized_ThreeSlots: {X:0, Y:Gui%guiName%.Height_Maximized_ThreeSlot-borderSize, W:guiFullWidth, H:borderSize}
+				,Bottom_Maximized_FourSlots: {X:0, Y:Gui%guiName%.Height_Maximized_FourSlot-borderSize, W:guiFullWidth, H:borderSize} }
+		}
+        else if (_guiMode="Tabs") {
+            bordersObj := { Top: {X:0, Y:0, W:guiFullWidth, H:borderSize}
+				,Left: {X:0, Y:0, W:borderSize, H:guiFullHeight}
+				,Right: {X:guiFullWidth-borderSize, Y:0, W:borderSize, H:guiFullHeight}
+				,Bottom_Minimized: {X:0, Y:guiMinimizedHeight, W:guiFullWidth, H:borderSize}
+				,Bottom_Maximized: {X:0, Y:guiHeight+borderSize, W:guiFullWidth, H:borderSize}
+				,Bottom_Maximized_OneSlot: {X:0, Y:guiHeight+borderSize, W:guiFullWidth, H:borderSize} }
+		}
+		borders := []
+		for objName, nothing in bordersObj
+			bordersObj[objName].Name := objName, borders.Push(bordersObj[objName])
 
+		SKIN.Settings.COLORS.Border := "Red"
         Loop % borders.Count()
             Gui.Add(guiName, "Progress", "x" borders[A_Index]["X"] " y" borders[A_Index]["Y"] " w" borders[A_Index]["W"] " h" borders[A_Index]["H"] " Background" SKIN.Settings.COLORS.Border " c" SKIN.Settings.COLORS.Border " hwndhPROGRESS_Border" borders[A_Index].Name, 100)
 
@@ -478,6 +450,11 @@
 			Gui.Add(slotGuiName, "Text", "x" PriceCount_X " y" PriceCount_Y " w" PriceCount_W " R1 BackgroundTrans hwndhTEXT_PriceCount c" SKIN.Settings.COLORS.Trade_Info_2)
 			Gui.Add(slotGuiName, "Text", "x" AdditionalMsg_X " y" AdditionalMsg_Y " w" AdditionalMsg_W " R1 BackgroundTrans  hwndhTEXT_AdditionalMessage c" SKIN.Settings.COLORS.Trade_Info_2)
 			Gui.Add(slotGuiName, "Text", "x" Time_X " y" Time_Y " w" Time_W " R1 BackgroundTrans hwndhTEXT_TimeSent c" SKIN.Settings.COLORS.Trade_Info_2)
+			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerify BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
+			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGrey Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
+			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyOrange Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Orange)
+			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGreen Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Green)
+			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyRed Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Red)
             if (_guiMode="Slots")
 			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 
@@ -606,13 +583,6 @@
 				}
 			}
 			*/
-			
-            ; TO_DO_V2 add TradeVerify 
-            ; Gui.Add(guiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerify" tabNum " BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
-			; Gui.Add(guiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGrey" tabNum " Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
-			; Gui.Add(guiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyOrange" tabNum " Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Orange)
-			; Gui.Add(guiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGreen" tabNum " Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Green)
-			; Gui.Add(guiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyRed" tabNum " Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Red)
 			
 			Gui%guiName%["Slot" tabNum] := Gui%guiName%_Slot%tabNum% ; adding gui array to our main gui array as a sub array
 			Gui%guiName%["Slot" tabNum "_Controls"] := Gui%guiName%_Slot%tabNum%_Controls
@@ -930,7 +900,7 @@
 
         ; TO_DO is this needed?
 		if (doOnlyOnce != False) {
-			Gui, Trades%_buyOrSell%Search:Show, NoActivate
+			; Gui, Trades%_buyOrSell%Search:Show, NoActivate
 			doOnlyOnce := True
 		}
 
@@ -946,13 +916,13 @@
 		}
 
         ; Update the GUI height if the mode is slots
-        if (isSlots) {
-            GuiTrades[_buyOrSell].Height_Maximized := guiHeight := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_NoRow
-                : newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_OneRow
-                : newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_TwoRow
-                : newTabsCount = 3 ? GuiTrades[_buyOrSell].Height_ThreeRow
-                : newTabsCount >= 4 ? GuiTrades[_buyOrSell].Height_FourRow
-                : GuiTrades[_buyOrSell].Height_FourRow
+        if (isSlots && !IsContaining(_buyOrSell, "Preview")) {
+            GuiTrades[_buyOrSell].Height_Maximized := guiHeight := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_Minimized
+                : newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
+                : newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
+                : newTabsCount = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
+                : newTabsCount >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
+                : GuiTrades[_buyOrSell].Height_Maximized_FourSlot
 
             Gui.Show("Trades" _buyOrSell, "h" guiHeight " NoActivate")
         }
@@ -1151,6 +1121,9 @@
 		global GuiTrades, GuiTrades_Controls
 		global PROGRAM
 
+		if IsContaining(_buyOrSell, "Preview")
+			return
+
 		Detect_HiddenWindows("On")
 		WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% GuiTrades[_buyOrSell].Height_Minimized * GuiTrades[_buyOrSell].Windows_DPI
 		Detect_HiddenWindows()
@@ -1174,6 +1147,9 @@
     Maximize(_buyOrSell) {
 		global GuiTrades, GuiTrades_Controls
 		global PROGRAM
+
+		if IsContaining(_buyOrSell, "Preview")
+			return
 
         Detect_HiddenWindows("On")
 		WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% GuiTrades[_buyOrSell].Height_Maximized * GuiTrades[_buyOrSell].Windows_DPI
@@ -1404,6 +1380,9 @@
 		isSlots := GuiTrades[_buyOrSell].Is_Slots
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 		activeTab := GuiTrades[_buyOrSell].Active_Tab
+
+		if IsContaining(_buyOrSell, "Preview")
+			return
 
 		tabNum := isTabs && !tabNum ? activeTab : tabNum
 		; Removing tab and adjusting others if needed
