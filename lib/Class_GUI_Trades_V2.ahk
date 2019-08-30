@@ -1,9 +1,9 @@
 ﻿Class GUI_Trades_V2 {
 
-	CreateButtonImage(assets, sizes, debug=False) {
+	CreateButtonImage(assets, sizes, options="", debug=False) {
 		global SKIN
 		width := sizes.Width, height := sizes.Height
-		centerRatio := sizes.CenterRatio?sizes.CenterRatio:1
+		centerRatio := options.CenterRatio?options.CenterRatio:1
 
 		; Declaring sizing + positionning
 		assets_infos := {}
@@ -17,36 +17,56 @@
 
 			; Sizing
 			scaleMultiplerFormula := assets_infos[asset].ImageSizes.W > assets_infos[asset].ImageSizes.H ? width / assets_infos[asset].ImageSizes.W : height / assets_infos[asset].ImageSizes.H
-			if IsIn(asset, "Left,Right") {
-				assets_infos[asset].Scale_Multiplier := scaleMultiplerFormula
-				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
+			assets_infos[asset].Scale_Multiplier := asset="Center" ? (width > height ? height / assets_infos[asset].ImageSizes.H : width / assets_infos[asset].ImageSizes.W)
+				: scaleMultiplerFormula
+			if (options[asset].Fill) {
+				if (options[asset].FillVertically)
+					assets_infos[asset].Width := width, assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H)
+				else 
+					assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W), assets_infos[asset].Height := height
 			}
-			if (asset = "Center") {
-				assets_infos[asset].Scale_Multiplier := height / assets_infos[asset].ImageSizes.H
-				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier * centerRatio), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier * centerRatio)
-			}
-			if (asset = "Fill") {
-				assets_infos[asset].Scale_Multiplier := scaleMultiplerFormula
-				assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
+			else {
+				if (asset="Center")
+					assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier * centerRatio), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier * centerRatio)
+				else {
+					assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W * assets_infos[asset].Scale_Multiplier), assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H * assets_infos[asset].Scale_Multiplier)
+				}
 			}
 
+			; Reset sizing based on options
+			if (options[asset].NoWidthScale)
+				assets_infos[asset].Width := assets_infos[asset].ImageSizes.W
+			if (options[asset].NoHeightScale)
+				assets_infos[asset].Height := assets_infos[asset].ImageSizes.H
+
 			; Positionning
-			if IsIn(asset, "Left,Fill") {
+			if IsIn(asset, "Left,Background,Top")
 				assets_infos[asset].X_POS := 0, assets_infos[asset].Y_POS := 0
-			}
-			if (asset = "Right") {
+			if (asset = "Right")
 				assets_infos[asset].X_POS := width-assets_infos[asset].Width, assets_infos[asset].Y_POS := 0
-			}
-			if (asset = "Center") {
+			if (asset = "Center")
 				assets_infos[asset].X_POS := (width/2)-(assets_infos[asset].Width/2), assets_infos[asset].Y_POS := (height/2)-(assets_infos[asset].Height/2)
+			if (asset = "Bottom")
+				assets_infos[asset].X_POS := 0, assets_infos[asset].Y_POS := height-assets_infos[asset].Height
+		}
+		if (assets.Background && options.Background.FillCentered) {
+			if (assets.Left) {
+				assets_infos.Background.X_POS := assets_infos.Left.X_POS + assets_infos.Left.Width
+				assets_infos.Background.Width := assets_infos.Background.Width - assets_infos.Left.Width
 			}
+			if (assets.Right)
+				assets_infos.Background.Width := assets_infos.Background.Width - assets_infos.Right.Width
+			if (assets.Top)
+				assets_infos.Background.Y_POS := assets_infos.Top.Y_POS + assets_infos.Top.Height
 		}
 
 		; Creating new final bitmap + graphics
 		pBitmapFinal := Gdip_CreateBitmap(width, height)
 		G := Gdip_GraphicsFromImage(pBitmapFinal)
-		; Gdip_SetSmoothingMode(G, 4)
-		; Gdip_SetInterpolationMode(G, 7)
+		Gdip_SetSmoothingMode(G, 4)
+		Gdip_SetInterpolationMode(G, 7)
+		pBrush := Gdip_BrushCreateSolid(0xff00ff00)
+		Gdip_FillRectangle(G, pBrush, 0, 0, width, height)
 		; Creating bitmap for every element
 		bitMaps := {}
 		for asset, imagePath in assets {
@@ -57,15 +77,34 @@
 			bitMaps[asset] := Gdip_ResizeBitmap(bitMaps[asset], "w" assets_infos[asset].Width " h" assets_infos[asset].Height, smooth:=False)
 		}
 		; Drawing bitmap on final bitmap
-		if (bitMaps.Fill) {
-			Loop % width / assets_infos.Fill.Width {
-				imgX := A_Index=1?assets_infos.Fill.X_POS: assets_infos.Fill.X_POS+(assets_infos.Fill.Width*(A_Index-1))
-				Gdip_DrawImage(G, bitMaps.Fill, imgX, assets_infos.Fill.Y_POS, assets_infos.Fill.Width, assets_infos.Fill.Height, 0, 0, assets_infos.Fill.Width, assets_infos.Fill.Height)
+		Loop 2 {
+			loopIndex := A_Index
+			for bitMapName, bitMapValue in bitMaps {
+				if (loopIndex=1 && bitMapName != "Background") ; Making sure to fill background first
+					Continue
+				if (loopIndex=2 && bitMapName = "Background") ; And then the rest
+					Continue
+
+				if (options[bitMapName].Fill) {
+					if (options[bitMapName].FillVertically) {
+						caca := true 
+						Loop % height / assets_infos[bitMapName].Height {
+							imgY := A_Index=1?assets_infos[bitMapName].Y_POS: assets_infos[bitMapName].Y_POS+(assets_infos[bitMapName].Height*(A_Index-1))
+							Gdip_DrawImage(G, bitMaps[bitMapName], assets_infos[bitMapName].X_POS, imgY, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
+						}
+					}
+					else {
+						Loop % width / assets_infos[bitMapName].Width {
+							imgX := A_Index=1?assets_infos[bitMapName].X_POS: assets_infos[bitMapName].X_POS+(assets_infos[bitMapName].Width*(A_Index-1))
+							Gdip_DrawImage(G, bitMaps[bitMapName], imgX, assets_infos[bitMapName].Y_POS, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
+						}
+					}
+				}
+				else {
+					Gdip_DrawImage(G, bitMaps[bitMapName], assets_infos[bitMapName].X_POS, assets_infos[bitMapName].Y_POS, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
+				}
 			}
 		}
-		for bitMapName, bitMapValue in bitMaps
-			if IsIn(bitMapName, "Left,Right,Center")
-				Gdip_DrawImage(G, bitMaps[bitMapName], assets_infos[bitMapName].X_POS, assets_infos[bitMapName].Y_POS, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
 
 		; Getting hBitmap
 		hBitmapFinal := Gdip_CreateHBITMAPFromBitmap(pBitmapFinal)
@@ -455,8 +494,12 @@
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyOrange Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Orange)
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGreen Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Green)
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyRed Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Red)
-            if (_guiMode="Slots")
+            if (_guiMode="Slots") {
+				if !IsObject(Styles.Close_Tab_Vertical) {
+					GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab_Vertical", CloseTabVertical_W, CloseTabVertical_H, "Cross", useBackground2:=True)
+				}
 			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+			}
 
             itemNamePos := Gui.GetControlPos(slotGuiName, "hTEXT_ItemName")
 			if (_buyOrSell = "Buy") {
@@ -1743,39 +1786,88 @@
 		return ret
 	}
 
-	CreateGenericIconButtonStyle(ByRef styles, styleName, width, height, _icon) {
+	CreateGenericIconButtonStyle_2(ByRef styles, styleName, width, height, _icon, useBackground2=False) {
 		global SKIN
-		return GUI_Trades_V2.Create_Style(styles, styleName
-			,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
-			,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, FillHover: SKIN.Assets.Button_Generic.Fill_Hover, ColorHover: SKIN.Settings.Colors.Button_Hover
-			,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, FillPress: SKIN.Assets.Button_Generic.Fill_Press, ColorPress: SKIN.Settings.Colors.Button_Press
-			,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
-			,CenterRatio:0.60, Center: SKIN.Assets.Icons[_icon], CenterHover: SKIN.Assets.Icons[_icon], CenterPress: SKIN.Assets.Icons[_icon], CenterDefault: SKIN.Assets.Icons[_icon]
-			,Width:width, Height:height})
+		styleObj := {}, assets := ["Background", "Left", "Right", "Top", "Bottom"]
+		for index, asset in assets {
+			assetSuffix := asset = "Background" && useBackground2=True ? "2" : ""
+			styleObj[asset] := SKIN.Assets.Button_Generic2[asset assetSuffix]
+			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic2[asset assetSuffix "_Hover"]
+			styleObj[asset "Press"] := SKIN.Assets.Button_Generic2[asset assetSuffix "_Press"]
+			styleObj[asset "Default"] := SKIN.Assets.Button_Generic2[asset assetSuffix "_Default"]
+		}
+		styleObj.Center := SKIN.Assets.Icons[_icon], styleObj.CenterHover := SKIN.Assets.Icons[_icon], styleObj.CenterPress := SKIN.Assets.Icons[_icon], styleObj.CenterDefault := SKIN.Assets.Icons[_icon], 
+		styleObj.Color := SKIN.Settings.Colors.Button_Normal, styleObj.ColorHover := SKIN.Settings.Colors.Button_Hover, styleObj.ColorPress := SKIN.Settings.Colors.Button_Press, styleObj.ColorDefault := SKIN.Settings.Colors.Button_Default, styleObj.ColorTransparency := SKIN.Assets.Misc.Transparency_Color
+		styleObj.Width := width, styleObj.Height := height
+		options := {Top: {NoHeightScale:True, Fill:True}
+			, Bottom: {NoHeightScale:True, Fill:True}
+			, Left: {NoWidthScale:True, Fill:True, FillVertically:True}
+			, Right: {NoWidthScale:True, Fill:True, FillVertically:True}
+			, Background: {Fill:True, FillVertically: True, FillCentered: True}
+			, CenterRatio:0.60}
+
+		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options, debug:=False)
+	}
+
+	CreateGenericIconButtonStyle(ByRef styles, styleName, width, height, _icon, specificInfos="") {
+		global SKIN
+		styleObj := {}, assets := ["Background", "Left", "Right"]
+		for index, asset in assets {
+			styleObj[asset] := SKIN.Assets.Button_Generic[asset]
+			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic[asset "_Hover"]
+			styleObj[asset "Press"] := SKIN.Assets.Button_Generic[asset "_Press"]
+			styleObj[asset "Default"] := SKIN.Assets.Button_Generic[asset "_Default"]
+		}
+		styleObj.Center := SKIN.Assets.Icons[_icon], styleObj.CenterHover := SKIN.Assets.Icons[_icon], styleObj.CenterPress := SKIN.Assets.Icons[_icon], styleObj.CenterDefault := SKIN.Assets.Icons[_icon], 
+		styleObj.Color := SKIN.Settings.Colors.Button_Normal, styleObj.ColorHover := SKIN.Settings.Colors.Button_Hover, styleObj.ColorPress := SKIN.Settings.Colors.Button_Press, styleObj.ColorDefault := SKIN.Settings.Colors.Button_Default, styleObj.ColorTransparency := SKIN.Assets.Misc.Transparency_Color
+		styleObj.Width := width, styleObj.Height := height
+		options := {Background: {Fill:True}
+			, CenterRatio:0.60}
+
+		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options)
 	}
 
 	CreateGenericTextButtonStyle(byRef styles, styleName, width, height) {
 		global SKIN
-		return GUI_Trades_V2.Create_Style(styles, styleName
-			,{Left: SKIN.Assets.Button_Generic.Left, Right: SKIN.Assets.Button_Generic.Right, Fill: SKIN.Assets.Button_Generic.Fill, Color: SKIN.Settings.Colors.Button_Normal
-			,LeftHover: SKIN.Assets.Button_Generic.Left_Hover, RightHover: SKIN.Assets.Button_Generic.Right_Hover, FillHover: SKIN.Assets.Button_Generic.Fill_Hover, ColorHover: SKIN.Settings.Colors.Button_Hover
-			,LeftPress: SKIN.Assets.Button_Generic.Left_Press, RightPress: SKIN.Assets.Button_Generic.Right_Press, FillPress: SKIN.Assets.Button_Generic.Fill_Press, ColorPress: SKIN.Settings.Colors.Button_Press
-			,LeftDefault: SKIN.Assets.Button_Generic.Left_Hover, RightDefault: SKIN.Assets.Button_Generic.Right_Hover, FillDefault: SKIN.Assets.Button_Generic.Fill_Hover, Color_Default: SKIN.Settings.Colors.Button_Hover
-			,Width:width, Height:height})
+		styleObj := {}, assets := ["Background", "Left", "Right"]
+		for index, asset in assets {
+			styleObj[asset] := SKIN.Assets.Button_Generic[asset]
+			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic[asset "_Hover"]
+			styleObj[asset "Press"] := SKIN.Assets.Button_Generic[asset "_Press"]
+			styleObj[asset "Default"] := SKIN.Assets.Button_Generic[asset "_Default"]
+		}
+		styleObj.Color := SKIN.Settings.Colors.Button_Normal, styleObj.ColorHover := SKIN.Settings.Colors.Button_Hover, styleObj.ColorPress := SKIN.Settings.Colors.Button_Press, styleObj.ColorDefault := SKIN.Settings.Colors.Button_Default, styleObj.ColorTransparency := SKIN.Assets.Misc.Transparency_Color
+		styleObj.Width := width, styleObj.Height := height
+		options := {Background: {Fill:True}}
+
+		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options)
 	}
 
-	Create_Style(ByRef styles, styleName, styleInfos) {
+	Create_Style(ByRef styles, styleName, styleInfos, options="", debug=False) {
 		global SKIN
 	
-		normalImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.Left, Right:styleInfos.Right, Center:styleInfos.Center, Fill:styleInfos.Fill}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
-		hoverImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftHover, Right:styleInfos.RightHover, Center:styleInfos.CenterHover, Fill:styleInfos.FillHover}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
-		ressImg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftPress, Right:styleInfos.RightPress, Center:styleInfos.CenterPress, Fill:styleInfos.FillPress}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
-		defaultimg 	:= GUI_Trades_V2.CreateButtonImage({Left:styleInfos.LeftDefault, Right:styleInfos.RightDefault, Center:styleInfos.CenterDefault, Fill:styleInfos.FillDefault}, {Width: styleInfos.Width, Height: styleInfos.Height, CenterRatio: styleInfos.CenterRatio})
+		normalObj := {}, hoverObj := {}, pressObj := {}, defaultObj := {}, assets := ["Background", "Left", "Right", "Top", "Bottom", "Center"]
+		for index, asset in assets {
+			if (styleInfos[asset])
+				normalObj[asset] := styleInfos[asset]
+			if (styleInfos[asset "Hover"])
+				hoverObj[asset] := styleInfos[asset "Hover"]
+			if (styleInfos[asset "Press"])
+				pressObj[asset] := styleInfos[asset "Press"]
+			if (styleInfos[asset "Default"])
+				defaultObj[asset] := styleInfos[asset "Default"]
+		}
+		sizesObj := {Width: styleInfos.Width, Height: styleInfos.Height}, optionsObj := options
+
+		normalImg 	:= GUI_Trades_V2.CreateButtonImage(normalObj, sizesObj, optionsObj, debug:=debug)
+		hoverImg 	:= GUI_Trades_V2.CreateButtonImage(hoverObj, sizesObj, optionsObj, debug:=debug)
+		pressImg 	:= GUI_Trades_V2.CreateButtonImage(pressObj, sizesObj, optionsObj, debug:=debug)
+		defaultimg 	:= GUI_Trades_V2.CreateButtonImage(defaultObj, sizesObj, optionsObj, debug:=debug)
 		
 		return styles[styleName] := [ [0, normalImg, "", styleInfos.Color, "", styleInfos.ColorTransparency]
-						, [0, hoverImg, "", styleInfos.ColorHover, "", styleInfos.ColorTransparency]
-						, [0, ressImg, "", styleInfos.ColorPress, "", styleInfos.ColorTransparency]
-						, [0, defaultimg, "", styleInfos.ColorDefault, "", styleInfos.ColorTransparency] ]
+			, [0, hoverImg, "", styleInfos.ColorHover, "", styleInfos.ColorTransparency]
+			, [0, pressImg, "", styleInfos.ColorPress, "", styleInfos.ColorTransparency]
+			, [0, defaultimg, "", styleInfos.ColorDefault, "", styleInfos.ColorTransparency] ]
 	}
 
     Get_Styles() {

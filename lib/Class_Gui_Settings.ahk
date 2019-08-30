@@ -439,7 +439,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
 		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationSellingActionTypeTip")
