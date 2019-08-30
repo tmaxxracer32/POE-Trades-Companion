@@ -21,9 +21,9 @@
 				: scaleMultiplerFormula
 			if (options[asset].Fill) {
 				if (options[asset].FillVertically)
-					assets_infos[asset].Width := width, assets_infos[asset].Height := Ceil(assets_infos[asset].ImageSizes.H)
+					assets_infos[asset].Width := width, assets_infos[asset].Height := assets_infos[asset].ImageSizes.H, assets_infos[asset].FillRepeat := height / assets_infos[asset].Height
 				else 
-					assets_infos[asset].Width := Ceil(assets_infos[asset].ImageSizes.W), assets_infos[asset].Height := height
+					assets_infos[asset].Width := assets_infos[asset].ImageSizes.W, assets_infos[asset].Height := height, assets_infos[asset].FillRepeat := width / assets_infos[asset].Width
 			}
 			else {
 				if (asset="Center")
@@ -49,15 +49,26 @@
 			if (asset = "Bottom")
 				assets_infos[asset].X_POS := 0, assets_infos[asset].Y_POS := height-assets_infos[asset].Height
 		}
-		if (assets.Background && options.Background.FillCentered) {
+		; Changing background size
+		if (assets.Background && options.Background.Fill && options.Background.FillCentered) {
 			if (assets.Left) {
 				assets_infos.Background.X_POS := assets_infos.Left.X_POS + assets_infos.Left.Width
-				assets_infos.Background.Width := assets_infos.Background.Width - assets_infos.Left.Width
+				if (options.Background.FillVertically)
+					assets_infos.Background.Width := assets_infos.Background.Width - assets_infos.Left.Width
 			}
-			if (assets.Right)
-				assets_infos.Background.Width := assets_infos.Background.Width - assets_infos.Right.Width
+			if (assets.Right) {
+				if (options.Background.FillVertically)
+					assets_infos.Background.Width := assets_infos.Background.Width - assets_infos.Right.Width				
+			}
 			if (assets.Top)
 				assets_infos.Background.Y_POS := assets_infos.Top.Y_POS + assets_infos.Top.Height
+			if (assets.Bottom && !options.Background.FillVertically)
+				assets_infos.Background.Height := assets_infos.Background.Height - assets_infos.Bottom.Height
+			; Changing FillRepeat value
+			if (options.Background.FillVertically)
+				assets_infos.Background.FillRepeat := height / assets_infos.Background.Height
+			else
+				assets_infos.Background.FillRepeat := width / assets_infos.Background.Width
 		}
 
 		; Creating new final bitmap + graphics
@@ -86,15 +97,12 @@
 					Continue
 
 				if (options[bitMapName].Fill) {
-					if (options[bitMapName].FillVertically) {
-						caca := true 
-						Loop % height / assets_infos[bitMapName].Height {
+					Loop % assets_infos[bitMapName].FillRepeat {
+						if (options[bitMapName].FillVertically) {
 							imgY := A_Index=1?assets_infos[bitMapName].Y_POS: assets_infos[bitMapName].Y_POS+(assets_infos[bitMapName].Height*(A_Index-1))
 							Gdip_DrawImage(G, bitMaps[bitMapName], assets_infos[bitMapName].X_POS, imgY, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
 						}
-					}
-					else {
-						Loop % width / assets_infos[bitMapName].Width {
+						else {
 							imgX := A_Index=1?assets_infos[bitMapName].X_POS: assets_infos[bitMapName].X_POS+(assets_infos[bitMapName].Width*(A_Index-1))
 							Gdip_DrawImage(G, bitMaps[bitMapName], imgX, assets_infos[bitMapName].Y_POS, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height, 0, 0, assets_infos[bitMapName].Width, assets_infos[bitMapName].Height)
 						}
@@ -362,13 +370,30 @@
             Gui.Add(guiName, "Progress", "x" borders[A_Index]["X"] " y" borders[A_Index]["Y"] " w" borders[A_Index]["W"] " h" borders[A_Index]["H"] " Background" SKIN.Settings.COLORS.Border " c" SKIN.Settings.COLORS.Border " hwndhPROGRESS_Border" borders[A_Index].Name, 100)
 
         ; = = Header
+		if !IsObject(Styles.Minimize)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Minimize", MinMax_W, MinMax_H, "Minimize")
+		if !IsObject(Styles.Maximize)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Maximize", MinMax_W, MinMax_W, "Maximize")
+		if !IsObject(Styles.Toolbar_Hideout)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Toolbar_Hideout", ToolBar_Button1_W, ToolBar_Button1_H, "Hideout", {CenterRatio:0.70})
+		if !IsObject(Styles.Toolbar_Sheet)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Toolbar_Sheet", ToolBar_Button1_W, ToolBar_Button1_H, "Sheet", {CenterRatio:0.70})
+		if !IsObject(Styles.Arrow_Left)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Arrow_Left", LeftArrow_W, LeftArrow_H, "ArrowLeft", {CenterRatio:0.70, Right:{Skip:True}})
+		if !IsObject(Styles.Arrow_Right)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Arrow_Right", RightArrow_W, RightArrow_H, "ArrowRight", {CenterRatio:0.70, Left:{Skip:True}})
+		if !IsObject(Styles.Close_Tab) && (_guiMode="Tabs")
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab", RightArrow_W, RightArrow_H, "CloseTab")
+		if !IsObject(Styles.Close_Tab_Vertical) && (_guiMode="Slots")
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab_Vertical", CloseTabVertical_W, CloseTabVertical_H, "Cross", {CenterRatio:0.65, Top:{Skip:True}, Bottom:{Skip:True}, Background: {FillVertically:True, UseBackground2:True}})
+
 		Gui.Add(guiName, "Picture", "x" Header_X " y" Header_Y " w" Header_W " h" Header_H " hwndhIMG_Header BackgroundTrans", SKIN.Assets.Misc.Header)
 		Gui.Add(guiName, "ImageButton", "x" MinMax_X " y" MinMax_Y " w" MinMax_W " h" MinMax_H " BackgroundTrans hwndhBTN_Minimize", "", styles.Minimize, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 		Gui.Add(guiName, "ImageButton", "x" MinMax_X " y" MinMax_Y " w" MinMax_W " h" MinMax_H " BackgroundTrans hwndhBTN_Maximize Hidden", "", styles.Maximize, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 		Gui.Add(guiName, "ImageButton", "x" ToolBar_Button1_X " y" ToolBar_Button1_Y " w" ToolBar_Button1_W " h" ToolBar_Button1_H " BackgroundTrans hwndhBTN_Hideout", "", Styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 		Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_LeagueHelp", "", styles.Toolbar_Sheet, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What2 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What3 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+		Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What2 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+		Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What3 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
         Gui.Add(guiName, "Text", "x" Header_X " y" Header_Y " w" Header_W " h" Header_H " hwndhTXT_HeaderGhost BackgroundTrans", "") ; Empty text ctrl to allow moving the gui by dragging the title bar
 
         minBtnPos := Gui.GetControlPos(guiName, "hBTN_Minimize"), lastToolBtnPos := Gui.GetControlPos(guiName, "hBTN_What3")
@@ -495,9 +520,6 @@
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGreen Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Green)
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyRed Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Red)
             if (_guiMode="Slots") {
-				if !IsObject(Styles.Close_Tab_Vertical) {
-					GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab_Vertical", CloseTabVertical_W, CloseTabVertical_H, "Cross", useBackground2:=True)
-				}
 			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 			}
 
@@ -1786,11 +1808,23 @@
 		return ret
 	}
 
-	CreateGenericIconButtonStyle_2(ByRef styles, styleName, width, height, _icon, useBackground2=False) {
+	CreateGenericIconButtonStyle_2(ByRef styles, styleName, width, height, _icon, specialOpts="") {
 		global SKIN
+		options := {Top: {NoHeightScale:True, Fill:True}
+			, Bottom: {NoHeightScale:True, Fill:True}
+			, Left: {NoWidthScale:True, Fill:True, FillVertically:True}
+			, Right: {NoWidthScale:True, Fill:True, FillVertically:True}
+			, Background: {Fill:True, FillVertically:False, FillCentered:True}
+			, CenterRatio:0.60}
+		if IsObject(specialOpts)
+			options := ObjMerge(specialOpts, options)
+
 		styleObj := {}, assets := ["Background", "Left", "Right", "Top", "Bottom"]
 		for index, asset in assets {
-			assetSuffix := asset = "Background" && useBackground2=True ? "2" : ""
+			if (options[asset].Skip)
+				Continue
+				
+			assetSuffix := asset = "Background" && options.Background.UseBackground2=True ? "2" : ""
 			styleObj[asset] := SKIN.Assets.Button_Generic2[asset assetSuffix]
 			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic2[asset assetSuffix "_Hover"]
 			styleObj[asset "Press"] := SKIN.Assets.Button_Generic2[asset assetSuffix "_Press"]
@@ -1799,13 +1833,7 @@
 		styleObj.Center := SKIN.Assets.Icons[_icon], styleObj.CenterHover := SKIN.Assets.Icons[_icon], styleObj.CenterPress := SKIN.Assets.Icons[_icon], styleObj.CenterDefault := SKIN.Assets.Icons[_icon], 
 		styleObj.Color := SKIN.Settings.Colors.Button_Normal, styleObj.ColorHover := SKIN.Settings.Colors.Button_Hover, styleObj.ColorPress := SKIN.Settings.Colors.Button_Press, styleObj.ColorDefault := SKIN.Settings.Colors.Button_Default, styleObj.ColorTransparency := SKIN.Assets.Misc.Transparency_Color
 		styleObj.Width := width, styleObj.Height := height
-		options := {Top: {NoHeightScale:True, Fill:True}
-			, Bottom: {NoHeightScale:True, Fill:True}
-			, Left: {NoWidthScale:True, Fill:True, FillVertically:True}
-			, Right: {NoWidthScale:True, Fill:True, FillVertically:True}
-			, Background: {Fill:True, FillVertically: True, FillCentered: True}
-			, CenterRatio:0.60}
-
+		
 		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options, debug:=False)
 	}
 
