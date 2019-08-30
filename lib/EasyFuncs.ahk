@@ -26,30 +26,30 @@ ObjMerge(obj1, obj2) {
     nobj3 := obj1.Clone()
 
     for k,v in nobj1 {
-        if IsObject(v) && !IsObject(nobj3[k]) && (!nobj3[k])
+        if IsObject(v) && !IsObject(nobj3[k]) && !nobj3.HasKey(k)
             nobj3[k] := ObjFullyClone(v)
         else if IsObject(v) && IsObject(nobj3[k])
             nobj3[k] := A_ThisFunc.(nobj3[k], obj1[k])
         else {
-            if !(nobj3[k])
+            if !nobj3.HasKey(k)
                 nobj3[k] := v   
             for k2,v2 in v
-                if !(nobj3[k][k2])
+                if !nobj3[k].HasKey(k2)
                     nobj3[k][k2] := v2         
         }
     }
  
     for k,v in nobj2 {
-        if IsObject(v) && !IsObject(nobj3[k]) && (!nobj3[k])
+        if IsObject(v) && !IsObject(nobj3[k]) && !nobj3.HasKey(k)
             nobj3[k] := ObjFullyClone(v)
         else if IsObject(v) && IsObject(nobj3[k])
             nobj3[k] := A_ThisFunc.(nobj3[k], obj2[k])
         else {
-            if !(nobj3[k])
-                nobj3[k] := v   
+            if !nobj3.HasKey(k)
+                nobj3[k] := v  
             for k2,v2 in v
-                if !(nobj3[k][k2])
-                    nobj3[k][k2] := v2        
+                if !nobj3[k].HasKey(k2)
+                    nobj3[k][k2] := v2
         }
     }
 
