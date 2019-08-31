@@ -16,6 +16,17 @@
  *     Email:      - cocobelgica <at> gmail <dot> com
  */
 
+ Is_JSON(fileOrObj) {
+	if !IsObject(fileOrObj)
+		FileRead, fileContent,% fileOrObj
+	try {
+		JSON.Load(fileContent)
+		return True
+	}
+	catch e
+		return False
+ }
+
  JSON_Load(fileOrObj) {
 	if !IsObject(fileOrObj)
 		FileRead, fileContent,% fileOrObj
@@ -23,9 +34,10 @@
 	
 	try
 		return JSON.Load(fileContent)
-	catch e
+	catch e {
 		MsgBox,% 16+4096,, % "Couldn't load JSON file!`n`nwhat: " e.what "`nfile: " e.file
-        . "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
+		. "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
+	}
 }
 
 /**
