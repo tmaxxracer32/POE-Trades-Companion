@@ -20,7 +20,7 @@ Close_PreviousInstance() {
 	}
 
 	localSettings := Get_LocalSettings()	
-	prevPID := localSettings.UPDATING.PID
+	prevPID := localSettings.UPDATING.PID = DllCall("GetCurrentProcessId") ? 0 : localSettings.UPDATING.PID ; Prevent to close app due to same pid
 	prevPName := localSettings.UPDATING.FileProcessName
 	prevHwnd := localSettings.UPDATING.ScriptHwnd
 

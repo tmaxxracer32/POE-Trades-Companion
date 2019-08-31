@@ -6,6 +6,10 @@
 		defaultSettings := Get_LocalSettings_DefaultValues()
 		Save_LocalSettings(defaultSettings)
 	}
+	else if FileExist(settingsFile) && !Is_JSON(PROGRAM.SETTINGS_FILE) {
+		settings := Get_LocalSettings_DefaultValues()
+		Save_LocalSettings(settings)
+	}
 }
 
 Set_LocalSettings() {
@@ -17,7 +21,7 @@ Set_LocalSettings() {
 		LocalSettings_CreateFileIfNotExisting()
 		return
 	}
-	LocalSettings_VerifyValuesValidity()
+	LocalSettings_Verify()
 	; Load settings and reset updating related settings
 	localSettings := Get_LocalSettings()
 	localSettings.UPDATING.ScriptHwnd := defaultSettings.UPDATING.ScriptHwnd
@@ -90,6 +94,17 @@ Set_LocalSettings() {
 
 Get_LocalSettings() {
 	global PROGRAM
+	/*
+	; if Is_JSON(PROGRAM.SETTINGS_FILE) {
+		settings := JSON_Load(PROGRAM.SETTINGS_FILE)
+		return settings
+	; }
+	; else {
+	; 	settings := Get_LocalSettings_DefaultValues()
+	; 	Save_LocalSettings(settings)
+	; 	Get_LocalSettings()
+	; }
+	*/
 	return JSON_Load(PROGRAM.SETTINGS_FILE)
 }
 
@@ -446,10 +461,12 @@ Get_LocalSettings_DefaultValues() {
 	; Getting default poe skin settings
 	poeSkinSettings := GUI_Settings.TabCustomizationSkins_GetSkinDefaultSettings("Path of Exile")
 	; Getting current preset and skin settings
-	currentPreset := JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS.Preset
-	currentSkin := currentPreset="User Defined"?JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS_UserDefined.Skin
-				: JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS.Skin
-	currentSkin := (currentSkin && currentSkin != "" && currentSkin != "ERROR") ? currentSkin : settings.SETTINGS_CUSTOMIZATION_SKINS.Skin
+	if Is_JSON(PROGRAM.SETTINGS_FILE) {
+		currentPreset := JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS.Preset
+		currentSkin := currentPreset="User Defined"?JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS_UserDefined.Skin
+					: JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS.Skin
+		currentSkin := (currentSkin && currentSkin != "" && currentSkin != "ERROR") ? currentSkin : settings.SETTINGS_CUSTOMIZATION_SKINS.Skin
+	}
 	defaultSkinSettings := GUI_Settings.TabCustomizationSkins_GetSkinDefaultSettings(currentSkin)
 	; Getting process name + Setting some other vars
 	DetectHiddenWindows("On")
@@ -780,7 +797,153 @@ Get_LocalSettings_DefaultValues() {
 	return JSON.Load(settings)	
 }
 
-LocalSettings_VerifyValuesValidity(obj="") {
+LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, nextObj="", key="", ByRef invalidLogs="") {
+	; Assigning obj values
+	nextObj := IsObject(nextObj) ? ObjFullyClone(nextObj) : [], nextObj.Push(key)
+
+	; Creating list of parent obj
+	for key, value in nextObj
+		params2_list := params2_list ? params2_list "`n" value : value
+	parents := []
+	Loop, Parse, params2_list, `n, `r
+		if (A_LoopField != "")
+			parents.Push(A_LoopField)
+
+	; The core of the func
+	for k, v in userSettingsObj {
+		if IsObject(v) ; Start this func again, to go deeper
+            A_ThisFunc.(userSettingsObj[k], defaultSettingsObj[k], nextObj, k, invalidLogs)
+        else { ; React based on key and parent list
+			lastParent := parents[parents.Count()], parentsCount := parents.Count()
+			userValue := v, defaultValue := defaultSettingsObj[k]
+			; BUY_INTERFACE and SELL_INTERFACE
+			if IsIn(parents.1, "BUY_INTERFACE,SELL_INTERFACE") {
+				if (k="Mode")
+					isValid := IsIn(v, "Tabs,Slots")
+				else if (k="Buttons_Count") && RegExMatch(lastParent, "iO)CUSTOM_BUTTON_ROW_(\d+)", matchPat)
+					isValid := IsBetween(matchPat.1, 1, 3) && IsBetween(userValue, 0, 10) ? True : (matchPat.1=4) && IsBetween(userValue, 0, 5) ? True : False
+				else if (k="Icon") ; && IsContaining(parents[parentsCount-1], "CUSTOM_BUTTON_ROW_")
+					isValid := IsIn(userValue, "Clipboard,Cross,Hideout,Invite,Kick,ThumbsUp,ThumbsDown,Trade,Whisper") ? True : False
+				else if (k="Text") ; && IsContaining(parents[parentsCount-1], "CUSTOM_BUTTON_ROW_")
+					isValid := True
+				else if (k="Content") ; && (parents[parentsCount-1]="Actions")
+					isValid := True
+				else if (k="Type") ; && (parents[parentsCount-1]="Actions")
+					isValid := True
+				else
+					isValid := False
+			}
+			else if (parents.1 = "GENERAL") {
+				if IsIn(k, "AddShowGridActionToInviteButtons,AskForLanguage,HasAskedForImport,IsFirstTimeRunning,RemoveCopyItemInfosIfGridActionExists"
+				. ",ReplaceOldTradeVariables,UpdateKickMyselfOutOfPartyHideoutHotkey")
+					isValid := IsIn(userValue, "True,False") ? True : False
+				else if (k="Language")
+					isValid := IsIn(userValue, "chinese_simplified,chinese_traditional,english,french") ? True : False
+				else isValid := False
+			}
+			else if (parents.1 = "HOTKEYS") {
+				isValid := True 
+			}
+			else if IsIn(parents.1, "SETTINGS_CUSTOMIZATION_SKINS,SETTINGS_CUSTOMIZATION_SKINS_UserDefined") {
+				if (lastParent="Colors")
+					isValid := IsHex(userValue) && (StrLen(userValue) = 8) ? True : False
+				else if (k="Font")
+					isValid := True
+				else if (k="FontQuality")
+					isValid := IsBetween(userValue, 0, 5) ? True : False
+				else if IsIn(k, "FontSize,ScalingPercentage")
+					isValid := IsNum(userValue) ? True : False
+				else if IsIn(k, "Preset,Skin")
+					isValid := True
+				else if (k="UseRecommendedFontSettings")
+					isValid := IsIn(userValue, "True,False") ? True : False
+				else isValid := False
+			}
+			else if (parents.1 = "SETTINGS_MAIN") {
+				if IsIn(k, "AllowClicksToPassThroughWhileInactive,AutoFocusNewTabs,AutoMaximizeOnFirstNewTab,AutoMinimizeOnAllTabsClosed,BuyerJoinedAreaSFXToggle"
+				. ",CopyItemInfosOnTabChange,HideInterfaceWhenOutOfGame,ItemGridHideNormalTab,ItemGridHideNormalTabAndQuadTabForMaps,ItemGridHideQuadTab"
+				. ",MinimizeInterfaceToBottomLeft,PushBulletOnlyWhenAfk,PushBulletOnPartyMessage,PushBulletOnTradingWhisper,PushBulletOnWhisperMessage,"
+				. ",RegularWhisperSFXToggle,SendTradingWhisperUponCopyWhenHoldingCTRL,ShowTabbedTrayNotificationOnWhisper,TradesGUI_Locked,TradingWhisperSFXToggle")
+					isValid := IsIn(userValue, "True,False") ? True : False
+				else if IsIn(k, "BuyerJoinedAreaSFXPath,RegularWhisperSFXPath,TradingWhisperSFXPath")
+					isValid := (userValue) && FileExist(userValue) ? True : !userValue ? True : False
+				else if IsIn(k, "NoTabsTransparency,TabsOpenTransparency")
+					isValid := IsNum(userValue) ? True : False
+				else if (k="TradesGUI_Mode")
+					isValid := IsIn(userValue, "Dock,Window") ? True : False
+				else if IsIn(k, "PushBulletToken,PoeAccounts,SendMsgMode")
+					isValid := True
+			}
+			else if (parents.1 = "UPDATING") {
+				if IsIn(k, "DownloadUpdatesAutomatically,UseBeta,UseBeta")
+					isValid := IsIn(userValue, "True,False") ? True : False
+				if (k="CheckForUpdatePeriodically")
+					isValid := IsIn(userValue, "OnStartOnly,OnStartAndEveryFiveHours,OnStartAndEveryDay") ? True : False
+				if IsIn(k, "FileName,FileProcessName,LastUpdateCheck,PID,ScriptHwnd,Version")
+					isValid := True
+			}
+			else isValid := False
+
+			if (!isValid) {
+				userSettingsObj[k] := defaultValue, logsLine := ""
+				for index, parentName in parents
+					logsLine := logsLine ? logsLine "." parentName : parentName
+				logsLine .= "." k
+				. "`nValue: " userValue
+				. "`nHas been reset to: " defaultValue
+				invalidLogs := invalidLogs ? invalidLogs "`n`n" logsLine : logsLine
+			}
+        }
+    }
+}
+
+LocalSettings_VerifyFileIntegrity(ByRef userSettingsObj, defaultSettingsObj, nextObj="", key="", ByRef invalidLogs="") {
+	; Assigning obj values
+	nextObj := IsObject(nextObj) ? ObjFullyClone(nextObj) : [], nextObj.Push(key)
+
+	; Creating list of parent obj
+	for key, value in nextObj
+		params2_list := params2_list ? params2_list "`n" value : value
+	parents := []
+	Loop, Parse, params2_list, `n, `r
+		if (A_LoopField != "")
+			parents.Push(A_LoopField)
+
+	; The core of the func
+	for k, v in defaultSettingsObj {
+		if IsObject(v) {
+			if !userSettingsObj.HasKey(k) {
+			; if !IsObject(userSettingsObj[k]) {
+				userSettingsObj[k] := ObjFullyClone(v)
+				GoSub LocalSettings_VerifyFileIntegrity_AppendToLogs
+			}
+			else ; Start this func again, to go deeper
+            	A_ThisFunc.(userSettingsObj[k], defaultSettingsObj[k], nextObj, k, invalidLogs)
+		}
+        else { ; React based on key and parent list
+			lastParent := parents[parents.Count()], parentsCount := parents.Count()
+			userValue := v, defaultValue := defaultSettingsObj[k]
+
+			if !userSettingsObj.HasKey(k) {
+				userSettingsObj[k] := defaultValue
+				GoSub LocalSettings_VerifyFileIntegrity_AppendToLogs
+			}
+		}
+	}
+	return
+
+	LocalSettings_VerifyFileIntegrity_AppendToLogs:
+		logsLine := ""
+		for index, parentName in parents
+			logsLine := logsLine ? logsLine "." parentName : parentName
+		if (parentName)
+			logsLine .= "." k "`nInexistent key. Has been set to: " defaultValue
+		else logsLine .= k "`nInexistent section. Has been set to default."
+		invalidLogs := invalidLogs ? invalidLogs "`n`n" logsLine : logsLine
+	return
+}
+
+LocalSettings_Verify() {
 	; Make sure values are valid, and reset them if not 
 	global PROGRAM
 
@@ -790,9 +953,17 @@ LocalSettings_VerifyValuesValidity(obj="") {
 		Save_LocalSettings(defaultSettings)
 		return
 	}
-	settings := Get_LocalSettings()
-	finalSettings := ObjFullyClone(defaultSettings)
+	settings := Get_LocalSettings(), settings := IsObject(settings) ? settings : {}
+	finalSettings := ObjFullyClone(defaultSettings), invalidLogs := ""
+	LocalSettings_VerifyValuesValidity(settings, defaultSettings, "", "", invalidLogs:=invalidLogs)
+	LocalSettings_VerifyFileIntegrity(settings, defaultSettings, "", "", invalidLogs:=invalidLogs)
+	if (invalidLogs) {
+		; msgbox % invalidLogs
+	}
+	Save_LocalSettings(settings)
+	return
 
+	/*
 	; GENERAL section
 	for key in defaultSettings.GENERAL {
 		value := settings.GENERAL[key], defValue := defaultSettings.GENERAL[key]
@@ -854,7 +1025,7 @@ LocalSettings_VerifyValuesValidity(obj="") {
 		}
 	}
 	; SELL_INTERFACE section
-	/*
+	; /*
 	for key, value in settings.SELL_INTERFACE { ; For every row name
 		if IsObject(settings.SELL_INTERFACE[key]) {
 			for key2, value2 in settings.SELL_INTERFACE[key] { ; For every button num
@@ -869,7 +1040,7 @@ LocalSettings_VerifyValuesValidity(obj="") {
 			}
 		}
 	}
-	*/
+	; */
 
 	; HOTKEYS section
 	for key, value in settings.HOTKEYS {
@@ -893,6 +1064,7 @@ LocalSettings_VerifyValuesValidity(obj="") {
 	}
 	
 	Save_LocalSettings(finalSettings)
+	*/
 }
 
 Restore_LocalSettings(obj, iniKey="") {

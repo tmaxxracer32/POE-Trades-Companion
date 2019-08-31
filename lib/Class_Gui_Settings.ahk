@@ -735,6 +735,8 @@ Class GUI_Settings {
 
 		GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]++ ; new var for buy sell TO_DO
 		newBtnsCount := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count := newBtnsCount
+		Save_LocalSettings()
 
 		if (!btnsCount) {
 			; Hiding the row button
@@ -782,6 +784,8 @@ Class GUI_Settings {
 
 		GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]--
 		newBtnsCount := GuiSettings[_buyOrSell "PreviewRow" rowNum "_Count"]
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count := newBtnsCount
+		Save_LocalSettings()
 
 		Loop % btnsCount ; Hiding previous buttons, skipCreateStyle=False
 			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
@@ -856,7 +860,7 @@ Class GUI_Settings {
 	Customization_SellingBuying_LoadButtonSettings(whichTab, rowNum, btnNum) {
 		global PROGRAM, GuiSettings
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
-		btnSettings := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]
+		btnSettings := ObjFullyClone(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
 
 		if (btnSettings.Text) {
 			GUI_Settings.Customization_SellingBuying_ShowButtonNameControl(whichTab)
@@ -876,7 +880,7 @@ Class GUI_Settings {
 		global PROGRAM, GuiSettings
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		GUI_Settings.SetDefaultListView("hLV_Customization" whichTab "ActionsList")
-		btnSettings := btnSettings := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]
+		btnSettings := ObjFullyClone(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
 
 		Loop % LV_GetCount()
 			LV_Delete()
@@ -909,6 +913,8 @@ Class GUI_Settings {
 		}
 		; Save new actions
 		lvContent := GUI_Settings.Customization_SellingBuying_GetListViewContent(whichTab)
+		if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
+			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"] := {}
 		for index, nothing in lvContent {
 			actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
@@ -983,8 +989,10 @@ Class GUI_Settings {
 			return
 		}
 
+		if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
+			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon := ddlContent
-		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Name")
+		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Text")
 		Save_LocalSettings()
 
 		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
@@ -1022,6 +1030,8 @@ Class GUI_Settings {
 			return
 		}
 
+		if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
+			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text := editBoxContent
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Icon")
 		Save_LocalSettings()
@@ -1820,7 +1830,7 @@ Class GUI_Settings {
 
 	TabsSettingsMain_SetUserSettings() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		thisTabSettings := PROGRAM.SETTINGS.SETTINGS_MAIN
+		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_MAIN)
 
 		for key, value in thisTabSettings {
 			cbValue := value="True"?1 : value="False"?0 : value
@@ -1969,7 +1979,7 @@ Class GUI_Settings {
 		global PROGRAM
 
 		if (presetName = "User Defined") { ; Get settings from user ini
-			userDefSettings := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined
+			userDefSettings := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined)
 			; presetSettings := {	Name: userDefSettings.Name,	Skin: userDefSettings.Skin,	Font: userDefSettings.Font,	FontSize: userDefSettings.FontSize
 				; , FontQuality: userDefSettings.FontQuality, ScalingPercentage: userDefSettings.ScalingPercentage, UseRecommendedFontSettings: userDefSettings.UseRecommendedFontSettings }
 			presetSettings := {}
@@ -3523,7 +3533,7 @@ Class GUI_Settings {
 
 	TabMiscUpdating_SetUserSettings() {
 		global PROGRAM, GuiSettings_Controls
-		thisTabSettings := PROGRAM.SETTINGS.UPDATING
+		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.UPDATING)
 
 		GUI_Settings.TabMiscUpdating_UpdateVersionsText()
 		; Set checkbox state
@@ -3549,7 +3559,7 @@ Class GUI_Settings {
 
 	TabMiscUpdating_UpdateVersionsText() {
 		global PROGRAM, GuiSettings_Controls, UPDATE_TAGNAME
-		thisTabSettings := PROGRAM.SETTINGS.UPDATING
+		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.UPDATING)
 
 		; Get time diff since update check
 		timeDiff := timeDiffS A_Now, lastTimeChecked := thisTabSettings.LastUpdateCheck
@@ -3587,7 +3597,7 @@ Class GUI_Settings {
 
 	TabMiscUpdating_CheckForUpdates() {
 		global PROGRAM, GuiSettings_Controls
-		thisTabSettings := PROGRAM.SETTINGS.UPDATING
+		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.UPDATING)
 
 		UpdateCheck(checkType:="forced", notifOrBox:="box")
 		GUI_Settings.TabMiscUpdating_UpdateVersionsText()
