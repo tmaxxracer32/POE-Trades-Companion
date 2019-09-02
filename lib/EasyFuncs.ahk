@@ -1,4 +1,14 @@
-﻿ControlGetPos(ctrlHwnd) {
+﻿StrTrimLeft(var, trimCount) {
+	StringTrimLeft, var, var, %trimCount%
+	return var
+}
+
+StrTrimRight(var, trimCount) {
+	StringTrimRight, var, var, %trimCount%
+	return var
+}
+
+ControlGetPos(ctrlHwnd) {
 	global
 	local X, Y, W, H
 	ControlGetPos, X, Y, W, H,, % "ahk_id " ctrlHwnd
