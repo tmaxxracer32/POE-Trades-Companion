@@ -438,11 +438,12 @@ WM_MOUSEWHEEL(wParam, lParam) {
 	WheelDelta := 120 << 16
 	isWheelUp := WheelDelta=wParam?True:False
 	
-	if (A_Gui="TradesBuyCompact") {
+	if IsContaining(A_Gui, "Trades") {
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
 		if (isWheelUp)
-			GUI_TradesBuyCompact.ScrollUp()
+			GUI_Trades_V2.ScrollUp(_buyOrSell)
 		else
-			GUI_TradesBuyCompact.ScrollDown()
+			GUI_Trades_V2.ScrollDown(_buyOrSell)
 	}
 }
 

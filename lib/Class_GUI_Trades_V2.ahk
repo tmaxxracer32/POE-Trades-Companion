@@ -221,15 +221,15 @@
 			: 0
 
         if (_guiMode="Slots") {
-			Gui%guiName%.Height_Minimized	:= guiMinimizedHeight 	:= (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
-			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
+			Gui%guiName%.Height_Minimized			:= guiMinimizedHeight := (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
+			Gui%guiName%.Height_Maximized 	 	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
 			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
-			Gui%guiName%.Height_Maximized_TwoSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+(TabContentSlot_H_Temp*2)+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
-			Gui%guiName%.Height_Maximized_ThreeSlot := ( guiMinimizedHeight+(22*scaleMult)+(TabContentSlot_H_Temp*3)+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
-			Gui%guiName%.Height_Maximized_FourSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+(TabContentSlot_H_Temp*4)+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
-			Gui%guiName%.Slot_Height		:= TabContentSlot_H 	:= guiFullHeight-guiMinimizedHeight-(22*scaleMult)
-			Gui%guiName%.Height 			:= guiMinimizedHeight
-			Gui%guiName%.Width 				:= guiFullWidth 		:= (398*scaleMult)+(2*borderSize)
+			Gui%guiName%.Slot_Height				:= TabContentSlot_H := Gui%guiName%.Height_Maximized_OneSlot-guiMinimizedHeight-(22*scaleMult)
+			Gui%guiName%.Height_Maximized_TwoSlot 	:= Gui%guiName%.Height_Maximized_OneSlot + Gui%guiName%.Slot_Height
+			Gui%guiName%.Height_Maximized_ThreeSlot := Gui%guiName%.Height_Maximized_TwoSlot + Gui%guiName%.Slot_Height
+			Gui%guiName%.Height_Maximized_FourSlot 	:= guiFullHeight := Gui%guiName%.Height_Maximized_ThreeSlot + Gui%guiName%.Slot_Height
+			Gui%guiName%.Height 					:= guiMinimizedHeight
+			Gui%guiName%.Width 						:= guiFullWidth := (398*scaleMult)+(2*borderSize)
 
 			guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
@@ -1419,6 +1419,10 @@
 		}
 	}
 
+	CloseTab(params*) {
+		GUI_Trades_V2.RemoveTab(params*)
+	}
+
 	RemoveTab(_buyOrSell, tabNum, massRemove=False) {
 		global PROGRAM, SKIN
 		global GuiTrades, GuiTrades_Controls
@@ -1474,11 +1478,11 @@
 		; Updating height var if is slots
 		if (isSlots) {
 			GuiTrades[_buyOrSell].Height_Maximized := GuiTrades[_buyOrSell].Tabs_Count = 0 ? GuiTrades[_buyOrSell].Height_NoRow
-				: GuiTrades[_buyOrSell].Tabs_Count = 1 ? GuiTrades[_buyOrSell].Height_OneRow
-				: GuiTrades[_buyOrSell].Tabs_Count = 2 ? GuiTrades[_buyOrSell].Height_TwoRow
-				: GuiTrades[_buyOrSell].Tabs_Count = 3 ? GuiTrades[_buyOrSell].Height_ThreeRow
-				: GuiTrades[_buyOrSell].Tabs_Count >= 4 ? GuiTrades[_buyOrSell].Height_FourRow
-				: GuiTrades[_buyOrSell].Height_FourRow
+				: GuiTrades[_buyOrSell].Tabs_Count = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
+				: GuiTrades[_buyOrSell].Tabs_Count = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
+				: GuiTrades[_buyOrSell].Tabs_Count = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
+				: GuiTrades[_buyOrSell].Tabs_Count >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
+				: GuiTrades[_buyOrSell].Height_Maximized_FourSlot
 		}
 		; Do stuff if tabs count is zero
 		if (GuiTrades[_buyOrSell].Tabs_Count = 0) {
