@@ -835,9 +835,11 @@ Class GUI_Settings {
 			rowNum := A_Index
 			buttonsCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
 			Loop % buttonsCount {
-				if (A_Index = buttonsCount)
-					GUI_Settings.Customization_SellingBuying_AddOneButtonToRow(whichTab, rowNum, skipCreateStyle:=False, dontActivateButton:=True)
-				else GUI_Settings.Customization_SellingBuying_AddOneButtonToRow(whichTab, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
+				/*
+				; if (A_Index = buttonsCount)
+				; GUI_Settings.Customization_SellingBuying_AddOneButtonToRow(whichTab, rowNum, skipCreateStyle:=False, dontActivateButton:=True)
+				*/
+				GUI_Settings.Customization_SellingBuying_AddOneButtonToRow(whichTab, rowNum, skipCreateStyle:=True, dontActivateButton:=True)
 			}
 		}
 

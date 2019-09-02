@@ -383,7 +383,7 @@
 		if !IsObject(Styles.Arrow_Right)
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Arrow_Right", RightArrow_W, RightArrow_H, "ArrowRight", {CenterRatio:0.70, Left:{Skip:True}})
 		if !IsObject(Styles.Close_Tab) && (_guiMode="Tabs")
-			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab", RightArrow_W, RightArrow_H, "CloseTab")
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab", RightArrow_W, RightArrow_H, "Cross", {CenterRatio:0.60})
 		if !IsObject(Styles.Close_Tab_Vertical) && (_guiMode="Slots")
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab_Vertical", CloseTabVertical_W, CloseTabVertical_H, "Cross", {CenterRatio:0.65, Top:{Skip:True}, Bottom:{Skip:True}, Background: {FillVertically:True, UseBackground2:True}})
 
@@ -523,33 +523,85 @@
 			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 			}
 
-            itemNamePos := Gui.GetControlPos(slotGuiName, "hTEXT_ItemName")
-			if (_buyOrSell = "Buy") {
-				Gui.Add(slotGuiName, "ImageButton", "x" SmallButton_X " y" SmallButton_Y " w" SmallButton_W " h" SmallButton_H " hwndhBTN_WhisperSeller", "", Styles.Button_Whisper, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; write to seller
-				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_HideoutSeller", "", Styles.Button_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; hideout seller
-				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_KickSelfSeller", "", Styles.Button_Kick, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; thanks seller
-				Gui.Add(slotGuiName, "ImageButton", "x+" SmallButton_Space " yp wp hp hwndhBTN_ThankSeller", "", Styles.Button_Thanks, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size) ; kick self
-			}
+			Loop 4 { ; Max 4 rows
+				rowNum := A_Index
+				rowH := SmallButton_H, rowW := rowNum=4 ? TabContentSlot_W-SellerName_X-5 : TabContentSlot_W-(5+5)
+				row1Y := SmallButton_Y+rowH+5, row2Y := row1Y+rowH+5, row3Y := row2Y+rowH+5, row4Y := SmallButton_Y
+				rowX := IsBetween(rowNum, 1, 3) ? 6 : SmallButton_X, rowY := row%rowNum%Y
 
-			if (_isPreview=True) {
-
-				Loop 4 { ; Max 4 rows
-					rowNum := A_Index
-					rowH := SmallButton_H, rowW := rowNum=4 ? TabContentSlot_W-SellerName_X-5 : TabContentSlot_W-(5+5)
-					row1Y := SmallButton_Y+rowH+5, row2Y := row1Y+rowH+5, row3Y := row2Y+rowH+5, row4Y := SmallButton_Y
-					rowX := IsBetween(rowNum, 1, 3) ? 6 : SmallButton_X, rowY := row%rowNum%Y
-					; Creating row button and style
+				; Preview only - Creating row button and style
+				if (_isPreview=True) {				
 					styleName := "CustomButton_" _buyOrSell "_Row" rowNum
-					if !IsObject(Styles[styleName])
-						GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, rowW, rowH)
-					if !IsObject(StylesData[styleName])
-						StylesData[styleName] := {Width:rowW, height:rowH}
+					if !IsObject(Styles[styleName]) {
+						; Loop 4 {
+							; otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
+							; if IsObject(Styles[otherRowStyleName]) {
+							; 	Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
+							; 	StylesData[styleName] := ObjFullyClone(StylesData[otherRowStyleName])
+							; }
+							; else {
+								GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, rowW, rowH)
+								StylesData[styleName] := {Width:rowW, height:rowH}
+							; }
+						; }
+					}					
 
 					Gui.Add(slotGuiName, "ImageButton", "x" rowX " y" rowY " w" rowW " h" rowH " hwndhBTN_CustomRowSlot" rowNum " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomRowSlot" rowNum, "Preview_AddCustomButtonsToRow", _buyOrSell, rowNum) 
-					; Creating image buttons for buttons we can see
-					btnsCount := userBtnsCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
-					Loop % btnsCount {
+				}
+				; Creating buttons
+				userThisRowMaxCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
+				if (_isPreview) {
+					Loop % rowNum=4?5:10 {
+						thisRowMaxCount := A_Index
+
+						Loop % thisRowMaxCount {
+							btnsCount := thisRowMaxCount, spaceBetweenBtns := 0
+							btnWidth := (rowW/btnsCount), btnHeight := rowH
+							btnNum := A_Index, spaceBetweenBtns := 0
+							btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
+							btnWidth := (rowW/btnsCount), btnHeight := rowH
+							btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
+							btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
+							styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
+
+							; Creating imagebutton style
+							if !IsObject(Styles[styleName]) && (btnsCount = userThisRowMaxCount) {
+							; 	otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
+							; 	if IsObject(Styles[otherRowStyleName]) {
+							; 		Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
+							; 		StylesData[styleName] := ObjFullyClone(StylesData[otherRowStyleName])
+							; 	}
+							; 	else {
+									if (btnIcon)
+										GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
+									else
+										GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
+									StylesData[styleName] := {Width:rowW, height:rowH}
+							; 	}
+							}
+
+							; Preview only - Button size data, used to create imagebuttons later
+							if (_isPreview) {
+								if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"])
+									StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"] := {Width:btnWidth, height:btnHeight}
+								for iconName, iconFile in SKIN.Assets.Icons
+									if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName])
+										StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName] := {Width:btnWidth, height:btnHeight}
+							}
+
+							if (_isPreview && btnsCount != userThisRowMaxCount)
+								Gui.Add(slotGuiName, "Button", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", !btnIcon?btnName:"")
+							else
+								Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", !btnIcon?btnName:"", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+							Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, btnNum)
+						}
+					}
+				}
+				else {
+					Loop % userThisRowMaxCount {
+						btnsCount := userThisRowMaxCount, spaceBetweenBtns := 0
+						btnWidth := (rowW/btnsCount), btnHeight := rowH
 						btnNum := A_Index, spaceBetweenBtns := 0
 						btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
 						btnWidth := (rowW/btnsCount), btnHeight := rowH
@@ -557,43 +609,24 @@
 						btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 						styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
+						; Creating imagebutton style
 						if !IsObject(Styles[styleName]) {
-							if (btnIcon)
-								GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
-							else
-								GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
+							; otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
+							; if IsObject(Styles[otherRowStyleName]) {
+							; 	Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
+							; 	StylesData[styleName] := ObjFullyClone(StylesData[otherRowStyleName])
+							; }
+							; else {
+								if (btnIcon)
+									GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
+								else
+									GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
+								StylesData[styleName] := {Width:rowW, height:rowH}
+							; }
 						}
-						if !IsObject(StylesData[styleName]) {
-							StylesData[styleName] := {Width:btnWidth, height:btnHeight}
-						}
 
-						Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", !btnIcon?btnName:"", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-						Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, btnNum)
-					}
-					; Creating normal buttons for those we can't see
-					thisRowMaxCount := rowNum=4?5:10
-					Loop % thisRowMaxCount {
-						btnsCount := A_Index, spaceBetweenBtns := 0
-						btnWidth := (rowW/btnsCount), btnHeight := rowH
-						Loop %btnsCount% {
-							btnNum := A_Index, spaceBetweenBtns := 0
-							btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
-							btnWidth := (rowW/btnsCount), btnHeight := rowH
-							btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
-							btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
-
-							if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"])
-								StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"] := {Width:btnWidth, height:btnHeight}
-							for iconName, iconFile in SKIN.Assets.Icons
-								if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName])
-									StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName] := {Width:btnWidth, height:btnHeight}
-
-							if (btnsCount=userBtnsCount) ; To avoid creating button again
-								Continue
-
-							Gui.Add(slotGuiName, "Button", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2 " Hidden", !btnIcon?btnName:"")
-							Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, btnNum)
-						}
+						Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2, !btnIcon?btnName:"", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+						; Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, btnNum)
 					}
 				}
 			}
@@ -603,10 +636,6 @@
 
             if (_guiMode="Slots")
                 Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CloseTab", "RemoveTab", _buyOrSell, tabNum) 
-            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_WhisperSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "WhisperSeller") 
-            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_HideoutSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "HideoutSeller") 
-            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_KickSelfSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "KickSelfSeller") 
-            Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_ThankSeller", "DoTradeButtonAction", _buyOrSell, tabNum, "ThankSeller") 
 
 			; Gui.Show(slotGuiName, "x0 y0 w" guiWidth+borderSize " h" TabContentSlot_H " Hide")	
 			Gui.Show(slotGuiName, "AutoSize Hide")	
