@@ -1,5 +1,6 @@
 ﻿Reload() {
-	GUI_Trades.SaveBackup()
+	GUI_Trades_V2.SaveBackup("Sell")
+	GUI_Trades_V2.SaveBackup("Buy")
 	ReloadWithParams("", True, A_IsAdmin)
 	; Sleep 10
 	; Reload

@@ -365,7 +365,6 @@
 		for objName, nothing in bordersObj
 			bordersObj[objName].Name := objName, borders.Push(bordersObj[objName])
 
-		SKIN.Settings.COLORS.Border := "Red"
         Loop % borders.Count()
             Gui.Add(guiName, "Progress", "x" borders[A_Index]["X"] " y" borders[A_Index]["Y"] " w" borders[A_Index]["W"] " h" borders[A_Index]["H"] " Background" SKIN.Settings.COLORS.Border " c" SKIN.Settings.COLORS.Border " hwndhPROGRESS_Border" borders[A_Index].Name, 100)
 
@@ -1279,7 +1278,7 @@
     IsTabAlreadyExisting(_buyOrSell, contentInfos) {
 		global GuiTrades, GuiTrades_Controls
 
-		Loop % GuiTrades[_buyOrSell]Tabs_Count {
+		Loop % GuiTrades[_buyOrSell].Tabs_Count {
 			loopedcontentInfos := GUI_Trades_V2.GetTabContent(_buyOrSell, A_Index)
 			if ( (contentInfos.Seller = loopedcontentInfos.Seller && _buyOrSell="Buy") || (contentInfos.Buyer = loopedcontentInfos.Buyer && _buyOrSell="Sell") )
 			&& (contentInfos.Item = loopedcontentInfos.Item)
@@ -1426,6 +1425,8 @@
 		activeTab := GuiTrades[_buyOrSell].Active_Tab
 
 		if IsContaining(_buyOrSell, "Preview")
+			return
+		if (!tabsCount)
 			return
 
 		tabNum := isTabs && !tabNum ? activeTab : tabNum
@@ -1597,6 +1598,50 @@
      *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     */
+
+	SaveBackup(_buyOrSell) {
+	/*		Save all pending trades in a file.
+	 */
+	 	global PROGRAM, GuiTrades
+		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
+		backupFile := PROGRAM["TRADES_" _buyOrSell "_BACKUP_FILE"]
+
+		if (!tabsCount)
+			Return
+
+		FileDelete,% backupFile
+		tabInfos := {}
+		Loop % tabsCount { ; Get all tabs content
+			tabInfos[A_Index] := GUI_Trades_V2.GetTabContent(_buyOrSell, A_Index)
+		}
+		
+		jsonText := JSON.Dump(tabInfos, "", "`t")
+		hFile := FileOpen(backupFile, "w", "UTF-16")
+		hFile.Write(jsonText)
+		hFile.Close()
+	}
+
+	LoadBackup(_buyOrSell) {
+	/*		Read the backup file, and send those trades requests to the Trades GUI
+	 */
+		global PROGRAM, GuiTrades
+		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
+		backupFile := PROGRAM["TRADES_" _buyOrSell "_BACKUP_FILE"]
+
+		if !FileExist(backupFile)
+			Return
+		if !Is_JSON(backupFile) {
+			FileDelete,% backupFile
+			return
+		}
+
+		tabInfos := JSON_Load(backupFile)
+		Loop % tabInfos.Count() {
+			GUI_Trades_V2.PushNewTab(_buyOrSell, tabInfos[A_Index])
+		}
+		
+		FileDelete,% backupFile
+	}
 
 	RemoveButtonFocus(_buyOrSell) {
 		global GuiTrades

@@ -124,7 +124,8 @@ Start_Script() {
 	PROGRAM.CHEATSHEETS_FOLDER		:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\Cheatsheets":"\resources\cheatsheets")
 
 	prefsFileName 					:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Preferences"):("Preferences")
-	backupFileName 					:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Trades_Backup"):("Trades_Backup")
+	sellBackupFileName 				:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Sell_Trades_Backup"):("Sell_Trades_Backup")
+	buyBackupFileName 				:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_Trades_Backup"):("Buy_Trades_Backup")
 	tradesHistoryFileName 			:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Trades_History"):("Trades_History")
 	tradesHistoryBuyFileName 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
 	PROGRAM.FONTS_SETTINGS_FILE		:= PROGRAM.FONTS_FOLDER "\Settings.ini"
@@ -135,7 +136,8 @@ Start_Script() {
 	PROGRAM.CHANGELOG_FILE_BETA 	:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\changelog_beta.txt":"\resources\changelog_beta.txt")
 	PROGRAM.TRADES_HISTORY_FILE 	:= PROGRAM.MAIN_FOLDER "\" tradesHistoryFileName ".ini"
 	PROGRAM.TRADES_HISTORY_BUY_FILE	:= PROGRAM.MAIN_FOLDER "\" tradesHistoryBuyFileName ".ini"
-	PROGRAM.TRADES_BACKUP_FILE		:= PROGRAM.MAIN_FOLDER "\" backupFileName ".ini"
+	PROGRAM.TRADES_SELL_BACKUP_FILE	:= PROGRAM.MAIN_FOLDER "\" sellBackupFileName ".json"
+	PROGRAM.TRADES_BUY_BACKUP_FILE	:= PROGRAM.MAIN_FOLDER "\" buyBackupFileName ".json"
 
 	PROGRAM.NEW_FILENAME			:= PROGRAM.MAIN_FOLDER "\POE-TC-NewVersion.exe"
 	PROGRAM.UPDATER_FILENAME 		:= PROGRAM.MAIN_FOLDER "\POE-TC-Updater.exe"
@@ -290,6 +292,8 @@ Start_Script() {
 
 	GUI_Trades_V2.Create("", buyOrSell:="Sell", slotsOrTab:="Tabs")
 	GUI_Trades_V2.Create("", buyOrSell:="Buy", slotsOrTab:="Slots")
+	GUI_Trades_V2.LoadBackup("Sell")
+	GUI_Trades_V2.LoadBackup("Buy")
 
 	; Parse debug msgs
 	if (DEBUG.settings.use_chat_logs) {
