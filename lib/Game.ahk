@@ -727,7 +727,7 @@ Parse_GameLogs(strToParse, preview=False) {
 				guiName := preview=False?"Sell":"SellPreview"
 				err := GUI_Trades_V2.PushNewTab(guiName, tradeInfos)
 
-				if !(err) {
+				if !(err) && (preview=False) {
 					if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradingWhisperSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.TradingWhisperSFXPath) {
 						try 
 							SoundPlay,% PROGRAM.SETTINGS.SETTINGS_MAIN.TradingWhisperSFXPath

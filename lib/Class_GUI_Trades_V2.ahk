@@ -143,17 +143,17 @@
 
 	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
 		global GuiTrades, GuiSettings
-		static prevBtn
+		static prevBtn := {}
 		whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
 		guiName := "Trades" _buyOrSell "_Slot1"
 		thisBtn := "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum
 		
-		if (prevBtn) {
-			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn]
+		if (prevBtn[_buyOrSell]) {
+			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn[_buyOrSell]]
 			GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions(whichTab)
 		}
 		GuiControl, %guiName%:+Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn]
-		prevBtn := thisBtn
+		prevBtn[_buyOrSell] := thisBtn
 
 		GuiSettings.CUSTOM_BUTTON_SELECTED_ROW := rowNum
 		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
@@ -539,7 +539,7 @@
 					row1Y := SmallButton_Y+rowH+5, row2Y := row1Y+rowH+5, row3Y := row2Y+rowH+5, row4Y := SmallButton_Y
 					rowX := IsBetween(rowNum, 1, 3) ? 6 : SmallButton_X, rowY := row%rowNum%Y
 					; Creating row button and style
-					styleName := "CustomButton_Row" rowNum
+					styleName := "CustomButton_" _buyOrSell "_Row" rowNum
 					if !IsObject(Styles[styleName])
 						GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, rowW, rowH)
 					if !IsObject(StylesData[styleName])
@@ -548,14 +548,14 @@
 					Gui.Add(slotGuiName, "ImageButton", "x" rowX " y" rowY " w" rowW " h" rowH " hwndhBTN_CustomRowSlot" rowNum " c" SKIN.Settings.COLORS.Trade_Info_2, "[ + ]", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 					Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomRowSlot" rowNum, "Preview_AddCustomButtonsToRow", _buyOrSell, rowNum) 
 					; Creating image buttons for buttons we can see
-					btnsCount := userBtnsCount := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
+					btnsCount := userBtnsCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
 					Loop % btnsCount {
 						btnNum := A_Index, spaceBetweenBtns := 0
 						btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
 						btnWidth := (rowW/btnsCount), btnHeight := rowH
-						btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Text
-						btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
-						styleName := "CustomButton_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
+						btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
+						btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
+						styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
 						if !IsObject(Styles[styleName]) {
 							if (btnIcon)
@@ -579,14 +579,14 @@
 							btnNum := A_Index, spaceBetweenBtns := 0
 							btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
 							btnWidth := (rowW/btnsCount), btnHeight := rowH
-							btnName := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Text
-							btnIcon := PROGRAM.SETTINGS["SETTINGS_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum].Icon
+							btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
+							btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 
-							if !IsObject(StylesData["CustomButton_Row" rowNum "Max" btnsCount "_Text"])
-								StylesData["CustomButton_Row" rowNum "Max" btnsCount "_Text"] := {Width:btnWidth, height:btnHeight}
+							if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"])
+								StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"] := {Width:btnWidth, height:btnHeight}
 							for iconName, iconFile in SKIN.Assets.Icons
-								if !IsObject(StylesData["CustomButton_Row" rowNum "Max" btnsCount "_Icon_" iconName])
-									StylesData["CustomButton_Row" rowNum "Max" btnsCount "_Icon_" iconName] := {Width:btnWidth, height:btnHeight}
+								if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName])
+									StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName] := {Width:btnWidth, height:btnHeight}
 
 							if (btnsCount=userBtnsCount) ; To avoid creating button again
 								Continue
@@ -673,7 +673,7 @@
 		}
 
 		if (_isPreview) {
-			GuiTrades[_buyOrSell].Preview := True
+			GuiTrades[_buyOrSell].Preview := True, GuiTrades[_buyOrSell].Is_Preview := True
 			GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, 100)
 			if IsContaining(_buyOrSell, "Buy")
 				GUI_Settings.Customization_SellingBuying_SetPreviewPreferences("Buying")
@@ -688,7 +688,8 @@
 
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, %A_Gui%:Name,% ctrlHwnd
-			GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
+			if !(GuiTrades[_buyOrSell].Is_Preview)
+				GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
 		Return
 
         GUI_Trades_V2_Slot_Size:
@@ -703,7 +704,8 @@
 
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, %A_Gui%:Name,% ctrlHwnd
-			GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
+			if !(GuiTrades[_buyOrSell].Is_Preview)
+				GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
 		return
     }
 

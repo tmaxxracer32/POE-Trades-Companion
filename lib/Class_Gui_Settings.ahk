@@ -716,6 +716,8 @@ Class GUI_Settings {
 
 			if (ctrlHwnd = GuiSettings_Controls.hLV_CustomizationSellingActionsList)
 				GUI_Settings.Customization_Selling_OnListviewRightClick()
+			else if (ctrlHwnd = GuiSettings_Controls.hLV_CustomizationBuyingActionsList)
+				GUI_Settings.Customization_Buying_OnListviewRightClick()
 			else
 				GUI_Settings.ContextMenu(ctrlHwnd, ctrlName)
 		return
@@ -751,7 +753,7 @@ Class GUI_Settings {
 			btnNum := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" btnNum]
 			btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 			btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
-			styleName := "CustomButton_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
+			styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 			if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
 				style%styleName%DidntExist := True
 				GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.Styles, styleName, btnIcon?btnIcon:btnName)
@@ -797,7 +799,7 @@ Class GUI_Settings {
 				btnNum := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" newBtnsCount "Num" btnNum]
 				btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 				btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
-				styleName := "CustomButton_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
+				styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
 				if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
 					style%styleName%DidntExist := True
@@ -807,6 +809,8 @@ Class GUI_Settings {
 					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				else if (style%styleName%DidntExist && btnName)
 					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				else if (style%styleName%DidntExist && !btnIcon && !btnName)
+					Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 
 				GuiControl, %guiName%:Show,% btnHwnd
 			}
@@ -837,7 +841,17 @@ Class GUI_Settings {
 			}
 		}
 
-		GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS[guiIniSection].CUSTO_BUTTON_ROW_1.Buttons_Count, 1)
+		; Try to select the first existing button
+		Loop 4 {
+			if (PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" A_Index].Buttons_Count) {
+				GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" A_Index].Buttons_Count, 1)
+				hasExistingButtons := True
+				Break
+			}
+		}
+		; Select the first row button if failure
+		if (!hasExistingButtons)
+			GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, 1, 1)
 	}
 
 	Customization_SellingBuying_AdjustPreviewControls(whichTab) {
@@ -870,7 +884,7 @@ Class GUI_Settings {
 		else if (btnSettings.Icon) {
 			GUI_Settings.Customization_SellingBuying_ShowButtonIconControl(whichTab)
 			GUI_Settings.Customization_SellingBuying_SetButtonType(whichTab, "Icon", noTrigger:=True)
-			GUI_Settings.Customization_SellingBuying_SetButtonIcon(whichTab, btnSettings.Icon, noTrigger:=True)
+			GUI_Settings.Customization_SellingBuying_SeztButtonIcon(whichTab, btnSettings.Icon, noTrigger:=True)
 		}
 
 		GUI_Settings.Customization_SellingBuying_LoadButtonActions(whichTab, rowNum, btnNum)
@@ -910,7 +924,8 @@ Class GUI_Settings {
 			TrayNotifications.Show("", "COULDN'T SAVE BUTTON"
 			. "`nRow: " rowNum
 			. "`nCount: " btnsCount
-			. "`nNum: " btnNum)
+			. "`nNum: " btnNum
+			. "`nTab: " whichTab)
 			return
 		}
 		; Save new actions
@@ -987,7 +1002,8 @@ Class GUI_Settings {
 			TrayNotifications.Show("", "COULDN'T SAVE BUTTON NAME"
 			. "`nRow: " rowNum
 			. "`nCount: " btnsCount
-			. "`nNum: " btnNum)
+			. "`nNum: " btnNum
+			. "`nTab: " whichTab)
 			return
 		}
 
@@ -1028,7 +1044,8 @@ Class GUI_Settings {
 			TrayNotifications.Show("", "COULDN'T SAVE BUTTON NAME"
 			. "`nRow: " rowNum
 			. "`nCount: " btnsCount
-			. "`nNum: " btnNum)
+			. "`nNum: " btnNum
+			. "`nTab: " whichTab)
 			return
 		}
 
