@@ -71,7 +71,9 @@ Do_Action(actionType, actionContent="", isHotkey=False, uniqueNum="") {
 		. "`n" "ignoreFollowingActions=""" ignoreFollowingActions """, prevActionType=""" prevActionType """, prevActionContent=""" prevActionContent """.")
 		Return
 	}
-	
+
+	if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
+				actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
 
 	global ACTIONS_FORCED_CONTENT
 	if (ACTIONS_FORCED_CONTENT[actionType]) && !(actionContent)

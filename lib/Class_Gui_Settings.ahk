@@ -886,7 +886,9 @@ Class GUI_Settings {
 			LV_Delete()
 		Loop % btnSettings.Actions.Count() {
 			actionType := btnSettings.Actions[A_Index].Type
-			actionContent := btnSettings.Actions[A_Index].Content
+			if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
+				actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
+			actionContent := StrTrimLeft(btnSettings.Actions[A_Index].Content, 1), actionContent := StrTrimRight(actionContent, 1) ; Removing quotes
 			actionLongName := GUI_Settings.Get_ActionLongName_From_ShortName(actionType)
 
 			LV_Add("", A_Index, actionLongName, actionContent)
@@ -918,7 +920,7 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"] := {}
 		for index, nothing in lvContent {
 			actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
-			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"][index] := {Content: lvContent[index].ActionContent, Type: actionShortName}
+			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"][index] := {Content: """" lvContent[index].ActionContent """", Type: actionShortName}
 		}
 		Save_LocalSettings()
 	}
