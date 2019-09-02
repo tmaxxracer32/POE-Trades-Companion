@@ -19,6 +19,11 @@
  Is_JSON(fileOrObj) {
 	if !IsObject(fileOrObj)
 		FileRead, fileContent,% fileOrObj
+	else fileContent := fileOrObj
+
+	if !(fileContent)
+		return False
+
 	try {
 		JSON.Load(fileContent)
 		return True
