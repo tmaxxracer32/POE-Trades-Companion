@@ -428,9 +428,9 @@
         if (_guiMode="Slots") {
             global GuiTradesBuySearch, GuiTradesBuySearch_Controls
             global GuiTradesSellSearch, GuiTradesSellSearch_Controls
-			if (_isPreview)
-            	Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +HwndhGui" guiName "Search")
-			else Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +Parent" guiName " +E0x08000000 +HwndhGui" guiName "Search")
+			global GuiTradesBuyPreviewSearch, GuiTradesBuyPreviewSearch_Controls
+            global GuiTradesSellPreviewSearch, GuiTradesSellPreviewSearch_Controls
+			Gui.New(guiName "Search", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +E0x08000000 +Parent" guiName " +HwndhGui" guiName "Search")
             Gui.SetDefault(guiName "Search")
             Gui.Margin(guiName "Search", 0, 0)
             Gui.Color(guiName "Search", "White")
@@ -440,21 +440,22 @@
             
             global GuiTradesBuySearchHidden, GuiTradesBuySearchHidden_Controls
             global GuiTradesSellSearchHidden, GuiTradesSellSearchHidden_Controls
-			if (_isPreview)
-            	Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +HwndhGui" guiName "SearchHidden")
-			else Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +E0x08000000 +LastFound +HwndhGui" guiName "SearchHidden")
+			global GuiTradesBuyPreviewSearchHidden, GuiTradesBuyPreviewSearchHidden_Controls
+            global GuiTradesSellPreviewSearchHidden, GuiTradesSellPreviewSearchHidden_Controls
+			Gui.New(guiName "SearchHidden", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +E0x08000000 +LastFound +HwndhGui" guiName "SearchHidden")
             Gui.SetDefault(guiName "SearchHidden")
             Gui.Margin(guiName "SearchHidden", 0, 0)
             Gui.Color(guiName "SearchHidden", "White")
             Gui.Font(guiName "SearchHidden", Gui%guiName%.Font, Gui%guiName%.Font_Size, Gui%guiName%.Font_Quality)
+			
             Gui.Add(guiName "SearchHidden", "Edit", "x" 0 " y" 0 " w" SearchBox_W " h" SearchBox_H " FontQuality5 BackgroundTrans hwndhEDIT_HiddenSearchBar")
 
-            Gui%guiName%_Controls["Gui" guiName "SearchHandle"] := Gui%guiName%Search.Handle
-            Gui%guiName%_Controls["Gui" guiName "SearchHiddenHandle"] := Gui%guiName%SearchHidden.Handle
+            Gui%guiName%_Controls["GuiSearchHandle"] := Gui%guiName%Search.Handle
+            Gui%guiName%_Controls["GuiSearchHiddenHandle"] := Gui%guiName%SearchHidden.Handle
             Gui%guiName%_Controls.hEDIT_SearchBar := Gui%guiName%Search_Controls.hEDIT_SearchBar
             Gui%guiName%_Controls.hEDIT_HiddenSearchBar := Gui%guiName%SearchHidden_Controls.hEDIT_HiddenSearchBar
 
-            Gui.BindFunctionToControl("GUI_Trades_V2", guiName "SearchHidden", "hEDIT_HiddenSearchBar", "SetFakeSearch", _buyOrSell, makeEmpty:=False) 
+			Gui.BindFunctionToControl("GUI_Trades_V2", guiName "SearchHidden", "hEDIT_HiddenSearchBar", "SetFakeSearch", _buyOrSell, makeEmpty:=False) 
 
             Gui.SetDefault(guiName)
         }
@@ -678,7 +679,7 @@
         	Gui.Show(guiName, "x0 y0 h" guiFullHeight " w" guiFullWidth " Hide")
 		else Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
         if (_guiMode="Slots") { 
-            Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " Hide")
+            Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " ")
             Gui.Show(guiName "SearchHidden", "x0 y0 w0 h0 NoActivate") ; Not hidden on purpose so it can work with ShellMessage to empty on click
         }
         GuiTrades[_buyOrSell].Is_Created := True		
@@ -1230,7 +1231,10 @@
 			GuiControl, Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake,% "..."
 		}
 
-		SetTimer, GUI_Trades_V2_Search, -500
+		if (_buyOrSell="Buy")
+			SetTimer, GUI_Trades_V2_Search_Buy, -500
+		else if (_buyOrSell="Sell")
+			SetTimer, GUI_Trades_V2_Search_Sell, -500
 	}
 
 	Search(_buyOrSell) {
@@ -1242,14 +1246,14 @@
 		*/
 		global GuiTrades, GuiTrades_Controls
 
-		GuiControlGet, search, ,% GuiTrades[_buyOrSell].hEDIT_HiddenSearchBar
+		GuiControlGet, search, ,% GuiTrades_Controls[_buyOrSell].hEDIT_HiddenSearchBar
 		
 		matches := 0
-		if (search != "") {		
+		if (search != "") {
 			contents := {}
 			Loop % GuiTrades[_buyOrSell].Tabs_Count {
 				content := GuiTrades[_buyOrSell]["Tab" A_Index "Content"]
-				if IsContaining(content.Seller, search) || IsContaining(content.Item, search)
+				if IsContaining(content.Seller, search) || IsContaining(content.Buyer, search) || IsContaining(content.Item, search)
 					contents[matches+1] := content, matches++
 			}
 			if (matches) {
@@ -2134,6 +2138,9 @@
 	}
 }
 
-GUI_Trades_V2_Search:
-	GUI_Trades_V2.Search(_buyOrSell)
+GUI_Trades_V2_Search_Buy:
+	GUI_Trades_V2.Search("Buy")
+return
+GUI_Trades_V2_Search_Sell:
+	GUI_Trades_V2.Search("Sell")
 return

@@ -66,24 +66,28 @@ WM_LBUTTONDOWN() {
 	global MOUSEDRAG_CTRL, MOUSEDRAG_ENABLED
 	global GuiTrades, GuiTrades_Controls
 	global GuiSettings_Controls, GuiSettings
-	global GuiTradesBuyCompact, GuiTradesBuyCompact_Controls
 	global GUITRADES_TOOLTIP
-	global GUITRADESBUYCOMPACT_CLICKED_SEARCH
+	global GUITRADESBUY_CLICKED_SEARCH, GUITRADESSELL_CLICKED_SEARCH
 
 	; = = TRADES GUI = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-	if (A_Gui = "Trades") {
+	if IsContaining(A_Gui, "Trades") {
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
 		underMouseCtrl := Get_UnderMouse_CtrlHwnd()
-		if (underMouseCtrl = GuiTrades_Controls["hTEXT_TradeInfos" GuiTrades.Active_Tab]) {
-			tabContent := Gui_Trades.GetTabContent(GuiTrades.Active_Tab)
-			if (tabContent.OtherFull) {
+		if (underMouseCtrl = GuiTrades_Controls[_buyOrSell]["hTEXT_TradeInfos" GuiTrades[_buyOrSell].Active_Tab]) {
+			tabContent := Gui_Trades_V2.GetTabContent(_buyOrSell, GuiTrades[_buyOrSell].Active_Tab)
+			if (tabContent.AdditionalMsgFull) {
 				GUITRADES_TOOLTIP := True
-				ShowToolTip( StrReplace(tabContent.OtherFull,"\n","`n") , , , 20, 20)
+				ShowToolTip( StrReplace(tabContent.AdditionalMsgFull,"\n","`n") , , , 20, 20)
 			}
 		}
-		else if (underMouseCtrl = GuiTrades_Controls["hIMG_TradeVerify" GuiTrades.Active_Tab]) {
-			tabContent := GUI_Trades.GetTabContent(GuiTrades.Active_Tab)
-			GUI_Trades.VerifyItemPrice(tabContent)
+		else if (underMouseCtrl = GuiTrades_Controls[_buyOrSell]["hIMG_TradeVerify" GuiTrades[_buyOrSell].Active_Tab]) {
+			tabContent := GUI_Trades_V2.GetTabContent(GuiTrades[_buyOrSell].Active_Tab)
+			GUI_Trades_V2.VerifyItemPrice(_buyOrSell, tabContent)
 		}
+		else if (underMouseCtrl = GuiTrades_Controls.Buy.hTEXT_SearchBarFake)
+			GUITRADESBUY_CLICKED_SEARCH := True
+		else if (underMouseCtrl = GuiTrades_Controls.Sell.hTEXT_SearchBarFake)
+			GUITRADESSELL_CLICKED_SEARCH := True
 	}
 
 	; = = SETTINGS GUI = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -103,13 +107,6 @@ WM_LBUTTONDOWN() {
 			MOUSEDRAG_ENABLED := True
 		}
 	}
-	
-	else if (A_Gui = "TradesBuyCompactSearch") {
-		mouseCtrlHwnd := Get_UnderMouse_CtrlHwnd()
-		if (mouseCtrlHwnd = GuiTradesBuyCompact_Controls.hTEXT_SearchBarFake) {
-			GUITRADESBUYCOMPACT_CLICKED_SEARCH := True
-		}
-	}
 }
 
 ShowListLines:
@@ -117,14 +114,27 @@ ListLines
 return
 
 WM_LBUTTONUP() {
-	global GuiTradesBuyCompact_Controls
-	global MOUSEDRAG_CTRL, MOUSEDRAG_ENABLED, GUITRADES_TOOLTIP, GUITRADESBUYCOMPACT_CLICKED_SEARCH
+	global GuiTrades, GuiTrades_Controls
+	global MOUSEDRAG_CTRL, MOUSEDRAG_ENABLED
+	global GUITRADES_TOOLTIP, GUITRADESBUY_CLICKED_SEARCH, GUITRADESSELL_CLICKED_SEARCH
 
-	if (A_Gui = "Trades") {
+	if IsContaining(A_Gui, "Trades") {
+		mouseCtrlHwnd := Get_UnderMouse_CtrlHwnd()
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
 		if (GUITRADES_TOOLTIP) {
 			RemoveToolTip()
 			GUITRADES_TOOLTIP := False
-			GUI_Trades.UnSetTabStyleWhisperReceived(GUI_Trades.GetActiveTab())
+			GUI_Trades_V2.UnSetTabStyleWhisperReceived(GUI_Trades_V2.GetActiveTab(_buyOrSell))
+		}
+		if (GUITRADESBUY_CLICKED_SEARCH && mouseCtrlHwnd = GuiTrades_Controls.Buy.hTEXT_SearchBarFake) {
+			DetectHiddenWindows("On")
+			WinActivate,% "ahk_id " GuiTrades_Controls.Buy.GuiSearchHiddenHandle
+			DetectHiddenWindows("")
+		}
+		else if (GUITRADESSELL_CLICKED_SEARCH && mouseCtrlHwnd = GuiTrades_Controls.Sell.hTEXT_SearchBarFake) {
+			DetectHiddenWindows("On")
+			WinActivate,% "ahk_id " GuiTrades_Controls.Sell.GuiSearchHiddenHandle
+			DetectHiddenWindows("")
 		}
 		; GUI_Trades.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
 	}
@@ -135,17 +145,7 @@ WM_LBUTTONUP() {
 		MOUSEDRAG_ENABLED := False
 		MOUSEDRAG_CTRL := ""
 	}
-
-	if (A_Gui = "TradesBuyCompactSearch") {
-		mouseCtrlHwnd := Get_UnderMouse_CtrlHwnd()
-		if (GUITRADESBUYCOMPACT_CLICKED_SEARCH && mouseCtrlHwnd = GuiTradesBuyCompact_Controls.hTEXT_SearchBarFake) {
-			hw := A_DetectHiddenWindows
-			DetectHiddenWindows, On
-			WinActivate,% "ahk_id " GuiTradesBuyCompact_Controls.GuiTradesBuyCompactSearchHiddenHandle
-			DetectHiddenWindows, %hw%
-		}
-	}
-	GUITRADESBUYCOMPACT_CLICKED_SEARCH := False
+	GUITRADESBUY_CLICKED_SEARCH := False, GUITRADESSELL_CLICKED_SEARCH := False
 }
 
 WM_MOUSEMOVE() {
