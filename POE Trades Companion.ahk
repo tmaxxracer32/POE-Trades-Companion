@@ -153,30 +153,51 @@ Start_Script() {
 	GAME.MAIN_FOLDER 				:= MyDocuments "\my games\Path of Exile"
 	GAME.INI_FILE 					:= GAME.MAIN_FOLDER "\production_Config.ini"
 	GAME.INI_FILE_COPY 		 		:= PROGRAM.MAIN_FOLDER "\production_Config.ini"
-	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe"
+	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe"
 	GAME.CHALLENGE_LEAGUE 			:= "Legion"
 	GAME.CHALLENGE_LEAGUE_TRANS		:= {"RUS":"Легион","KOR":"군단"} ; Rest doesn't have translations. Translated whispers suck and are inconsistent
-
-	PROGRAM.SETTINGS.SUPPORT_MESSAGE 	:= "@%buyerName% " PROGRAM.NAME ": view-thread/1755148"
 
 	PROGRAM.PID 					:= DllCall("GetCurrentProcessId")
 
 	SetWorkingDir,% PROGRAM.MAIN_FOLDER
 
-	; Auto admin reload - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	; Auto admin reload
 	if (!A_IsAdmin && !RUNTIME_PARAMETERS.SkipAdmin && !DEBUG.SETTINGS.skip_admin) {
 		ReloadWithParams(" /MyDocuments=""" MyDocuments """", getCurrentParams:=True, asAdmin:=True)
 	}
 
-	; Game executables groups - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	global POEGameArr := ["PathOfExile.exe", "PathOfExile_x64.exe", "PathOfExileSteam.exe", "PathOfExile_x64Steam.exe", "PathOfExile_KG.exe", "PathOfExile_x64_KG.exe"]
+	; Creating settings and file
+	LocalSettings_CreateFileIfNotExisting()
+	LocalSettings_VerifyEncoding()
 
-	global POEGameList := ""
-	for nothing, executable in POEGameArr {
+	Delete_OldLogsFile()
+	Create_LogsFile()
+
+	; Loading global GDIP 
+	GDIP_Startup()
+	
+	; Loading fonts
+	LoadFonts() 
+
+	; Closing previous instance
+	if (!RUNTIME_PARAMETERS.NewInstance)
+		Close_PreviousInstance()
+	TrayRefresh()
+
+	; More local settings stuff
+	Set_LocalSettings()
+	Update_LocalSettings()
+	Declare_LocalSettings(localSettings)
+	PROGRAM.TRANSLATIONS := GetTranslations(PROGRAM.SETTINGS.GENERAL.Language)
+	Declare_SkinAssetsAndSettings()
+
+	; Game executables groups
+	global POEGameArr := []
+	Loop, Parse,% GAME.EXECUTABLES, % ","
+		POEGameArr.Push(A_LoopField)
+	global POEGameList := GAME.EXECUTABLES	
+	for nothing, executable in POEGameArr
 		GroupAdd, POEGameGroup, ahk_exe %executable%
-		POEGameList .= executable ","
-	}
-	StringTrimRight, POEGameList, POEGameList, 1
 
 	; Create local directories - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	directories := PROGRAM.MAIN_FOLDER "`n" PROGRAM.SFX_FOLDER "`n" PROGRAM.LOGS_FOLDER "`n" PROGRAM.SKINS_FOLDER
@@ -194,17 +215,11 @@ Start_Script() {
 		}
 	}
 
-	; Logs files
-	Create_LogsFile()
-	Delete_OldLogsFile()
-
-	if (!RUNTIME_PARAMETERS.NewInstance)
-		Close_PreviousInstance()
-	TrayRefresh()
-
+	; Extracting assets
 	if !(DEBUG.settings.skip_assets_extracting)
 		AssetsExtract()
 
+	; Warning stuff
 	if !FileExist(PROGRAM.TRANSLATIONS_FOLDER "\english.json") {
 		MsgBox(4096+48,"ERROR","/!\ PLEASE READ CAREFULLY /!\"
 		. "`n`nUnable to find translation files. Please re-download the tool."
@@ -218,7 +233,7 @@ Start_Script() {
 		ExitApp
 	}
 
-	; Currency names for stats gui - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	; Loading currency data for stats gui
 	PROGRAM.DATA := {}
 	FileRead, allCurrency,% PROGRAM.DATA_FOLDER "\CurrencyNames.txt"
 	Loop, Parse, allCurrency, `n, `r
@@ -228,55 +243,20 @@ Start_Script() {
 	}
 	StringTrimRight, currencyList, currencyList, 1 ; Remove last comma
 	PROGRAM.DATA.CURRENCY_LIST := currencyList
-
 	FileRead, JSONFile,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
     PROGRAM["DATA"]["POETRADE_CURRENCY_DATA"] := JSON.Load(JSONFile)
-
 	FileRead, gggCurrency,% PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json"
 	PROGRAM["DATA"]["POEDOTCOM_CURRENCY_DATA"] := JSON.Load(gggCurrency)
 
-	; Maps data for ITemGrid - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+	; Loading maps data for item grid
 	FileRead, mapsData,% PROGRAM.DATA_FOLDER "\mapsData.json"
 	PROGRAM.DATA.MAPS_DATA := JSON.Load(mapsData)
-
 	FileRead, uniqueMapsList,% PROGRAM.DATA_FOLDER "\UniqueMaps.txt"
 	PROGRAM.DATA.UNIQUE_MAPS_LIST := uniqueMapsList
 
-	; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-	GDIP_Startup()
-
-	; Fonts related
-	LoadFonts() 
-
-	; Import old settings if accepted
-	oldIni := MyDocuments "\AutoHotkey\POE Trades Companion\Preferences.ini"
-	if FileExist(oldIni) {
-		hasAsked := INI.Get(PROGRAM.INI_File, "GENERAL", "HasAskedForImport")
-		INI.Set(PROGRAM.INI_File, "GENERAL", "HasAskedForImport", "True")
-		if (hasAsked != "True") {
-			AppendToLogs("Showing import pre1.13 settings GUI.")
-			GUI_ImportPre1dot13Settings.Show()
-			global GuiImportPre1dot13Settings
-			WinWait,% "ahk_id " GuiImportPre1dot13Settings.Handle
-			WinWaitClose,% "ahk_id " GuiImportPre1dot13Settings.Handle
-			AppendToLogs("Successfully closed pre1.13 settings GUI.")
-		}
-	}
-	
-	; Local settings
-	LocalSettings_VerifyEncoding()
-	Set_LocalSettings()
-	Update_LocalSettings()
-	localSettings := Get_LocalSettings()
-	Declare_LocalSettings(localSettings)
-	PROGRAM.TRANSLATIONS := GetTranslations(PROGRAM.SETTINGS.GENERAL.Language)
-
 	; Game settings
-	gameSettings := Get_GameSettings()
 	Declare_GameSettings(gameSettings)
-
-	Declare_SkinAssetsAndSettings()
+	Get_TradingLeagues()
 
 	; Update checking
 	if !(DEBUG.settings.skip_update_check) {
@@ -299,21 +279,17 @@ Start_Script() {
 		}
 	}
 
-	Get_TradingLeagues() ; Getting leagues
-
 	if (PROGRAM.SETTINGS.GENERAL.AskForLanguage = "True")
 		GUI_ChooseLang.Show()
 	
 	TrayMenu()
 	EnableHotkeys()
 
-	; ImageButton_TestDelay()
 	GUI_Intercom.Create()
-	GUI_TradesMinimized.Create()
-	Gui_Trades.Create()
-	GUI_Trades.LoadBackup()
-	GUI_TradesBuyCompact.Create()
-	GUI_TradesBuyCompact.Show()
+	; ImageButton_TestDelay()
+
+	GUI_Trades_V2.Create("", buyOrSell:="Sell", slotsOrTab:="Tabs")
+	GUI_Trades_V2.Create("", buyOrSell:="Buy", slotsOrTab:="Slots")
 
 	; Parse debug msgs
 	if (DEBUG.settings.use_chat_logs) {
@@ -325,29 +301,30 @@ Start_Script() {
 	global GuiSettings
 	if !WinExist("ahk_id " GuiSettings.Handle)
 		Gui_Settings.Create()
-	if (DEBUG.settings.open_settings_gui) {
+	if (DEBUG.settings.open_settings_gui)
 		Gui_Settings.Show()
-	}
 
-	if (DEBUG.settings.open_mystats_gui) {
+	if (DEBUG.settings.open_mystats_gui)
 		GUI_MyStats.Show()
-	}
 
 	if (PROGRAM.SETTINGS.PROGRAM.Show_Changelogs = True) 
 	|| (PROGRAM.SETTINGS.GENERAL.ShowChangelog = "True") {
-		INI.Remove(PROGRAM.INI_FILE, "PROGRAM")
-		INI.Set(PROGRAM.INI_FILE, "GENERAL", "ShowChangelog", "False")
-		PROGRAM.SETTINGS.PROGRAM.Show_Changelogs := ""
+		PROGRAM.SETTINGS.Delete("PROGRAM") ; old section
 		PROGRAM.SETTINGS.GENERAL.ShowChangelog := "False"
+		Save_LocalSettings()
 		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.UpdateSuccessful_Msg, "%version%", PROGRAM.VERSION)
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.UpdateSuccessful_Title, trayMsg)
 		GUI_Settings.Show("Misc Updating")
 	}
-	
+
+	; Shellmessage, after all gui are created	
 	ShellMessage_Enable()
+
+	; Clipboard change funcs + refresh list
 	OnClipboardChange("OnClipboardChange_Func")
 	SetTimer, GUI_Trades_RefreshIgnoreList, 60000 ; One min
 
+	; Showing tray notification
 	trayMsg := PROGRAM.TRANSLATIONS.TrayNotifications.AppLoaded_Msg
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency <= 20)
 		trayMsg .= "`n`n" . StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.AppLoadedTransparency_Msg, "%number%", PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency)
@@ -362,6 +339,8 @@ Return
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Include %A_ScriptDir%\lib\
+
+#Include Class_Gui_Trades_V2.ahk
 
 #Include Class_GUI.ahk
 #Include Class_GUI_BetaTasks.ahk
