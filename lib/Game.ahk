@@ -91,8 +91,6 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 
 	Thread, NoTimers
 
-	sendMsgMode := PROGRAM.SETTINGS.SETTINGS_MAIN.SendMsgMode
-
 ;	Retrieve the virtual key id for chat opening
 	chatVK := GAME.SETTINGS.ChatKey_VK ? GAME.SETTINGS.ChatKey_VK : "0xD"
 
@@ -133,84 +131,63 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 	GoSub, Send_GameMessage_ClearChat
 
 	if (actionType = "WRITE_SEND") {
-		if (sendMsgMode = "Clipboard") {
-			While (Clipboard != msgString) {
-				Set_Clipboard(msgString)
+		While (Clipboard != msgString) {
+			Set_Clipboard(msgString)
 
-				if (Clipboard = msgString)
-					break
+			if (Clipboard = msgString)
+				break
 
-				else if (A_Index > 100) {
-					err := True
-					break
-				}
-				Sleep 50
+			else if (A_Index > 100) {
+				err := True
+				break
 			}
-			if (!err)
-				SendEvent, ^{sc02F}
-			else
-				TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-			; SetTimer, Reset_Clipboard, -700
+			Sleep 50
 		}
-		else if (sendMsgMode = "SendInput")
-			SendInput,%msgString%
-		else if (sendMsgMode = "SendEvent")
-			SendEvent,%msgString%
+		if (!err)
+			SendEvent, ^{sc02F}
+		else
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
 
 		SendEvent,{Enter}
 	}
 	else if (actionType = "WRITE_DONT_SEND") {
-		if (sendMsgMode = "Clipboard") {
-			While (Clipboard != msgString) {
-				Set_Clipboard(msgString)
+		While (Clipboard != msgString) {
+			Set_Clipboard(msgString)
 
-				if (Clipboard = msgString)
-					break
+			if (Clipboard = msgString)
+				break
 
-				else if (A_Index > 100) {
-					err := True
-					break
-				}
-				Sleep 50
+			else if (A_Index > 100) {
+				err := True
+				break
 			}
-			if (!err)
-				SendEvent, ^{sc02F}
-			else
-				TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-			; SetTimer, Reset_Clipboard, -700
+			Sleep 50
 		}
-		else if (sendMsgMode = "SendInput")
-			SendEvent,%msgString%
-		else if (sendMsgMode = "SendEvent")
-			SendEvent,%msgString%
+		if (!err)
+			SendEvent, ^{sc02F}
+		else
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
 	}
 	else if (actionType = "WRITE_GO_BACK") {
 		foundPos := InStr(msgString, "{X}"), _strLen := StrLen(msgString), leftPresses := _strLen-foundPos+1-3
 		msgString := StrReplace(msgString, "{X}", "")
 
-		if (sendMsgMode = "Clipboard") {
-			While (Clipboard != msgString) {
-				Set_Clipboard(msgString)
+		While (Clipboard != msgString) {
+			Set_Clipboard(msgString)
 
-				if (Clipboard = msgString)
-					break
+			if (Clipboard = msgString)
+				break
 
-				else if (A_Index > 100) {
-					err := True
-					break
-				}
-				Sleep 50
+			else if (A_Index > 100) {
+				err := True
+				break
 			}
-			if (!err)
-				SendEvent, ^{sc02F}
-			else
-				TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-			; SetTimer, Reset_Clipboard, -700
+			Sleep 50
 		}
-		else if (sendMsgMode = "SendInput")
-			SendInput,%msgString%
-		else if (sendMsgMode = "SendEvent")
-			SendEvent,%msgString%
+		if (!err)
+			SendEvent, ^{sc02F}
+		else
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
 
 		if (!err)
 			SendInput {Left %leftPresses%}
