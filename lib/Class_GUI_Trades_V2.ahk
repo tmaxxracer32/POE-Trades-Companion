@@ -960,7 +960,7 @@
 		}
 
         ; Update the GUI height if the mode is slots
-        if (isSlots && !IsContaining(_buyOrSell, "Preview")) {
+        if (isSlots) {
             GuiTrades[_buyOrSell].Height_Maximized := guiHeight := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_Minimized
                 : newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
                 : newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot

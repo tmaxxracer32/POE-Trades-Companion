@@ -508,13 +508,12 @@ Get_LocalSettings_DefaultValues() {
 				"TradesGUI_Mode": "Window",
 				"TradesGUI_Locked": "False",
 				"AllowClicksToPassThroughWhileInactive": "False",
-				"SendMsgMode": "Clipboard",
 				"PushBulletToken": "",
 				"PushBulletOnTradingWhisper": "True",
 				"PushBulletOnPartyMessage": "False",
 				"PushBulletOnWhisperMessage": "False",
 				"PushBulletOnlyWhenAfk": "True",
-				"PoeAccounts": "",
+				"PoeAccounts": {},
 				"MinimizeInterfaceToBottomLeft": "False",
 				"ItemGridHideNormalTab": "False",
 				"ItemGridHideQuadTab": "False",
@@ -871,7 +870,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 					isValid := IsNum(userValue) ? True : False
 				else if (k="TradesGUI_Mode")
 					isValid := IsIn(userValue, "Dock,Window") ? True : False
-				else if IsIn(k, "PushBulletToken,PoeAccounts,SendMsgMode")
+				else if (k="PushBulletToken" || parents.2 = "PoeAccounts")
 					isValid := True
 			}
 			else if (parents.1 = "UPDATING") {
