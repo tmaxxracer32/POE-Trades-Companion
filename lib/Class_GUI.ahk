@@ -21,6 +21,7 @@ Class GUI {
 		Gui%name% := ""
 		Gui%name%_Controls := ""
 		Gui%name%_Submit := ""
+		Gui%name%_ControlFunctions := ""
 	}
 
 	New(name, opts="", title="") {
@@ -72,16 +73,17 @@ Class GUI {
 		Return Gui%name%_Submit
 	}
 
-	Font(name, font, size="", qual="") {
+	Font(name, font, size="", qual="", col="") {
 		global
 		local opts
 
 		; Set values
 		size := (size)?(size):(10)
 		qual := (qual)?(qual):(5)
+		col := (col!="")?(col):("Black")
 
 		; Add the prefixes
-		opts .= " S" size " Q" qual
+		opts .= " S" size " Q" qual " c" col
 
 		; Set the default font settings
 		Gui, %name%:Font, %opts%, %font%
@@ -91,6 +93,7 @@ Class GUI {
 		Gui%name%["Font_Size"] := size
 		Gui%name%["Font_Qual"] := qual
 		Gui%name%["Font_Quality"] := qual
+		Gui%name%["Font_Color"] := col
 	}
 
 	Margin(name, xMargin, yMargin) {
@@ -285,13 +288,13 @@ Class GUI {
 		return {X:X,Y:Y,W:W,H:H}
 	}
 
-	MoveControl(guiName, ctrlName, x="", y="", w="", h="") { 
+	MoveControl(guiName, ctrlName, opts="") { 
 		global
-		moveParams := x != "" ? moveParams " x" x : moveParams
-		moveParams := y != "" ? moveParams " h" y : moveParams
-		moveParams := w != "" ? moveParams " w" w : moveParams
-		moveParams := h != "" ? moveParams " h" h : moveParams
-		GuiControl, %guiName%:Move, Gui%guiName%_Controls[ctrlName],% moveParams
+		; if IsContaining(opts, "Center")
+		; 	centerCtrl := True, opts := StrReplace(opts, "Center", "")
+		GuiControl, %guiName%:Move,% Gui%guiName%_Controls[ctrlName],% opts
+		; if (centerCtrl)
+			; GuiControl, %guiName%:+Center,% Gui%guiName%_Controls[ctrlName]
 	}
 
 	BindFunctionToControl(guiClass, guiName, ctrlName, funcName, params*) {
