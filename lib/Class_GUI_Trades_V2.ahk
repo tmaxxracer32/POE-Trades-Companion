@@ -158,7 +158,17 @@
 		GuiSettings.CUSTOM_BUTTON_SELECTED_ROW := rowNum
 		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
 		GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := btnNum
+
+		Gui, Settings:+Disabled
+		SetTimer, GUI_Settings_Customization_%whichTab%_OnActionContentChange, Delete
+		Sleep 10
+
 		GUI_Settings.Customization_SellingBuying_LoadButtonSettings(whichTab, rowNum, btnNum)
+		GUI_Settings.Customization_SellingBuying_SelectListviewRow(whichTab, 1)
+
+		Sleep 10
+		Gui, Settings:-Disabled
+		SetTimer, GUI_Settings_Customization_%whichTab%_OnActionContentChange, Delete
 
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
 	}

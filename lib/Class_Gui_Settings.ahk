@@ -421,7 +421,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
 		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1", "Clipboard|Invite|Kick|Thanks|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationBuyingActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
@@ -432,9 +432,9 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Hotkeys
 
-		Gui.Add("Settings", "ListBox", "x" leftMost2 " y" upMost2 " w130 h" downMost2-upMost2-25-3 " hwndhLB_HotkeyProfiles"), hkListBoxPos := Get_ControlCoords("Settings", GuiSettings_Controls.hLB_HotkeyProfiles), leftMost3 := hkListBoxPos.X+hkListBoxPos.W+10
-		Gui.Add("Settings", "Button", "xp y+3 w" (130/2)-(4/2) " h25 hwndhBTN_HotkeysRemoveSelectedProfile", "-")
-		Gui.Add("Settings", "Button", "x+4 yp wp hp hwndhBTN_HotkeysAddNewProfile", "+")
+		Gui.Add("Settings", "ListBox", "x" leftMost2 " y" upMost2 " w130 h" downMost2-upMost2-25-3 " hwndhLB_HotkeyProfiles AltSubmit"), hkListBoxPos := Get_ControlCoords("Settings", GuiSettings_Controls.hLB_HotkeyProfiles), leftMost3 := hkListBoxPos.X+hkListBoxPos.W+10
+		Gui.Add("Settings", "Button", "xp y+3 w" (130/2)-(4/2) " h25 hwndhBTN_HotkeyRemoveSelectedProfile", "-")
+		Gui.Add("Settings", "Button", "x+4 yp wp hp hwndhBTN_HotkeyAddNewProfile", "+")
 
 		centeredX := rightMost2-leftMost3-160-(160/2)-(15/2)
 		Gui.Add("Settings", "Text", "x" centeredX " y" upMost2 " Center hwndhTEXT_HotkeyProfileName", "Profile name:")
@@ -451,6 +451,8 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+
+		GUI_Settings.TabHotkeys_SetUserSettings()
 
 		/*
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y" upMost2+20 " w430 R20 hwndhDDL_HotkeyAdvExistingList")
@@ -1489,7 +1491,7 @@ Class GUI_Settings {
 		; Try to select the first existing button
 		Loop 4 {
 			if (PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" A_Index].Buttons_Count) {
-				GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, 1, PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" A_Index].Buttons_Count, 1)
+				GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, A_Index, PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" A_Index].Buttons_Count, 1)
 				hasExistingButtons := True
 				Break
 			}
@@ -1539,8 +1541,8 @@ Class GUI_Settings {
 		return GUI_Settings.Universal_LoadActionsIntoListview(whichTab, rowNum, btnNum)
 	}
 
-	Customization_SellingBuying_SaveAllCurrentButtonActions(whichTab) {
-		return GUI_Settings.Universal_SaveAllActions(whichTab)
+	Customization_SellingBuying_SaveAllCurrentButtonActions(whichTab, isTimedSave=False) {
+		return GUI_Settings.Universal_SaveAllActions(whichTab, isTimedSave)
 	}
 
 	Customization_SellingBuying_SetButtonType(whichTab, btnType, dontTriggerOnChange=False) {
@@ -1621,7 +1623,7 @@ Class GUI_Settings {
 			if (btnNum <= A_Index) { ; Otherwise it can't exist, eg: Num3 can't exist if Max2
 				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
 				btnIcon := ddlContent
-				styleName := "CustomButton_Row" rowNum "Max" btnMax, styleName .= "_Icon_" btnIcon
+				styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnMax, styleName .= "_Icon_" btnIcon
 				if !IsObject(GuiTrades.Styles[styleName]) 
 					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Icon", GuiTrades.Styles, styleName, btnIcon)
 				else
@@ -1663,7 +1665,7 @@ Class GUI_Settings {
 			if (btnNum <= A_Index) { ; Otherwise it can't exist, eg: Num3 can't exist if Max2
 				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
 				btnName := editBoxContent
-				styleName := "CustomButton_Row" rowNum "Max" btnMax, styleName .= "_Text"
+				styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnMax, styleName .= "_Text"
 				if !IsObject(GuiTrades.Styles[styleName])
 					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Text", GuiTrades.Styles, styleName, btnName)
 				else
@@ -1729,8 +1731,8 @@ Class GUI_Settings {
 		return GUI_Settings.Universal_AdjustListviewHeaders(whichTab)
 	}
 
-	Customization_SellingBuying_OnListviewClick(whichTab, CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
-		return GUI_Settings.Universal_OnListviewClick(whichTab, CtrlHwnd, GuiEvent, EventInfo, GuiEvent2)
+	Customization_SellingBuying_OnListviewClick(whichTab, params*) {
+		return GUI_Settings.Universal_OnListviewClick(whichTab, params*)
 	}
 
 	Customization_SellingBuying_SetActionType(whichTab, actionType) {
@@ -1741,6 +1743,16 @@ Class GUI_Settings {
 		return GUI_Settings.Universal_SetActionContent(whichTab, actionContent)
 	}
 
+	Customization_SellingBuying_SelectListviewRow(whichTab, rowNum) {
+		return GUI_Settings.Universal_SelectListViewRow(whichTab, rowNum)
+	}
+
+	Customization_Buying_SelectListviewRow(params*) {
+		return GUI_Settings.Customization_SellingBuying_SelectListviewRow("Buying", params*)
+	}
+	Customization_Selling_SelectListviewRow(params*) {
+		return GUI_Settings.Customization_SellingBuying_SelectListviewRow("Selling", params*)
+	}
 	Customization_Selling_SetActionType(params*) {
 		return GUI_Settings.Customization_SellingBuying_SetActionType("Selling", params*)
 	}
@@ -1873,11 +1885,11 @@ Class GUI_Settings {
 	Customization_Buying_SetButtonType(params*) {
 		return GUI_Settings.Customization_SellingBuying_SetButtonType("Buying", params*)
 	}
-    Customization_Selling_SaveAllCurrentButtonActions() {
-		return GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions("Selling")
+    Customization_Selling_SaveAllCurrentButtonActions(params*) {
+		return GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions("Selling", params*)
 	}
-	Customization_Buying_SaveAllCurrentButtonActions() {
-		return GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions("Buying")
+	Customization_Buying_SaveAllCurrentButtonActions(params*) {
+		return GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions("Buying", params*)
 	}
     Customization_Selling_LoadButtonActions(params*) {
 		return GUI_Settings.Customization_SellingBuying_LoadButtonActions("Selling", params*)
@@ -1927,7 +1939,7 @@ Class GUI_Settings {
 	TabHotkeys_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
 		controlsList := "hLB_HotkeyProfiles,hEDIT_HotkeyProfileName,hEDIT_HotkeyProfileHotkey,hDDL_HotkeyActionType"
-		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList"
+		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList,hBTN_HotkeyAddNewProfile,hBTN_HotkeyRemoveSelectedProfile"
 
 		Loop, Parse, controlsList,% ","
 		{
@@ -1936,7 +1948,7 @@ Class GUI_Settings {
 			if (ctrlName="hLB_HotkeyProfiles")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileChange")
 			if (ctrlName="hEDIT_HotkeyProfileName")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter500ms:=True)
 			if (ctrlName="hEDIT_HotkeyProfileHotkey")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileHotkeyChange")
 			if (ctrlName="hDDL_HotkeyActionType")
@@ -1945,34 +1957,125 @@ Class GUI_Settings {
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnActionContentChange")
 			if (ctrlName="hLV_HotkeyActionsList")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnListviewClick")
+			else if (ctrlName="hBTN_HotkeyAddNewProfile")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_AddNewHotkeyProfile")
+			else if (ctrlName="hBTN_HotkeyRemoveSelectedProfile")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_RemoveSelectedHotkeyProfile")
 		}
 	}
 
 	TabHotkeys_SetUserSettings() {
+		global PROGRAM
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hLB_HotkeyProfiles,hEDIT_HotkeyProfileName,hEDIT_HotkeyProfileHotkey,hDDL_HotkeyActionType"
-		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList"
+		controlsList := "hLB_HotkeyProfiles"
 
 		Loop, Parse,% controlsList,% ","
 		{
 			ctrlName := A_LoopField, ctrlSplit := StrSplit(ctrlName, "_"), ctrlType := ctrlSplit.1, settingsKey := ctrlSplit.2
 
 			if (ctrlName="hLB_HotkeyProfiles") {
-				for index, hkObj in PROGRAM.SETTINGS.HOTKEYS
-					hkList := hkList ? hkList "|" hkObj.Name : hkObj.Name
-				GuiControl, Settings:,% GuiSettings_Controls[ctrlName],% hkList
-				GuiControl, Settings:ChooseString,% GuiSettings_Controls[ctrlName],% hkObj.1.Name
+				GUI_Settings.TabHotkeys_UpdateAvailableProfiles()
+				GuiControl, Settings:Choose,% GuiSettings_Controls[ctrlName], 1
 				GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
 			}
 		}
 	}
 
-	TabHotkeys_OnHotkeyProfileChange() {
-
+	TabHotkeys_UpdateAvailableProfiles() {
+		global PROGRAM, GuiSettings_Controls
+		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
+		for index, hkObj in PROGRAM.SETTINGS.HOTKEYS
+			hkList := hkList ? hkList "|" hkObj.Name : hkObj.Name
+		GuiControl, Settings:,% GuiSettings_Controls.hLB_HotkeyProfiles,% "|" hkList
+		if (selectedHkNum)
+			GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% selectedHkNum
 	}
 
-	TabHotkeys_OnHotkeyProfileNameChange() {
+	TabHotkeys_AddNewHotkeyProfile() {
+		global PROGRAM, GuiSettings_Controls
+		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
+		PROGRAM.SETTINGS.HOTKEYS[hotkeysCount+1] := {Name: "New hotkey " hotkeysCount+1, Hotkey: "", Actions: {}}
+		Save_LocalSettings()
+		GUI_Settings.TabHotkeys_SetUserSettings()
+		GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% hotkeysCount+1
+		GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
+	}
 
+	TabHotkeys_RemoveSelectedHotkeyProfile() {
+		global PROGRAM, GuiSettings_Controls
+		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
+		MsgBox(4096+4, "", PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name
+		. "Are you sure to delete this hotkey profile?")
+		IfMsgBox, Yes
+		{
+			hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
+			if (selectedHkNum=hotkeysCount) ; Can just delete the last hk 
+				PROGRAM.SETTINGS.HOTKEYS.Delete(selectedHkNum)
+			else { ; Need to re-arrange the obj
+				hotkeysCopy := ObjFullyClone(PROGRAM.SETTINGS.HOTKEYS)
+				loopedHK := selectedHkNum
+				Loop % hotkeysCount-selectedHkNum {
+					PROGRAM.SETTINGS.HOTKEYS[loopedHK] := ObjFullyClone(hotkeysCopy[loopedHK+1])
+					loopedHK++
+				}
+				PROGRAM.SETTINGS.HOTKEYS.Delete(hotkeysCount)
+			}
+			Save_LocalSettings()
+			GUI_Settings.TabHotkeys_SetUserSettings()
+			GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% (hotkeysCount > selectedHkNum ? selectedHkNum : hotkeysCount-1)
+			GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
+		}
+	}
+
+	TabHotkeys_GetSelectedHotkeyProfile() {
+		return GUI_Settings.Submit("hLB_HotkeyProfiles")
+	}
+
+	TabHotkeys_OnHotkeyProfileChange() {
+		global PROGRAM, GuiSettings_Controls, GuiSettings_ControlFunctions
+		Gui, Settings:+Disabled
+		SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
+		Sleep 10
+		
+		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
+		GUI_Settings.TabHotkeys_SetHotkeyProfileName(PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name)
+		GUI_Settings.TabHotkeys_LoadHotkeyActions(selectedHkNum)
+		GUI_Settings.TabHotkeys_SelectListviewRow(1)
+		if !(GuiSettings_ControlFunctions.hLV_HotkeyActionsList)
+			GUI_Settings.TabHotkeys_OnListviewClick()
+
+		Sleep 10
+		SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
+		Gui, Settings:-Disabled
+	}
+
+	TabHotkeys_SetHotkeyProfileName(hkName) {
+		global GuiSettings_Controls
+		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_HotkeyProfileName,% hkName
+	}
+
+	TabHotkeys_GetHotkeyProfileName() {
+		return GUI_Settings.Submit("hEDIT_HotkeyProfileName")
+	}
+
+	TabHotkeys_OnHotkeyProfileNameChange(doAgainAfter500ms=False) {
+		global PROGRAM
+		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
+		hkName := GUI_Settings.TabHotkeys_GetHotkeyProfileName()
+
+		if (!selectedHkNum)
+			return
+		if (hkName="") {
+			GUI_Settings.TabHotkeys_SetHotkeyProfileName("New hotkey " selectedHkNum)
+			return
+		}
+
+		PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name := hkName
+		Save_LocalSettings()
+		GUI_Settings.TabHotkeys_UpdateAvailableProfiles()
+
+		if (doAgainAfter500ms=True)
+			GoSub, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange
 	}
 
 	TabHotkeys_OnHotkeyProfileHotkeyChange() {
@@ -1984,11 +2087,20 @@ Class GUI_Settings {
 	}
 
 	TabHotkeys_OnActionContentChange() {
-		return GUI_Settings.Universal_OnActionContentChange("Hotkeys")
+		return GUI_Settings.Universal_OnActionContentChange("Hotkeys", doAgainAfter500ms:=True)
 	}
 
-	TabHotkeys_OnListviewClick(CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
-		return GUI_Settings.Universal_OnListviewClick("Hotkeys", CtrlHwnd, GuiEvent, EventInfo, GuiEvent2)
+	TabHotkeys_LoadHotkeyActions(hkNum) {
+		return GUI_Settings.Universal_LoadActionsIntoListview("Hotkeys", hkNum)
+	}
+
+	TabHotkeys_SelectListviewRow(rowNum) {
+		return GUI_Settings.Universal_SelectListViewRow("Hotkeys", rowNum)
+	}
+
+	TabHotkeys_OnListviewClick(params*) {
+		global GuiSettings_Controls
+		return GUI_Settings.Universal_OnListviewClick("Hotkeys", params*)
 	}
 
 	Hotkeys_OnListviewRightClick() {
@@ -2943,6 +3055,11 @@ Class GUI_Settings {
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	*/
 
+	Universal_SelectListViewRow(whichTab, rowNum=1) {
+		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
+		LV_Modify(rowNum, "+Select +Focus")
+	}
+
 	Universal_LoadActionsIntoListview(whichTab, params*) {
 		global PROGRAM, GuiSettings
 		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
@@ -2950,20 +3067,20 @@ Class GUI_Settings {
 		if IsIn(whichTab, "Selling,Buying") {
 			rowNum := params.1, btnNum := params.2
 			guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
-			actionsObj := ObjFullyClone(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
+			actionsObj := ObjFullyClone(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Actions)
 		}
 		else if (whichTab="Hotkeys") {
 			hkIndex := params.1
-			actionsObj := ObjFullyClone(PROGRAM.SETTINGS.HOTKEYS[hkIndex])
+			actionsObj := ObjFullyClone(PROGRAM.SETTINGS.HOTKEYS[hkIndex].Actions)
 		}
 
 		Loop % LV_GetCount()
 			LV_Delete()
-		Loop % actionsObj.Actions.Count() {
-			actionType := actionsObj.Actions[A_Index].Type
+		Loop % actionsObj.Count() {
+			actionType := actionsObj[A_Index].Type
 			if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
 				actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
-			actionContent := StrTrimLeft(actionsObj.Actions[A_Index].Content, 1), actionContent := StrTrimRight(actionContent, 1) ; Removing quotes
+			actionContent := StrTrimLeft(actionsObj[A_Index].Content, 1), actionContent := StrTrimRight(actionContent, 1) ; Removing quotes
 			actionLongName := GUI_Settings.Get_ActionLongName_From_ShortName(actionType)
 
 			LV_Add("", A_Index, actionLongName, actionContent)
@@ -2971,8 +3088,9 @@ Class GUI_Settings {
 		GUI_Settings.Universal_AdjustListviewHeaders(whichTab)
 	}
 
-    Universal_SaveAllActions(whichTab, params*) {
+    Universal_SaveAllActions(whichTab, isTimedSave=False) {
 		global PROGRAM, GuiSettings
+		static prevNum
 		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
 
 		; Getting activated button variables
@@ -2994,6 +3112,9 @@ Class GUI_Settings {
 		; Save new actions
 		lvContent := GUI_Settings.Universal_GetListViewContent(whichTab)
 		if IsIn(whichTab, "Buying,Selling") {
+			if (isTimedSave && prevNum != rowNum btnNum)
+				return
+				
 			if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
 				PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
 			PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"] := {}
@@ -3001,9 +3122,13 @@ Class GUI_Settings {
 				actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
 				PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"][index] := {Content: """" lvContent[index].ActionContent """", Type: actionShortName}
 			}
+			prevNum := rowNum btnNum
 		}
 		else if (whichTab="Hotkeys") {
-			hkIndex := params.1
+			hkIndex := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
+			if (isTimedSave && prevNum != hkIndex)
+				return
+
 			if !IsObject(PROGRAM.SETTINGS.HOTKEYS[hkIndex])
 				PROGRAM.SETTINGS.HOTKEYS[hkIndex] := {}
 			PROGRAM.SETTINGS.HOTKEYS[hkIndex]["Actions"] := {}
@@ -3011,6 +3136,7 @@ Class GUI_Settings {
 				actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
 				PROGRAM.SETTINGS.HOTKEYS[hkIndex]["Actions"][index] := {Content: """" lvContent[index].ActionContent """", Type: actionShortName}
 			}
+			prevNum := hkIndex
 		}
 		Save_LocalSettings()
 	}
@@ -3029,7 +3155,7 @@ Class GUI_Settings {
 			: ""
 		actionTypeTipCtrlName := whichTab="Buying"?"hTEXT_CustomizationBuyingActionTypeTip"
 			: whichTab="Selling"?"hTEXT_CustomizationSellingActionTypeTip"
-			: whichTab="Hotkeys"?"HotkeyActionTypeTip"
+			: whichTab="Hotkeys"?"hTEXT_HotkeyActionTypeTip"
 			: ""
 
 		actionTypeHwnd := GuiSettings_Controls[actionTypeCtrlName]
@@ -3041,10 +3167,8 @@ Class GUI_Settings {
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
 		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
-		SetEditCueBanner(actionContentHwnd, contentPlaceholder)
 		GuiControl, Settings:,% GuiSettings_Controls[actionTypeTipCtrlName],% contentPlaceholder
-		ShowToolTip(contentPlaceholder)
-
+				
 		; Avoid selecting actions with -> in name or empty
 		if IsContaining(actionType, "-> ") || (actionType = "") {
 			; Check if one arrow was being pressed
@@ -3224,7 +3348,7 @@ Class GUI_Settings {
 		else if (whichTab="Buying")
 			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 		else if (whichTab="Hotkeys")
-			GoSub, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer
+			GoSub, GUI_Settings_Hotkeys_SaveAllActions_Timer
 	}
 
     Universal_OnListviewRightClick(whichTab) {
@@ -3307,7 +3431,7 @@ Class GUI_Settings {
 		else if (whichTab="Buying")
 			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 		else if (whichTab="Hotkeys")
-			GoSub, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer
+			GoSub, GUI_Settings_Hotkeys_SaveAllActions_Timer
 	}
 
     Universal_MoveActionDown(whichTab, rowNum) {
@@ -3346,7 +3470,7 @@ Class GUI_Settings {
 		else if (whichTab="Buying")
 			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 		else if (whichTab="Hotkeys")
-			GoSub, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer
+			GoSub, GUI_Settings_Hotkeys_SaveAllActions_Timer
 	}
 
     Universal_GetListviewSelectedRow(whichTab) {
@@ -3381,7 +3505,7 @@ Class GUI_Settings {
 		else if (whichTab="Buying")
 			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 		else if (whichTab="Hotkeys")
-			GoSub, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer
+			GoSub, GUI_Settings_Hotkeys_SaveAllActions_Timer
 	}
 
     Universal_GetListViewContent(whichTab) {
@@ -3448,7 +3572,7 @@ Class GUI_Settings {
 		else if (whichTab="Buying")
 			GoSub, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer
 		else if (whichTab="Hotkeys")
-			GoSub, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer
+			GoSub, GUI_Settings_Hotkeys_SaveAllActions_Timer
 	}
 
     Universal_AdjustListviewHeaders(whichTab) {
@@ -3457,7 +3581,7 @@ Class GUI_Settings {
 			LV_ModifyCol(A_Index, "AutoHdr NoSort")
 	}
 
-    Universal_OnListviewClick(whichTab, CtrlHwnd, GuiEvent, EventInfo, GuiEvent2) {
+    Universal_OnListviewClick(whichTab, CtrlHwnd="", GuiEvent="", EventInfo="", GuiEvent2="") {
 		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
 
 		selectedRow := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
@@ -3467,6 +3591,7 @@ Class GUI_Settings {
 		lvContent := GUI_Settings.Universal_GetListViewContent(whichTab)
 		GUI_Settings.Universal_SetActionType(whichTab, lvContent[selectedRow].ActionType)
 		GUI_Settings.Universal_SetActionContent(whichTab, lvContent[selectedRow].ActionContent)
+		GUI_Settings.Universal_OnActionTypeChange(whichTab)
 	}
 
     Universal_SetActionType(whichTab, actionType) {
@@ -3847,7 +3972,7 @@ Class GUI_Settings {
 
 GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions:
 	global SaveAllCurrentSellingActions_After500ms
-	GUI_Settings.Customization_Selling_SaveAllCurrentButtonActions()
+	GUI_Settings.Customization_Selling_SaveAllCurrentButtonActions(isTimedSave:=True)
 	if (SaveAllCurrentSellingActions_After500ms=True) {
 		SaveAllCurrentSellingActions_After500ms := False
 		GoSub GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer_2
@@ -3868,7 +3993,7 @@ return
 
 GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions:
 	global SaveAllCurrentBuyingActions_After500ms
-	GUI_Settings.Customization_Buying_SaveAllCurrentButtonActions()
+	GUI_Settings.Customization_Buying_SaveAllCurrentButtonActions(isTimedSave:=True)
 	if (SaveAllCurrentBuyingActions_After500ms=True) {
 		SaveAllCurrentBuyingActions_After500ms := False
 		GoSub GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer_2
@@ -3887,25 +4012,25 @@ GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer_2:
 	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -500
 return
 
-GUI_Settings_Hotkeys_SaveAllCurrentButtonActions:
+GUI_Settings_Hotkeys_SaveAllActions:
 	global SaveAllHotkeysActions_After500ms
-	GUI_Settings.Universal_SaveAllActions("Hotkeys")
+	GUI_Settings.Universal_SaveAllActions("Hotkeys", isTimedSave:=True)
 	if (SaveAllHotkeysActions_After500ms=True) {
 		SaveAllHotkeysActions_After500ms := False
-		GoSub GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer_2
+		GoSub GUI_Settings_Hotkeys_SaveAllActions_Timer_2
 	}
 return
-GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer:
+GUI_Settings_Hotkeys_SaveAllActions_Timer:
 	global SaveAllHotkeysActions_After500ms
 	SaveAllHotkeysActions_After500ms := True
-	SetTimer, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, Delete
+	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -500
 return
-GUI_Settings_Hotkeys_SaveAllCurrentButtonActions_Timer_2:
+GUI_Settings_Hotkeys_SaveAllActions_Timer_2:
 	; Starts 500ms after saving to make sure save is ok
 	global SaveAllHotkeysActions_After500ms
-	SetTimer, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Hotkeys_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, Delete
+	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -500
 return
 
 
@@ -3931,6 +4056,14 @@ return
 GUI_Settings_Hotkeys_OnActionContentChange_Timer:
 	SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
 	SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, -500
+return
+
+GUI_Settings_Hotkeys_OnHotkeyProfileNameChange:
+	GUI_Settings.TabHotkeys_OnHotkeyProfileNameChange(doAgainAfter500ms:=False)
+return
+GUI_Settings_Hotkeys_OnHotkeyProfileNameChange_Timer:
+	SetTimer, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange, Delete
+	SetTimer, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange, -500
 return
 
 
