@@ -717,7 +717,7 @@ Get_LocalSettings_DefaultValues() {
 							},
 							"2": {
 								"Type": "KICK_MYSELF",
-								"Content": "\"/kick %myself%\""
+								"Content": "\"/kick `%myself`%\""
 							},
 							"3": {
 								"Type": "SAVE_TRADE_STATS",
@@ -762,7 +762,7 @@ Get_LocalSettings_DefaultValues() {
 					"Actions": {
 						"1": {
 							"Type": "KICK_MYSELF",
-							"Content": "\"/kick %myself%\""
+							"Content": "\"/kick `%myself`%\""
 						},
 						"2": {
 							"Type": "CMD_HIDEOUT",
@@ -910,9 +910,20 @@ LocalSettings_VerifyFileIntegrity(ByRef userSettingsObj, defaultSettingsObj, nex
 
 	; The core of the func
 	for k, v in defaultSettingsObj {
+
+		; parentsList := ""
+		; for index, parent in parents
+		; 	parentsList .= "`n" index ": " parent
+		; StringTrimLeft, parentsList, parentsList, 1
+
 		if IsObject(v) {
 			if !userSettingsObj.HasKey(k) {
-			; if !IsObject(userSettingsObj[k]) {
+				if ( IsIn(parents.1, "BUY_INTERFACE,SELL_INTERFACE") && RegExMatch(parents.2, "iO)CUSTOM_BUTTON_ROW_\d+") && IsNum(k) )
+				|| ( (parents.1="HOTKEYS") && IsNum(k) )
+					Continue
+
+				; msgbox % "ONE`n" parentsList "`nKey: " k
+
 				userSettingsObj[k] := ObjFullyClone(v)
 				GoSub LocalSettings_VerifyFileIntegrity_AppendToLogs
 			}
@@ -924,6 +935,13 @@ LocalSettings_VerifyFileIntegrity(ByRef userSettingsObj, defaultSettingsObj, nex
 			userValue := v, defaultValue := defaultSettingsObj[k]
 
 			if !userSettingsObj.HasKey(k) {
+				if ( IsIn(parents.1, "BUY_INTERFACE,SELL_INTERFACE") && RegExMatch(parents.2, "iO)CUSTOM_BUTTON_ROW_\d+") && IsNum(parents.3) ) {
+					if ( (k="Icon") && userSettingsObj.HasKey("Text") ) || ( (k="Text") && userSettingsObj.HasKey("Icon") )
+						Continue
+				}
+
+				; msgbox,4096,, % "TWO`n" parentsList "`nKey: " k
+
 				userSettingsObj[k] := defaultValue
 				GoSub LocalSettings_VerifyFileIntegrity_AppendToLogs
 			}
@@ -957,7 +975,7 @@ LocalSettings_Verify() {
 	LocalSettings_VerifyValuesValidity(settings, defaultSettings, "", "", invalidLogs:=invalidLogs)
 	LocalSettings_VerifyFileIntegrity(settings, defaultSettings, "", "", invalidLogs:=invalidLogs)
 	if (invalidLogs) {
-		; msgbox % invalidLogs
+		msgbox % invalidLogs ; TO_DO_V2
 	}
 	Save_LocalSettings(settings)
 	return
