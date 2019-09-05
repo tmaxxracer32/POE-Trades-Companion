@@ -15,13 +15,20 @@ Class GUI {
 
 	Destroy(name) {
 		global
+		local msgID
 
-		Gui, %name%:Destroy
+		Gui, %name%:Hide
+
+		for msgID in Gui%name%_OnMessageObjs
+			OnMessage(msgID, Gui%name%_OnMessageObjs[msgID], 0)
 
 		Gui%name% := ""
 		Gui%name%_Controls := ""
 		Gui%name%_Submit := ""
 		Gui%name%_ControlFunctions := ""
+		Gui%name%_OnMessageObjs := ""
+
+		Gui, %name%:Destroy
 	}
 
 	New(name, opts="", title="") {
@@ -48,6 +55,7 @@ Class GUI {
 		Gui%name%_Controls := {}
 		Gui%name%_Submit := {}
 		Gui%name%_ControlFunctions := {}
+		Gui%name%_OnMessageObjs := {}
 
 		if (title)
 			Gui%name%["Title"] := title
@@ -297,11 +305,23 @@ Class GUI {
 			; GuiControl, %guiName%:+Center,% Gui%guiName%_Controls[ctrlName]
 	}
 
+	OnMessageBind(guiClass, guiName, msgID, funcName, params*) {
+		global
+		local __f
+
+		if ( params.Count() )
+			Gui%guiName%_OnMessageObjs[msgID] := %guiClass%[funcName].Bind(guiClass, params*)
+		else
+			Gui%guiName%_OnMessageObjs[msgID] := %guiClass%[funcName].Bind(guiClass)
+
+		OnMessage(msgID, Gui%guiName%_OnMessageObjs[msgID])
+	}
+
 	BindFunctionToControl(guiClass, guiName, ctrlName, funcName, params*) {
 		global
 		local __f
 
-		if IsObject(params) {
+		if ( params.Count() ) {
 			__f := %guiClass%[funcName].Bind(guiClass, params*)
 			Gui%guiName%_ControlFunctions[ctrlName] := {Function: funcName, Params: [params*]}
 		}
