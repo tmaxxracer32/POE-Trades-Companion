@@ -1,4 +1,40 @@
-﻿StrTrimLeft(var, trimCount) {
+﻿CaculateCenter(howManyElements, startingX, startingY, elementWidth, elementHeight, maxElementsPerRow, spaceWidth) {
+	; Calculate the space between each
+	spaceBetweenElements := (spaceWidth/howManyElements)
+
+	While (maxElementsPerRow > maxElementsPerRow) { ; So that icons do not overlap
+		maxElementsPerRow := (maxElementsPerRow)?(maxElementsPerRow-1):(howManyElements-1)
+		spaceBetweenElements := (spaceWidth/maxElementsPerRow)
+	}
+	spaceBetweenElements := Round(spaceBetweenElements)
+	firstElementX := (spaceWidth-(spaceBetweenElements*(maxElementsPerRow-1)+elementWidth))/2 ; We retrieve the blank space after the lastest icon in the row
+																				 			  ;	then divide this space in two so icons are centered
+	firstElementX := Round(firstElementX)
+	firstElementX += startingX
+	; Create the game icon buttons
+	elementsPositions := {}
+	Loop % howManyElements {
+		thisRow++
+		if (thisRow > maxElementsPerRow) { ; Draw a new row
+			thisRow := 1, ypos += elementHeight
+			divider := (remainingElements <= maxElementsPerRow)?(remainingElements):(maxElementsPerRow) ; Caculate the divider, so we can center the new row
+			firstElementX := (spaceWidth-(spaceBetweenElements*(divider-1)+elementWidth))/2 ; Same thing as the firstElementX above
+		}
+		xpos := (thisRow=1)?(firstElementX)
+			   :(xpos+spaceBetweenElements)
+		ypos := (!ypos)?(startingY):(ypos)
+
+		elementsPositions[A_Index] := {}
+		elementsPositions[A_Index]["X"] := xpos
+		elementsPositions[A_Index]["Y"] := ypos
+
+		remainingElements--
+	}
+
+	Return elementsPositions
+}
+
+StrTrimLeft(var, trimCount) {
 	StringTrimLeft, var, var, %trimCount%
 	return var
 }
