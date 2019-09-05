@@ -297,6 +297,38 @@ RandomStr(l = 24, i = 48, x = 122) { ; length, lowest and highest Asc value
 	Return, s
 }
 
+SplitHotkeyFromModifiers(_hotkey) {
+	len := StrLen(_hotkey)
+	
+	Loop, Parse,% _hotkey
+    {
+        parseIndex := A_Index
+        curChar := A_LoopField, nextChar := SubStr(_hotkey, parseIndex+1, 1), curAndNextChars := curChar . nextChar
+
+        if (skipNextChar) {
+            skipNextChar := False
+        }
+        else if IsIn(curAndNextChars, "<^,>^,<!,>!,<+,>+,<#,>#") {
+            mod := curChar = "<" ? "L" : curChar = ">" ? "R" : ""
+            mod .= nextChar = "^" ? "Ctrl" : nextChar = "!" ? "Alt" : nextChar = "+" ? "Shift" : nextChar = "#" ? "Win" : ""
+            modStr .= modStr ? "+" mod : mod
+            skipNextChar := True
+        }
+        else if IsIn(curChar, "^,!,+,#") && (parseIndex < len) {
+            mod := curChar = "^" ? "Ctrl" : curChar = "!" ? "Alt" : curChar = "+" ? "Shift" : curChar = "#" ? "Win" : ""
+            modStr .= modStr ? "+" mod : mod
+        }
+        else {
+            hkNoMods := SubStr(_hotkey, parseIndex)
+            StringUpper, hkNoMods, hkNoMods, T
+            Break
+        }
+    }
+
+	hkModsOnly := StrTrimRight(_hotkey, StrLen(hkNoMods))
+	return {Key:hkNoMods, Modifiers:hkModsOnly}
+}
+
 Transform_ReadableHotkeyString_Into_AHKHotkeyString(_hotkey, _delimiter="+") {
 	len := StrLen(_hotkey)
     Loop 2 {
@@ -389,13 +421,13 @@ Transform_AHKHotkeyString_Into_ReadableHotkeyString(_hotkey, _delimiter="+") {
             modStr .= modStr ? "+" mod : mod
         }
         else {
-            hk := SubStr(_hotkey, parseIndex)
-            StringUpper, hk, hk, T
+            hkNoMods := SubStr(_hotkey, parseIndex)
+            StringUpper, hkNoMods, hkNoMods, T
             Break
         }
     }
 
-    hkStr := modStr ? modStr "+" hk : hk
+    hkStr := modStr ? modStr "+" hkNoMods : hkNoMods
     return hkStr
 }
 
