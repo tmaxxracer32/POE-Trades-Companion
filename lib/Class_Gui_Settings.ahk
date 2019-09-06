@@ -338,7 +338,8 @@ Class GUI_Settings {
 		Gui.MoveControl("Settings", "hTEXT_HotkeyProfileName", "w" editHkProfNamePos.W)
 		
 		Gui.Add("Settings", "Text", "x+15 y" upMost2 " Center hwndhTEXT_HotkeyProfileHotkey", "Profile hotkey:")
-		Gui.Add("Settings", "Edit", "xp y+3 w160 hwndhEDIT_HotkeyProfileHotkey", ""), editHkProfHotkeyPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyProfileHotkey)
+		Gui.Add("Settings", "Edit", "xp y+3 w130 hwndhEDIT_HotkeyProfileHotkey ReadOnly", ""), editHkProfHotkeyPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyProfileHotkey)
+		Gui.Add("Settings", "Button", "x+0 yp w30 hp hwndhBTN_EditHotkey") ; TO_DO_V2 remove later
 		Gui.MoveControl("Settings", "hTEXT_HotkeyProfileHotkey", "w" editHkProfHotkeyPos.W)
 
 		availableWidth := rightMost2-leftMost3
@@ -347,6 +348,8 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditHotkey", "TabHotkeys_ChangeHotkeyProfileHotkey") ; TO_DO_V2 change it to on edit click
 
 		GUI_Settings.TabHotkeys_SetUserSettings()
 
@@ -1834,7 +1837,7 @@ Class GUI_Settings {
 
 	TabHotkeys_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hLB_HotkeyProfiles,hEDIT_HotkeyProfileName,hEDIT_HotkeyProfileHotkey,hDDL_HotkeyActionType"
+		controlsList := "hLB_HotkeyProfiles,hEDIT_HotkeyProfileName,hEDIT_HotkeyProfileHotkey,hHK_HotkeyProfileHotkey,hDDL_HotkeyActionType"
 		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList,hBTN_HotkeyAddNewProfile,hBTN_HotkeyRemoveSelectedProfile"
 
 		Loop, Parse, controlsList,% ","
@@ -1845,7 +1848,7 @@ Class GUI_Settings {
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileChange")
 			if (ctrlName="hEDIT_HotkeyProfileName")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter500ms:=True)
-			if (ctrlName="hEDIT_HotkeyProfileHotkey")
+			if IsIn(ctrlName,"hEDIT_HotkeyProfileHotkey")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileHotkeyChange")
 			if (ctrlName="hDDL_HotkeyActionType")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnActionTypeChange")
@@ -1935,6 +1938,7 @@ Class GUI_Settings {
 		
 		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		GUI_Settings.TabHotkeys_SetHotkeyProfileName(PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name)
+		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Hotkey)
 		GUI_Settings.TabHotkeys_LoadHotkeyActions(selectedHkNum)
 		GUI_Settings.TabHotkeys_SelectListviewRow(1)
 		if !(GuiSettings_ControlFunctions.hLV_HotkeyActionsList)
@@ -1974,8 +1978,32 @@ Class GUI_Settings {
 			GoSub, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange
 	}
 
+	TabHotkeys_GetHotkeyProfileHotkey() {
+		return GUI_Settings.Submit("hEDIT_HotkeyProfileHotkey")
+	}
+
+	TabHotkeys_SetHotkeyProfileHotkey(hkStr) {
+		global GuiSettings_Controls
+		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_HotkeyProfileHotkey,% Transform_AHKHotkeyString_Into_ReadableHotkeyString(hkStr)
+	}
+
+	TabHotkeys_ChangeHotkeyProfileHotkey() {
+		global PROGRAM, GuiSettings
+
+		Gui, Settings:+Disabled
+		hkStr := GUI_SetHotkey.WaitForHotkey()
+		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(hkStr)
+		Gui, Settings:-Disabled
+
+		WinActivate,% "ahk_id " GuiSettings.Handle
+
+		profileNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
+		PROGRAM.SETTINGS.HOTKEYS[profileNum].Hotkey := hkStr
+		Save_LocalSettings()
+	}
+
 	TabHotkeys_OnHotkeyProfileHotkeyChange() {
-		
+		global PROGRAM, GuiSettings_Controls		
 	}
 
 	TabHotkeys_OnActionTypeChange() {
