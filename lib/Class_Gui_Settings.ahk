@@ -17,20 +17,30 @@ Class GUI_Settings {
 		leftMost := borderSize, rightMost := leftMost+guiWidth
 		upMost := borderSize, downMost := upMost+guiHeight
 
-		GuiSettings.Style_Tab := Style_Tab := [ [0, "0x1c4563", "0x878787", "0x80c4ff", 0, , ""] ; normal
-			,  [0, "0x132f44", "", "0x80c4ff", 0] ; hover
-			,  [3, "0x132f44", "0x0f2434", "0x0f8fff", 0]  ; press
-			,  [3, "0x132f44", "0x0f2434", "0x0f8fff", 0 ] ] ; default
+		GuiSettings.Style_Tab := Style_Tab := [ [0, "0x132f44", "", "0x0f8fff"] ; normal
+			,  [0, "0x275474"] ; hover
+			,  [0, "0x275474"]  ; press
+			,  [0, "0x1c4563" ] ] ; default
+        
+		GuiSettings.Style_CloseBtn := Style_CloseBtn := [ [0, "0xe01f1f", "", "White"] ; normal
+			, [0, "0xb00c0c"] ; hover
+			, [0, "0x8a0a0a"] ] ; press
 
-		GuiSettings.Style_RedBtn := Style_RedBtn := [ [0, "0xff5c5c", "", "White", 0, , ""] ; normal
-			, [0, "0xff5c5c", "", "White", 0] ; hover
-			, [3, "0xe60000", "0xff5c5c", "Black", 0]  ; press
-			, [3, "0xff5c5c", "0xe60000", "White", 0 ] ] ; default
-		
-		GuiSettings.Style_ResetBtn := Style_ResetBtn := [ [0, "0xf9a231", "", "Black", 0, , ""] ; normal
-			, [0, "0xf9a231", "", "Red", 0] ; hover
-			, [3, "0xf9a231", "0xe7740e", "Red", 0]  ; press
-			, [0, "0xe7740e", "", "Red", 0 ] ] ; default
+		GuiSettings.Style_MinimizeBtn := Style_MinimizeBtn := [ [0, "0x0fa1d7", "", "White"] ; normal
+			, [0, "0x0b7aa2"] ; hover
+			, [0, "0x096181"] ]  ; press
+
+		GuiSettings.Style_ResetBtn := Style_ResetBtn := [ [0, "0xf9a231", "", "Black"] ; normal
+			, [0, "0xffb24d"] ; hover
+			, [0, "0xe98707"] ] ; press
+
+		GuiSettings.Style_Button := Style_Button := [ [0, "0x132f44", "", "0xebebeb", , , "0xd6d6d6"] ; normal
+			, [0, "0x163850"] ; hover
+			, [0, "0x102638"] ] ; press
+
+		GuiSettings.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
+			, [0, "0x355e73"] ; hover
+			, [0, "0x122630"] ] ; press
 
 		global ACTIONS_SECTIONS := {}
 		for key, value in PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS
@@ -129,7 +139,7 @@ Class GUI_Settings {
 		*/
 
 		Gui.Margin("Settings", 0, 0)
-		Gui.Color("Settings", "334a5b", "374a58")
+		Gui.Color("Settings", "0x1c4563", "0x274554")
 		Gui.Font("Settings", "Segoe UI", "8", "5", "0x80c4ff")
 		Gui, Settings:Default ; Required for LV_ cmds
 
@@ -141,11 +151,13 @@ Class GUI_Settings {
 			Gui.Add("Settings", "Progress", "x" bordersPositions[A_Index]["X"] " y" bordersPositions[A_Index]["Y"] " w" bordersPositions[A_Index]["W"] " h" bordersPositions[A_Index]["H"] " Background" borderColor)
 
 		; * * Title bar
-		Gui.Add("Settings", "Text", "x" leftMost " y" upMost " w" guiWidth-(borderSize*2)-30 " h25 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
-		Gui.Add("Settings", "Progress", "xp yp wp hp Background359cfc") ; Title bar background
+		Gui.Add("Settings", "Text", "x" leftMost " y" upMost " w" guiWidth-30-30 " h20 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
+		Gui.Add("Settings", "Progress", "xp yp wp hp Background0b6fcc") ; Title bar background
 		Gui.Add("Settings", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - " PROGRAM.TRANSLATIONS.TrayMenu.Settings) ; Title bar text
-		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp 0x200 Center hwndhBTN_MinimizeGUI", "-", Style_MinimizeBtn, PROGRAM.FONTS["Segoe UI"], 10)
+		imageBtnLog .= Gui.Add("Settings", "ImageButton", "x+0 yp wp hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_HeaderGhost", "DragGui", GuiSettings.Handle)
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_MinimizeGUI", "Minimize")
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CloseGUI", "Close")
 
 		; * * Tab controls
@@ -158,7 +170,7 @@ Class GUI_Settings {
 		; * * Tab buttons
 		tabWidth := (guiWidth)/(allTabs.Count()), tabHeight := 30
 		for index, tabName in allTabs {
-			xpos := A_Index=1?leftMost:xpos+tabWidth, ypos := upMost+25
+			xpos := A_Index=1?leftMost:xpos+tabWidth, ypos := upMost+20
 			Gui.Add("Settings", "ImageButton", "x" xpos " y" ypos " w" tabWidth " h" tabHeight " hwndhBTN_Tab" tabName, tabName, Style_Tab, PROGRAM.FONTS["Segoe UI"], 8)
 			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_Tab" tabName, "OnTabBtnClick", tabName)
 		}
@@ -172,7 +184,7 @@ Class GUI_Settings {
 		; * * Accounts
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " Center hwndhTEXT_POEAccountsList", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_POEAccountsList), poeAccTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_POEAccountsList)
 		Gui.Add("Settings", "DropDownList", "xp y+3 w" poeAccTxtPos.W-2-25 " hwndhDDL_PoeAccounts", "")
-		Gui.Add("Settings", "Button", "x+2 yp w25 hp hwndhBTN_EditPoeAccountsList", "+") ; TO_DO_V2 special gui, one account per line, some text tips
+		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp hwndhBTN_EditPoeAccountsList", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8) ; TO_DO_V2 special gui, one account per line, some text tips
 		poeAccDdlPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_PoeAccounts)
 
 		; * * Buying selling modes
@@ -209,13 +221,13 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Text", "x300 y" topMost3 " hwndhTEXT_PlaySoundNotificationWhen", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_PlaySoundNotificationWhen)
 		Gui.Add("Settings", "CheckBox", "x" secondColX+10 " y+10 hwndhCB_TradingWhisperSFXToggle", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_TradingWhisperSFXToggle)
 		Gui.Add("Settings", "Edit", "x+5 yp-4 w100 R1 ReadOnly hwndhEDIT_TradingWhisperSFXPath")
-		Gui.Add("Settings", "Button", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseTradingWhisperSFX", "O")
+		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseTradingWhisperSFX", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "CheckBox", "x" secondColX+10 " y+6 hwndhCB_RegularWhisperSFXToggle", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_RegularWhisperSFXToggle)
 		Gui.Add("Settings", "Edit", "x+5 yp-4 w100 R1 ReadOnly hwndhEDIT_RegularWhisperSFXPath")
-		Gui.Add("Settings", "Button", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseRegularWhisperSFX", "O")
+		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseRegularWhisperSFX", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "CheckBox", "x" secondColX+10 " y+6 hwndhCB_BuyerJoinedAreaSFXToggle", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_BuyerJoinedAreaSFXToggle)
 		Gui.Add("Settings", "Edit", "x+5 yp-4 w100 R1 ReadOnly hwndhEDIT_BuyerJoinedAreaSFXPath")
-		Gui.Add("Settings", "Button", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseBuyerJoinedAreaSFX", "O")
+		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseBuyerJoinedAreaSFX", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "CheckBox", "x" secondColX " y+6 hwndhCB_ShowTabbedTrayNotificationOnWhisper Center", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ShowTabbedTrayNotificationOnWhisper)
 
 		Gui.Add("Settings", "Text", "x" secondColX " y+20 hwndhTEXT_PushBulletNotifications", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_PushBulletNotifications)
@@ -225,8 +237,8 @@ Class GUI_Settings {
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_PushBulletOnlyWhenAfk", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_PushBulletOnlyWhenAfk)
 		
 		; * * Reset
-		resetBtnW := Get_TextCtrlSize("RESET SETTINGS TO DEFAULT", "Segoe UI", 8, "", "", ctrlType:="Button").W
-		Gui.Add("Settings", "ImageButton", "x" rightMost2-resetBtnW " y" downMost2-30 " h30 hwndhBTN_ResetToDefaultSettings", "RESET SETTINGS TO DEFAULT", Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		resetBtnW := Get_TextCtrlSize("RESET ALL SETTINGS TO DEFAULT", "Segoe UI", 8, "", "", ctrlType:="Button").W
+		Gui.Add("Settings", "ImageButton", "x" rightMost2-resetBtnW " y" downMost2-30 " h30 hwndhBTN_ResetToDefaultSettings", "RESET ALL SETTINGS TO DEFAULT", Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_ResetToDefaultSettings", "ResetToDefaultSettings")
 		
 		; User settings
@@ -271,7 +283,7 @@ Class GUI_Settings {
 		; Gui.Add("Settings", "Button", "x+5 yp-1  hwndhBTN_ShowColorPicker R1", "Show Color Picker")
 
 		; * * Preview btn
-		Gui.Add("Settings", "Button", "x" rightMost2-215 " y" downMost2-30 " w215 h30 hwndhBTN_RecreateTradesGUI", "Apply skin changes now")
+		Gui.Add("Settings", "ImageButton", "x" rightMost2-215 " y" downMost2-30 " w215 h30 hwndhBTN_RecreateTradesGUI", "Apply skin changes now", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_RecreateTradesGUI", "TabCustomizationSkins_RecreateTradesGUI")
 
 		; * * Subroutines + User settings
@@ -282,14 +294,14 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Selling
 
-		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+")
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
@@ -299,20 +311,21 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationSellingActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationSellingActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB Customization Buying
 		*/
 		Gui, Settings:Tab, Buying
 
-		Gui.Add("Settings", "Button", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow2", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow2", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow3", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow3", "+")
-		Gui.Add("Settings", "Button", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow4", "-")
-		Gui.Add("Settings", "Button", "x+0 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4", "+")
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow2", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow2", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow3", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow3", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow4", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
@@ -322,6 +335,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationBuyingActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationBuyingActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB HOTKEYS ADVANCED
@@ -329,8 +343,8 @@ Class GUI_Settings {
 		Gui, Settings:Tab, Hotkeys
 
 		Gui.Add("Settings", "ListBox", "x" leftMost2 " y" upMost2 " w130 h" downMost2-upMost2-25-3 " hwndhLB_HotkeyProfiles AltSubmit"), hkListBoxPos := Get_ControlCoords("Settings", GuiSettings_Controls.hLB_HotkeyProfiles), leftMost3 := hkListBoxPos.X+hkListBoxPos.W+10
-		Gui.Add("Settings", "Button", "xp y+3 w" (130/2)-(4/2) " h25 hwndhBTN_HotkeyRemoveSelectedProfile", "-")
-		Gui.Add("Settings", "Button", "x+4 yp wp hp hwndhBTN_HotkeyAddNewProfile", "+")
+		Gui.Add("Settings", "ImageButton", "xp y+3 w" (130/2)-(4/2) " h25 hwndhBTN_HotkeyRemoveSelectedProfile", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+4 yp wp hp hwndhBTN_HotkeyAddNewProfile", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		centeredX := rightMost2-leftMost3-160-(160/2)-(15/2)
 		Gui.Add("Settings", "Text", "x" centeredX " y" upMost2 " Center hwndhTEXT_HotkeyProfileName", "Profile name:")
@@ -339,7 +353,7 @@ Class GUI_Settings {
 		
 		Gui.Add("Settings", "Text", "x+15 y" upMost2 " Center hwndhTEXT_HotkeyProfileHotkey", "Profile hotkey:")
 		Gui.Add("Settings", "Edit", "xp y+3 w130 hwndhEDIT_HotkeyProfileHotkey ReadOnly", ""), editHkProfHotkeyPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyProfileHotkey)
-		Gui.Add("Settings", "Button", "x+0 yp w30 hp hwndhBTN_EditHotkey") ; TO_DO_V2 remove later
+		Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_EditHotkey", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8) ; TO_DO_V2 remove later
 		Gui.MoveControl("Settings", "hTEXT_HotkeyProfileHotkey", "w" editHkProfHotkeyPos.W)
 
 		availableWidth := rightMost2-leftMost3
@@ -348,6 +362,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		LV_SetSelColors(GuiSettings_Controls.hLV_HotkeyActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditHotkey", "TabHotkeys_ChangeHotkeyProfileHotkey") ; TO_DO_V2 change it to on edit click
 
@@ -410,7 +425,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Text", "x" programVerCoords.X " yp BackgroundTrans hwndhTEXT_LatestStableVer")
 		Gui.Add("Settings", "Text", "x" yourVerCoords.X " y+5 hwndhTEXT_LatestBETA", "Latest BETA:")
 		Gui.Add("Settings", "Text", "x" programVerCoords.X " yp BackgroundTrans hwndhTEXT_LatestBetaVer")
-		Gui.Add("Settings", "Button", "x" yourVerCoords.X " y+10 R1 hwndhBTN_CheckForUpdates", "Check for updates manually")
+		Gui.Add("Settings", "ImageButton", "x" yourVerCoords.X " y+10 R1 hwndhBTN_CheckForUpdates", "Check for updates manually", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "Text", "x+5 yp+7 hwndhTEXT_MinsAgo", "(x mins ago)")
 
 		; Gui.Add("Settings", "Checkbox", "x400 y" upMost2+20 " hwndhCB_AllowToUpdateAutomaticallyOnStart", "Allow to update automatically on start?")
@@ -450,29 +465,33 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab
 
-		Gui.Add("Settings", "Progress", "x0 y" guiHeight-50 " w" guiWidth " h50 c359cfc Background359cfc")
+		Gui.New("SettingsFooter", "-Caption -Border +ToolWindow -SysMenu +AlwaysOnTop +LastFound +E0x08000000 +ParentSettings +HwndhGuiSettingsFooter")
+		Gui.Margin("SettingsFooter", 0, 0)
+		Gui.Color("SettingsFooter", "0b6fcc")
+		guiFooterW := guiWidth, guiFooterH := 50
+		guiFooterX := leftMost, guiFooterY := downMost-guiFooterH
 
-		Gui.Add("Settings", "Picture", "x3 y" guiHeight-27 " w35 h24 hwndhIMG_FlagUK BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_uk.png")
-		Gui.Add("Settings", "Picture", "x+3 yp wp hp hwndhIMG_FlagFrance BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_france.png")
-		Gui.Add("Settings", "Picture", "x+3 yp wp hp hwndhIMG_FlagChina BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_china.png")
-		Gui.Add("Settings", "Picture", "x+3 yp wp hp hwndhIMG_FlagTaiwan BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_taiwan.png")
+		Gui.Add("SettingsFooter", "Picture", "x5 y20 w35 h24 hwndhIMG_FlagUK BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_uk.png")
+		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagFrance BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_france.png")
+		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagChina BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_china.png")
+		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagTaiwan BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_taiwan.png")
 
-		Gui.Add("Settings", "Picture", "x" guiWidth-120 " y" guiHeight-45 " w115 h40 hwndhIMG_Paypal BackgroundTrans", PROGRAM.IMAGES_FOLDER "\DonatePaypal.png")
-		Gui.Add("Settings", "Picture", "xp-70 yp w40 h40 hwndhIMG_Discord BackgroundTrans", PROGRAM.IMAGES_FOLDER "\Discord.png")
-		Gui.Add("Settings", "Picture", "xp-45 yp w40 h40 hwndhIMG_Reddit BackgroundTrans", PROGRAM.IMAGES_FOLDER "\Reddit.png")
-		Gui.Add("Settings", "Picture", "xp-45 yp w40 h40 hwndhIMG_PoE BackgroundTrans", PROGRAM.IMAGES_FOLDER "\PoE.png")
-		Gui.Add("Settings", "Picture", "xp-45 yp w40 h40 hwndhIMG_GitHub BackgroundTrans", PROGRAM.IMAGES_FOLDER "\GitHub.png")
+		Gui.Add("SettingsFooter", "Picture", "x" guiFooterW-120 " y5 w115 h40 hwndhIMG_Paypal BackgroundTrans", PROGRAM.IMAGES_FOLDER "\DonatePaypal.png")
+		Gui.Add("SettingsFooter", "Picture", "xp-70 yp w40 h40 hwndhIMG_Discord BackgroundTrans", PROGRAM.IMAGES_FOLDER "\Discord.png")
+		Gui.Add("SettingsFooter", "Picture", "xp-45 yp w40 h40 hwndhIMG_Reddit BackgroundTrans", PROGRAM.IMAGES_FOLDER "\Reddit.png")
+		Gui.Add("SettingsFooter", "Picture", "xp-45 yp w40 h40 hwndhIMG_PoE BackgroundTrans", PROGRAM.IMAGES_FOLDER "\PoE.png")
+		Gui.Add("SettingsFooter", "Picture", "xp-45 yp w40 h40 hwndhIMG_GitHub BackgroundTrans", PROGRAM.IMAGES_FOLDER "\GitHub.png")
 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagUK", "OnLanguageChange", "english")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagFrance", "OnLanguageChange", "french")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagChina", "OnLanguageChange", "chinese_simplified")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_FlagTaiwan", "OnLanguageChange", "chinese_traditional")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagUK", "OnLanguageChange", "english")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagFrance", "OnLanguageChange", "french")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagChina", "OnLanguageChange", "chinese_simplified")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagTaiwan", "OnLanguageChange", "chinese_traditional")
 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_Paypal", "OnPictureLinkClick", "Paypal")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_Discord", "OnPictureLinkClick", "Discord")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_Reddit", "OnPictureLinkClick", "Reddit")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_PoE", "OnPictureLinkClick", "PoE")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hIMG_GitHub", "OnPictureLinkClick", "GitHub")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Paypal", "OnPictureLinkClick", "Paypal")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Discord", "OnPictureLinkClick", "Discord")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Reddit", "OnPictureLinkClick", "Reddit")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_PoE", "OnPictureLinkClick", "PoE")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_GitHub", "OnPictureLinkClick", "GitHub")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
@@ -487,8 +506,9 @@ Class GUI_Settings {
 		; GUI_Settings.TabHotkeysAdvanced_EnableSubroutines()
 		; GUI_Settings.TabMiscUpdating_EnableSubroutines()
 
-		Gui.Show("Settings", "h" guiHeight " w" guiWidth " NoActivate Hide")
-		
+		Gui.Show("Settings", "h" guiFullHeight " w" guiFullWidth " NoActivate Hide")
+		Gui.Show("SettingsFooter", "x" guiFooterX " y" guiFooterY " w" guiFooterW " h" guiFooterH " NoActivate")
+
 		; Gui.Show("Settings", "h" guiHeight " w" guiWidth " x-" guiWidth+10 " y" 1010-guiHeight " NoActivate " param)
 		detectHiddenWin := A_DetectHiddenWindows
 		DetectHiddenWindows, On
@@ -1406,13 +1426,14 @@ Class GUI_Settings {
 		Loop 4 {
 			rowIndex := A_Index
 			rowPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowIndex])
-			btnPos := ControlGetPos(GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex])
+			minusBtnPos := ControlGetPos(GuiSettings_Controls["hBTN_Customization" whichTab "ButtonMinusRow" rowIndex])
+			plusBtnPos := ControlGetPos(GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex])
 			guiPos := ControlGetPos(GuiTrades[_buyOrSell].Handle)
 
-			if (rowPos.X && btnPos.X) {
-				minusX := guiPos.X+guiPos.W, plusX := minusX+btnPos.W, plusY := minusY := rowPos.Y
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex],% "x" plusX " y" plusY
+			if (rowPos.X && minusBtnPos.X) {
+				minusX := guiPos.X+guiPos.W+3, plusX := minusX+minusBtnPos.W+3, plusY := minusY := rowPos.Y
 				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonMinusRow" rowIndex],% "x" minusX " y" minusY
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex],% "x" plusX " y" plusY
 			}
 		}
 	}
@@ -3532,12 +3553,14 @@ Class GUI_Settings {
     Universal_OnListviewClick(whichTab, CtrlHwnd="", GuiEvent="", EventInfo="", GuiEvent2="") {
 		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
 
-		if !IsIn(GuiEvent, "Normal,D,I,K")
+		if !IsIn(GuiEvent, "DoubleClick,Normal,D,I,K")
 			return
 
 		selectedRow := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
 		if (!selectedRow)
 			return
+
+		LV_Modify(selectedRow, "+Select")
 
 		lvContent := GUI_Settings.Universal_GetListViewContent(whichTab)
 		GUI_Settings.Universal_SetActionType(whichTab, lvContent[selectedRow].ActionType)
@@ -3581,6 +3604,10 @@ Class GUI_Settings {
 
 	DragGui(GuiHwnd) {
 		PostMessage, 0xA1, 2,,,% "ahk_id " GuiHwnd
+	}
+
+	Minimize() {
+		Gui, Settings:Show, Minimize
 	}
 
 	Close() {
@@ -3925,7 +3952,7 @@ Class GUI_Settings {
 			}
 			
 			GuiControl, Settings:,% GuiSettings_Controls["hBTN_CloseGUI"],% "X"
-			ImageButton.Create(GuiSettings_Controls["hBTN_CloseGUI"], GuiSettings.Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)						
+			ImageButton.Create(GuiSettings_Controls["hBTN_CloseGUI"], GuiSettings.Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)						
 		}
 
 		GUI_Settings.Redraw()
