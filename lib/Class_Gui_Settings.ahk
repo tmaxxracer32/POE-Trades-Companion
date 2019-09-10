@@ -1949,9 +1949,13 @@ Class GUI_Settings {
 		Gui, Settings:-Disabled
 	}
 
-	TabHotkeys_SetHotkeyProfileName(hkName) {
+	TabHotkeys_SetHotkeyProfileName(hkName, dontTriggerSub=True) {
 		global GuiSettings_Controls
+		if (dontTriggerSub)
+			GUI.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_HotkeyProfileName")
 		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_HotkeyProfileName,% hkName
+		if (dontTriggerSub)
+			GUI.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_HotkeyProfileName")
 	}
 
 	TabHotkeys_GetHotkeyProfileName() {
@@ -1982,9 +1986,13 @@ Class GUI_Settings {
 		return GUI_Settings.Submit("hEDIT_HotkeyProfileHotkey")
 	}
 
-	TabHotkeys_SetHotkeyProfileHotkey(hkStr) {
+	TabHotkeys_SetHotkeyProfileHotkey(hkStr, dontTriggerSub=True) {
 		global GuiSettings_Controls
+		if (dontTriggerSub)
+			GUI.DisableControlFunction("GUI_Settings", "Settings", "hEDIT_HotkeyProfileHotkey")
 		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_HotkeyProfileHotkey,% Transform_AHKHotkeyString_Into_ReadableHotkeyString(hkStr)
+		if (dontTriggerSub)
+			GUI.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_HotkeyProfileHotkey")
 	}
 
 	TabHotkeys_ChangeHotkeyProfileHotkey() {
@@ -3014,7 +3022,7 @@ Class GUI_Settings {
 
     Universal_SaveAllActions(whichTab, isTimedSave=False) {
 		global PROGRAM, GuiSettings
-		static prevNum
+		static prevNumObj := {}
 		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
 
 		; Getting activated button variables
@@ -3036,8 +3044,10 @@ Class GUI_Settings {
 		; Save new actions
 		lvContent := GUI_Settings.Universal_GetListViewContent(whichTab)
 		if IsIn(whichTab, "Buying,Selling") {
-			if (isTimedSave && prevNum != rowNum btnNum)
+			if (isTimedSave && prevNumObj[whichTab] && prevNumObj[whichTab] != rowNum btnNum) {
+				prevNumObj[whichTab] := rowNum btnNum
 				return
+			}
 				
 			if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
 				PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
@@ -3046,12 +3056,14 @@ Class GUI_Settings {
 				actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
 				PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum]["Actions"][index] := {Content: """" lvContent[index].ActionContent """", Type: actionShortName}
 			}
-			prevNum := rowNum btnNum
+			prevNumObj[whichTab] := rowNum btnNum
 		}
 		else if (whichTab="Hotkeys") {
 			hkIndex := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
-			if (isTimedSave && prevNum != hkIndex)
+			if (isTimedSave && prevNumObj[whichTab] && prevNumObj[whichTab] != hkIndex) {
+				prevNumObj[whichTab] := hkIndex
 				return
+			}
 
 			if !IsObject(PROGRAM.SETTINGS.HOTKEYS[hkIndex])
 				PROGRAM.SETTINGS.HOTKEYS[hkIndex] := {}
@@ -3060,9 +3072,22 @@ Class GUI_Settings {
 				actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[index].ActionType)
 				PROGRAM.SETTINGS.HOTKEYS[hkIndex]["Actions"][index] := {Content: """" lvContent[index].ActionContent """", Type: actionShortName}
 			}
-			prevNum := hkIndex
+			prevNumObj[whichTab] := hkIndex
 		}
+
+		tooltip saved 
 		Save_LocalSettings()
+	}
+
+	Universal_ShowActionTypeTip(whichTab, actionTypeShort) {
+		global GuiSettings_Controls
+		actionTypeTipCtrlName := whichTab="Buying"?"hTEXT_CustomizationBuyingActionTypeTip"
+			: whichTab="Selling"?"hTEXT_CustomizationSellingActionTypeTip"
+			: whichTab="Hotkeys"?"hTEXT_HotkeyActionTypeTip"
+			: ""
+
+		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionTypeShort)
+		GuiControl, Settings:,% GuiSettings_Controls[actionTypeTipCtrlName],% contentPlaceholder
 	}
 
     Universal_OnActionTypeChange(whichTab) {
@@ -3077,11 +3102,7 @@ Class GUI_Settings {
 			: whichTab="Selling"?"hEDIT_CustomizationSellingActionContent"
 			: whichTab="Hotkeys"?"hEDIT_HotkeyActionContent"
 			: ""
-		actionTypeTipCtrlName := whichTab="Buying"?"hTEXT_CustomizationBuyingActionTypeTip"
-			: whichTab="Selling"?"hTEXT_CustomizationSellingActionTypeTip"
-			: whichTab="Hotkeys"?"hTEXT_HotkeyActionTypeTip"
-			: ""
-
+		
 		actionTypeHwnd := GuiSettings_Controls[actionTypeCtrlName]
 		actionContentHwnd := GuiSettings_Controls[actionContentCtrlName]
 
@@ -3090,8 +3111,7 @@ Class GUI_Settings {
 		actionContent := GUI_Settings.Submit(actionContentCtrlName)
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
-		GuiControl, Settings:,% GuiSettings_Controls[actionTypeTipCtrlName],% contentPlaceholder
+		GUI_Settings.Universal_ShowActionTypeTip("Hotkeys", actionShortName)
 				
 		; Avoid selecting actions with -> in name or empty
 		if IsContaining(actionType, "-> ") || (actionType = "") {
@@ -3234,7 +3254,7 @@ Class GUI_Settings {
 		actionType := actionType?actionType: GUI_Settings.Submit(actionTypeCtrlName)
 		actionContent := actionContent?actionContent: GUI_Settings.Submit(actionContentCtrlName)
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-		selectedRow := GUI_Settings.Customization_SellingBuying_GetListviewSelectedRow(whichTab)
+		selectedRow := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
 		; Get informations about the last action
 		LV_GetText(lastActionType, LV_GetCount(), 2), LV_GetText(lastActionContent, LV_GetCount(), 3)
 		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastActionType)
@@ -3263,7 +3283,11 @@ Class GUI_Settings {
 			return
 		}
 		else {
+			GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
+			lvCtrlName := GUI_Settings.GetListViewControlNameBasedOnTabName(whichTab)
+			GUI.DisableControlFunction("GUI_Settings", "Settings", lvCtrlName)
 			LV_Modify(selectedRow, , selectedRow, actionType, actionContent) ; Replacing before last line with our action
+			GUI.EnableControlFunction("GUI_Settings", "Settings", lvCtrlName)
 		}
 		
 		GUI_Settings.Universal_AdjustListviewHeaders(whichTab)
@@ -3508,6 +3532,9 @@ Class GUI_Settings {
     Universal_OnListviewClick(whichTab, CtrlHwnd="", GuiEvent="", EventInfo="", GuiEvent2="") {
 		GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
 
+		if !IsIn(GuiEvent, "Normal,D,I,K")
+			return
+
 		selectedRow := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
 		if (!selectedRow)
 			return
@@ -3515,27 +3542,37 @@ Class GUI_Settings {
 		lvContent := GUI_Settings.Universal_GetListViewContent(whichTab)
 		GUI_Settings.Universal_SetActionType(whichTab, lvContent[selectedRow].ActionType)
 		GUI_Settings.Universal_SetActionContent(whichTab, lvContent[selectedRow].ActionContent)
-		GUI_Settings.Universal_OnActionTypeChange(whichTab)
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lvContent[selectedRow].ActionType)
+		GUI_Settings.Universal_ShowActionTypeTip(whichTab, actionShortName)
 	}
 
-    Universal_SetActionType(whichTab, actionType) {
+    Universal_SetActionType(whichTab, actionType, dontTriggerSub=True) {
 		global GuiSettings_Controls
 		actionTypeCtrlName := whichTab="Buying"?"hDDL_CustomizationBuyingActionType"
 			: whichTab="Selling"?"hDDL_CustomizationSellingActionType"
 			: whichTab="Hotkeys"?"hDDL_HotkeyActionType"
 			: ""
 		ctrlHwnd := GuiSettings_Controls[actionTypeCtrlName]
-		GuiControl, Settings:ChooseString,% ctrlHwnd,% actionType
-	}
 
-    Universal_SetActionContent(whichTab, actionContent) {
+		if (dontTriggerSub)
+			GUI.DisableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
+		GuiControl, Settings:ChooseString,% ctrlHwnd,% actionType
+		if (dontTriggerSub)
+			GUI.EnableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
+	}
+	
+    Universal_SetActionContent(whichTab, actionContent, dontTriggerSub=True) {
 		global GuiSettings_Controls
 		actionContentCtrlName := whichTab="Buying"?"hEDIT_CustomizationBuyingActionContent"
 			: whichTab="Selling"?"hEDIT_CustomizationSellingActionContent"
 			: whichTab="Hotkeys"?"hEDIT_HotkeyActionContent"
 			: ""
 		ctrlHwnd := GuiSettings_Controls[actionContentCtrlName]
+		if (dontTriggerSub)
+			GUI.DisableControlFunction("GUI_Settings", "Settings", actionContentCtrlName)
 		GuiControl, Settings:,% ctrlHwnd,% actionContent
+		if (dontTriggerSub)
+			GUI.EnableControlFunction("GUI_Settings", "Settings", actionContentCtrlName)
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -3779,11 +3816,16 @@ Class GUI_Settings {
 		WinSet, Redraw
 	}
 
-	SetDefaultListViewBasedOnTabName(tabName) {
+	GetListViewControlNameBasedOnTabName(tabName) {
 		lvCtrlName := tabName="Selling"?"hLV_CustomizationSellingActionsList"
 			: tabName="Buying"?"hLV_CustomizationBuyingActionsList"
 			: tabName="Hotkeys"?"hLV_HotkeyActionsList"
 			: ""
+		return lvCtrlName
+	}
+
+	SetDefaultListViewBasedOnTabName(tabName) {
+		lvCtrlName := GUI_Settings.GetListViewControlNameBasedOnTabName(tabName)
 		GUI_Settings.SetDefaultListView(lvCtrlName)
 	}
 
