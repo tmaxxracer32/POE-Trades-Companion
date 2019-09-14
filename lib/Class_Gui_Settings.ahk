@@ -175,6 +175,8 @@ Class GUI_Settings {
 			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_Tab" tabName, "OnTabBtnClick", tabName)
 		}
 		leftMost2 := leftMost+10, rightMost2 := rightMost-10, upMost2 := ypos+tabHeight+10, downMost2 := downMost-50-10
+		GuiSettings.LeftMost := leftMost, GuiSettings.LeftMost2 := leftMost2, GuiSettings.RightMost := rightMost2, GuiSettings.RightMost2 := rightMost2
+		GuiSettings.UpMost := upMost, GuiSettings.UpMost2 := upMost2, GuiSettings.DownMost := downMost, GuiSettings.DownMost := downMost2
 
 		/* * * * * * * * * * *
 		*	TAB SETTINGS
@@ -189,10 +191,10 @@ Class GUI_Settings {
 
 		; * * Buying selling modes
 		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_BuyingInterfaceMode", "Buying interface mode:"), buyIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_BuyingInterfaceMode)
-		Gui.Add("Settings", "DropDownList", "xp y+3 w" buyIntefaceTxtPos.W " hwndhDDL_BuyingInterfaceMode", "Tabs|Stack|Disabled")
+		Gui.Add("Settings", "DropDownList", "xp y+3 w" buyIntefaceTxtPos.W " AltSubmit hwndhDDL_BuyingInterfaceMode", "Tabs|Stack|Disabled")
 
 		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_SellingInterfaceMode", "Selling interface mode:"), sellIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_SellingInterfaceMode)
-		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " hwndhDDL_SellingInterfaceMode", "Tabs|Stack")
+		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode", "Tabs|Stack")
 		topMost3 := poeAccDdlPos.Y+poeAccDdlPos.H+25
 		
 		; * * Interface
@@ -304,13 +306,13 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
-		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
+		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE)
-		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationSellingActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationSellingActionTypeTip")
-		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
+		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationSellingActionContent")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationSellingActionTypeTip")
+		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationSellingActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -328,17 +330,17 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20+( (200+295+5) / 2)-75-40-5 " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
-		Gui.Add("Settings", "Edit", "x+5 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName", "Button Name")
+		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName", "Button Name")
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+5 w200 R50 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE)
-		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_CustomizationBuyingActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost2+20 " y+5 w500 R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
-		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w200 R50 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
+		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationBuyingActionContent")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
+		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationBuyingActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-		*	TAB HOTKEYS ADVANCED
+		*	TAB HOTKEYS
 		*/
 		Gui, Settings:Tab, Hotkeys
 
@@ -368,55 +370,12 @@ Class GUI_Settings {
 
 		GUI_Settings.TabHotkeys_SetUserSettings()
 
-		/*
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y" upMost2+20 " w430 R20 hwndhDDL_HotkeyAdvExistingList")
-		Gui.Add("Settings", "Button", "x+5 yp-1 w30 hp hwndhBTN_HotkeyAdvAddNewProfile", "+")
-		Gui.Add("Settings", "Button", "x+5 yp w30 hp hwndhBTN_HotkeyAdvDeleteCurrentProfile", "-")
-		Gui.Add("Settings", "Edit", "x" leftMost2+20 " y+16 w260 hwndhEDIT_HotkeyAdvName")
-
-		Gui.Add("Settings", "Hotkey", "x+5 yp w165 hwndhHK_HotkeyAdvHotkey")
-		Gui.Add("Settings", "Edit", "xp yp wp hp Hidden hwndhEDIT_HotkeyAdvHotkey")
-		Gui.Add("Settings", "Button", "x+0 yp hp hwndhBTN_ChangeHKType", "HK Type Switch")
-		coords := Get_ControlCoords("Settings", GuiSettings_Controls.hBTN_ChangeHKType)
-		GuiControl, Settings:Move,% GuiSettings_Controls.hHK_HotkeyAdvHotkey,% "w" 235-coords.W
-		GuiControl, Settings:Move,% GuiSettings_Controls.hEDIT_HotkeyAdvHotkey,% "w" 235-coords.W
-		coords := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyAdvHotkey)
-		GuiControl, Settings:Move,% GuiSettings_Controls.hBTN_ChangeHKType,% "x" coords.X + coords.W + 1
-
-		Gui.Add("Settings", "DropDownList", "x" leftMost2+20 " y+7 w200 R50 hwndhDDL_HotkeyAdvActionType")
-		Gui.Add("Settings", "Edit", "x+5 yp w295 hwndhEDIT_HotkeyAdvActionContent")
-		Gui.Add("Settings", "Button","x" leftMost2+20 " y+7 w245 hwndhBTN_HotkeyAdvSaveChangesToAction", "Save changes to action...")
-		Gui.Add("Settings", "Button","x+10 yp wp hwndhBTN_HotkeyAdvAddAsNewAction", "Add as a new action")
-		Gui.Add("Settings", "ListView", "x" leftMost2+20 " y+10 w500 hwndhLV_HotkeyAdvActionsList -Multi AltSubmit +LV0x10000 R8", "#|Type|Content")
-		GUI_Settings.SetDefaultListView("hLV_HotkeyAdvActionsList")
-		loopIndex := 1
-		Loop, Parse, ACTIONS_AVAILABLE,% "|"
-		{
-			if (A_LoopField && A_LoopField != " " && !IsContaining(A_LoopField, "-> ")) {
-				LV_Add("", loopIndex, A_LoopField, "")
-				loopIndex++
-			}
-		}
-		Loop 3
-			LV_ModifyCol(A_Index, "AutoHdr NoSort")
-		LV_ModifyCol(1, "Integer")
-		LV_Delete()
-
-		GUI_Settings.TabHotkeysAdvanced_UpdateActionsList()
-		GUI_Settings.TabHotkeysAdvanced_UpdateRegisteredHotkeysList()
-		GuiSettings.Hotkeys_Advanced_TabControls := "hDDL_HotkeyAdvExistingList,hEDIT_HotkeyAdvName,hHK_HotkeyAdvHotkey,hDDL_HotkeyAdvActionType"
-			. ",hEDIT_HotkeyAdvActionContent,hBTN_HotkeyAdvSaveChangesToAction,hBTN_HotkeyAdvAddAsNewAction,hLV_HotkeyAdvActionsList"
-			. ",hBTN_HotkeyAdvAddNewProfile,hBTN_HotkeyAdvDeleteCurrentProfile,hEDIT_HotkeyAdvHotkey,hBTN_ChangeHKType"
-			*/
-
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB MISC UPDATING
 		*/
 		Gui, Settings:Tab, Updating
 
-		Gui.Add("Settings", "GroupBox", "x" leftMost2 " y" upMost2 " cBlack w525 h115 hwndhGB_UpdateCheck", "You are up to date!")
-
-		Gui.Add("Settings", "Text", "x" leftMost2+20 " y" upMost2+20 " hwndhTEXT_YourVersion", "Your version:")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " hwndhTEXT_YourVersion", "Your version:")
 		Gui.Add("Settings", "Text", "x+30 yp BackgroundTrans hwndhTEXT_ProgramVer")
 		yourVerCoords := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_YourVersion)
 		programVerCoords := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_ProgramVer)
@@ -425,23 +384,19 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Text", "x" programVerCoords.X " yp BackgroundTrans hwndhTEXT_LatestStableVer")
 		Gui.Add("Settings", "Text", "x" yourVerCoords.X " y+5 hwndhTEXT_LatestBETA", "Latest BETA:")
 		Gui.Add("Settings", "Text", "x" programVerCoords.X " yp BackgroundTrans hwndhTEXT_LatestBetaVer")
-		Gui.Add("Settings", "ImageButton", "x" yourVerCoords.X " y+10 R1 hwndhBTN_CheckForUpdates", "Check for updates manually", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" yourVerCoords.X " y+10 h25 hwndhBTN_CheckForUpdates", "Check for updates manually", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "Text", "x+5 yp+7 hwndhTEXT_MinsAgo", "(x mins ago)")
 
 		; Gui.Add("Settings", "Checkbox", "x400 y" upMost2+20 " hwndhCB_AllowToUpdateAutomaticallyOnStart", "Allow to update automatically on start?")
 		; Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_AllowPeriodicUpdateCheck", "Allow automatic update check every 2hours?")
-		Gui.Add("Settings", "Text", "x380 y" upMost2+20 " hwndhTEXT_CheckForUpdatesWhen", "Check for updates... ")
+		Gui.Add("Settings", "Text", "x350 y" upMost2+10 " hwndhTEXT_CheckForUpdatesWhen", "Check for updates... ")
 		Gui.Add("Settings", "DropDownList", "x+5 yp-2 w155 hwndhDDL_CheckForUpdate AltSubmit", "Only on application start|On start + every 5 hours|On start + every day")
-		Gui.Add("Settings", "Checkbox", "xp y+10 hwndhCB_UseBeta", "Use the BETA branch?")		
-		Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_DownloadUpdatesAutomatically", "Download updates`nautomatically?")
+		Gui.Add("Settings", "Checkbox", "x350 y+10 hwndhCB_UseBeta", "Use the BETA branch?")		
+		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_DownloadUpdatesAutomatically", "Download updates`nautomatically?")
 		
-		ctrlSize := Get_ControlCoords("Settings", GuiSettings_Controls.hGB_UpdateCheck)
-		Gui.Add("Settings", "Edit", "x" leftMost2 " y" upMost2+125 " w525 h" guiHeight-80-ctrlSize.H-ctrlSize.Y+15, Get_Changelog(removeTrails:=True) )
+		Gui.Add("Settings", "Edit", "x" leftMost2 " y" upMost2+125 " w" rightMost2-leftMost2 " R10 hwndhEDIT_ChangeLogs ReadOnly", Get_Changelog(removeTrails:=True) ), chgLogEditPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_ChangeLogs)
+		Gui.MoveControl("Settings", "hEDIT_ChangeLogs", "h" downMost2-chgLogEditPos.Y)
 
-		Gui.Font("Settings", "Segoe UI", "8")
-
-		GuiSettings.TabMiscUpdating_Controls := "hGB_UpdateCheck,hTEXT_LatestBetaVer,hTEXT_LatestStableVer,hTEXT_YourVersion,hBTN_CheckForUpdates,hTEXT_MinsAgo"
-			. ",hDDL_CheckForUpdate,hCB_UseBeta,hBTN_CheckForUpdates,hCB_DownloadUpdatesAutomatically"
 		GUI_Settings.TabMiscUpdating_SetUserSettings()
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -449,16 +404,15 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, About
 
-		Gui.Add("Settings", "GroupBox", "x" leftMost2 " y" upMost2 " cBlack w525 h115 hwndhGB_About")
-		Gui.Add("Settings", "Text", "x" leftMost2+10 " y" upMost2+15 " w505 Center hwndhTEXT_About" , "POE Trades Companion is a tool meant to enhance your trading experience. "
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " Center hwndhTEXT_About" , "POE Trades Companion is a tool meant to enhance your trading experience. "
 			. "`n`nUpon receiving a trading whisper (poe.trade / poeapp.com),"
 			. "`nthe most important informations from the trade will be shown in a convenient interface."
 			. "`n`nUp to nine custom buttons to interact with your buyer, five special smaller buttons to do the strict minimum, and many hotkeys are available to make trading more enjoyable.")
 
-		ctrlSize := Get_ControlCoords("Settings", GuiSettings_Controls.hGB_About)
-		Gui.Add("Settings", "Edit", "x" leftMost2 " y" upMost2+125 " w525 h" guiHeight-80-ctrlSize.H-ctrlSize.Y+15 " ReadOnly Center hwndhEDIT_HallOfFame", "Hall of Fame`nThank you for your support!`n`n" "[Hall of Fame loading]")
+		Gui.Add("Settings", "Edit", "x" leftMost2 " y+15 wp R10 ReadOnly Center hwndhEDIT_HallOfFame", "Hall of Fame`nThank you for your support!`n`n" "[Hall of Fame loading]"), hofPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HallOfFame)
+		Gui.MoveControl("Settings", "hEDIT_HallOfFame", "h" downMost2-hofPos.Y)
 
-		GUI_Settings.TabMiscAbout_UpdateAllOfFame()		
+		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB - ALL
@@ -502,9 +456,7 @@ Class GUI_Settings {
 		GUI_Settings.TabCustomizationBuying_SetSubroutines()
 		GUI_Settings.TabCustomizationSelling_SetSubroutines()
 		GUI_Settings.TabHotkeys_SetSubroutines()
-		; GUI_Settings.TabHotkeysBasic_EnableSubroutines()
-		; GUI_Settings.TabHotkeysAdvanced_EnableSubroutines()
-		; GUI_Settings.TabMiscUpdating_EnableSubroutines()
+		GUI_Settings.TabUpdating_SetSubroutines()
 
 		Gui.Show("Settings", "h" guiFullHeight " w" guiFullWidth " NoActivate Hide")
 		Gui.Show("SettingsFooter", "x" guiFooterX " y" guiFooterY " w" guiFooterW " h" guiFooterH " NoActivate")
@@ -584,7 +536,8 @@ Class GUI_Settings {
 			}
 			else if IsIn(ctrlName, "hDDL_BuyingInterfaceMode,hDDL_SellingInterfaceMode") {
 				settingValue := ctrlName="hDDL_BuyingInterfaceMode" ? PROGRAM.SETTINGS.BUY_INTERFACE.Mode : PROGRAM.SETTINGS.SELL_INTERFACE.Mode
-				GuiControl, Settings:ChooseString,% GuiSettings_Controls[ctrlName],% settingValue
+				chooseNum := settingValue="Tabs"?1 : settingValue="Stack"?2 : settingValue="Disabled"?3 : 1
+				GuiControl, Settings:Choose,% GuiSettings_Controls[ctrlName],% settingValue
 			}
 			else if (ctrlType = "hDDL") {
 				GuiControl, Settings:ChooseString,% GuiSettings_Controls[ctrlName],% thisTabSettings[settingsKey]
@@ -632,12 +585,18 @@ Class GUI_Settings {
 
 		currentMode := PROGRAM.SETTINGS.BUY_INTERFACE.Mode
 		mode := GUI_Settings.Submit("hDDL_BuyingInterfaceMode")
+		mode := mode=1 ? "Tabs" : mode=2 ? "Stack" : mode=3 ? "Disabled" : ""
 		if (currentMode=mode)
 			return
 
+		Gui, Settings:+Disabled
+		
 		PROGRAM.SETTINGS.BUY_INTERFACE.Mode := mode
 		Save_LocalSettings()
-		; TO_DO_V2 remake interface for the buy tab
+
+		GUI_Trades_V2.CreatePreview("Buy", mode)
+
+		Gui, Settings:-Disabled
 	}
 	
 	TabSettingsMain_OnSellingInterfaceModeChange() {
@@ -646,12 +605,18 @@ Class GUI_Settings {
 
 		currentMode := PROGRAM.SETTINGS.SELL_INTERFACE.Mode
 		mode := GUI_Settings.Submit("hDDL_SellingInterfaceMode")
+		mode := mode=1 ? "Tabs" : mode=2 ? "Stack" : mode=3 ? "Disabled" : ""
 		if (currentMode=mode)
 			return
 
+		Gui, Settings:+Disabled
+
 		PROGRAM.SETTINGS.SELL_INTERFACE.Mode := mode
 		Save_LocalSettings()
-		; TO_DO_V2 remake interface for the sell tab
+
+		GUI_Trades_V2.CreatePreview("Sell", mode)
+
+		Gui, Settings:-Disabled
 	}
 
 	TabSettingsMain_OnCheckboxToggle(CtrlName) {	
@@ -2834,38 +2799,20 @@ Class GUI_Settings {
 	*	Tab MISC UPDATING
 	*/
 
-	/* * * * * Subroutines toggle * * * * *
-	*/
-	TabMiscUpdating_EnableSubroutines() {
-		GUI_Settings.TabMiscUpdating_ToggleSubroutines("Enable")
-	}
-	TabMiscUpdating_DisableSubroutines() {
-		GUI_Settings.TabMiscUpdating_ToggleSubroutines("Disable")
-	}
-	TabMiscUpdating_ToggleSubroutines(enableOrDisable) {
+	TabUpdating_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		thisTabCtrls := GuiSettings.TabMiscUpdating_Controls
+		controlsList := "hBTN_CheckForUpdates,hDDL_CheckForUpdate,hCB_UseBeta,hCB_DownloadUpdatesAutomatically"
 
-		Loop, Parse, thisTabCtrls,% ","
+		Loop, Parse, controlsList,% ","
 		{
-			loopedCtrl := A_LoopField
-			isCheckbox := SubStr(loopedCtrl, 1, 3)="hCB" ? True : False
+			ctrlName := A_LoopField, ctrlSplit := StrSplit(ctrlName, "_"), ctrlType := ctrlSplit.1, settingsKey := ctrlSplit.2
 
-			if (enableOrDisable = "Disable")
-				GuiControl, Settings:-g,% GuiSettings_Controls[loopedCtrl]
-			else if (enableOrDisable = "Enable") {
-				if (loopedCtrl = "hBTN_CheckForUpdates")
-					__f := GUI_Settings.TabMiscUpdating_CheckForUpdates.bind(GUI_Settings)
-				else if (isCheckbox)
-					__f := GUI_Settings.TabMiscUpdating_OnCheckboxToggle.bind(GUI_Settings, loopedCtrl)
-				else if (loopedCtrl = "hDDL_CheckForUpdate")
-					__f := GUI_Settings.TabMiscUpdating_OnCheckForUpdatesDDLChange.bind(GUI_Settings, loopedCtrl)
-				else 
-					__f := 
-
-				if (__f)
-					GuiControl, Settings:+g,% GuiSettings_Controls[loopedCtrl],% __f 
-			}
+			if (ctrlType="hCB")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_OnCheckboxToggle", ctrlName)
+			if (ctrlName="hBTN_CheckForUpdates")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_CheckForUpdates")
+			if (ctrlName="hDDL_CheckForUpdate")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_OnCheckForUpdatesDDLChange", ctrlName)
 		}
 	}
 
@@ -3132,7 +3079,7 @@ Class GUI_Settings {
 		actionContent := GUI_Settings.Submit(actionContentCtrlName)
 		; Get infos concerning this action
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-		GUI_Settings.Universal_ShowActionTypeTip("Hotkeys", actionShortName)
+		GUI_Settings.Universal_ShowActionTypeTip(whichTab, actionShortName)
 				
 		; Avoid selecting actions with -> in name or empty
 		if IsContaining(actionType, "-> ") || (actionType = "") {
@@ -3668,16 +3615,12 @@ Class GUI_Settings {
 
 		if (foundHwnd) {
 			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
-			if !(GuiTrades.SellPreview.Handle) {
-				GUI_Trades_V2.Create(1, buyOrSell:="Sell", slotsOrTab:="Tabs", preview:=True)
-				Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @From SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
-			}
-			if !(GuiTrades.BuyPreview.Handle) {
-				GUI_Trades_V2.Create(1, buyOrSell:="Buy", slotsOrTab:="Slots", preview:=True)
-				Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @To SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
-			}
-			Gui, Settings:Show, xCenter yCenter
+			if !(GuiTrades.SellPreview.Handle)
+				GUI_Trades_V2.CreatePreview("Sell", PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
+			if !(GuiTrades.BuyPreview.Handle)
+				GUI_Trades_V2.CreatePreview("Buy", PROGRAM.SETTINGS.BUY_INTERFACE.Mode)
 
+			Gui, Settings:Show, xCenter yCenter
 			Gui_Settings.OnTabBtnClick(whichTab)
 		}
 		else {
@@ -3764,7 +3707,7 @@ Class GUI_Settings {
 		
 		if (whichTab = "Selling") {
 			Gui, TradesSellPreview:+LastFound +AlwaysOnTop
-			Gui, TradesSellPreview:Show, x10 y65
+			Gui, TradesSellPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.SellPreview.Width/2) " y" GuiSettings.UpMost2
 			GUI_Settings.Customization_Selling_AdjustPreviewControls()
 		}
 		else
@@ -3772,7 +3715,7 @@ Class GUI_Settings {
 
 		if (whichTab = "Buying") {
 			Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
-			Gui, TradesBuyPreview:Show, x10 y65
+			Gui, TradesBuyPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.BuyPreview.Width/2) " y" GuiSettings.UpMost2
 			GUI_Settings.Customization_Buying_AdjustPreviewControls()
 		}
 		else

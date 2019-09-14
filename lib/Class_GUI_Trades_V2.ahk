@@ -172,6 +172,16 @@
 
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
 	}
+
+	CreatePreview(_buyOrSell, _guiMode) {
+
+		GUI_Trades_V2.Create(1, buyOrSell:=_buyOrSell, slotsOrTab:=_guiMode, preview:=True)
+
+		if (_buyOrSell="Buy")
+			Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @To SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
+		else if (_buyOrSell="Sell")
+			Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @From SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
+	}
 	
 	Create(_tabsToRender=50, _buyOrSell="", _guiMode="", _isPreview=False) {
 		global PROGRAM, GAME, SKIN
@@ -190,15 +200,16 @@
         if !IsIn(_guiMode, "Tabs,Slots") {
             MsgBox(4096, "", "ERROR NOT Tabs OR Slots: " _guiMode)
             return
-        }
-
-        if (PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface="True")
-			return
+        }		
 
         ; = = Init GUI Obj
 		if (_isPreview)
 			_buyOrSell .= "Preview"
         guiName := "Trades" _buyOrSell
+
+		if (guiName = "TradesBuy" && PROGRAM.SETTINGS.BUY_INTERFACE.Mode="Disabled")
+			return
+
         GUI_Trades_V2.Destroy(guiName)
 		if (_isPreview=True)
 			Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +LabelGUI_Trades_V2_ +ParentSettings +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
