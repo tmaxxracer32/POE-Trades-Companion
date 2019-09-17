@@ -49,20 +49,15 @@
 	Return {Name:currencyFullName, Is_Listed:isCurrencyListed}
 }
 
-Do_Action(actionType, actionContent="", isHotkey=False, uniqueNum="") {
+Do_Action(actionType, actionContent="", gamePID="", isHotkey=False, uniqueNum="") {
 	global PROGRAM, GuiTrades, GuiTrades_Controls
 	static prevNum, ignoreFollowingActions, prevActionType, prevActionContent
 	activeTab := GuiTrades.Active_Tab
 
-	tabContent := isHotkey ? "" : GUI_Trades.GetTabContent(activeTab)
-	tabPID := isHotkey ? "" : tabContent.PID
-
 	WRITE_SEND_ACTIONS := "SEND_MSG,SEND_TO_BUYER,SEND_TO_LAST_WHISPER,SEND_TO_LAST_WHISPER_SENT"
-						. ",INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
-						. ",CMD_AFK,CMD_AUTOREPLY,CMD_DND,CMD_HIDEOUT,CMD_OOS,CMD_REMAINING"
-
+		. ",INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
+		. ",CMD_AFK,CMD_AUTOREPLY,CMD_DND,CMD_HIDEOUT,CMD_OOS,CMD_REMAINING"
 	WRITE_DONT_SEND_ACTIONS := "WRITE_MSG,WRITE_TO_BUYER,WRITE_TO_LAST_WHISPER,WRITE_TO_LAST_WHISPER_SENT,CMD_WHOIS"
-
 	WRITE_GO_BACK_ACTIONS := "WRITE_THEN_GO_BACK"
 
 	if (uniqueNum) && (uniqueNum = prevNum) && (ignoreFollowingActions) {
@@ -72,34 +67,14 @@ Do_Action(actionType, actionContent="", isHotkey=False, uniqueNum="") {
 		Return
 	}
 
-	if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
-				actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
-
-	global ACTIONS_FORCED_CONTENT
-	if (ACTIONS_FORCED_CONTENT[actionType]) && !(actionContent)
-		actionContent := ACTIONS_FORCED_CONTENT[actionType]
-
-	actionContentWithVariables := Replace_TradeVariables(actionContent)
-	StringSplit, contentWords, actionContentWithVariables,% A_Space
-	if ( SubStr(actionContentWithVariables, 1, 2) = "@ ") {
-		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarEmpty_Msg, "%name%", contentWords1)
-		trayMsg := StrReplace(trayMsg, "%variable%", actionContent)
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
-		return
-	}
-	else if ( SubStr(contentWords1, 2, 1) = "%" || SubStr(contentWords1, 0, 1) = "%" ) {
-		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarTypo_Msg, "%variable%", actionContent)
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
-		return
-	}
-
 	if IsIn(prevActionType, "COPY_ITEM_INFOS,WRITE_SEND,WRITE_DONT_SEND,WRITE_GO_BACK,SENDINPUT,SENDINPUT_RAW,SENDEVENT,SENDEVENT_RAW") {
 		; AppendToLogs(A_thisFunc "(actionType=" actionType ", actionContent=" actionContent ", isHotkey=" isHotkey ", uniqueNum=" uniqueNum "):"
 		; . "Sleeping for 10ms due to previous action (" prevActionType ") being listed as using the clipboard.")
 		Sleep 10
 	}
 
-	if IsContaining(actionType, "CUSTOM_BUTTON_") {
+	if IsContaining(actionType, "CUSTOM_BUTTON_") { 
+		; TO_DO_V2
 		RegExMatch(actionType, "\D+", actionType_NoNum)
 		RegExMatch(actionType, "\d+", actionType_NumOnly)
 
@@ -107,26 +82,26 @@ Do_Action(actionType, actionContent="", isHotkey=False, uniqueNum="") {
 
 		; ControlClick,,% "ahk_id " GuiTrades.Handle " ahk_id " GuiTrades_Controls["hBTN_Custom" actionType_NumOnly],,,, NA
 	}
-
 	else if IsIn(actionType, WRITE_SEND_ACTIONS) {
 		if (actionType = "KICK_MYSELF") {
 			if (!PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts)
 				TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToKickSelf_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToKickSelf_Msg)
 			else
-				Send_GameMessage("WRITE_SEND", actionContentWithVariables, tabPID)
+				Send_GameMessage("WRITE_SEND", actionContent, gamePID)
 		}
 		else
-			Send_GameMessage("WRITE_SEND", actionContentWithVariables, tabPID)
+			Send_GameMessage("WRITE_SEND", actionContent, gamePID)
 	}
 	else if IsIn(actionType, WRITE_DONT_SEND_ACTIONS) {
-		Send_GameMessage("WRITE_DONT_SEND", actionContentWithVariables, tabPID)
+		Send_GameMessage("WRITE_DONT_SEND", actionContent, gamePID)
 		ignoreFollowingActions := True
 	}
 	else if IsIn(actionType, WRITE_GO_BACK_ACTIONS) {
-		Send_GameMessage("WRITE_GO_BACK", actionContentWithVariables, tabPID)
+		Send_GameMessage("WRITE_GO_BACK", actionContent, gamePID)
 		ignoreFollowingActions := True
 	}
 
+	; TO_DO_V2
 	else if (actionType = "COPY_ITEM_INFOS")
 		GoSub, GUI_Trades_CopyItemInfos_CurrentTab_Timer
 	else if (actionType = "GO_TO_NEXT_TAB")
@@ -161,7 +136,7 @@ Do_Action(actionType, actionContent="", isHotkey=False, uniqueNum="") {
 	else if (actionType = "CLOSE_SIMILAR_TABS")
 		GUI_Trades.CloseOtherTabsForSameItem()
 	else if (actionType = "SHOW_GRID")
-		GUI_Trades.ShowActiveTabItemGrid()
+		GUI_Trades.ShowActiveTabItemGrid() ; TO_DO_V2
 
 	prevNum := uniqueNum, prevActionType := actionType, prevActionContent := actionContentWithVariables	
 }
@@ -212,33 +187,22 @@ Reset_Clipboard() {
 		Clipboard := ""
 }
 
-Replace_TradeVariables(string) {
+Replace_TradeVariables(_buyOrSell, tabNum, string) {
 	global PROGRAM, GuiTrades
 	static lastCharacterLogged, timeSinceRetrievedChar
-	activeTab := GuiTrades.Active_Tab
 
-	tabContent := Gui_Trades.GetTabContent(activeTab)
+	tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum)
 
-	string := StrReplace(string, "%buyer%", tabContent.Buyer)
-	string := StrReplace(string, "%buyerName%", tabContent.Buyer)
-	string := StrReplace(string, "%item%", tabContent.Item)
-	string := StrReplace(string, "%itemName%", tabContent.Item)
-	string := StrReplace(string, "%price%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
-	string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
+	string := StrReplace(string, "%buyer%", tabContent.Buyer), string := StrReplace(string, "%buyerName%", tabContent.Buyer)
+	string := StrReplace(string, "%item%", tabContent.Item), string := StrReplace(string, "%itemName%", tabContent.Item)
+	string := StrReplace(string, "%price%", tabContent.Price != ""?tabContent.Price : "[unpriced]"), string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
+	string := StrReplace(string, "%lastWhisper%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lastWhisperReceived%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lwr%", GuiTrades.Last_Whisper_Name)
+	string := StrReplace(string, "%sentWhisper%", GuiTrades.Last_Whisper_Sent_Name), string := StrReplace(string, "%lastWhisperSent%", GuiTrades.Last_Whisper_Sent_Name), string := StrReplace(string, "%lws%", GuiTrades.Last_Whisper_Sent_Name)
 
-	string := StrReplace(string, "%lastWhisper%", GuiTrades.Last_Whisper_Name)
-	string := StrReplace(string, "%lastWhisperReceived%", GuiTrades.Last_Whisper_Name)
-	string := StrReplace(string, "%lwr%", GuiTrades.Last_Whisper_Name)
-
-	string := StrReplace(string, "%sentWhisper%", GuiTrades.Last_Whisper_Sent_Name)
-	string := StrReplace(string, "%lastWhisperSent%", GuiTrades.Last_Whisper_Sent_Name)
-	string := StrReplace(string, "%lws%", GuiTrades.Last_Whisper_Sent_Name)
-
-	firstAcc := StrSplit(PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts, ",").1
 	if IsContaining(string, "%myself%") {
-		if (!lastCharacterLogged) {
+		firstAcc := PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.1
+		if (!lastCharacterLogged)
 			poeLoggedChar := PoeDotCom_GetCurrentlyLoggedCharacter(firstAcc)
-		}
 		lastCharacterLogged := poeLoggedChar?poeLoggedChar:lastCharacterLogged
 
 		string := StrReplace(string, "%myself%", lastCharacterLogged)

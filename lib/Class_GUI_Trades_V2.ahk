@@ -647,7 +647,7 @@
 						}
 
 						Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2, !btnIcon?btnName:"", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-						; Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum, "Preview_CustomizeThisCustomButton", _buyOrSell, rowNum, btnsCount, btnNum)
+						Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum, "DoCustomButtonAction", _buyOrSell, rowNum, btnNum, tabNum)
 					}
 				}
 			}
@@ -821,45 +821,54 @@
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     */
 
-    DoTradeButtonAction(_buyOrSell, slotNum, btnType) {
-		global PROGRAM
+    DoCustomButtonAction(_buyOrSell, rowNum, btnNum, tabNum) {
+		global PROGRAM, ACTIONS_FORCED_CONTENT
 		global GuiTrades, GuiTrades_Controls
-		static uniqueNum
-
-		if !IsNum(slotNum)
-			Return
-			
-		slotContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
-		tabPID := slotContent.PID
-
-		if WinExist("ahk_group POEGameGroup ahk_pid " tabPID) {
+		static uniqueNu
+		tabGamePID := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum).GamePID
+		titleMatchMode := A_TitleMatchMode
+		guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
+		
+		SetTitleMatchMode, RegEx
+		if WinExist("ahk_group POEGameGroup ahk_pid " tabGamePID) {
 			uniqueNum := !uniqueNum
 			keysState := GetKeyStateFunc("Ctrl,LCtrl,RCtrl")
 
-			actionType := btnType="WhisperSeller" ? "WRITE_MSG"
-				: btnType="HideoutSeller" ? "SEND_MSG"
-				: btnType="KickSelfSeller" ? "KICK_MYSELF"
-				: btnType="ThankSeller" ? "SEND_MSG"
-				: ""
-			
-			actionContent := btnType="WhisperSeller" ? "@%seller% "
-				: btnType="HideoutSeller" ? "/hideout %seller%"
-				: btnType="KickSelfSeller" ? "/kick %myself%"
-				: btnType="ThankSeller" ? "@%seller% ty!"
-				: ""
+			thisBtnActions := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Actions
+			Loop % thisBtnActions.Count() {
+				actionType := thisBtnActions[A_Index].Type, actionContent := thisBtnActions[A_Index].Content
 
-			actionContent := StrReplace(actionContent, "%seller%", slotContent.Seller)
+				if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
+					actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
 
-			if (actionType)
-				Do_Action(actionType, actionContent)
-			SetKeyStateFunc(keysState)
+				if (ACTIONS_FORCED_CONTENT[actionType]) && !(actionContent)
+					actionContent := ACTIONS_FORCED_CONTENT[actionType]
 
-			if (btnType="ThankSeller") {
-				GUI_Trades_V2.SaveStats(slotNum)
-				GUI_Trades_V2.RemoveTab(slotNum)
+				actionContentWithVariables := Replace_TradeVariables(_buyOrSell, tabNum, actionContent)
+				StringSplit, contentWords, actionContentWithVariables,% A_Space
+				if ( SubStr(actionContentWithVariables, 1, 2) = "@ ") {
+					trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarEmpty_Msg, "%name%", contentWords1)
+					trayMsg := StrReplace(trayMsg, "%variable%", actionContent)
+					TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
+					return
+				}
+				else if ( SubStr(contentWords1, 2, 1) = "%" || SubStr(contentWords1, 0, 1) = "%" ) {
+					trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarTypo_Msg, "%variable%", actionContent)
+					TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
+					return
+				}
+				else
+					actionContent := actionContentWithVariables
+
+				if (actionType != "COPY_ITEM_INFOS") ; Make sure to only copy item infos after all actions have been done
+					Do_Action(actionType, actionContent, isHk:=False, uniqueNum)
+				else if (actionType = "COPY_ITEM_INFOS")
+					doCopyAction := True
 			}
-			
-			
+			if (doCopyActionAtEnd = True) {
+				Sleep 100
+				Do_Action("COPY_ITEM_INFOS", "", isHk:=False, uniqueNum)
+			}			
 		}
 		else { ; Instance doesn't exist anymore, replace and do btn action
 			runningInstances := Get_RunningInstances()
@@ -874,13 +883,14 @@
 
 			Loop % GuiTrades[_buyOrSell].Tabs_Count {
 				loopTabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, A_Index)
-				loopTabPID := loopTabContent.PID
+				looptabGamePID := loopTabContent.GamePID
 
-				if (loopTabPID = tabPID)
-					GUI_Trades_V2.UpdateSlotContent(_buyOrSell, A_Index, "PID", newInstancePID)
+				if (looptabGamePID = tabGamePID)
+					GUI_Trades_V2.UpdateSlotContent(_buyOrSell, A_Index, "GamePID", newInstancePID)
 			}
-			GUI_Trades_V2.DoTradeButtonAction(_buyOrSell, slotNum, btnType)
+			GUI_Trades_V2.DoTradeButtonAction(_buyOrSell, rowNum, btnNum, tabNum)
 		}
+		SetTitleMatchMode, %titleMatchMode%
 	}
 
     SaveStats(_buyOrSell, slotNum) {
@@ -1145,6 +1155,53 @@
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     */
 
+	ShowItemGrid(tabNum) {
+		global PROGRAM, GuiTrades
+		; static prev_tabXPos, prev_tabYPos, prev_tabStashTab
+		; static prev_winX, prev_winY, prev_clientInfos
+
+		tabInfos := GUI_Trades_V2.GetTabContent("Sell", tabNum)
+		tabXPos := tabInfos.StashX, tabYPos := tabInfos.StashY, tabStashTab := tabInfos.StashTab, tabStashItem := tabInfos.Item
+
+		if !IsNum(tabXPos) || !IsNum(tabYPos) {
+			GUI_Trades_V2.DestroyItemGrid()
+			return
+		}
+		
+		if (tabXPos && tabYPos) && WinExist("ahk_pid " tabInfos.GamePID " ahk_group POEGameGroup") {
+			WinGetPos, winX, winY, winW, winH,% "ahk_pid " tabInfos.GamePID " ahk_group POEGameGroup"
+			clientInfos := GetWindowClientInfos("ahk_pid" tabInfos.GamePID " ahk_group POEGameGroup")
+
+			if RegExMatch(tabInfos.Item, "O)(.*) \(T(\d+)\)$", itemPat) {
+				itemType := "Map", mapTier := itemPat.2
+				if IsContaining_Parse(tabStashItem, PROGRAM.DATA.UNIQUE_MAPS_LIST, "`n", "`r")
+					mapTier := "unique"
+			}
+
+			if (clientInfos.Y = 0) && IsIn(clientInfos.H, "606,774,870,726,806,966,1030,1056,1086,1206") ; Fix issue where +6 is added to res H
+				clientInfos.H -= 6	
+
+			; itemGridExists := GUI_ItemGrid.Exists()
+			; if !(itemGridExists) ; if not visible, or visible and one variable changed
+			;  || (itemGridExists) && ( (prev_tabXPos != tabXPos) || (prev_tabYPos != tabYPos) || (prev_tabStashTab != tabStashTab)
+			;  || (prev_winX != winX) || (prev_winY != winY)
+			;  || (prev_clientInfos.X != clientInfos.X) || (prev_clientInfos.Y != clientInfos.Y) || (prev_clientInfos.H != clientInfos.H) ) {
+				; GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "IsBuyerInvited", True)
+				GUI_ItemGrid.Create(tabXPos, tabYPos, tabStashItem, tabStashTab, winX, winY, clientInfos.H, clientInfos.X, clientInfos.Y, itemType, mapTier)
+			; }
+			; else
+				; GUI_ItemGrid.Show()
+		}
+		else
+			GUI_ItemGrid.Hide()
+
+		prev_tabXPos := tabXPos, prev_tabYPos := tabYPos, prev_tabStashTab := tabStashTab
+		prev_winX := winX, prev_winY := winY, prev_clientInfos := clientInfos
+	}
+	DestroyItemGrid() {
+		GUI_ItemGrid.Destroy()
+	}
+
     HotBarButton(_buyOrSell, btnType) {
 		global PROGRAM
 		global LASTACTIVATED_GAMEPID
@@ -1226,8 +1283,8 @@
 		; GuiControl, Trades%_buyOrSell%:Show,% GuiTrades_Controls[_buyOrSell].hPROGRESS_BorderBottom
 		GuiControl, Trades%_buyOrSell%:Hide,% GuiTrades_Controls[_buyOrSell].hPROGRESS_BorderBottom_Minimized
 
-		GuiTrades_Controls[_buyOrSell].Is_Maximized := True
-		GuiTrades_Controls[_buyOrSell].Is_Minimized := False
+		GuiTrades[_buyOrSell].Is_Maximized := True
+		GuiTrades[_buyOrSell].Is_Minimized := False
 
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 		; GUI_Trades_V2.ToggleTabSpecificAssets("On")
@@ -1573,7 +1630,7 @@
 
         ; Showing item grid as long as interface is maximized
 		if (GuiTrades[_buyOrSell].Is_Maximized = True)
-			GUI_Trades_V2.ShowActiveTabItemGrid()
+			GUI_Trades_V2.ShowItemGrid(tabName)
 
 		; Don't do these if only the tab style changed.
 		; Avoid an issue where upon removing a tab, it would copy the item infos again due to the tab style func re-activating the tab

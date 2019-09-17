@@ -96,9 +96,9 @@ ShellMessage(wParam,lParam) {
 			}
 
 			WinGet, activePID, PID, ahk_id %lParam%
-			activeTabPID := GUI_Trades_V2.GetTabContent("Sell", Gui_Trades.GetActiveTab()).PID
+			activeTabPID := GUI_Trades_V2.GetTabContent("Sell", GUI_Trades_V2.GetActiveTab()).GamePID
 			if (activePID = activeTabPID && GUI_ItemGrid.Exists() && GuiTrades.Sell.Is_Maximized = True)
-				GUI_Trades_V2.ShowActiveTabItemGrid() ; Recreate. In case window moved.
+				GUI_Trades_V2.ShowActiveTabItemGrid() ; Recreate. In case window moved. ; TO_DO_V2
 				; GUI_ItemGrid.Show() ; Just show at same pos.
 			else {
 				GUI_ItemGrid.Hide()
