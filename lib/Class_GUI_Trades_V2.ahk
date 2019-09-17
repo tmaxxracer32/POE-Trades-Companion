@@ -838,37 +838,14 @@
 			Loop % thisBtnActions.Count() {
 				actionType := thisBtnActions[A_Index].Type, actionContent := thisBtnActions[A_Index].Content
 
-				if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
-					actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
-
-				if (ACTIONS_FORCED_CONTENT[actionType]) && !(actionContent)
-					actionContent := ACTIONS_FORCED_CONTENT[actionType]
-
-				actionContentWithVariables := Replace_TradeVariables(_buyOrSell, tabNum, actionContent)
-				StringSplit, contentWords, actionContentWithVariables,% A_Space
-				if ( SubStr(actionContentWithVariables, 1, 2) = "@ ") {
-					trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarEmpty_Msg, "%name%", contentWords1)
-					trayMsg := StrReplace(trayMsg, "%variable%", actionContent)
-					TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
-					return
-				}
-				else if ( SubStr(contentWords1, 2, 1) = "%" || SubStr(contentWords1, 0, 1) = "%" ) {
-					trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarTypo_Msg, "%variable%", actionContent)
-					TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
-					return
-				}
-				else
-					actionContent := actionContentWithVariables
-
 				if (actionType != "COPY_ITEM_INFOS") ; Make sure to only copy item infos after all actions have been done
-					Do_Action(actionType, actionContent, isHk:=False, uniqueNum)
-				else if (actionType = "COPY_ITEM_INFOS")
-					doCopyAction := True
+					Do_Action(actionType, actionContent, _buyOrSell, tabNum, uniqueNum)
+				else doCopyActionAtEnd := True
 			}
-			if (doCopyActionAtEnd = True) {
+			if (doCopyActionAtEnd=True) {
 				Sleep 100
-				Do_Action("COPY_ITEM_INFOS", "", isHk:=False, uniqueNum)
-			}			
+				Do_Action("COPY_ITEM_INFOS", "", _buyOrSell, tabNum, uniqueNum)
+			}
 		}
 		else { ; Instance doesn't exist anymore, replace and do btn action
 			runningInstances := Get_RunningInstances()
@@ -888,7 +865,7 @@
 				if (looptabGamePID = tabGamePID)
 					GUI_Trades_V2.UpdateSlotContent(_buyOrSell, A_Index, "GamePID", newInstancePID)
 			}
-			GUI_Trades_V2.DoTradeButtonAction(_buyOrSell, rowNum, btnNum, tabNum)
+			GUI_Trades_V2.DoCustomButtonAction(_buyOrSell, rowNum, btnNum, tabNum)
 		}
 		SetTitleMatchMode, %titleMatchMode%
 	}
@@ -947,6 +924,11 @@
 		existingTabID := GUI_Trades_V2.IsTabAlreadyExisting(_buyOrSell, infos)
 		if (existingTabID)
 			Return "TabAlreadyExists"
+		if GUI_Trades_V2.IsTrade_In_IgnoreList(FINISHED_V2) {
+			AppendToLogs(A_ThisFunc "(): Canceled creating new tab due to trade being in ignore list:" 
+			. "Buyer: """ tabInfos.Buyer """ - Item: """ tabInfos.Item """ - Price: """ tabInfos.Price """ - Stash:""" tabInfos.Stash """")
+			return "TabIgnored"
+		}
         ; If tabs limit is close, allocate more slots
 		if (tabsCount+1 >= tabsLimit) && !IsContaining(_buyOrSell, "Preview")
 			GUI_Trades_V2.IncreaseTabsLimit(_buyOrSell)
@@ -1237,6 +1219,15 @@
  
 			GUI_CheatSheet.Show(which)
 		return
+	}
+
+	Toggle_MinMax(_buyOrSell) {
+		global GuiTrades
+
+		if (GuiTrades[_buyOrSell].Is_Maximized)
+			GUI_Trades_V2.Minimize(_buyOrSell)
+		else 
+			GUI_Trades_V2.Maximize(_buyOrSell)
 	}
 
     Minimize(_buyOrSell) {
@@ -1636,7 +1627,7 @@
 		; Avoid an issue where upon removing a tab, it would copy the item infos again due to the tab style func re-activating the tab
 		if (styleChanged=False) {
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.CopyItemInfosOnTabChange = "True" && IsNum(tabName)) {
-				GoSub, GUI_Trades_CopyItemInfos_CurrentTab_Timer
+				GoSub, GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab_Timer
 			}
 		}
 	}
@@ -1684,6 +1675,153 @@
      *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     */
+
+	IsTrade_In_IgnoreList(tradeInfos) {
+		global TRADES_IGNORE_LIST
+		
+		for key, value in TRADES_IGNORE_LIST
+			ignoreIndex := key
+
+		isInList := False
+		Loop % ignoreIndex {
+			loopIndex := A_Index
+			if (TRADES_IGNORE_LIST[loopIndex].Item = tradeInfos.Item)
+			 && (TRADES_IGNORE_LIST[loopIndex].Price = tradeInfos.Price)
+			 && (TRADES_IGNORE_LIST[loopIndex].Stash = tradeInfos.Stash) {
+			 	isInList := True
+				Break
+			}
+		}
+		
+		return isInList
+	}
+
+	AddTrade_To_IgnoreList(tabNum) {
+		global GuiTrades, TRADES_IGNORE_LIST
+		if !IsObject(TRADES_IGNORE_LIST)
+			TRADES_IGNORE_LIST := {}
+
+		for key, value in TRADES_IGNORE_LIST
+			ignoreIndex := key
+		ignoreIndex++
+		
+		if !IsNum(tabNum || tabNum=0)
+			return
+
+		tabContent := GUI_Trades_V2.GetTabContent("Sell", tabNum)
+		if GUI_Trades_V2.IsTrade_In_IgnoreList(tabContent) {
+			AppendToLogs(A_ThisFunc "(): Tab is already in ignore list. Canceling."
+			. "`nBuyer: """ tabContent.Buyer """ - Item: """ tabContent.Item """ - Price: """ tabContent.Price """ - Stash: """ tabContent.Stash """")
+			return
+		}
+		if !(tabContent.Item) {
+			return
+		}
+
+		TRADES_IGNORE_LIST[ignoreIndex+1] := {}
+		TRADES_IGNORE_LIST[ignoreIndex+1].Item := tabContent.Item
+		TRADES_IGNORE_LIST[ignoreIndex+1].Price := tabContent.Price
+		TRADES_IGNORE_LIST[ignoreIndex+1].Stash := tabContent.Stash
+		TRADES_IGNORE_LIST[ignoreIndex+1].Time := A_Now
+		AppendToLogs(A_ThisFunc "(): Successfully added tab to ignore list."
+		. "`nBuyer: """ tabContent.Buyer """ - Item: """ tabContent.Item """ - Price: """ tabContent.Price """ - Stash: """ tabContent.Stash """")
+	}
+	
+	RefreshIgnoreList() {
+		global TRADES_IGNORE_LIST
+		timeToIgnore := 10 ; Time in mins
+
+		for key, value in TRADES_IGNORE_LIST
+			ignoreIndex := key
+		Loop % ignoreIndex {
+			loopIndex := A_Index
+			timeDif := A_Now, timeAdded := TRADES_IGNORE_LIST[loopIndex].Time
+			timeDif -= timeAdded, Minutes
+
+			if (timeDif > timeToIgnore) {
+				for key, value in TRADES_IGNORE_LIST[loopIndex]
+					TRADES_IGNORE_LIST[loopIndex].Delete(key)
+				TRADES_IGNORE_LIST.Delete(loopIndex)
+				; AppendToLogs(A_ThisFunc "(): Removed item from ignore list after " timeToIgnore "mins.")
+			}
+		}
+	}
+
+	CopyItemInfos(_buyOrSell, tabID="") {
+		global GuiTrades
+		tabID := tabID="" ? GuiTrades[_buyOrSell].Active_Tab : tabID
+
+		tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabID)
+		item := tabContent.Item, whisLang := tabContent.WhisperLang
+		if RegExMatch(item, "O)(.*?) \(Lvl:(.*?) \/ Qual:(.*?)%\)", itemPat) {
+			gemName := itemPat.1, gemLevel := itemPat.2, gemQual := itemPat.3
+		}
+		else if RegExMatch(item, "O)(.*?) \(T(.*?)\)", itemPat) {
+			mapName := itemPat.1, mapTier := itemPat.2
+		}
+
+		if (gemName) {
+			Gui_Trades_V2_CopyItemInfos_GemString:
+			searchLvlPrefix := whisLang = "ENG" ? "l" ; level
+				: whisLang = "RUS" ? "ь" ; Уровень
+				: whisLang = "FRE" ? "u" ; Niveau
+				: whisLang = "POR" ? "l" ; Nível
+				: whisLang = "THA" ? "ล" ; เลเวล
+				: whisLang = "GER" ? "e" ; Stufe
+				: whisLang = "SPA" ? "l" ; Nivel
+				: whisLang = "KOR" ? "벨" ; 레벨
+				: "l"
+			searchQualPrefix := whisLang = "ENG" ? "y" ; quality
+				: whisLang = "RUS" ? "о" ; Качество
+				: whisLang = "FRE" ? "é" ; Qualité
+				: whisLang = "POR" ? "e" ; Qualidade
+				: whisLang = "THA" ? "พ" ; คุณภาพ
+				: whisLang = "GER" ? "t" ; Qualität
+				: whisLang = "SPA" ? "d" ; Calidad
+				: whisLang = "KOR" ? "티" ; 퀄리티
+				: "y"
+
+			searchGemStr := """" gemName """"
+			searchLvlStr := """" searchLvlPrefix ": " gemLevel """"
+			searchQualStr := """" searchQualPrefix ": +" gemQual "%"""
+			searchString := searchGemStr
+			searchString .= (gemLevel && !gemQual)?(" " searchLvlStr):(gemLevel && gemQual)?(" " searchLvlStr " " searchQualStr):("")
+
+			searchStrLen := StrLen(searchString)
+			if (searchStrLen > 50) {
+				charsToRemove := searchStrLen-50
+				StringTrimRight, gemName, gemName, %charsToRemove%
+				GoTo Gui_Trades_V2_CopyItemInfos_GemString
+			}
+		}
+		else if (mapName) {
+			Gui_Trades_V2_CopyItemInfos_MapString:
+			if RegExMatch(mapName, "O)^\d+ (.*)", mapNameOut)
+				mapName := mapNameOut.1
+			/*	Disabled tier:x doesn't work on map tab map section
+			searchMapStr := mapName, searchTierStr := "tier:" mapTier
+			searchString := searchMapStr
+			searchString .= (mapTier)?(" " searchTierStr):("")
+			*/
+			searchString := mapName
+
+			searchStrLen := StrLen(searchString)
+			if (searchStrLen > 50) {
+				charsToRemove := searchStrLen-50
+				StringTrimRight, mapName, mapName, %charsToRemove%
+				GoTo, Gui_Trades_V2_CopyItemInfos_MapString
+			}
+		}
+		else { ; Remove numbers from str, so we only keep item name
+			searchString := RegExReplace(item, "\d")
+			AutoTrimStr(searchString)
+		}
+
+		clipContent := (searchString)?(searchString):(item)
+		if (clipContent) {
+			Set_Clipboard(clipContent)
+		}
+	}
 
 	SaveBackup(_buyOrSell) {
 	/*		Save all pending trades in a file.
@@ -2225,4 +2363,22 @@ GUI_Trades_V2_Search_Buy:
 return
 GUI_Trades_V2_Search_Sell:
 	GUI_Trades_V2.Search("Sell")
+return
+
+/*
+GUI_Trades_V2_Buy_CopyItemInfos_CurrentTab_Timer:
+	SetTimer, GUI_Trades_V2_Buy_CopyItemInfos_CurrentTab, Delete
+	SetTimer, GUI_Trades_V2_Buy_CopyItemInfos_CurrentTab, -500
+return
+GUI_Trades_V2_Buy_CopyItemInfos_CurrentTab:
+	GUI_Trades_V2.CopyItemInfos(_buyOrSell)
+return
+*/
+
+GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab_Timer:
+	SetTimer, GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab, Delete
+	SetTimer, GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab, -500
+return
+GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab:
+	GUI_Trades_V2.CopyItemInfos(_buyOrSell)
 return

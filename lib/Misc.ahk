@@ -49,10 +49,11 @@
 	Return {Name:currencyFullName, Is_Listed:isCurrencyListed}
 }
 
-Do_Action(actionType, actionContent="", gamePID="", isHotkey=False, uniqueNum="") {
+Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") {
 	global PROGRAM, GuiTrades, GuiTrades_Controls
 	static prevNum, ignoreFollowingActions, prevActionType, prevActionContent
-	activeTab := GuiTrades.Active_Tab
+	if !(tabNum) && (_buyOrSell)
+		tabNum := GuiTrades[_buyOrSell].Active_Tab
 
 	WRITE_SEND_ACTIONS := "SEND_MSG,SEND_TO_BUYER,SEND_TO_LAST_WHISPER,SEND_TO_LAST_WHISPER_SENT"
 		. ",INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
@@ -66,6 +67,30 @@ Do_Action(actionType, actionContent="", gamePID="", isHotkey=False, uniqueNum=""
 		. "`n" "ignoreFollowingActions=""" ignoreFollowingActions """, prevActionType=""" prevActionType """, prevActionContent=""" prevActionContent """.")
 		Return
 	}
+
+	if (SubStr(actionContent, 1, 1) = """") && (SubStr(actionContent, 0) = """") ; Removing quotes
+		actionContent := StrTrimLeft(actionContent, 1), actionContent := StrTrimRight(actionContent, 1)
+
+	if (ACTIONS_FORCED_CONTENT[actionType]) && !(actionContent)
+		actionContent := ACTIONS_FORCED_CONTENT[actionType]
+
+	if (tabNum) {
+		actionContentWithVariables := Replace_TradeVariables(_buyOrSell, tabNum, actionContent)
+		StringSplit, contentWords, actionContentWithVariables,% A_Space
+		if ( SubStr(actionContentWithVariables, 1, 2) = "@ ") {
+			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarEmpty_Msg, "%name%", contentWords1)
+			trayMsg := StrReplace(trayMsg, "%variable%", actionContent)
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
+			return
+		}
+		else if ( SubStr(contentWords1, 2, 1) = "%" || SubStr(contentWords1, 0, 1) = "%" ) {
+			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarTypo_Msg, "%variable%", actionContent)
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
+			return
+		}
+	}
+	else
+		actionContentWithVariables := actionContent
 
 	if IsIn(prevActionType, "COPY_ITEM_INFOS,WRITE_SEND,WRITE_DONT_SEND,WRITE_GO_BACK,SENDINPUT,SENDINPUT_RAW,SENDEVENT,SENDEVENT_RAW") {
 		; AppendToLogs(A_thisFunc "(actionType=" actionType ", actionContent=" actionContent ", isHotkey=" isHotkey ", uniqueNum=" uniqueNum "):"
@@ -87,39 +112,39 @@ Do_Action(actionType, actionContent="", gamePID="", isHotkey=False, uniqueNum=""
 			if (!PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts)
 				TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToKickSelf_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToKickSelf_Msg)
 			else
-				Send_GameMessage("WRITE_SEND", actionContent, gamePID)
+				Send_GameMessage("WRITE_SEND", actionContentWithVariables, gamePID)
 		}
 		else
-			Send_GameMessage("WRITE_SEND", actionContent, gamePID)
+			Send_GameMessage("WRITE_SEND", actionContentWithVariables, gamePID)
 	}
 	else if IsIn(actionType, WRITE_DONT_SEND_ACTIONS) {
-		Send_GameMessage("WRITE_DONT_SEND", actionContent, gamePID)
+		Send_GameMessage("WRITE_DONT_SEND", actionContentWithVariables, gamePID)
 		ignoreFollowingActions := True
 	}
 	else if IsIn(actionType, WRITE_GO_BACK_ACTIONS) {
-		Send_GameMessage("WRITE_GO_BACK", actionContent, gamePID)
+		Send_GameMessage("WRITE_GO_BACK", actionContentWithVariables, gamePID)
 		ignoreFollowingActions := True
 	}
 
 	; TO_DO_V2
 	else if (actionType = "COPY_ITEM_INFOS")
-		GoSub, GUI_Trades_CopyItemInfos_CurrentTab_Timer
+		GoSub, GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab_Timer
 	else if (actionType = "GO_TO_NEXT_TAB")
-		GUI_Trades.SelectNextTab()
+		GUI_Trades_V2.SelectNextTab(_buyOrSell)
 	else if (actionType = "GO_TO_PREVIOUS_TAB")
-		GUI_Trades.SelectPreviousTab()
+		GUI_Trades_V2.SelectPreviousTab(_buyOrSell)
 	else if (actionType = "CLOSE_TAB")
-		GUI_Trades.RemoveTab(activeTab)
+		GUI_Trades_V2.RemoveTab(_buyOrSellactiveTab)
 	else if (actionType = "TOGGLE_MIN_MAX")
-		GUI_Trades.Toggle_MinMax()
+		GUI_Trades_V2.Toggle_MinMax(_buyOrSell)
 	else if (actionType = "FORCE_MIN")
-		GUI_Trades.Minimize()
+		GUI_Trades_V2.Minimize(_buyOrSell)
 	else if (actionType = "FORCE_MAX")
-		GUI_Trades.Maximize()
+		GUI_Trades_V2.Maximize(_buyOrSell)
 	else if (actionType = "SAVE_TRADE_STATS")
-		GUI_Trades.SaveStats(activeTab)
+		GUI_Trades_V2.SaveStats(_buyOrSellactiveTab)
 	else if (actionType = "SHOW_LEAGUE_SHEETS")
-		GUI_TradesBuyCompact.HotBarButton("LeagueHelp")
+		GUI_Trades_V2.HotBarButton(_buyOrSell, "LeagueHelp")
 
 	else if (actionType = "SLEEP")
 		Sleep %actionContentWithVariables%
@@ -132,11 +157,11 @@ Do_Action(actionType, actionContent="", gamePID="", isHotkey=False, uniqueNum=""
 	else if (actionType = "SENDEVENT_RAW")
 		SendEvent,{Raw}%actionContentWithVariables%
 	else if (actionType = "IGNORE_SIMILAR_TRADE")
-		GUI_Trades.AddActiveTrade_To_IgnoreList()
+		GUI_Trades_V2.AddTrade_To_IgnoreList(tabNum)
 	else if (actionType = "CLOSE_SIMILAR_TABS")
-		GUI_Trades.CloseOtherTabsForSameItem()
+		GUI_Trades_V2.CloseOtherTabsForSameItem(_buyOrSell, tabNum)
 	else if (actionType = "SHOW_GRID")
-		GUI_Trades.ShowActiveTabItemGrid() ; TO_DO_V2
+		GUI_Trades_V2.ShowItemGrid(tabNum) ; TO_DO_V2
 
 	prevNum := uniqueNum, prevActionType := actionType, prevActionContent := actionContentWithVariables	
 }
