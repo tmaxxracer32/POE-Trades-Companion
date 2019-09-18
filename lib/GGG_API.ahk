@@ -4,6 +4,62 @@
     Like MapTier slot or something?
 */
 
+GGG_API_GetLastActiveCharacter(accName) {  
+    if !(accName)
+        return
+
+    url := "https://www.pathofexile.com/character-window/get-characters?accountName=" accName
+    headers := "Content-Type: application/json"
+    . "`n"     "Cache-Control: no-store, no-cache, must-revalidate"
+    options := "TimeOut: 7"
+    . "`n"     "Charset: UTF-8"
+
+    WinHttpRequest(url, data:="", headers, options), charsJSON := data
+    charsJSON := JSON.Load(charsJSON)
+
+    Loop % charsJSON.Count() {
+        if (charsJSON[A_Index].lastActive = True) {
+            lastChar := charsJSON[A_Index].name  
+            return lastChar  
+        }
+    }
+}
+
+GGG_API_CreateDataFiles() {
+    langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR"], jsonFinal := {}, sectList := ""
+    Loop % langs.Count() {
+        thisLang := langs[A_Index]
+        poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
+        url := poeURL "/api/trade/data/static/"
+        headers := "Content-Type:application/json;charset=UTF-8"
+        options := "TimeOut: 25"
+        . "`n"  "Charset: UTF-8"
+        WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+
+        for sect in jsonData.result {
+            if !IsObject(jsonFinal[sect])
+                jsonFinal[sect] := {}
+            if !IsObject(jsonFinal[sect][thisLang])
+                jsonFinal[sect][thisLang] := {}
+
+            Loop % jsonData.result[sect].Count()
+                jsonFinal[sect][thisLang][jsonData.result[sect][A_Index].id] := jsonData.result[sect][A_Index].text
+        }
+    }
+
+    for sect in jsonFinal {
+        sectFileName := StrReplace(sect, "_", " ")
+        StringUpper, sectFileName, sectFileName, T
+        sectFileName := StrReplace(sectFileName, " ", "")
+        fileLocation := A_ScriptDir "/data/poeDotCom" sectFileName "Data.json"
+        jsonText := JSON.Dump(jsonFinal[sect], "", "`t")
+        
+        hFile := FileOpen(fileLocation, "w", "UTF-8")
+        hFile.Write(jsonText)
+        hFile.Close()
+    } 
+}
+
 GGG_API_BuildItemSearchObj(obj) {
 /*  Convert POE TC slot infos into an item search obj
 */
@@ -58,6 +114,7 @@ GGG_API_BuildItemSearchObj(obj) {
     return searchObj
 }
 
+/*
 GGG_API_BuildExchangeSearchObj(obj) {
     if (obj.Account)
         account_obj := {exchange:{account:obj.Account}}
@@ -91,6 +148,7 @@ GGG_API_BuildExchangeSearchObj(obj) {
 
     return searchObj
 }
+*/
 
 GGG_API_GetMatchingExchangeData(obj) {
     ; Building the search obj based on provided infos, then retrieving results
@@ -190,7 +248,7 @@ GGG_API_IsExchangeDataMatching(obj, obj2) {
 
 GGG_API_GetMatchingItemsData(obj) {
     ; Building the search obj based on provided infos, then retrieving results
-    poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildSearchObj(obj)
+    poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildItemSearchObj(obj)
     url := poeURL "/api/trade/search/" obj.League "?source=" poeSearchObj
     headers := "Content-Type:application/json;charset=UTF-8"
     options := "TimeOut: 25"
@@ -212,7 +270,7 @@ GGG_API_GetMatchingItemsData(obj) {
 
             Loop % resultsListCount {
                 loopedResult := jsonData.result[A_Index]
-                isDataMatching := GGG_API_IsItemDataMatching(obj, {StashTab:loopedResult.listing.stash, StashX:loopedResult.listing.x, StashY:loopedResult.listing.Y)
+                isDataMatching := GGG_API_IsItemDataMatching(obj, {StashTab:loopedResult.listing.stash, StashX:loopedResult.listing.x, StashY:loopedResult.listing.Y})
                 if (isDataMatching) {
                     matchingObj := jsonData.result[A_Index]
                     Break
@@ -361,7 +419,7 @@ GGG_API_Get_ActiveTradingLeagues() {
 	}
 
 	if (attempts > 1) {
-		AppendtoLogs("Successfully reached Leagues API on attempt " attempts})
+		AppendtoLogs("Successfully reached Leagues API on attempt " attempts)
 		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPISuccess_Msg, "%number%", attempts)
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPISuccess_Title, trayMsg, {Fade_Timer:5000})
 		attempts := 0
