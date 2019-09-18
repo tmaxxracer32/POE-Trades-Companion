@@ -488,7 +488,7 @@ Parse_GameLogs(strToParse, preview=False) {
 		for index, regexStr in allAreaJoinedRegEx {
 			if RegExMatch(parsedLogsMsg, "SO)" regexStr, joinedPat) {
 				instancePID := joinedPat.1, playerName := joinedPat.2
-				GUI_Trades_V2.SetTabStyleJoinedArea("Sell", playerName)
+				GUI_Trades_V2.SetTabStyleJoinedArea(playerName)
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath) {
 					try
 						SoundPlay,% PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath
@@ -501,7 +501,7 @@ Parse_GameLogs(strToParse, preview=False) {
 		for index, regexStr in allAreaLeftRegEx {
 			if RegExMatch(parsedLogsMsg, "SO)" regexStr, leftPat) {
 				instancePID := leftPat.1, playerName := leftPat.2
-				GUI_Trades_V2.UnSetTabStyleJoinedArea("Sell", playerName)
+				GUI_Trades_V2.UnSetTabStyleJoinedArea(playerName)
 				break
 			}
 		}
@@ -775,7 +775,7 @@ Parse_GameLogs(strToParse, preview=False) {
 					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
 						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
-						GUI_Trades_V2.SetTabStyleWhisperReceived("Sell", whispName)
+						GUI_Trades_V2.SetTabStyleWhisperReceived(whispName)
 					}
 				}
 				Loop % GuiTradesBuyCompact.Tabs_Count {

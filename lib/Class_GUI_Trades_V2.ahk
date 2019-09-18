@@ -188,7 +188,6 @@
         global GuiTrades, GuiTrades_Controls
         global GuiTradesBuy, GuiTradesBuy_Controls
         global GuiTradesSell, GuiTradesSell_Controls
-		static guiCreated, borderSize ; TO_DO_V2 useless?
 		static Styles, StylesData
         scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100
         windowsDPI := Get_DpiFactor()
@@ -505,12 +504,12 @@
             Loop % _tabsToRender {
                 xpos := IsBetween(A_Index, 1, maxTabsToShow) ? TabButton%A_Index%_X : TabButton%maxTabsToShow%_X
                 Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabDefault" A_Index " Hidden", A_Index, Styles.Tab, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-                Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabJoined" A_Index " Hidden", A_Index, Styles.Tab_Joined, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-                Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabWhisper" A_Index " Hidden", A_Index, Styles.Tab_Whisper, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+                Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabJoinedArea" A_Index " Hidden", A_Index, Styles.Tab_Joined, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+                Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabWhisperReceived" A_Index " Hidden", A_Index, Styles.Tab_Whisper, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 
                 Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabDefault" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
-                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabJoined" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
-                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabWhisper" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
+                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabJoinedArea" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
+                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabWhisperReceived" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
 
                 Gui%guiName%["Tab_" A_Index] := Gui%guiName%_Controls["hBTN_TabDefault" A_Index]
             }            
@@ -694,11 +693,14 @@
 	    GuiTrades[_buyOrSell] := Gui%guiName%, GuiTrades_Controls[_buyOrSell] := Gui%guiName%_Controls
 		GuiTrades.Styles := Styles, GuiTrades.StylesData := StylesData
 
-        savedXPos := PROGRAM.SETTINGS.SETTINGS_MAIN[_buyOrSell "_Pos_X"], savedYPos := PROGRAM.SETTINGS.SETTINGS_MAIN[_buyOrSell "_Pos_Y"]
-        savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
 		if (_isPreview)
         	Gui.Show(guiName, "x0 y0 h" guiFullHeight " w" guiFullWidth " Hide")
-		else Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
+		else {
+			guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
+			savedXPos := PROGRAM.SETTINGS[guiIniSection].Pos_X, savedYPos := PROGRAM.SETTINGS[guiIniSection].Pos_Y
+			savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
+			Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
+		}
         if (_guiMode="Slots") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " ")
             Gui.Show(guiName "SearchHidden", "x0 y0 w0 h0 NoActivate") ; Not hidden on purpose so it can work with ShellMessage to empty on click
@@ -870,39 +872,28 @@
 		SetTitleMatchMode, %titleMatchMode%
 	}
 
-    SaveStats(_buyOrSell, slotNum) {
+    SaveStats(_buyOrSell, tabNum) {
 		global PROGRAM, DEBUG
-        if (_buyOrSell="Buy")
-		    iniFile := PROGRAM.TRADES_HISTORY_BUY_FILE
+		
+		tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum)
+		if (DEBUG.settings.use_chat_logs || tabContent.Seller = "iSellStuff" || tabContent.Buyer = "iSellStuff") {
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.iSellStuffNotSaved_Title, PROGRAM.TRANSLATIONS.TrayNotifications.iSellStuffNotSaved_Msg)
+			Return
+		}
 
-		slotContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
+		histFile := _buyOrSell="Buy" ? PROGRAM.TRADES_BUY_HISTORY_FILE : PROGRAM.TRADES_SELL_HISTORY_FILE
+		if !histfileObj := JSON_Load(histFile)
+			histfileObj := []
+		histfileObj[histfileObj.Count()+1] := ObjFullyClone(tabContent)
 
-		; if (DEBUG.settings.use_chat_logs || slotContent.Seller = "iSellStuff") {
-		; 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.iSellStuffNotSaved_Title, PROGRAM.TRANSLATIONS.TrayNotifications.iSellStuffNotSaved_Msg)
-		; 	Return
-		; }
-
-		index := INI.Get(iniFile, "GENERAL", "Index")
-		index := IsNum(index) ? index : 0
-
-		index++
-		; existsAlready := INI.Get(iniFile, index, "Buyer")
-		; existsAlready := existsAlready = "ERROR" || existsAlready = "" ? False : True
-		; if (existsAlready = True) {
-		; 	trayTxt := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ErrorSavingStatsSameIDExists_Msg, "%number%", index)
-		; 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ErrorSavingStatsSameIDExists_Title, trayTxt)
-		; 	Loop {
-		; 		index++
-		; 		existsAlready := INI.Get(iniFile, index, "Buyer")
-		; 		if (existsAlready = "ERROR" || existsAlready = "")
-		; 			Break
-		; 	}
-		; 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ErrorSavingStatsSameIDExists_Solved_Title, PROGRAM.TRANSLATIONS.TrayNotifications.ErrorSavingStatsSameIDExists_Solved_Msg)
-		; }
-		INI.Set(iniFile, "GENERAL", "Index", index)
-
-		value := StrReplace(value, "`n", "\n"), value := StrReplace(value, "`r", "\n")
-		INI.Set(iniFile, index, key, value)
+		; Making backup of old file
+		SplitPath, histFile, fileName, fileFolder
+		FileMove,% histFile,% fileFolder "\" fileName ".bak", 1
+		; Setting content into the settings file
+		jsonText := JSON.Dump(histfileObj, "", "`t")
+		hFile := FileOpen(histFile, "w", "UTF-16")
+		hFile.Write(jsonText)
+		hFile.Close()
 	}
 
     PushNewTab(_buyOrSell, infos) {
@@ -951,7 +942,7 @@
 		if (isFirstTab) {
             GUI_Trades_V2.SetActiveTab(_buyOrSell, 1)
 			GUI_Trades_V2.SetTransparency_Active(_buyOrSell)
-            ; if (PROGRAM.SETTINGS.SETTINGS_MAIN.AutoMaximizeOnFirstNewTab = "True")
+            if (PROGRAM.SETTINGS.SETTINGS_MAIN.AutoMaximizeOnFirstNewTab = "True")
 			    GUI_Trades_V2.Maximize(_buyOrSell)
 		}
 
@@ -1128,7 +1119,345 @@
 			GuiControl, Hide,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG ; basically "redraw", fixes old pic still there behind
 			GuiControl, Show,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG
 		}
-	}  
+
+		; Set trade verify color
+		if (cTabCont.TradeVerify != newContent.TradeVerify)
+			GUI_Trades_V2.SetTabVerifyColor(_buyOrSell, slotNum, newContent.TradeVerify)
+
+		; Set tab color style
+		if (cTabCont.TabStyle != newContent.TabStyle) {
+			if (newContent.TabStyle = "IsInArea")
+				GUI_Trades_V2.SetTabStyleJoinedArea(_buyOrSell, slotNum)
+			else if (newContent.TabStyle = "HasNewMessage")
+				GUI_Trades_V2.SetTabStyleWhisperReceived(_buyOrSell, slotNum)
+			else if (newContent.TabStyle = "Default")
+				GUI_Trades_V2.SetTabStyleDefault(_buyOrSell, slotNum)
+
+		}
+	}
+	
+	VerifyItemPrice(tabInfos) {
+		; TO_DO_V2
+		; Verify an item's price based on the information we have
+		; User acc name, item name, item level & qual for gems, stash tab & stash position
+		global PROGRAM
+
+		accountsObj := PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts
+
+		if (!accounts.1) {
+			tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
+			vColor := "Orange", vInfos := "No account name detected" "\nPlease set your account name in the Settings"
+
+			GUI_Trades_V2.SetTabVerifyColor(tabNum, vColor)
+		    GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", vInfos)
+			return
+		}
+
+		if (tabInfos.ItemCurrency && tabInfos.ItemCount) { ; TO_DO_V2 RegExMatch(tabInfos.Item, "iO)(\d+\.\d+|\d+) (\D+) \(T\d+\)", itemPat) && (tabInfos.ItemLevel) { ; currency.poe.trade map trade
+			RegExMatch(tabInfos.Price, "iO)(\d+\.\d+|\d+) (\D+)", pricePat)
+			; want currency infos
+			wantCount := itemPat.1, wantWhat := itemPat.2, wantCurInfos := Get_CurrencyInfos(wantWhat)
+			wantFullName := wantCurInfos.Name, wantID := PROGRAM["DATA"]["POETRADE_CURRENCY_DATA"][wantFullName].ID, isWantListed := wantCurInfos.Is_Listed
+			; give currency infos
+			giveCount := pricePat.1, giveWhat := pricePat.2, giveCurInfos := Get_CurrencyInfos(giveWhat)
+			giveFullName := giveCurInfos.Name, giveID := PROGRAM["DATA"]["POETRADE_CURRENCY_DATA"][giveFullName].ID, isGiveListed := giveCurInfos.Is_Listed
+			; ratio
+			sellBuyRatio := RemoveTrailingZeroes(giveCount/wantCount)
+
+			cmdLineParamsObj := {}
+			cmdLineParamsObj.Accounts := accounts
+			cmdLineParamsObj.League := tabInfos.StashLeague
+			cmdLineParamsObj.SellCurrencyFullName := wantFullName, cmdLineParamsObj.SellCurrencyIsListed := isWantListed, cmdLineParamsObj.SellCurrencyID := wantID, cmdLineParamsObj.SellCurrencyCount := wantCount
+			cmdLineParamsObj.BuyCurrencyFullName := giveFullName, cmdLineParamsObj.BuyCurrencyIsListed := isGiveListed, cmdLineParamsObj.BuyCurrencyID := giveID, cmdLineParamsObj.BuyCurrencyCount := giveCount
+			cmdLineParamsObj.SellBuyRatio := sellBuyRatio
+
+			cmdLineParamsObj.WhisperLang := tabInfos.WhisperLang, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
+			cmdLineParamsObj.TradeType := "Currency"
+
+			GoSub GUI_Trades_V2_VerifyItemPrice_SA
+			return
+		}
+		else { ; its a regular trade
+		    itemQualNoPercent := StrReplace(tabInfos.ItemQuality, "%", "")
+		    RegExMatch(tabInfos.StashPosition, "O)(.*);(.*)", stashPosPat), stashPosX := stashPosPat.1, stashPosY := stashPosPat.2
+		    RegExMatch(tabInfos.Price, "O)(\d+\.\d+|\d+) (\D+)", pricePat), priceNum := pricePat.1, priceCurrency := pricePat.2
+		    AutoTrimStr(priceNum, pricePat)
+			
+		    currencyInfos := Get_CurrencyInfos(priceCurrency)
+		    poeTradeCurrencyName := PoeTrade_Get_CurrencyAbridgedName_From_FullName(currencyInfos.Name)
+		    poeTradePrice := priceNum " " poeTradeCurrencyName
+
+			; making obj so it's easier to pass cmd line params
+			cmdLineParamsObj := {}
+			cmdLineParamsObj.Accounts := accounts, cmdLineParamsObj.ItemPrice := poeTradePrice
+			cmdLineParamsObj.ItemName := tabInfos.ItemName, cmdLineParamsObj.ItemLevel := tabInfos.ItemLevel
+			cmdLineParamsObj.ItemQuality := itemQualNoPercent, cmdLineParamsObj.League := tabInfos.StashLeague
+			cmdLineParamsObj.StashTab := tabInfos.StashTab, cmdLineParamsObj.StashX := stashPosX, cmdLineParamsObj.StashY := stashPosY
+
+			cmdLineParamsObj.WhisperLang := tabInfos.WhisperLang, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
+			cmdLineParamsObj.TradeType := "Regular", cmdLineParamsObj.CurrencyName := currencyInfos.Name, cmdLineParamsObj.CurrencyIsListed := currencyInfos.Is_Listed
+
+			GoSub GUI_Trades_V2_VerifyItemPrice_SA
+			return
+		}
+		return
+
+		GUI_Trades_V2_VerifyItemPrice_SA:
+			global PROGRAM, GuiIntercom, GuiIntercom_Controls
+
+			tabID := GUI_Trades.GetTabNumberFromUniqueID(tabInfos.UniqueID)
+			if (A_IsCompiled) {
+				GUI_Trades.SetTabVerifyColor(tabID, "Orange")
+				GUI_Trades.UpdateSlotContent(tabID, "TradeVerifyInfos", "Automated price verifying has been temporarily"
+				. "\n disabled for the executable version due to issues"
+				. "\n\nPlease use the AHK version if you wish to use this feature")
+				return
+			}
+			GUI_Trades.SetTabVerifyColor(tabID, "Grey")
+		    GUI_Trades.UpdateSlotContent(tabID, "TradeVerifyInfos", "Comparing price on poe.trade...")
+
+			intercomSlotNum := GUI_Intercom.GetNextAvailableSlot()
+			intercomSlotHandle := GUI_Intercom.GetSlotHandle(intercomSlotNum)
+			GUI_Intercom.ReserveSlot(intercomSlot)
+
+			cmdLineParams := ""
+			for key, value in cmdLineParamsObj
+				cmdLineParams .= " /" key "=" """" value """"
+
+			cl := DllCall( "GetCommandLine", "str" )
+			StringMid, path_AHk, cl, 2, InStr( cl, """", true, 2 )-2
+
+			saFile := A_ScriptDir "\lib\SA_PriceVerify.ahk"
+			saFile_run_cmd := % """" path_AHk """" A_Space """" saFile """"
+			.		" " cmdLineParams
+			.		" /IntercomHandle=" """" GuiIntercom.Handle """"
+			.		" /IntercomSlotHandle=" """" intercomSlotHandle """"
+			.		" /cURL=" """" PROGRAM.CURL_EXECUTABLE """"
+			.		" /ProgramLogsFile=" """" PROGRAM.LOGS_FILE """"
+			
+			Run,% saFile_run_cmd,% A_ScriptDir
+		return
+	}
+
+	SetTabVerifyColor(tabID, colour) {
+		; TO_DO_V2
+		global GuiTrades_Controls
+
+		if !IsIn(colour, "Grey,Orange,Green,Red") || !IsNum(tabID) {
+			AppendToLogs(A_ThisFunc "(tabID=" tabID ", colour=" colour "): Invalid colour or tabID is not a number.")
+			; MsgBox("", "", "Invalid use of " A_ThisFunc "`n`ntabID: """ tabID """`ncolour: """ colour """")
+			return
+		}
+
+		newColHwnd := GuiTrades_Controls["hIMG_TradeVerify" colour tabID]
+		curColHwnd := GuiTrades_Controls["hIMG_TradeVerify" tabID]
+
+		if (newColHwnd != curColHwnd) {
+			GuiControl, Trades:Show,% newColHwnd
+			GuiControl, Trades:Hide,% curColHwnd
+			GuiTrades_Controls["hIMG_TradeVerify" tabID] := newColHwnd
+
+			Gui_Trades.UpdateSlotContent(tabID, "TradeVerify", colour)
+		}
+	}
+
+	Use_WindowMode(checkOnly=False) {
+		; TO_DO_V2
+		global PROGRAM, GuiTrades
+
+		if (checkOnly=False) {
+			
+			INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", "TradesGUI_Mode", "Window")
+			GuiTrades.Docked_Window_Handle := ""
+
+			GUI_Trades.ResetPosition()
+		}
+
+		Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
+		Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.ModeWindow
+		Menu, Tray, Disable,% PROGRAM.TRANSLATIONS.TrayMenu.CycleDock
+
+		Menu, Tray, Enable,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
+	}
+
+	Use_DockMode(checkOnly=False) {
+		; TO_DO_V2
+		global PROGRAM, GuiTrades
+
+		if (checkOnly=False) {
+			INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", "TradesGUI_Mode", "Dock")
+			GuiTrades.Docked_Window_Handle := ""
+
+			GUI_Trades.ResetPosition()
+		}
+
+		Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
+		Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.ModeWindow
+		Menu, Tray, Enable,% PROGRAM.TRANSLATIONS.TrayMenu.CycleDock
+
+		Tray_ToggleLockPosition("Check")
+		Menu, Tray, Disable,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
+
+		GUI_Trades.DockMode_Cycle()
+	}
+
+	DockMode_Cycle(dontSetPos=False) {
+		; TO_DO_V2
+		global GuiTrades
+
+		gameInstances := Get_RunningInstances()
+		Loop % gameInstances.Count {
+			if (gameInstances[A_Index]["Hwnd"] = GuiTrades.Docked_Window_Handle)
+				cycleIndex := A_Index=gameInstances.Count ? 1 : A_Index+1
+		}
+		cycleIndex := cycleIndex ? cycleIndex : 1
+		GuiTrades.Docked_Window_Handle := gameInstances[cycleIndex]["Hwnd"]
+
+		if (dontSetPos=False)
+			Gui_Trades.DockMode_SetPosition()
+	}
+
+	DockMode_SetPosition() {
+		; TO_DO_V2
+		global GuiTrades, GuiTradesMinimized
+
+		if !WinExist("ahk_id " GuiTrades.Docked_Window_Handle " ahk_group POEGameGroup") {
+			GUI_Trades.DockMode_Cycle(dontSetPos:=True)
+			return
+		}
+
+		hiddenWin := A_DetectHiddenWindows
+		DetectHiddenWindows, On
+
+		WinGet, isMinMax, MinMax,% "ahk_id " GuiTrades.Docked_Window_Handle
+		isWinMinimized := isMinMax=-1?True:False
+
+		WinGetPos, dockedX, dockedY, dockedW, dockedH,% "ahk_id " GuiTrades.Docked_Window_Handle
+		clientInfos := GetWindowClientInfos("ahk_id " GuiTrades.Docked_Window_Handle)
+		dockedX -= clientInfos.X, dockedY += clientInfos.Y
+		
+		gtPos := GUI_Trades.GetPosition()
+		gtmPos := GUI_TradesMinimized.GetPosition()
+		
+		if (GuiTrades.Is_Minimized)
+			moveToX := (dockedX+dockedW)-gtmPos.W, moveToY := dockedY 
+		else moveToX := (dockedX+dockedW)-gtPos.W, moveToY := dockedY 
+
+		if IsNum(dockedX) && ( (GuiTrades.Is_Minimized && gtPos.X = moveToX && gtPos.Y = moveToY) || (GuiTrades.Is_Minimized && gtmPos.X = moveToX && gtmPos.Y = moveToY) ) {
+			DetectHiddenWindows, %hiddenWin%
+			Return
+		}
+		else if !IsNum(dockedX) || (isWinMinimized) {
+			AppendToLogs(A_ThisFunc "(): Couldn't dock Trades GUI to game window. Resetting pos and cycling to next game window.")
+			GUI_Trades.ResetPosition(dontWrite:=True)
+			GUI_Trades.DockMode_Cycle(dontSetPos:=True)
+		}
+		else {
+			if (GuiTrades.Is_Minimized)
+				WinMove,% "ahk_id " GuiTradesMinimized.Handle, ,% moveToX,% moveToY
+			else WinMove,% "ahk_id " GuiTrades.Handle, ,% moveToX,% moveToY
+		}
+
+		if (GuiTrades.Is_Minimized)
+			GUI_TradesMinimized.SavePosition()
+		else 
+			GUI_Trades.SavePosition()
+		
+		DetectHiddenWindows, %hiddenWin%
+	}
+
+	SetOrUnsetTabStyle(setOrUnset="", tabStyle="", playerOrTab="", applyToThisTabOnly=False) {
+		global GuiTrades, GuiTrades_Controls
+
+		if (!GuiTrades.Sell.Is_Tabs)
+			return
+
+		if !(setOrUnset) || !(playerOrTab) || (!tabStyle) {
+			MsgBox(4096, "", "Invalid use of GUI_Trades.SetOrUnsetTabStyle()`n`nsetOrUnset: " setOrUnset "`nplayerOrTab: " playerOrTab "`ntabStyle: " tabStyle)
+			return
+		}
+
+		tabNum := IsNum(playerOrTab) ? tabNum : ""
+		buyerName := IsNum(playerOrTab) ? GUI_Trades_V2.GetTabContent("Sell", playerOrTab).Buyer : playerOrTab
+
+		; Retrieve which tabs this buyer owns
+		if (applyToThisTabOnly=True && tabNum) {
+			tabContent := GUI_Trades_V2.GetTabContent("Sell", buyerName)
+			buyerTabs := tabNum, tab%playerOrTab%IsInArea := tabContent.IsInArea, tab%playerOrTab%HasNewMessage := tabContent.HasNewMessage
+		}
+		else {
+			Loop % GuiTrades.Sell.Tabs_Count {
+				tabContent := GUI_Trades_V2.GetTabContent("Sell", A_Index)
+				if (tabContent.Buyer = buyerName) {
+					buyerTabs .= A_Index ",", tab%A_Index%IsInArea := tabContent.IsInArea, tab%A_Index%HasNewMessage := tabContent.HasNewMessage
+				}
+			}
+			StringTrimRight, buyerTabs, buyerTabs, 1
+		}
+
+		Loop, Parse, buyerTabs,% ","
+		{
+			styleCurrent := GuiTrades.Sell["Tab_" A_LoopField]
+
+			if (setOrUnset = "Set") {
+				newStyle := tabStyle="Default"?GuiTrades_Controls.Sell["hBTN_TabDefault" A_LoopField]
+					: tabStyle = "JoinedArea"?GuiTrades_Controls.Sell["hBTN_TabJoinedArea" A_LoopField]
+					: tabStyle = "WhisperReceived"?GuiTrades_Controls.Sell["hBTN_TabWhisperReceived" A_LoopField]
+					: GuiTrades_Controls.Sell["hBTN_TabDefault" A_LoopField]
+			}
+			else if (setOrUnset = "UnSet") {
+				newStyle := tabStyle="JoinedArea" && tab%A_LoopField%HasNewMessage = True ? GuiTrades_Controls.Sell["hBTN_TabWhisperReceived" A_LoopField]
+					: tabStyle="JoinedArea" && tab%A_LoopField%HasNewMessage != True ? GuiTrades_Controls.Sell["hBTN_TabDefault" A_LoopField]
+					: tabStyle="WhisperReceived" && tab%A_LoopField%IsInArea = True ? GuiTrades_Controls.Sell["hBTN_TabJoinedArea" A_LoopField]
+					: tabStyle="WhisperReceived" && tab%A_LoopField%IsInArea != True ? GuiTrades_Controls.Sell["hBTN_TabDefault" A_LoopField]
+					: GuiTrades_Controls.Sell["hBTN_TabDefault" A_LoopField]
+			}
+
+			state := setOrUnset="Set"? True : False
+			tabContent := GUI_Trades_V2.GetTabContent("Sell", A_LoopField)
+			if (tabStyle = "JoinedArea" && !tabContent.IsInArea)
+				GUI_Trades_V2.UpdateSlotContent("Sell", A_LoopField, "IsInArea", state)
+			else if (tabStyle = "WhisperReceived" && !tabContent.HasNewMessage)
+				GUI_Trades_V2.UpdateSlotContent("Sell", A_LoopField, "HasNewMessage", state)
+
+			if (styleCurrent != newStyle) {
+				if !(setOrUnset = "Set" && tabStyle = "JoinedArea" && tab%A_LoopField%HasNewMessage = True) { ; Priority: Whisper > Joined > Default. Don't set JoinedArea style if we already have WhisperReceived style
+					GuiControl, TradesSell:Show,% newStyle
+					GuiControl, TradesSell:Hide,% styleCurrent
+					GuiTrades.Sell["Tab_" A_LoopField] := newStyle
+					if (A_LoopField = GuiTrades.Sell.Active_Tab) {
+						GuiControl, TradesSell:+Disabled,% newStyle
+						GuiControl, TradesSell:-Disabled,% styleCurrent
+					}
+					styleChanged := True
+				}
+			}
+		}
+
+;		if (styleChanged = True) {
+;			GUI_Trades_V2.SetActiveTab( tabName:=GUI_Trades.GetActiveTab(), autoScroll:=True, skipError:=False, styleChanged:=True )
+;		}
+	}
+
+	SetTabStyleDefault(playerOrTab) {
+		GUI_Trades_V2.SetOrUnsetTabStyle("Set", "Default", playerOrTab)
+	}
+
+	SetTabStyleJoinedArea(playerOrTab) {
+		GUI_Trades_V2.SetOrUnsetTabStyle("Set", "JoinedArea", playerOrTab)
+	}
+
+	UnSetTabStyleJoinedArea(playerOrTab) {
+		GUI_Trades_V2.SetOrUnsetTabStyle("Unset", "JoinedArea", playerOrTab)
+	}
+
+	SetTabStyleWhisperReceived(playerOrTab) {
+		GUI_Trades_V2.SetOrUnsetTabStyle("Set", "WhisperReceived", playerOrTab)
+	}
+
+	UnSetTabStyleWhisperReceived(playerOrTab) {
+		GUI_Trades_V2.SetOrUnsetTabStyle("Unset", "WhisperReceived", playerOrTab, applyToThisTabOnly:=True)
+	}
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
      *
@@ -1277,6 +1606,7 @@
 		GuiTrades[_buyOrSell].Is_Maximized := True
 		GuiTrades[_buyOrSell].Is_Minimized := False
 
+		; GUI_Trades_V2.ShowItemGrid(_buyOrSell) ; TO_DO_V2
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 		; GUI_Trades_V2.ToggleTabSpecificAssets("On")
 	}
@@ -1676,6 +2006,103 @@
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
     */
 
+	GetTabNumberFromUniqueID(_buyOrSell, uniqueID) {
+		global GuiTrades
+		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
+
+		Loop % tabsCount {
+			tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, A_Index)
+			if (tabContent.UniqueID = uniqueID)
+				return A_Index
+		}
+
+		AppendToLogs(A_ThisFunc "(uniqueId=" uniqueId "): Couldn't find any tab ID matching this unique ID")
+		return
+	}
+
+	GetActiveTab(_buyOrSell) {
+		global GuiTrades
+		return GuiTrades[_buyOrSell].Active_Tab
+	}
+
+	SelectNextTab(_buyOrSell) {
+		global GuiTrades
+		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
+		activeTab := GuiTrades[_buyOrSell].Active_Tab
+
+		if (!GuiTrades[_buyOrSell].Is_Tabs)
+			return
+		if !IsNum(activeTab)
+			Return
+
+		if (tabsCount > activeTab)
+			GUI_Trades_V2.SetActiveTab(_buyOrSell, activeTab+1)
+		else if (tabsCount = activeTab)
+			GUI_Trades_V2.SetActiveTab(_buyOrSell, 1)
+	}
+
+	SelectPreviousTab(_buyOrSell) {
+		global GuiTrades
+		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
+		activeTab := GuiTrades[_buyOrSell].Active_Tab
+
+		if (!GuiTrades[_buyOrSell].Is_Tabs)
+			return
+		if !IsNum(activeTab)
+			Return
+
+		if (activeTab != 1)
+			GUI_Trades_V2.SetActiveTab(_buyOrSell, activeTab-1)
+		else if (activeTab = 1)
+			GUI_Trades_V2.SetActiveTab(_buyOrSell, tabsCount)
+	}
+
+	EnableHotkeys(_buyOrSell) {
+		global GuiTrades, PROGRAM
+
+		for hk, value in PROGRAM.HOTKEYS {
+			noModsHKArr := RemoveModifiersFromHotkeyStr(hk, returnMods:=True), noModsHK := noModsHKArr.1, onlyModsHK := noModsHKArr.2
+			hkKeyName := GetKeyName(noModsKey)
+			
+			if (keyName = "Tab") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
+				hasCtrlTabHK := True
+			if (keyName = "Tab") && IsContaining(onlyModsHK, "^") && IsContaining(onlyModsHK, "+") && !IsContaining(onlyModsHK, "#,!")
+				hasCTrlShiftTabHK := True
+			if (keyName = "WheelDown") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
+				hasCtrlWheelDownHK := True
+			if (keyName = "WheelUp") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
+				hasCtrlWheelUpHK := True
+		}
+
+		GuiTrades[_buyOrSell].HOTKEYS := {}
+		if (!hasCtrlTabHK)
+			GuiTrades[_buyOrSell].HOTKEYS.Push("^SC00F")
+		if (!hasCTrlShiftTabHK)
+			GuiTrades[_buyOrSell].HOTKEYS.Push("^+SC00F")
+		if (!hasCtrlWheelDownHK)
+			GuiTrades[_buyOrSell].HOTKEYS.Push("^WheelDown")
+		if (!hasCtrlWheelUpHK)
+			GuiTrades[_buyOrSell].HOTKEYS.Push("^WheelUp")
+		
+		Loop % GuiTrades[_buyOrSell].HOTKEYS.MaxIndex() {
+			Hotkey, IfWinActive
+			Hotkey,% "~" GuiTrades[_buyOrSell].HOTKEYS[A_Index], GUI_Trades_V2_SelectTab_Hotkey, On
+		} 
+	}
+
+	DisableHotkeys(_buyOrSell) {
+		global GuiTrades
+		if !(GuiTrades[_buyOrSell].Handle)
+			return
+
+		try {
+			Loop % GuiTrades[_buyOrSell].HOTKEYS.MaxIndex() { 
+				Hotkey, IfWinActive
+				Hotkey,% "~" GuiTrades[_buyOrSell].HOTKEYS[A_Index], Off
+			}
+		}
+	}
+
 	IsTrade_In_IgnoreList(tradeInfos) {
 		global TRADES_IGNORE_LIST
 		
@@ -1998,7 +2425,7 @@
 			. "`nNew tabs will not be able to be created.")
 		}
 
-		TrayNotifications.Show("Increasing tabs limit to " limits.3)
+		TrayNotifications.Show("Increasing tabs limit to " limits.3, "")
 		
 		GUI_Trades_V2.RecreateGUI(_buyOrSell, nextLimit)
 	}
@@ -2381,4 +2808,28 @@ GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab_Timer:
 return
 GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab:
 	GUI_Trades_V2.CopyItemInfos(_buyOrSell)
+return
+
+GUI_Trades_V2_Sell_RefreshIgnoreList:
+	GUI_Trades_V2.RefreshIgnoreList()
+return
+
+GUI_Trades_V2_SelectTab_Hotkey:
+	global GuiTrades
+	MouseGetPos, , , undermouseWinHwnd
+	if IsIn(underMouseWinHwnd, GuiTrades.Buy.Handle "," GuiTrades.Sell.Handle) {
+		StringTrimLeft, thishotkey, A_ThisHotkey, 1 ; Removes ~
+		if IsIn(thishotkey, "^SC00F,^WheelDown") { ; Ctrl+Tab / Ctrl+WheelDown
+			if (underMouseWinHwnd=GuiTrades.Buy.Handle)
+				GUI_Trades_V2.SelectNextTab("Buy")
+			else if (underMouseWinHwnd=GuiTrades.Sell.Handle)
+				GUI_Trades_V2.SelectNextTab("Sell")
+		}
+		else if IsIn(thishotkey, "^+SC00F,^WheelUp") { ; Ctrl+Tab / Ctrl+WheelUp
+			if (underMouseWinHwnd=GuiTrades.Buy.Handle)
+				GUI_Trades_V2.SelectPreviousTab("Buy")
+			else if (underMouseWinHwnd=GuiTrades.Sell.Handle)
+				GUI_Trades_V2.SelectPreviousTab("Sell")
+		}
+	}
 return
