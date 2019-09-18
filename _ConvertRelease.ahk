@@ -31,7 +31,7 @@ if (generateCurrencyData) {
 	PoeTrade_GenerateCurrencyData()
 
 	ToolTip, Creating poeDotComCurrencyData.json
-	PoeDotCom_GenerateCurrencyData()
+	GGG_API_CreateDataFiles()
 }
 if (generateLeagueTxt) {
 	/*	TO_DO coming later
@@ -126,6 +126,7 @@ ReloadWithParams(params, getCurrentParams=False, asAdmin=False) {
 #Include CompileAhk2Exe.ahk
 #Include CmdLineParameters.ahk
 #Include EasyFuncs.ahk
+#Include GGG_API.ahk
 #Include Logs.ahk
 #Include SetFileInfos.ahk
 #Include PoeTrade.ahk
