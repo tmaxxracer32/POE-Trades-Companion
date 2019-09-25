@@ -134,7 +134,7 @@ While it should be safe to "spam" this hotkey (because there are some countermea
 
 ## Stats
 
-**Coming later**
+**Screenshots of the feature coming later**
 
 ## Settings 
 
