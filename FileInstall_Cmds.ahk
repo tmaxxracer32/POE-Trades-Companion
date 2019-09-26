@@ -154,23 +154,48 @@ if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
 	FileCreateDir,% PROGRAM.DATA_FOLDER ""
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("data\poeDotComCurrencyData.json")
-	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json"
+	sourceFileSize := Get_ResourceSize("data\poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\poeDotComItemsData.json"
 }
 else {
-	FileGetSize, sourceFileSize, data\poeDotComCurrencyData.json
-	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json"
+	FileGetSize, sourceFileSize, data\poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\poeDotComItemsData.json"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, data\poeDotComCurrencyData.json, % PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json", 1
+	FileInstall, data\poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\poeDotComItemsData.json", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: data\poeDotComCurrencyData.json"
-	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json"
+	.	"`nSource: data\poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeDotComItemsData.json"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: data\poeDotComCurrencyData.json"
-	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json"
+	.	"`nSource: data\poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeDotComStaticData.json"
 	.	"`nFlag: " 2
 }
 
@@ -196,6 +221,31 @@ if (ErrorLevel) {
 	errorLog .= "`n`n""Failed to extract file!"
 	.	"`nSource: data\poeTradeCurrencyData.json"
 	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\TradingLeagues.txt")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+}
+else {
+	FileGetSize, sourceFileSize, data\TradingLeagues.txt
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\TradingLeagues.txt, % PROGRAM.DATA_FOLDER "\TradingLeagues.txt", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\TradingLeagues.txt"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\TradingLeagues.txt"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
 	.	"`nFlag: " 2
 }
 
