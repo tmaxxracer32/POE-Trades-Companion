@@ -175,7 +175,7 @@
 
 	CreatePreview(_buyOrSell, _guiMode) {
 
-		GUI_Trades_V2.Create(1, buyOrSell:=_buyOrSell, slotsOrTab:=_guiMode, preview:=True)
+		GUI_Trades_V2.Create(1, buyOrSell:=_buyOrSell, stackOrTabs:=_guiMode, preview:=True)
 
 		if (_buyOrSell="Buy")
 			Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @To SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
@@ -196,8 +196,8 @@
             MsgBox(4096, "", "ERROR NOT Buy OR Sell: " _buyOrSell)
             return
         }
-        if !IsIn(_guiMode, "Tabs,Slots") {
-            MsgBox(4096, "", "ERROR NOT Tabs OR Slots: " _guiMode)
+        if !IsIn(_guiMode, "Tabs,Stack") {
+            MsgBox(4096, "", "ERROR NOT Tabs OR Stack: " _guiMode)
             return
         }		
 
@@ -240,7 +240,7 @@
 			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_1.Buttons_Count ? 1
 			: 0
 
-        if (_guiMode="Slots") {
+        if (_guiMode="Stack") {
 			Gui%guiName%.Height_Minimized			:= guiMinimizedHeight := (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
 			Gui%guiName%.Height_Maximized 	 	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
 			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
@@ -270,8 +270,8 @@
         }
 
         ; = = Define general gui slots
-        if (_guiMode="Slots") {
-            maxSlotsToShow := 4
+        if (_guiMode="Stack") {
+            maxTabsToShow := 4
         }
         else if (_guiMode="Tabs") {
             maxTabsToShow := 8
@@ -286,7 +286,7 @@
         ToolBar_SpaceBetweenButtons := 8*scaleMult
 
             ; Second bar
-        if (_guiMode="Slots") {
+        if (_guiMode="Stack") {
             Header2_X := leftMost, Header2_Y := Header_Y+Header_H, Header2_H := 22*scaleMult
             RightArrow_W := 25*scaleMult, RightArrow_H := Header2_H
             LeftArrow_W := RightArrow_W, LeftArrow_H := RightArrow_H       
@@ -337,7 +337,7 @@
         PriceCount_X := CurrencyImg_X+CurrencyImg_W, PriceCount_Y := CurrencyImg_Y, PriceCount_W := 50
         AdditionalMsg_X := PriceCount_X+PriceCount_W, AdditionalMsg_Y := PriceCount_Y, AdditionalMsg_W := 200
         SmallButton_X := SellerName_X, SmallButton_Y := secondRowY, SmallButton_W := 35*scaleMult, SmallButton_H := 25*scaleMult, SmallButton_Space := 5*scaleMult, SmallButton_Count := 4
-        if (_guiMode="Slots")
+        if (_guiMode="Stack")
             Time_X := CloseTabVertical_X-Time_W-(3*scaleMult), Time_Y := 0 ; 3=spacing
         else if (_guiMode="Tabs")
             Time_X := rightMost-Time_W-(3*scaleMult), Time_Y := 0 ; 3=spacing
@@ -357,13 +357,13 @@
 		Gui%guiName%.Max_Tabs_Per_Row := maxTabsToShow
 		Gui%guiName%.Is_Created := False
         Gui%guiName%.Is_Tabs := _guiMode="Tabs"?True:False
-        Gui%guiName%.Is_Slots := _guiMode="Slots"?True:False
+        Gui%guiName%.Is_Stack := _guiMode="Stack"?True:False
 
 		if !IsObject(Styles)
 			Styles := GUI_Trades_V2.Get_Styles(), StylesData := {}
 
         ; = = Borders
-        if (_guiMode="Slots") {
+        if (_guiMode="Stack") {
             bordersObj := { Top: {X:0, Y:0, W:guiFullWidth, H:borderSize}
 				,Left: {X:0, Y:0, W:borderSize, H:guiFullHeight}
 				,Right: {X:guiFullWidth-borderSize, Y:0, W:borderSize, H:guiFullHeight}
@@ -403,7 +403,7 @@
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Arrow_Right", RightArrow_W, RightArrow_H, "ArrowRight", {CenterRatio:0.70, Left:{Skip:True}})
 		if !IsObject(Styles.Close_Tab) && (_guiMode="Tabs")
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab", RightArrow_W, RightArrow_H, "Cross", {CenterRatio:0.60})
-		if !IsObject(Styles.Close_Tab_Vertical) && (_guiMode="Slots")
+		if !IsObject(Styles.Close_Tab_Vertical) && (_guiMode="Stack")
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Close_Tab_Vertical", CloseTabVertical_W, CloseTabVertical_H, "Cross", {CenterRatio:0.65, Top:{Skip:True}, Bottom:{Skip:True}, Background: {FillVertically:True, UseBackground2:True}})
 
 		Gui.Add(guiName, "Picture", "x" Header_X " y" Header_Y " w" Header_W " h" Header_H " hwndhIMG_Header BackgroundTrans", SKIN.Assets.Misc.Header)
@@ -445,7 +445,7 @@
 			- Anything typed in the hidden edit box will be reflected on our parent gui text control
 		*/
 
-        if (_guiMode="Slots") {
+        if (_guiMode="Stack") {
             global GuiTradesBuySearch, GuiTradesBuySearch_Controls
             global GuiTradesSellSearch, GuiTradesSellSearch_Controls
 			global GuiTradesBuyPreviewSearch, GuiTradesBuyPreviewSearch_Controls
@@ -480,7 +480,7 @@
             Gui.SetDefault(guiName)
         }
 
-        if (_guiMode="Slots") {
+        if (_guiMode="Stack") {
             sample1 := Get_TextCtrlSize("EXTREMELY_UNNECESSARILY_LONG_SAMPLE_TEXT", PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size, maxWidth:="", params="R1", ctrlType:="Text").W
             sample2 := Get_TextCtrlSize("EXTREMELY_UNNECESSARILY_LONG_SAMPLE_TEXT", PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size, maxWidth:="", params="R1", ctrlType:="Edit").W
             Gui.Add(guiName, "Picture", "x" Header2_X " y" Header2_Y " w" Header2_W " h" Header2_H " hwndhIMG_Header2 BackgroundTrans", SKIN.Assets.Misc.Header2) ; Title bar
@@ -539,7 +539,7 @@
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyOrange Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Orange)
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGreen Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Green)
 			Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyRed Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Red)
-            if (_guiMode="Slots") {
+            if (_guiMode="Stack") {
 			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 			}
 
@@ -654,7 +654,7 @@
 			Gui%guiName%["Slot" tabNum] := Gui%guiName%_Slot%tabNum% ; adding gui array to our main gui array as a sub array
 			Gui%guiName%["Slot" tabNum "_Controls"] := Gui%guiName%_Slot%tabNum%_Controls
 
-            if (_guiMode="Slots")
+            if (_guiMode="Stack")
                 Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CloseTab", "RemoveTab", _buyOrSell, tabNum) 
 
 			; Gui.Show(slotGuiName, "x0 y0 w" guiWidth+borderSize " h" TabContentSlot_H " Hide")	
@@ -663,7 +663,7 @@
             Gui%guiName%.ImageButton_Errors .= Gui%guiName%["Slot" tabNum].ImageButton_Errors
         }
 
-        if (_guiMode="Slots") {
+        if (_guiMode="Stack") {
             ; calculate slot positions
             Gui%guiName%["Slot1_Pos"] := (Header2_Y+Header2_H)*windowsDPI
             Gui%guiName%["Slot2_Pos"] := Gui%guiName%["Slot1_Pos"] + (Gui%guiName%.Slot1.Height*windowsDPI)
@@ -701,7 +701,7 @@
 			savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
 			Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
 		}
-        if (_guiMode="Slots") { 
+        if (_guiMode="Stack") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " ")
             Gui.Show(guiName "SearchHidden", "x0 y0 w0 h0 NoActivate") ; Not hidden on purpose so it can work with ShellMessage to empty on click
         }
@@ -763,9 +763,9 @@
 
     ContextMenu(CtrlName, _buyOrSell) {
 		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings
-		isSlot := GuiTrades[_buyOrSell].Is_Slots
+		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
-		if (isSlot) {
+		if (isStack) {
 			if RegExMatch(A_Gui, "iO)Trades" _buyOrSell "_Slot(\d+)", slotIDPat)
 				thisSlotID := slotIDPat.1
 		}
@@ -788,7 +788,7 @@
 			Menu, RClickMenu, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
 		if (!GuiTrades[_buyOrSell].Tabs_Count)
 			Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs
-		if (!GuiTrades[_buyOrSell].Tabs_Count) || (isSlot && !thisSlotID)
+		if (!GuiTrades[_buyOrSell].Tabs_Count) || (isStack && !thisSlotID)
 			Menu, RClickMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem
 		; Show
 		Menu, RClickMenu, Show		
@@ -904,7 +904,7 @@
         tabsLimit       := GuiTrades[_buyOrSell].Tabs_Limit
 		tabsCount       := GuiTrades[_buyOrSell].Tabs_Count
         maxTabsToShow   := GuiTrades[_buyOrSell].Max_Tabs_Per_Row
-        isSlots         := GuiTrades[_buyOrSell].Is_Slots
+        isStack         := GuiTrades[_buyOrSell].Is_Stack
         isTabs          := GuiTrades[_buyOrSell].Is_Tabs
 		isFirstTab      := tabsCount=0 ? True : False
 
@@ -927,7 +927,7 @@
         ; Putting infos to slot
         newTabsCount := (tabsCount <= 0) ? 1 : tabsCount+1
 		GUI_Trades_V2.SetSlotContent(_buyOrSell, tabsCount+1, infos)
-        if (isSlots)
+        if (isStack)
 		    GUI_Trades_V2.SetSlotPosition(_buyOrSell, tabsCount+1, tabsCount+1)
         else if (isTabs) {
             if IsBetween(newTabsCount, 1, maxTabsToShow) { ; Show new tab btn if its in the row
@@ -964,7 +964,7 @@
 		}
 
         ; Update the GUI height if the mode is slots
-        if (isSlots) {
+        if (isStack) {
             GuiTrades[_buyOrSell].Height_Maximized := guiHeight := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_Minimized
                 : newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
                 : newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
@@ -1788,10 +1788,10 @@
 
 	ScrollUp(_buyOrSell) {
 		; Tabs: Re-arrange the tabs buttons to simulate scrolling left
-		; Slots: Re-arrange the slots to simulate scrolling up
+		; Stack: Re-arrange the slots to simulate scrolling up
 		global GuiTrades, GuiTrades_Controls
 		tabsRange := GUI_Trades_V2.GetTabsRange(_buyOrSell)
-		isSlots := GuiTrades[_buyOrSell].Is_Slots
+		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 
 		if !(tabsRange.1 > 1) ; We can't scroll further
@@ -1810,7 +1810,7 @@
 			GuiControl, Trades%_buyOrSell%:Show,% GuiTrades[_buyOrSell]["Tab_" newFistTab] ; Show new tab on left most
 			GuiControl, Trades%_buyOrSell%:Hide,% GuiTrades[_buyOrSell]["Tab_" tabsRange.2] ; Hide previous tab on right most
 		}
-        else if (isSlots) {
+        else if (isStack) {
 			slotNum := tabsRange.1
 			GUI_Trades_V2.SetSlotPosition(_buyOrSell, slotNum-1, 1) ; Show new first slot
 			Loop 4 { ; Handle the other slots
@@ -1822,11 +1822,11 @@
 
 	ScrollDown(_buyOrSell) {
 		; Tabs: Re-arrange the tabs buttons to simulate scrolling right
-		; Slots: Re-arrange the slots to simulate scrolling down
+		; Stack: Re-arrange the slots to simulate scrolling down
 		global GuiTrades, GuiTrades_Controls
 		tabsRange := GUI_Trades_V2.GetTabsRange(_buyOrSell)
 		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
-		isSlots := GuiTrades[_buyOrSell].Is_Slots
+		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 
 		if !(tabsCount > tabsRange.2) ; We can't scroll further
@@ -1846,7 +1846,7 @@
 			GuiControl, Trades%_buyOrSell%:Show,% GuiTrades[_buyOrSell]["Tab_" newLastTab] ; Show new tab on right most
 			GuiControl, Trades%_buyOrSell%:Hide,% GuiTrades[_buyOrSell]["Tab_" tabsRange.1] ; Hide previous tab on left most
 		}
-        else if (isSlots) {
+        else if (isStack) {
 			slotNum := tabsRange.1
 			Loop 4 { ; Handle the other slots
 				GUI_Trades_V2.SetSlotPosition(_buyOrSell, slotNum, A_Index-1)
@@ -1865,7 +1865,7 @@
 		global GuiTrades, GuiTrades_Controls
 		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
 		tabsRange := GUI_Trades_V2.GetTabsRange(_buyOrSell)
-		isSlots := GuiTrades[_buyOrSell].Is_Slots
+		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 		activeTab := GuiTrades[_buyOrSell].Active_Tab
 
@@ -1912,8 +1912,8 @@
 			GuiControl, Trades%_buyOrSell%:Hide,% GuiTrades[_buyOrSell]["Tab_" tabsCount]
 		; Updating tab count var
 		GuiTrades[_buyOrSell].Tabs_Count := GuiTrades[_buyOrSell].Tabs_Count <= 0 ? 0 : GuiTrades[_buyOrSell].Tabs_Count-1
-		; Updating height var if is slots
-		if (isSlots) {
+		; Updating height var if is stack
+		if (isStack) {
 			GuiTrades[_buyOrSell].Height_Maximized := GuiTrades[_buyOrSell].Tabs_Count = 0 ? GuiTrades[_buyOrSell].Height_NoRow
 				: GuiTrades[_buyOrSell].Tabs_Count = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
 				: GuiTrades[_buyOrSell].Tabs_Count = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
@@ -1937,7 +1937,7 @@
 		; Do stuff if tabs count is not zero
 		else {
 			GuiControl,Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"],% PROGRAM.NAME " (" GuiTrades[_buyOrSell].Tabs_Count ")"
-			if (isSlots)
+			if (isStack)
 				Gui.Show("Trades" _buyOrSell, "h" GuiTrades[_buyOrSell].Height_Maximized " NoActivate")
 			; GuiControl,TradesBuyCompact:,% GuiTradesMinimized_Controls["hTEXT_Title"],% "(" GuiTrades.Tabs_Count ")"
 		}
@@ -2005,7 +2005,7 @@
 		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
 		maxTabsPerRow := GuiTrades[_buyOrSell].Max_Tabs_Per_Row
 		tabsRange := GUI_Trades_V2.GetTabsRange(_buyOrSell)
-        tabsOrSlot := GuiTrades[_buyOrSell].Is_Slots ? "Slots" : "Tabs"
+        tabsOrStack := GuiTrades[_buyOrSell].Is_Stack ? "Stack" : "Tabs"
 
 		if (tabsLimit = "")
 			tabsLimit := GuiTrades[_buyOrSell].Tabs_Limit
@@ -2016,9 +2016,9 @@
 		}
 		
 		if (tabsLimit)
-			GUI_Trades_V2.Create(tabsLimit, _buyOrSell, tabsOrSlot) ; Recreate GUI with more tabs
+			GUI_Trades_V2.Create(tabsLimit, _buyOrSell, tabsOrStack) ; Recreate GUI with more tabs
 		else
-			GUI_Trades_V2.Create("", _buyOrSell, tabsOrSlot) ; No limit specific, just use default limit
+			GUI_Trades_V2.Create("", _buyOrSell, tabsOrStack) ; No limit specific, just use default limit
 		Loop % tabsCount { ; Set tabs content
 			GUI_Trades_V2.PushNewTab(_buyOrSell, tabInfos%A_Index%)
 		}
@@ -2352,7 +2352,7 @@
 		global GuiTrades
 
 		Loop % GuiTrades[_buyOrSell].Tabs_Count {
-			if (GuiTrades[_buyOrSell].Is_Slots) {
+			if (GuiTrades[_buyOrSell].Is_Stack) {
 				guiName := "Trades" _buyOrSell "_Slot" A_Index
 				GuiControlGet, isVisible, %guiName%:Visible,% GuiTrades[_buyOrSell]["Slot" A_Index "_Controls"].hTEXT_TimeSent
 			}
@@ -2395,7 +2395,7 @@
 	}
 
 	SetSlotPosition(_buyOrSell, slotNum, slotPos) {
-        ; Only used with the Slots gui mode
+        ; Only used with the Stack gui mode
 		; Set the position of the Slot gui
 		; If position is higher than the allocated slot count, it will be hidden
 		global GuiTrades
@@ -2409,7 +2409,7 @@
 
 	CloseOtherTabsForSameItem(_buyOrSell, tabNum) {
 		global GuiTrades
-		isSlots := GuiTrades[_buyOrSell].Is_Slots
+		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
 
@@ -2715,7 +2715,7 @@
 		global GuiTrades
 		
 		GUI_Trades_V2.DestroyBtnImgList(_buyOrSell)
-        if (GuiTrades[_buyOrSell].Is_Slots) {
+        if (GuiTrades[_buyOrSell].Is_Stack) {
             Gui.Destroy("Trades" _buyOrSell "Search")
             Gui.Destroy("Trades" _buyOrSell "SearchHidden")
         }
@@ -2799,7 +2799,7 @@
 
     Show(_buyOrSell) {
 		global GuiTrades, PROGRAM
-        tabsOrSlot := GuiTrades[_buyOrSell].Is_Slots ? "Slots" : "Tabs"
+        tabsOrStack := GuiTrades[_buyOrSell].Is_Stack ? "Stack" : "Tabs"
 		
 		if (PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface="True")
 			return
@@ -2813,7 +2813,7 @@
 		}
 		else {
 			AppendToLogs("GUI_Trades_V2.Show(" _buyOrSell "): Non existent. Recreating.")
-			GUI_Trades_V2.Create("", _buyOrSell, tabsOrSlot)
+			GUI_Trades_V2.Create("", _buyOrSell, tabsOrStack)
 			Gui, Trades%_buyOrSell%:Show, NoActivate
 		}
 	}

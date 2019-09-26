@@ -818,7 +818,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 			; BUY_INTERFACE and SELL_INTERFACE
 			if IsIn(parents.1, "BUY_INTERFACE,SELL_INTERFACE") {
 				if (k="Mode")
-					isValid := IsIn(v, "Tabs,Slots")
+					isValid := IsIn(v, "Tabs,Stack")
 				else if (k="Buttons_Count") && RegExMatch(lastParent, "iO)CUSTOM_BUTTON_ROW_(\d+)", matchPat)
 					isValid := IsBetween(matchPat.1, 1, 3) && IsBetween(userValue, 0, 10) ? True : (matchPat.1=4) && IsBetween(userValue, 0, 5) ? True : False
 				else if (k="Icon") ; && IsContaining(parents[parentsCount-1], "CUSTOM_BUTTON_ROW_")
