@@ -32,16 +32,18 @@
 		return False
  }
 
- JSON_Load(fileOrObj) {
-	if !IsObject(fileOrObj)
+ JSON_Load(fileOrObj, debug=False) {
+	if !IsObject(fileOrObj) && FileExist(fileOrObj)
 		FileRead, fileContent,% fileOrObj
-	else fileContent := fileOrObj
+	else
+		fileContent := fileOrObj
 	
 	try
 		return JSON.Load(fileContent)
 	catch e {
 		MsgBox,% 16+4096,, % "Couldn't load JSON file!`n`nwhat: " e.what "`nfile: " e.file
 		. "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
+		. "`n`nfileOrObj: " fileOrObj
 	}
 }
 
