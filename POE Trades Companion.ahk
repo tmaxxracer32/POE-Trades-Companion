@@ -126,16 +126,20 @@ Start_Script() {
 	prefsFileName 					:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Preferences"):("Preferences")
 	sellBackupFileName 				:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Sell_Trades_Backup"):("Sell_Trades_Backup")
 	buyBackupFileName 				:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_Trades_Backup"):("Buy_Trades_Backup")
-	tradesHistoryFileName 			:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Trades_History"):("Trades_History")
-	tradesHistoryBuyFileName 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
+	tradesSellHistoryFileName 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Sell_History"):("Sell_History")
+	tradesBuyHistoryFileName 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
+	tradesSellHistoryFileNameOld 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Trades_History"):("Trades_History")
+	tradesBuyHistoryFileNameOld 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
 	PROGRAM.FONTS_SETTINGS_FILE		:= PROGRAM.FONTS_FOLDER "\Settings.ini"
 	PROGRAM.SETTINGS_FILE			:= PROGRAM.MAIN_FOLDER "\" prefsFileName ".json"
 	PROGRAM.SETTINGS_FILE_OLD		:= PROGRAM.MAIN_FOLDER "\" prefsFileName ".ini"
 	PROGRAM.LOGS_FILE 				:= PROGRAM.LOGS_FOLDER "\" A_YYYY "-" A_MM "-" A_DD " " A_Hour "h" A_Min "m" A_Sec "s.txt"
 	PROGRAM.CHANGELOG_FILE 			:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\changelog.txt":"\resources\changelog.txt")
 	PROGRAM.CHANGELOG_FILE_BETA 	:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\changelog_beta.txt":"\resources\changelog_beta.txt")
-	PROGRAM.TRADES_HISTORY_FILE 	:= PROGRAM.MAIN_FOLDER "\" tradesHistoryFileName ".ini"
-	PROGRAM.TRADES_HISTORY_BUY_FILE	:= PROGRAM.MAIN_FOLDER "\" tradesHistoryBuyFileName ".ini"
+	PROGRAM.TRADES_SELL_HISTORY_FILE 		:= PROGRAM.MAIN_FOLDER "\" tradesSellHistoryFileName ".json"
+	PROGRAM.TRADES_SELL_HISTORY_FILE_OLD 	:= PROGRAM.MAIN_FOLDER "\" tradesSellHistoryFileNameOld ".ini"
+	PROGRAM.TRADES_BUY_HISTORY_FILE			:= PROGRAM.MAIN_FOLDER "\" tradesBuyHistoryFileName ".json"
+	PROGRAM.TRADES_BUY_HISTORY_FILE_OLD 	:= PROGRAM.MAIN_FOLDER "\" tradesBuyHistoryFileNameOld ".ini"
 	PROGRAM.TRADES_SELL_BACKUP_FILE	:= PROGRAM.MAIN_FOLDER "\" sellBackupFileName ".json"
 	PROGRAM.TRADES_BUY_BACKUP_FILE	:= PROGRAM.MAIN_FOLDER "\" buyBackupFileName ".json"
 
@@ -326,7 +330,7 @@ Start_Script() {
 
 	; Clipboard change funcs + refresh list
 	OnClipboardChange("OnClipboardChange_Func")
-	SetTimer, GUI_Trades_RefreshIgnoreList, 60000 ; One min
+	SetTimer, GUI_Trades_V2_Sell_RefreshIgnoreList, 60000 ; One min
 
 	; Showing tray notification
 	trayMsg := PROGRAM.TRANSLATIONS.TrayNotifications.AppLoaded_Msg
@@ -354,12 +358,13 @@ Return
 #Include Class_Gui_ChooseInstance.ahk
 #Include Class_GUI_ChooseLang.ahk
 #Include Class_Gui_ItemGrid.ahk
-#Include Intercom_Receiver.ahk
 #Include Class_Gui_MyStats.ahk
+#Include Class_GUI_SetHotkey.ahk
 #Include Class_Gui_Settings.ahk
 #Include Class_Gui_Trades.ahk
 #Include Class_Gui_TradesMinimized.ahk
 #Include Class_GUI_TradesBuyCompact.ahk
+#Include Intercom_Receiver.ahk
 #Include WM_Messages.ahk
 
 #Include AssetsExtract.ahk
@@ -371,6 +376,7 @@ Return
 #Include FileInstall.ahk
 #Include Game.ahk
 #Include Game_File.ahk
+#Include GGG_API.ahk
 #Include GitHubAPI.ahk
 #Include Hotkeys.ahk
 #Include Local_File.ahk

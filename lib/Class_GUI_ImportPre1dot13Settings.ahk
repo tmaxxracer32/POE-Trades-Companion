@@ -94,8 +94,13 @@ Class GUI_ImportPre1dot13Settings {
         historyAppend := ""
         oldHistory := Get_Pre1dot13_TradeHistory()
         AppendToLogs(A_ThisFunc "(): Old history retrieved. Total index: " oldHistory.Length())
-        if FileExist(PROGRAM.TRADES_HISTORY_FILE) {
-            newHistory := GUI_MyStats.GetData()
+        if FileExist(PROGRAM.TRADES_SELL_HISTORY_FILE_OLD) {
+            statsIniFile := PROGRAM.TRADES_SELL_HISTORY_FILE_OLD
+            newHistory := class_EasyIni(statsIniFile)
+            EasyIni_Remove(newHistory, "GENERAL")
+            Loop % newHistory.MaxIndex() {
+                newHistory[A_Index].Index := A_Index
+            }
             AppendToLogs(A_ThisFunc "(): New history retrieved. Total index: " newHistory.Length() )
         }
         historyIndex := 0
@@ -122,7 +127,7 @@ Class GUI_ImportPre1dot13Settings {
         historyAppend := "[GENERAL]`nIndex=" historyIndex "`n" historyAppend
         
         oldHistoryFilePath := MyDocuments "\AutoHotkey\POE Trades Companion\Trades_History.ini"
-        newHistoryFilePath := PROGRAM.TRADES_HISTORY_FILE
+        newHistoryFilePath := PROGRAM.TRADES_SELL_HISTORY_FILE_OLD
         oldSettingsFilePath := MyDocuments "\AutoHotkey\POE Trades Companion\Preferences.ini"
         newSettingsFilePath := PROGRAM.SETTINGS_FILE_OLD
 
