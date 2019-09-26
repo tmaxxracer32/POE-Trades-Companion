@@ -686,13 +686,17 @@ Parse_GameLogs(strToParse, preview=False) {
 			: ("")
 
 			if (isWhisperReceived=True) {
-				RegExMatch(tradePrice, "O)(\d+.\d+|\d+) (.*)", tradePricePat), currencyCount := tradePricePat.1, currencyName := tradePricePat.2
-				currencyInfos := Get_CurrencyInfos(currencyName, dontWriteLogs:=False)
-				currencyName := currencyInfos.Is_Listed?currencyInfos.Name : currencyName	
-				tradeOther := tradeOther?"[" A_Hour ":" A_Min "] @From: " tradeOther : ""	
+				tradeOther := tradeOther?"[" A_Hour ":" A_Min "] @From: " tradeOther : ""
+
+				RegExMatch(tradePrice, "O)(\d+.\d+|\d+) (.*)", tradePricePat), priceCurrencyCount := tradePricePat.1, priceCurrencyName := tradePricePat.2
+				priceCurrencyInfos := Get_CurrencyInfos(priceCurrencyName, dontWriteLogs:=False), priceCurrencyName := priceCurrencyInfos.Is_Listed?priceCurrencyInfos.Name : priceCurrencyName
+
+				RegExMatch(tradeItem, "O)(\d+.\d+|\d+) (.*)", tradeItemPat), itemCurrencyCount := tradeItemPat.1, itemCurrencyName := tradeItemPat.2
+				itemCurrencyInfos := Get_CurrencyInfos(itemCurrencyName, dontWriteLogs:=False), itemCurrencyName := itemCurrencyInfos.Is_Listed?itemCurrencyInfos.Name : itemCurrencyName
 				
 				tradeInfos := {Buyer:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessageFull:tradeOther
-				,PriceCurrency:currencyName, PriceCount:currencyCount
+				,ItemCurrency:itemCurrencyName, ItemCount:itemCurrencyCount
+				,PriceCurrency:priceCurrencyName, PriceCount:priceCurrencyCount
 				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, StashY:tradeStashTop
 				,Guild:tradeBuyerGuild
 				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual

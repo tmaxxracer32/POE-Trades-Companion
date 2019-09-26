@@ -974,6 +974,8 @@
 
             Gui.Show("Trades" _buyOrSell, "h" guiHeight " NoActivate")
         }
+		if (_buyOrSell="Sell") 
+			GUI_Trades_V2.VerifyItemPrice( GUI_Trades_V2.GetTabContent(_buyOrSell, newTabsCount) )
 	}
 
 	SetSlotContent(params*) {
@@ -1120,10 +1122,6 @@
 			GuiControl, Show,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG
 		}
 
-		; Set trade verify color
-		if (cTabCont.TradeVerify != newContent.TradeVerify)
-			GUI_Trades_V2.SetTabVerifyColor(_buyOrSell, slotNum, newContent.TradeVerify)
-
 		; Set tab color style
 		if (cTabCont.TabStyle != newContent.TabStyle) {
 			if (newContent.TabStyle = "IsInArea")
@@ -1142,9 +1140,12 @@
 		; User acc name, item name, item level & qual for gems, stash tab & stash position
 		global PROGRAM
 
-		accountsObj := PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts
+		accounts := ""
+		for index, accName in PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts
+			accounts .= accName ","
+		accounts := StrTrimRight(accounts, 1)
 
-		if (!accounts.1) {
+		if (!accounts) {
 			tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
 			vColor := "Orange", vInfos := "No account name detected" "\nPlease set your account name in the Settings"
 
@@ -1154,48 +1155,91 @@
 		}
 
 		if (tabInfos.ItemCurrency && tabInfos.ItemCount) { ; TO_DO_V2 RegExMatch(tabInfos.Item, "iO)(\d+\.\d+|\d+) (\D+) \(T\d+\)", itemPat) && (tabInfos.ItemLevel) { ; currency.poe.trade map trade
-			RegExMatch(tabInfos.Price, "iO)(\d+\.\d+|\d+) (\D+)", pricePat)
-			; want currency infos
-			wantCount := itemPat.1, wantWhat := itemPat.2, wantCurInfos := Get_CurrencyInfos(wantWhat)
-			wantFullName := wantCurInfos.Name, wantID := PROGRAM["DATA"]["POETRADE_CURRENCY_DATA"][wantFullName].ID, isWantListed := wantCurInfos.Is_Listed
-			; give currency infos
-			giveCount := pricePat.1, giveWhat := pricePat.2, giveCurInfos := Get_CurrencyInfos(giveWhat)
-			giveFullName := giveCurInfos.Name, giveID := PROGRAM["DATA"]["POETRADE_CURRENCY_DATA"][giveFullName].ID, isGiveListed := giveCurInfos.Is_Listed
-			; ratio
-			sellBuyRatio := RemoveTrailingZeroes(giveCount/wantCount)
+			; infos := {Want:"chaos",Have:"alt",League:"Standard",Account:"z0rhawk",Ratio:"502.1",Online:"any"}
+			; matchingObj := GGG_API_GetMatchingExchangeData(infos)
+			; Loop % matchingObj.Count() {
+			; 	msgbox % matchingObj[A_Index].listing.price.exchange.amount "`n" matchingObj[A_Index].listing.price.item.amount
+			; }
+			
+			buyerWantsType := tabInfos.ItemCurrency, buyerWantsCount := tabInfos.ItemCount
+			buyerGivesType := tabInfos.PriceCurrency, buyerGivesCount := tabInfos.PriceCount
+			saleRatio := RemoveTrailingZeroes(buyerGivesCount/buyerWantsCount)
+			itemsDataObj := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComStaticData.json")
+			for sect in itemsDataObj {
+				for shortName, fullName in itemsDataObj[sect][tabInfos.WhisperLanguage] {
+					if (fullName=buyerWantsType)
+						buyerWantsID := shortName
+					if (fullName=buyerGivesType)
+						buyerGivesID := shortName
+					if (buyerWantsID && buyerGivesID)
+						Break
+				}
+				if (buyerWantsID && buyerGivesID)
+					Break
+			}
+
+			if (!buyerWantsType || !buyerWantsCount || !buyerWantsID || !buyerGivesType || !buyerGivesCount || !buyerGivesID) {
+				tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
+				GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
+				GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "/!\ Failed to retrieve informations for this trade"
+                    . "\nPlease contact me with the following:"
+                    . "\nWantCurrency: " buyerWantsType
+                    . "\nWantCurrencyCount: " buyerWantsCount
+                    . "\nWantCurrencyID: " buyerWantsID
+                    . "\nGiveCurrency: " buyerGivesType
+                    . "\nGiveCurrencyCount: " buyerGivesCount
+                    . "\nGiveCurrencyID: " buyerGivesID)
+				return
+            }
 
 			cmdLineParamsObj := {}
-			cmdLineParamsObj.Accounts := accounts
-			cmdLineParamsObj.League := tabInfos.StashLeague
-			cmdLineParamsObj.SellCurrencyFullName := wantFullName, cmdLineParamsObj.SellCurrencyIsListed := isWantListed, cmdLineParamsObj.SellCurrencyID := wantID, cmdLineParamsObj.SellCurrencyCount := wantCount
-			cmdLineParamsObj.BuyCurrencyFullName := giveFullName, cmdLineParamsObj.BuyCurrencyIsListed := isGiveListed, cmdLineParamsObj.BuyCurrencyID := giveID, cmdLineParamsObj.BuyCurrencyCount := giveCount
-			cmdLineParamsObj.SellBuyRatio := sellBuyRatio
-
-			cmdLineParamsObj.WhisperLang := tabInfos.WhisperLang, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
 			cmdLineParamsObj.TradeType := "Currency"
+			cmdLineParamsObj.WhisperLanguage := tabInfos.WhisperLanguage, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
+
+			cmdLineParamsObj.Accounts := accounts
+			cmdLineParamsObj.League := tabInfos.League
+			cmdLineParamsObj.WantCurrency := buyerWantsType, cmdLineParamsObj.WantCurrencyID := buyerWantsID, cmdLineParamsObj.WantCurrencyCount := buyerWantsCount
+			cmdLineParamsObj.GiveCurrency := buyerGivesType, cmdLineParamsObj.GiveCurrencyID := buyerGivesID, cmdLineParamsObj.GiveCurrencyCount := buyerGivesCount
+			cmdLineParamsObj.SaleRatio := saleRatio
 
 			GoSub GUI_Trades_V2_VerifyItemPrice_SA
 			return
 		}
 		else { ; its a regular trade
-		    itemQualNoPercent := StrReplace(tabInfos.ItemQuality, "%", "")
-		    RegExMatch(tabInfos.StashPosition, "O)(.*);(.*)", stashPosPat), stashPosX := stashPosPat.1, stashPosY := stashPosPat.2
-		    RegExMatch(tabInfos.Price, "O)(\d+\.\d+|\d+) (\D+)", pricePat), priceNum := pricePat.1, priceCurrency := pricePat.2
-		    AutoTrimStr(priceNum, pricePat)
-			
-		    currencyInfos := Get_CurrencyInfos(priceCurrency)
-		    poeTradeCurrencyName := PoeTrade_Get_CurrencyAbridgedName_From_FullName(currencyInfos.Name)
-		    poeTradePrice := priceNum " " poeTradeCurrencyName
+			priceType := tabInfos.PriceCurrency, priceCount := tabInfos.PriceCount
+			itemsDataObj := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComStaticData.json")
+			for sect in itemsDataObj {
+				for shortName, fullName in itemsDataObj[sect][tabInfos.WhisperLanguage] {
+					if (fullName=priceType)
+						priceID := shortName
+					if (priceID)
+						Break
+				}
+				if (priceID)
+					Break
+			}
 
-			; making obj so it's easier to pass cmd line params
+			if (!priceType || !priceCount || !priceID) {
+				tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
+				GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
+				GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "/!\ Failed to retrieve informations for this trade"
+                    . "\nPlease contact me with the following:"
+                    . "\nPriceCurrency: " priceType
+                    . "\nPriceCount: " priceCount
+                    . "\nPriceID: " priceID)
+				return
+            }
+
 			cmdLineParamsObj := {}
-			cmdLineParamsObj.Accounts := accounts, cmdLineParamsObj.ItemPrice := poeTradePrice
-			cmdLineParamsObj.ItemName := tabInfos.ItemName, cmdLineParamsObj.ItemLevel := tabInfos.ItemLevel
-			cmdLineParamsObj.ItemQuality := itemQualNoPercent, cmdLineParamsObj.League := tabInfos.StashLeague
-			cmdLineParamsObj.StashTab := tabInfos.StashTab, cmdLineParamsObj.StashX := stashPosX, cmdLineParamsObj.StashY := stashPosY
+			cmdLineParamsObj.TradeType := "Regular"
+			cmdLineParamsObj.WhisperLanguage := tabInfos.WhisperLanguage, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
 
-			cmdLineParamsObj.WhisperLang := tabInfos.WhisperLang, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
-			cmdLineParamsObj.TradeType := "Regular", cmdLineParamsObj.CurrencyName := currencyInfos.Name, cmdLineParamsObj.CurrencyIsListed := currencyInfos.Is_Listed
+			cmdLineParamsObj.Accounts := accounts
+			cmdLineParamsObj.Item := tabInfos.Item
+			cmdLineParamsObj.GemLevel := tabInfos.GemLevel, cmdLineParamsObj.GemQuality := tabInfos.GemQuality
+			cmdLineParamsObj.PriceCurrency := priceType, cmdLineParamsObj.PriceCount := priceCount, cmdLineParamsObj.PriceID := priceID
+			cmdLineParamsObj.League := tabInfos.League
+			cmdLineParamsObj.StashX := tabInfos.StashX, cmdLineParamsObj.StashY := tabInfos.StashY, cmdLineParamsObj.StashTab := tabInfos.StashTab
 
 			GoSub GUI_Trades_V2_VerifyItemPrice_SA
 			return
@@ -1205,16 +1249,16 @@
 		GUI_Trades_V2_VerifyItemPrice_SA:
 			global PROGRAM, GuiIntercom, GuiIntercom_Controls
 
-			tabID := GUI_Trades.GetTabNumberFromUniqueID(tabInfos.UniqueID)
+			tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
 			if (A_IsCompiled) {
-				GUI_Trades.SetTabVerifyColor(tabID, "Orange")
-				GUI_Trades.UpdateSlotContent(tabID, "TradeVerifyInfos", "Automated price verifying has been temporarily"
+				GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
+				GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Automated price verifying has been temporarily"
 				. "\n disabled for the executable version due to issues"
 				. "\n\nPlease use the AHK version if you wish to use this feature")
 				return
 			}
-			GUI_Trades.SetTabVerifyColor(tabID, "Grey")
-		    GUI_Trades.UpdateSlotContent(tabID, "TradeVerifyInfos", "Comparing price on poe.trade...")
+			GUI_Trades_V2.SetTabVerifyColor(tabNum, "Grey")
+		    GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Comparing price on poe.trade...")
 
 			intercomSlotNum := GUI_Intercom.GetNextAvailableSlot()
 			intercomSlotHandle := GUI_Intercom.GetSlotHandle(intercomSlotNum)
@@ -1223,6 +1267,8 @@
 			cmdLineParams := ""
 			for key, value in cmdLineParamsObj
 				cmdLineParams .= " /" key "=" """" value """"
+
+			; msgbox % cmdLineParams
 
 			cl := DllCall( "GetCommandLine", "str" )
 			StringMid, path_AHk, cl, 2, InStr( cl, """", true, 2 )-2
@@ -1234,30 +1280,32 @@
 			.		" /IntercomSlotHandle=" """" intercomSlotHandle """"
 			.		" /cURL=" """" PROGRAM.CURL_EXECUTABLE """"
 			.		" /ProgramLogsFile=" """" PROGRAM.LOGS_FILE """"
+			.		" /ProgramDataFolder=" """" PROGRAM.DATA_FOLDER """"
 			
 			Run,% saFile_run_cmd,% A_ScriptDir
 		return
 	}
 
-	SetTabVerifyColor(tabID, colour) {
+	SetTabVerifyColor(slotNum, colour) {
 		; TO_DO_V2
 		global GuiTrades_Controls
+		slotGuiName := "TradesSell_Slot" slotNum
 
-		if !IsIn(colour, "Grey,Orange,Green,Red") || !IsNum(tabID) {
-			AppendToLogs(A_ThisFunc "(tabID=" tabID ", colour=" colour "): Invalid colour or tabID is not a number.")
+		if !IsIn(colour, "Grey,Orange,Green,Red") || !IsNum(slotNum) {
+			AppendToLogs(A_ThisFunc "(slotNum=" slotNum ", colour=" colour "): Invalid colour or tabID is not a number.")
 			; MsgBox("", "", "Invalid use of " A_ThisFunc "`n`ntabID: """ tabID """`ncolour: """ colour """")
 			return
 		}
 
-		newColHwnd := GuiTrades_Controls["hIMG_TradeVerify" colour tabID]
-		curColHwnd := GuiTrades_Controls["hIMG_TradeVerify" tabID]
+		newColHwnd := GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify" colour]
+		curColHwnd := GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify"]
 
 		if (newColHwnd != curColHwnd) {
-			GuiControl, Trades:Show,% newColHwnd
-			GuiControl, Trades:Hide,% curColHwnd
-			GuiTrades_Controls["hIMG_TradeVerify" tabID] := newColHwnd
+			GuiControl, %slotGuiName%:Show,% newColHwnd
+			GuiControl, %slotGuiName%:Hide,% curColHwnd
+			GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify"] := newColHwnd
 
-			Gui_Trades.UpdateSlotContent(tabID, "TradeVerify", colour)
+			; GUI_Trades_V2.UpdateSlotContent("Sell", slotNum, "TradeVerify", colour)
 		}
 	}
 
@@ -1695,16 +1743,6 @@
 		}
 	}
 
-	tradeInfos := {Seller:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessageFull:tradeOther
-				,PriceCurrency:currencyName, PriceCount:currencyCount
-				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, StashY:tradeStashTop
-				,Guild:tradeBuyerGuild
-				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual
-				,TimeSent:A_Hour ":" A_Min, TimeStamp:A_YYYY A_MM A_DD A_Hour A_Min A_Sec
-				,WhisperRegEx:tradeRegExName, WhisperLanguage:whisperLang
-				,GamePID:instancePID
-				,UniqueID:GUI_Trades_V2.GenerateUniqueID()}
-
     ResetPosition(_buyOrSell, dontWrite=False) {
 		global PROGRAM, GuiTrades
 		guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
@@ -2012,8 +2050,9 @@
 
 		Loop % tabsCount {
 			tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, A_Index)
-			if (tabContent.UniqueID = uniqueID)
+			if (tabContent.UniqueID = uniqueID) {
 				return A_Index
+			}
 		}
 
 		AppendToLogs(A_ThisFunc "(uniqueId=" uniqueId "): Couldn't find any tab ID matching this unique ID")
@@ -2179,7 +2218,7 @@
 		tabID := tabID="" ? GuiTrades[_buyOrSell].Active_Tab : tabID
 
 		tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabID)
-		item := tabContent.Item, whisLang := tabContent.WhisperLang
+		item := tabContent.Item, whisLang := tabContent.WhisperLanguage
 		if RegExMatch(item, "O)(.*?) \(Lvl:(.*?) \/ Qual:(.*?)%\)", itemPat) {
 			gemName := itemPat.1, gemLevel := itemPat.2, gemQual := itemPat.3
 		}

@@ -26,38 +26,79 @@ GGG_API_GetLastActiveCharacter(accName) {
 }
 
 GGG_API_CreateDataFiles() {
-    langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR"], jsonFinal := {}, sectList := ""
-    Loop % langs.Count() {
-        thisLang := langs[A_Index]
-        poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
-        url := poeURL "/api/trade/data/static/"
-        headers := "Content-Type:application/json;charset=UTF-8"
-        options := "TimeOut: 25"
-        . "`n"  "Charset: UTF-8"
-        WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+    langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR"]
+	
+	jsonFinal := {}
+	Loop % langs.Count() {
+		thisLang := langs[A_Index]
+		poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
+		url := poeURL "/api/trade/data/static"
+		headers := "Content-Type:application/json;charset=UTF-8"
+		options := "TimeOut: 25"
+		. "`n"  "Charset: UTF-8"
+		WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
-        for sect in jsonData.result {
-            if !IsObject(jsonFinal[sect])
-                jsonFinal[sect] := {}
-            if !IsObject(jsonFinal[sect][thisLang])
-                jsonFinal[sect][thisLang] := {}
+		for sect in jsonData.result {
+			if !IsObject(jsonFinal[sect])
+				jsonFinal[sect] := {}
+			if !IsObject(jsonFinal[sect][thisLang])
+				jsonFinal[sect][thisLang] := {}
 
-            Loop % jsonData.result[sect].Count()
-                jsonFinal[sect][thisLang][jsonData.result[sect][A_Index].id] := jsonData.result[sect][A_Index].text
+			Loop % jsonData.result[sect].Count()
+				jsonFinal[sect][thisLang][jsonData.result[sect][A_Index].id] := jsonData.result[sect][A_Index].text
+		}
+	}
+	fileLocation := A_ScriptDir "/data/poeDotComStaticData.json"
+	jsonText := JSON.Dump(jsonFinal, "", "`t")
+	hFile := FileOpen(fileLocation, "w", "UTF-8")
+	hFile.Write(jsonText)
+	hFile.Close()
+
+	jsonFinal := {}, labels := {}
+	Loop % langs.Count() {
+		thisLang := langs[A_Index]
+		poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
+		url := poeURL "/api/trade/data/items"
+		headers := "Content-Type:application/json;charset=UTF-8"
+		options := "TimeOut: 25"
+		. "`n"  "Charset: UTF-8"
+		WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
+
+		Loop % jsonData.result.Count() {
+			resultIndex := A_Index
+			labelName := thisLang="ENG" ? jsonData.result[resultIndex].label : labels[resultIndex]
+			if !IsObject(jsonFinal[labelName])
+				jsonFinal[labelName] := {}
+			if !IsObject(jsonFinal[labelName][thisLang])
+				jsonFinal[labelName][thisLang] := {}
+			if (thisLang="ENG")
+				labels[resultIndex] := labelName
+
+			Loop % jsonData.result[resultIndex].entries.Count() {
+				jsonFinal[labelName][thisLang][A_Index] := ObjFullyClone(jsonData.result[resultIndex].entries[A_Index])
+			}
+		}
+	}
+	fileLocation := A_ScriptDir "/data/poeDotComItemsData.json"
+	jsonText := JSON.Dump(jsonFinal, "", "`t")
+	hFile := FileOpen(fileLocation, "w", "UTF-8")
+	hFile.Write(jsonText)
+	hFile.Close()
+
+		/*
+        for sect in jsonFinal {
+            sectFileName := StrReplace(sect, "_", " ")
+            StringUpper, sectFileName, sectFileName, T
+            sectFileName := StrReplace(sectFileName, " ", "")
+            StringUpper, thisCat, thisCat, T
+            fileLocation := A_ScriptDir "/data/poeDotCom" thisCat . sectFileName "Data.json"
+            jsonText := JSON.Dump(jsonFinal[sect], "", "`t")
+            
+            hFile := FileOpen(fileLocation, "w", "UTF-8")
+            hFile.Write(jsonText)
+            hFile.Close()
         }
-    }
-
-    for sect in jsonFinal {
-        sectFileName := StrReplace(sect, "_", " ")
-        StringUpper, sectFileName, sectFileName, T
-        sectFileName := StrReplace(sectFileName, " ", "")
-        fileLocation := A_ScriptDir "/data/poeDotCom" sectFileName "Data.json"
-        jsonText := JSON.Dump(jsonFinal[sect], "", "`t")
-        
-        hFile := FileOpen(fileLocation, "w", "UTF-8")
-        hFile.Write(jsonText)
-        hFile.Close()
-    } 
+		*/
 }
 
 GGG_API_BuildItemSearchObj(obj) {
@@ -84,32 +125,37 @@ GGG_API_BuildItemSearchObj(obj) {
     Gem                 {"query":{"status":{"option":"any"},"type":"Faster Attacks Support","stats":[{"type":"and","filters":[],"disabled":false}],"filters":{"misc_filters":{"filters":{"quality":{"max":99,"min":1},"gem_level":{"max":99,"min":1}},"disabled":false},"trade_filters":{"filters":{"account":{"input":"z0rhawk"}},"disabled":false}}},"sort":{"price":"asc"}}
     Map                 {"query":{"status":{"option":"any"},"type":{"option":"Cemetery Map","discriminator":"warfortheatlas"},"stats":[{"type":"and","filters":[],"disabled":false}],"filters":{"trade_filters":{"filters":{"account":{"input":"z0rhawk"}},"disabled":false},"map_filters":{"filters":{"map_tier":{"min":1,"max":99}}}}},"sort":{"price":"asc"}}
 */
-    itemSplit := SplitItemNameAndBaseType(obj.ItemName, obj.Language), itemName := itemSplit.Name, itemBaseType := itemSplit.BaseType, itemCategory := itemSplit.Category
+    itemSplit := SplitItemNameAndBaseType(obj.Item, obj.Language), itemName := itemSplit.Name, itemBaseType := itemSplit.BaseType, itemCategory := itemSplit.Category
     if (itemName) {
         itemName_obj := {query:{term:itemName}}
         itemName_obj_trans := {query:{name:itemName}}
         itemName_obj := obj.Language="ENG" ? itemName_obj : itemName_obj_trans
     }
     if (itemBaseType)
-        itemBaseType_obj := {query:{type:itemBaseType}}
-    if (obj.GemQuality)
-        gemQual_obj := {query:{filters:{misc_filters:{filters:{quality:{min:obj.GemQualityMin,max:obj.GemQualityMax}}}}}}
-    if (obj.GemLevel)
-        gemLevel_obj := {query:{filters:{misc_filters:{filters:{gem_level:{min:obj.GemLevelMin,max:obj.GemLevelMax}}}}}}
+        itemBaseType_obj := {"query":{"type":itemBaseType}}
+    if (obj.GemQualityMin || obj.GemQualityMax)
+        gemQual_obj := {"query":{"filters":{"misc_filters":{"filters":{"quality":{"min":obj.GemQualityMin,"max":obj.GemQualityMax}}}}}}
+    if (obj.GemLevelMin || obj.GemLevelMax)
+        gemLevel_obj := {"query":{"filters":{"misc_filters":{"filters":{"gem_level":{"min":obj.GemLevelMin,"max":obj.GemLevelMax}}}}}}
+    if (obj.MapTierMin || obj.MapTierMax)
+        mapTier_obj := {"query":{"filters":{"map_filters":{"filters":{"map_tier":{"min":obj.MapTierMin,"max":obj.MapTierMax}}}}}}
     if (obj.Account)
-        accountName_obj := {query:{filters:{trade_filters:{filters:{account:{input:obj.Account}}}}}}
-    if (obj.MapTier)
-        mapTier_obj := {query:{filters:{map_filters:{filters:{map_tier:{min:obj.MapTierMin,max:obj.MapTierMax}}}}}}
+        accountName_obj := {"query":{"filters":{"trade_filters":{"filters":{"account":{"input":obj.Account}}}}}}
+    if (obj.Online)
+        online_obj := {"query":{"status":{"option":obj.Online}}}
 
     ; Building final obj
+    ; baseObj := {"query":{"status":{"option":"any"},"stats":[{"type":"and","filters":[],"disabled":false}]},"sort":{"price":"asc"}}
     baseObj := {"query":{"status":{"option":"any"},"stats":[{"type":"and","filters":[],"disabled":false}]},"sort":{"price":"asc"}}
     searchObj := ObjFullyClone(baseObj)
     searchObj := ObjMerge(searchObj, itemName_obj)
     searchObj := ObjMerge(searchObj, itemBaseType_obj)
     searchObj := ObjMerge(searchObj, gemQual_obj)
     searchObj := ObjMerge(searchObj, gemLevel_obj)
-    searchObj := ObjMerge(searchObj, accountName_obj)
     searchObj := ObjMerge(searchObj, mapTier_obj)
+    searchObj := ObjMerge(searchObj, accountName_obj)
+    searchObj := ObjMerge(searchObj, online_obj)
+    searchObj := ObjMerge(online_obj, searchObj)
 
     return searchObj
 }
@@ -153,11 +199,11 @@ GGG_API_BuildExchangeSearchObj(obj) {
 GGG_API_GetMatchingExchangeData(obj) {
     ; Building the search obj based on provided infos, then retrieving results
     poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildExchangeSearchObj(obj)
-    url := poeURL "/api/trade/exchange/" obj.League "?source=" poeSearchObj
+    url := poeURL "/api/trade/exchange/" obj.League "?source=" JSON.Dump(poeSearchObj)
     headers := "Content-Type:application/json;charset=UTF-8"
     options := "TimeOut: 25"
     . "`n"  "Charset: UTF-8"
-    WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+    WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
     ; Making result list, retrieving individual items, then parsing those
     resultsListCount := 0, resultsIDList := ""
@@ -230,9 +276,8 @@ GGG_API_BuildExchangeSearchObj(obj) {
     searchObj := ObjMerge(searchObj, minimum_obj)
     searchObj := ObjMerge(searchObj, want_obj)
     searchObj := ObjMerge(searchObj, have_obj)
-    searchObjDump := JSON.Dump(searchObj)
 
-    return searchObjDump
+    return searchObj
 }
 
 GGG_API_IsExchangeDataMatching(obj, obj2) {
@@ -249,7 +294,7 @@ GGG_API_IsExchangeDataMatching(obj, obj2) {
 GGG_API_GetMatchingItemsData(obj) {
     ; Building the search obj based on provided infos, then retrieving results
     poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildItemSearchObj(obj)
-    url := poeURL "/api/trade/search/" obj.League "?source=" poeSearchObj
+    url := poeURL "/api/trade/search/" obj.League "?source=" JSON.Dump(poeSearchObj)
     headers := "Content-Type:application/json;charset=UTF-8"
     options := "TimeOut: 25"
     . "`n"  "Charset: UTF-8"
@@ -258,6 +303,7 @@ GGG_API_GetMatchingItemsData(obj) {
     ; Making result list, retrieving individual items, then parsing those
     resultsListCount := 0, resultsIDList := ""
     resultsTotalCount := jsonData.result.Count()
+    matchingObj := {}, matchIndex := 0
     Loop % jsonData.result.Count() {
         resultsIndex := A_Index, thisResultID := jsonData.result[resultsIndex], resultsListCount++
         resultsIDList := resultsIDList?resultsIDList "," thisResultID : thisResultID
@@ -270,18 +316,23 @@ GGG_API_GetMatchingItemsData(obj) {
 
             Loop % resultsListCount {
                 loopedResult := jsonData.result[A_Index]
-                isDataMatching := GGG_API_IsItemDataMatching(obj, {StashTab:loopedResult.listing.stash, StashX:loopedResult.listing.x, StashY:loopedResult.listing.Y})
+                isDataMatching := GGG_API_IsItemDataMatching(obj, {StashTab:loopedResult.listing.stash.name, StashX:loopedResult.listing.stash.x+1, StashY:loopedResult.listing.stash.y+1})
                 if (isDataMatching) {
-                    matchingObj := jsonData.result[A_Index]
+                    matchingObj := {}
+                    matchingObj.1 := jsonData.result[A_Index]
                     Break
+                }
+                else {
+                    matchIndex++
+                    matchingObj[matchIndex] := jsonData.result[A_Index]
                 }
             }
 
             if (isDataMatching)
                 Break
 
-            FileDelete, html.txt
-            FileAppend,% JSON.Beautify(jsonData), html.txt, utf-8
+            ; FileDelete, html.txt
+            ; FileAppend,% JSON.Beautify(jsonData), html.txt, utf-8
             resultsIDList := 0, resultsIDList := ""
         }
     }
@@ -297,37 +348,38 @@ GGG_API_IsItemDataMatching(obj, obj2) {
 }
 
 SplitItemNameAndBaseType(itemFull, LANG="ENG") {
+    global PROGRAM
+	if !(LANG)
+		LANG:="ENG"
 
-    Labels := {"Accessories":1,"Armour":2,"Cards":3,"Currency":4,"Flasks":5,"Gems":6,"Jewels":7,"Maps":8,"Weapons":9,"Leaguestones":10,"Prophecies":11,"Captured Beasts":12}
-    ENG_Labels := ["Accessories","Armour","Cards","Currency","Flasks","Gems","Jewels","Maps","Weapons","Leaguestones","Prophecies","Captured Beasts"]
-    FRE_Labels := ["Accessoires","Armure","Cartes divinatoires","Objets monétaires","Flacons","Gemmes","Joyaux","Cartes","Armes","Pierres de ligue","Prophéties","Bêtes capturées"]
-    GER_Labels := ["Schmuck","Rüstung","Weissagungskarten","Währung","Fläschchen","Gemmen","Juwelen","Karten","Waffen","Liga-Steine","Prophezeiungen","Eingefangene Bestien"]
-    KOR_Labels := ["장신구","방어구","카드","화폐","플라스크","젬","주얼","지도","무기","리그스톤","예언","포획한 야수"]
-    POR_Labels := ["Acessórios","Armadura","Cartas","Itens Monetários","Frascos","Gemas","Joias","Mapas","Armas","Pedras de Ligas","Profecias","Bestas Capturadas"]
-    RUS_Labels := ["Бижутерия","Броня","Гадальные карты","Валюта","Флаконы","Камни","Самоцветы","Карты","Оружие","Камни лиги","Пророчества","Пойманные животные"]
-    SPA_Labels := ["Accesorios","Armaduras","Cartas","Moneda","Frascos","Gemas","Joyas","Mapas","Armas","Piedras de Liga","Profecías","Bestias capturadas"]
-    THA_Labels := ["เครื่องประดับ","เกราะ","การ์ด","เคอเรนซี่","ขวดยา","Gems","Jewels","แผนที่","อาวุธ","Leaguestones","Prophecies","สัตว์ที่ถูกจับ"]
+    ; Labels := {"Accessories":1,"Armour":2,"Cards":3,"Currency":4,"Flasks":5,"Gems":6,"Jewels":7,"Maps":8,"Weapons":9,"Leaguestones":10,"Prophecies":11,"Captured Beasts":12}
+    ; ENG_Labels := ["Accessories","Armour","Cards","Currency","Flasks","Gems","Jewels","Maps","Weapons","Leaguestones","Prophecies","Captured Beasts"]
+    ; FRE_Labels := ["Accessoires","Armure","Cartes divinatoires","Objets monétaires","Flacons","Gemmes","Joyaux","Cartes","Armes","Pierres de ligue","Prophéties","Bêtes capturées"]
+    ; GER_Labels := ["Schmuck","Rüstung","Weissagungskarten","Währung","Fläschchen","Gemmen","Juwelen","Karten","Waffen","Liga-Steine","Prophezeiungen","Eingefangene Bestien"]
+    ; KOR_Labels := ["장신구","방어구","카드","화폐","플라스크","젬","주얼","지도","무기","리그스톤","예언","포획한 야수"]
+    ; POR_Labels := ["Acessórios","Armadura","Cartas","Itens Monetários","Frascos","Gemas","Joias","Mapas","Armas","Pedras de Ligas","Profecias","Bestas Capturadas"]
+    ; RUS_Labels := ["Бижутерия","Броня","Гадальные карты","Валюта","Флаконы","Камни","Самоцветы","Карты","Оружие","Камни лиги","Пророчества","Пойманные животные"]
+    ; SPA_Labels := ["Accesorios","Armaduras","Cartas","Moneda","Frascos","Gemas","Joyas","Mapas","Armas","Piedras de Liga","Profecías","Bestias capturadas"]
+    ; THA_Labels := ["เครื่องประดับ","เกราะ","การ์ด","เคอเรนซี่","ขวดยา","Gems","Jewels","แผนที่","อาวุธ","Leaguestones","Prophecies","สัตว์ที่ถูกจับ"]
 
-    FileRead, items, %LANG%_items.json
-    itemsJSON := JSON.Load(items)
+    itemsJSON := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComItemsData.json")
  
-    Loop % itemsJSON.result.Count() { ; for every section from json
-        resultIndex := A_Index, sectionName := itemsJSON.result[resultIndex].label
-        Loop % itemsJSON.result[resultIndex].entries.Count() { ; for every entry of this section
-            entriesIndex := A_Index, thisEntry := itemsJSON.result[resultIndex].entries[entriesIndex]
+    for sectName in itemsJSON { ; for every section from json
+        Loop % itemsJSON[sectName][LANG].Count() { ; for every entry of this section
+            entryIndex := A_Index, thisEntry := itemsJSON[sectName][LANG][entryIndex]
             isUnique := thisEntry.flags.unique = True ? True : False
-            isAccessory := sectionName = %LANG%_Labels[Labels["Accessories"]] ? True : False
-            isArmour := sectionName = %LANG%_Labels[Labels["Armour"]] ? True : False
-            isCard := sectionName = %LANG%_Labels[Labels["Cards"]] ? True : False
-            isCurrency := sectionName = %LANG%_Labels[Labels["Currency"]] ? True : False
-            isFlask := sectionName = %LANG%_Labels[Labels["Flasks"]] ? True : False
-            isGem := sectionName = %LANG%_Labels[Labels["Gems"]] ? True : False
-            isJewel := sectionName = %LANG%_Labels[Labels["Jewels"]] ? True : False
-            isMap := sectionName = %LANG%_Labels[Labels["Maps"]] ? True : False
-            isWeapon := sectionName = %LANG%_Labels[Labels["Weapons"]] ? True : False
-            isLeaguestone := sectionName = %LANG%_Labels[Labels["Leaguestones"]] ? True : False
-            isProphecy := thisEntry.flags.prophecy = True ? True : sectionName = %LANG%_Labels[Labels["Prophecies"]] ? True : False
-            isCapturedBeast := sectionName = %LANG%_Labels[Labels["Captured Beasts"]] ? True : False
+            isAccessory := sectName = "Accessories" ? True : False
+            isArmour := sectName = "Armour" ? True : False
+            isCard := sectName = "Cards" ? True : False
+            isCurrency := sectName = "Currency" ? True : False
+            isFlask := sectName = "Flasks" ? True : False
+            isGem := sectName = "Gems" ? True : False
+            isJewel := sectName = "Jewels" ? True : False
+            isMap := sectName = "Maps" ? True : False
+            isWeapon := sectName = "Weapons" ? True : False
+            isLeaguestone := sectName = "Leaguestones" ? True : False
+            isProphecy := thisEntry.flags.prophecy = True ? True : sectName = "Prophecies" ? True : False
+            isCapturedBeast := sectName = "Captured Beasts" ? True : False
 
             ; if (thisEntry.name " " thisEntry.type = itemFull) && ( StrLen(thisEntry.name " " thisEntry.type) = StrLen(itemFull) ) ; unique items
             ;     Return {Name:thisEntry.name, BaseType:thisEntry.type} 
@@ -341,11 +393,11 @@ SplitItemNameAndBaseType(itemFull, LANG="ENG") {
 
             if (isUnique) { ; Unique always have full name - .name then .type
                 if (thisEntry.name " " thisEntry.type = itemFull) ; if match perfectly, that's our item
-                    Return {Name:thisEntry.name, BaseType:thisEntry.type, Category:sectionName}
+                    Return {Name:thisEntry.name, BaseType:thisEntry.type, Category:sectName}
             }
-            else if (isCard || isCurrency || isMap) { ; .type is actual full name
+            else if (isCard || isCurrency || isMap || isGem) { ; .type is actual full name
                 if (thisEntry.type = itemFull)
-                    Return {Name:thisEntry.name, BaseType:thisEntry.type, Category:sectionName}
+                    Return {Name:thisEntry.name, BaseType:thisEntry.type, Category:sectName}
             }
             else if (isProphecy) {
 
@@ -359,7 +411,7 @@ SplitItemNameAndBaseType(itemFull, LANG="ENG") {
                     : longestMatch && StrLen(longestMatch) < StrLen(thisEntry.type) ? thisEntry.type
                     : longestMatch
                 if (longestMatch != longestMatch_bak) {
-                    category := sectionName
+                    category := sectName
                     RegExMatch(itemFull, "iO)(.*?)" longestMatch, itemPat), itemName := itemPat.1, itemType := longestMatch
                     ; itemMatchSplit := StrSplit(itemFull, longestMatch), itemName := itemMatchSplit.1, itemType := itemMatchSplit.2
                     AutoTrimStr(itemName, itemType)
