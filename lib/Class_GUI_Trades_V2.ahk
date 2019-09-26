@@ -840,6 +840,11 @@
 			Loop % thisBtnActions.Count() {
 				actionType := thisBtnActions[A_Index].Type, actionContent := thisBtnActions[A_Index].Content
 
+				if (actionType = "APPLY_ACTIONS_TO_BUY_INTERFACE")
+					_buyOrSell := "Buy"
+				else if (acitonType = "APPLY_ACTIONS_TO_SELL_INTERFACE")
+					_buyOrSell := "Sell"
+
 				if (actionType != "COPY_ITEM_INFOS") ; Make sure to only copy item infos after all actions have been done
 					Do_Action(actionType, actionContent, _buyOrSell, tabNum, uniqueNum)
 				else doCopyActionAtEnd := True
@@ -1147,7 +1152,7 @@
 
 		if (!accounts) {
 			tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
-			vColor := "Orange", vInfos := "No account name detected" "\nPlease set your account name in the Settings"
+			vColor := "Orange", vInfos := "Couldn't verify item price" "\nNo account name detected" "\nPlease set your account name in the Settings"
 
 			GUI_Trades_V2.SetTabVerifyColor(tabNum, vColor)
 		    GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", vInfos)

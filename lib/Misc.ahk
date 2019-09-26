@@ -55,12 +55,6 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 	if !(tabNum) && (_buyOrSell)
 		tabNum := GuiTrades[_buyOrSell].Active_Tab
 
-	WRITE_SEND_ACTIONS := "SEND_MSG,SEND_TO_BUYER,SEND_TO_LAST_WHISPER,SEND_TO_LAST_WHISPER_SENT"
-		. ",INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
-		. ",CMD_AFK,CMD_AUTOREPLY,CMD_DND,CMD_HIDEOUT,CMD_OOS,CMD_REMAINING"
-	WRITE_DONT_SEND_ACTIONS := "WRITE_MSG,WRITE_TO_BUYER,WRITE_TO_LAST_WHISPER,WRITE_TO_LAST_WHISPER_SENT,CMD_WHOIS"
-	WRITE_GO_BACK_ACTIONS := "WRITE_THEN_GO_BACK"
-
 	if (uniqueNum) && (uniqueNum = prevNum) && (ignoreFollowingActions) {
 		prevNum := uniqueNum, ignoreFollowingActions := False
 		AppendToLogs(A_thisFunc "(actionType=" actionType ", actionContent=" actionContent ", isHotkey=" isHotkey ", uniqueNum=" uniqueNum "): Action ignored."
@@ -92,7 +86,7 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 	else
 		actionContentWithVariables := actionContent
 
-	if IsIn(prevActionType, "COPY_ITEM_INFOS,WRITE_SEND,WRITE_DONT_SEND,WRITE_GO_BACK,SENDINPUT,SENDINPUT_RAW,SENDEVENT,SENDEVENT_RAW") {
+	if IsIn(prevActionType, "COPY_ITEM_INFOS,WRITE_MSG,SENDINPUT,SENDEVENT") {
 		; AppendToLogs(A_thisFunc "(actionType=" actionType ", actionContent=" actionContent ", isHotkey=" isHotkey ", uniqueNum=" uniqueNum "):"
 		; . "Sleeping for 10ms due to previous action (" prevActionType ") being listed as using the clipboard.")
 		Sleep 10
@@ -107,9 +101,9 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 
 		; ControlClick,,% "ahk_id " GuiTrades.Handle " ahk_id " GuiTrades_Controls["hBTN_Custom" actionType_NumOnly],,,, NA
 	}
-	else if IsIn(actionType, WRITE_SEND_ACTIONS) {
-		if (actionType = "KICK_MYSELF") {
-			if (!PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts)
+	else if (actionType = "SEND_MSG") {
+		if IsContaining(actionContent, "%myself%") {
+			if (!PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.Count())
 				TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToKickSelf_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToKickSelf_Msg)
 			else
 				Send_GameMessage("WRITE_SEND", actionContentWithVariables, gamePID)
@@ -117,11 +111,11 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 		else
 			Send_GameMessage("WRITE_SEND", actionContentWithVariables, gamePID)
 	}
-	else if IsIn(actionType, WRITE_DONT_SEND_ACTIONS) {
+	else if (actionType = "WRITE_MSG") {
 		Send_GameMessage("WRITE_DONT_SEND", actionContentWithVariables, gamePID)
 		ignoreFollowingActions := True
 	}
-	else if IsIn(actionType, WRITE_GO_BACK_ACTIONS) {
+	else if (actionType = "WRITE_THEN_GO_BACK") {
 		Send_GameMessage("WRITE_GO_BACK", actionContentWithVariables, gamePID)
 		ignoreFollowingActions := True
 	}
@@ -150,12 +144,8 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 		Sleep %actionContentWithVariables%
 	else if (actionType = "SENDINPUT")
 		SendInput,%actionContentWithVariables%
-	else if (actionType = "SENDINPUT_RAW")
-		SendInput,{Raw}%actionContentWithVariables%
 	else if (actionType = "SENDEVENT")
 		SendEvent,%actionContentWithVariables%
-	else if (actionType = "SENDEVENT_RAW")
-		SendEvent,{Raw}%actionContentWithVariables%
 	else if (actionType = "IGNORE_SIMILAR_TRADE")
 		GUI_Trades_V2.AddTrade_To_IgnoreList(tabNum)
 	else if (actionType = "CLOSE_SIMILAR_TABS")

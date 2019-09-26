@@ -50,10 +50,11 @@ Class GUI_Settings {
 		for key, value in PROGRAM.TRANSLATIONS.ACTIONS.TEXT_NAME
 			ACTIONS_TEXT_NAME[key] := value
 
-		global ACTIONS_DEFAULT_CONTENT := {}
-		for key, value in PROGRAM.TRANSLATIONS.ACTIONS.DEFAULT_CONTENT
-			ACTIONS_DEFAULT_CONTENT[key] := value
+		global ACTIONS_TIPS := {}
+		for key, value in PROGRAM.TRANSLATIONS.ACTIONS.TIPS
+			ACTIONS_TIPS[key] := value
 
+		/*	Not required anymore after actions revamp
 		global ACTIONS_FORCED_CONTENT := { "":""
 			, "SEND_TO_LAST_WHISPER":"@%lwr% "
 			, "WRITE_TO_LAST_WHISPER":"@%lwr% "
@@ -74,62 +75,46 @@ Class GUI_Settings {
 			, "CMD_REMAINING":"/remaining"
 			, "CMD_WHOIS":"/whois"
 			, "":""}
+		*/
+		global ACTIONS_FORCED_CONTENT := {}
 
-		global ACTIONS_READONLY := "INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
-			. ",SAVE_TRADE_STATS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB"
-			. ",CLOSE_TAB,TOGGLE_MIN_MAX,FORCE_MIN,FORCE_MAX,CMD_OOS,CMD_REMAINING"
-			. ",IGNORE_SIMILAR_TRADE,CLOSE_SIMILAR_TABS,SHOW_GRID,SHOW_LEAGUE_SHEETS"
-		Loop 9
+		global ACTIONS_READONLY := "APPLY_ACTIONS_TO_BUY_INTERFACE,APPLY_ACTIONS_TO_SELL_INTERFACE,CLOSE_TAB"
+		. ",CLOSE_SIMILAR_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB,IGNORE_SIMILAR_TRADE"
+		. ",SAVE_TRADE_STATS,FORCE_MAX,FORCE_MIN,TOGGLE_MIN_MAX,SHOW_LEAGUE_SHEETS"
+		Loop 9 ; TO_DO_V2
 			ACTIONS_READONLY .= ",CUSTOM_BUTTON_" A_Index
+		global ACTIONS_EMPTY := ACTIONS_READONLY
+
+		global ACTIONS_WRITE := "WRITE_MSG,WRITE_THEN_GO_BACK"
 
 		global COLORS_TYPES := {}
 		for key, value in PROGRAM.TRANSLATIONS.GUI_Settings.COLORS_TYPES
 			COLORS_TYPES[key] := value
 
-		global ACTIONS_WRITE := "WRITE_MSG,WRITE_THEN_GO_BACK,WRITE_TO_LAST_WHISPER,WRITE_TO_LAST_WHISPER_SENT,WRITE_TO_BUYER"
-
 		global ACTIONS_AVAILABLE := ""
-		. "-> " ACTIONS_SECTIONS.Simple
+		. "-> " ACTIONS_SECTIONS.Chat_Messages
 		. "|" ACTIONS_TEXT_NAME.SEND_MSG
-		. "|" ACTIONS_TEXT_NAME.SEND_TO_LAST_WHISPER
-		. "|" ACTIONS_TEXT_NAME.SEND_TO_LAST_WHISPER_SENT
 		. "|" ACTIONS_TEXT_NAME.WRITE_MSG
-		. "|" ACTIONS_TEXT_NAME.WRITE_THEN_GO_BACK
-		. "|" ACTIONS_TEXT_NAME.WRITE_TO_LAST_WHISPER
-		. "|" ACTIONS_TEXT_NAME.WRITE_TO_LAST_WHISPER_SENT
+		; . "|" ACTIONS_TEXT_NAME.WRITE_THEN_GO_BACK
 		. "| "
-		. "|-> " ACTIONS_SECTIONS.Interactions
-		. "|" ACTIONS_TEXT_NAME.SEND_TO_BUYER
-		. "|" ACTIONS_TEXT_NAME.WRITE_TO_BUYER
-		. "|" ACTIONS_TEXT_NAME.INVITE_BUYER
-		. "|" ACTIONS_TEXT_NAME.TRADE_BUYER
-		. "|" ACTIONS_TEXT_NAME.KICK_BUYER
-		. "|" ACTIONS_TEXT_NAME.KICK_MYSELF
-		. "|  "
-		. "|-> " ACTIONS_SECTIONS.Special
+		. "|-> " ACTIONS_SECTIONS.TC_Interfaces
+		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_BUY_INTERFACE
+		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_SELL_INTERFACE
+		. "| "
 		. "|" ACTIONS_TEXT_NAME.CLOSE_TAB
-		. "|" ACTIONS_TEXT_NAME.SAVE_TRADE_STATS
-		. "|" ACTIONS_TEXT_NAME.SHOW_GRID
-		. "|" ACTIONS_TEXT_NAME.IGNORE_SIMILAR_TRADE
 		. "|" ACTIONS_TEXT_NAME.CLOSE_SIMILAR_TABS
 		. "|" ACTIONS_TEXT_NAME.COPY_ITEM_INFOS
-		. "|" ACTIONS_TEXT_NAME.TOGGLE_MIN_MAX
-		. "|" ACTIONS_TEXT_NAME.FORCE_MIN
-		. "|" ACTIONS_TEXT_NAME.FORCE_MAX		
 		. "|" ACTIONS_TEXT_NAME.GO_TO_NEXT_TAB
 		. "|" ACTIONS_TEXT_NAME.GO_TO_PREVIOUS_TAB
+		. "|" ACTIONS_TEXT_NAME.IGNORE_SIMILAR_TRADE
+		. "|" ACTIONS_TEXT_NAME.SAVE_TRADE_STATS
+		. "| "
+		. "|" ACTIONS_TEXT_NAME.FORCE_MAX
+		. "|" ACTIONS_TEXT_NAME.FORCE_MIN
+		. "|" ACTIONS_TEXT_NAME.TOGGLE_MIN_MAX
 		. "|" ACTIONS_TEXT_NAME.SHOW_LEAGUE_SHEETS
-		. "|   "
-		. "|-> " ACTIONS_SECTIONS.Commands
-		. "|" ACTIONS_TEXT_NAME.CMD_AFK
-		. "|" ACTIONS_TEXT_NAME.CMD_AUTOREPLY
-		. "|" ACTIONS_TEXT_NAME.CMD_DND
-		. "|" ACTIONS_TEXT_NAME.CMD_HIDEOUT
-		. "|" ACTIONS_TEXT_NAME.CMD_OOS
-		. "|" ACTIONS_TEXT_NAME.CMD_REMAINING
-		. "|" ACTIONS_TEXT_NAME.CMD_WHOIS
-		. "|    "
-		. "|-> " ACTIONS_SECTIONS.Miscellaneous
+		. "|  "
+		. "|-> " ACTIONS_SECTIONS.AutoHotKey_Commands
 		. "|" ACTIONS_TEXT_NAME.SENDINPUT
 		. "|" ACTIONS_TEXT_NAME.SENDEVENT
 		. "|" ACTIONS_TEXT_NAME.SLEEP
@@ -142,6 +127,13 @@ Class GUI_Settings {
 		Gui.Color("Settings", "0x1c4563", "0x274554")
 		Gui.Font("Settings", "Segoe UI", "8", "5", "0x80c4ff")
 		Gui, Settings:Default ; Required for LV_ cmds
+
+		Loop, Parse, ACTIONS_AVAILABLE, |
+		{
+			ctrlSize := Get_TextCtrlSize(A_LoopField, GuiSettings.Font, GuiSettings.Font_Size)
+			longestActionName := ctrlSize.W > longestActionName ? ctrlSize.W : longestActionName
+		}
+		GuiSettings.AlternativeActionTypeDDLWidth := longestActionName+25
 
 		; *	* Borders
 		bordersPositions := [{X:0, Y:0, W:guiFullWidth, H:borderSize}, {X:0, Y:0, W:borderSize, H:guiFullHeight} ; Top and Left
@@ -311,7 +303,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
 		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationSellingActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationSellingActionTypeTip")
+		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationSellingActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationSellingActionsList, "0x0b6fcc", "0xFFFFFF")
 
@@ -333,9 +325,9 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
 		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName", "Button Name")
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w200 R50 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
 		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationBuyingActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
+		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationBuyingActionsList, "0x0b6fcc", "0xFFFFFF")
 
@@ -360,9 +352,9 @@ Class GUI_Settings {
 
 		availableWidth := rightMost2-leftMost3
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+25 w" availableWidth " Center hwndhTEXT_Actions", "Actions:")
-		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R50 hwndhDDL_HotkeyActionType Choose2", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
-		Gui.Add("Settings", "Text", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
+		Gui.Add("Settings", "Link", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_HotkeyActionsList, "0x0b6fcc", "0xFFFFFF")
 
@@ -1235,6 +1227,7 @@ Class GUI_Settings {
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingButtonName", "Customization_Buying_OnButtonNameChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingButtonIcon", "Customization_Buying_OnButtonIconChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingActionType", "Customization_Buying_OnActionTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_CustomizationBuyingActionTypeTip", "Universal_OnActionTypeTipLinkClick") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingActionContent", "Customization_Buying_OnActionContentChange", doAgainAfter500ms:=True) 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationBuyingActionsList", "Customization_Buying_OnListviewClick") 
 	}
@@ -1248,6 +1241,7 @@ Class GUI_Settings {
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonIcon", "Customization_Selling_OnButtonIconChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingActionType", "Customization_Selling_OnActionTypeChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_CustomizationSellingActionTypeTip", "Universal_OnActionTypeTipLinkClick") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingActionContent", "Customization_Selling_OnActionContentChange", doAgainAfter500ms:=True) 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationSellingActionsList", "Customization_Selling_OnListviewClick") 
 	}
@@ -1824,7 +1818,7 @@ Class GUI_Settings {
 	TabHotkeys_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
 		controlsList := "hLB_HotkeyProfiles,hEDIT_HotkeyProfileName,hEDIT_HotkeyProfileHotkey,hHK_HotkeyProfileHotkey,hDDL_HotkeyActionType"
-		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList,hBTN_HotkeyAddNewProfile,hBTN_HotkeyRemoveSelectedProfile"
+		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList,hBTN_HotkeyAddNewProfile,hBTN_HotkeyRemoveSelectedProfile,hTEXT_HotkeyActionTypeTip"
 
 		Loop, Parse, controlsList,% ","
 		{
@@ -1832,20 +1826,22 @@ Class GUI_Settings {
 
 			if (ctrlName="hLB_HotkeyProfiles")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileChange")
-			if (ctrlName="hEDIT_HotkeyProfileName")
+			else if (ctrlName="hEDIT_HotkeyProfileName")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter500ms:=True)
-			if IsIn(ctrlName,"hEDIT_HotkeyProfileHotkey")
+			else if IsIn(ctrlName,"hEDIT_HotkeyProfileHotkey")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileHotkeyChange")
-			if (ctrlName="hDDL_HotkeyActionType")
+			else if (ctrlName="hDDL_HotkeyActionType")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnActionTypeChange")
-			if (ctrlName="hEDIT_HotkeyActionContent")
+			else if (ctrlName="hEDIT_HotkeyActionContent")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnActionContentChange")
-			if (ctrlName="hLV_HotkeyActionsList")
+			else if (ctrlName="hLV_HotkeyActionsList")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnListviewClick")
 			else if (ctrlName="hBTN_HotkeyAddNewProfile")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_AddNewHotkeyProfile")
 			else if (ctrlName="hBTN_HotkeyRemoveSelectedProfile")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_RemoveSelectedHotkeyProfile")
+			else if (ctrlName="hTEXT_HotkeyActionTypeTip")
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "Universal_OnActionTypeTipLinkClick")
 		}
 	}
 
@@ -2331,9 +2327,9 @@ Class GUI_Settings {
 		actionContent := GUI_Settings.Submit("hEDIT_HotkeyAdvActionContent")
 
 		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionShortName)
-		SetEditCueBanner(GuiSettings_Controls.hEDIT_HotkeyAdvActionContent, contentPlaceholder)
-		ShowToolTip(contentPlaceholder)
+		actionTypeTip := GUI_Settings.Get_ActionTypeTip_From_ShortName(actionShortName)
+		SetEditCueBanner(GuiSettings_Controls.hEDIT_HotkeyAdvActionContent, actionTypeTip)
+		ShowToolTip(actionTypeTip)
 
 		if IsContaining(actionType, "-> ") || (!actionType) {
 			GetKeyState, isUpArrowPressed, Up, P
@@ -3043,7 +3039,6 @@ Class GUI_Settings {
 			prevNumObj[whichTab] := hkIndex
 		}
 
-		tooltip saved 
 		Save_LocalSettings()
 	}
 
@@ -3054,8 +3049,14 @@ Class GUI_Settings {
 			: whichTab="Hotkeys"?"hTEXT_HotkeyActionTypeTip"
 			: ""
 
-		contentPlaceholder := GUI_Settings.Get_ActionContentPlaceholder_From_ShortName(actionTypeShort)
-		GuiControl, Settings:,% GuiSettings_Controls[actionTypeTipCtrlName],% contentPlaceholder
+		actionTypeTip := GUI_Settings.Get_ActionTypeTip_From_ShortName(actionTypeShort)
+		GuiControl, Settings:,% GuiSettings_Controls[actionTypeTipCtrlName],% actionTypeTip
+	}
+
+	Universal_OnActionTypeTipLinkClick(CtrlHwnd, GuiEvent, LinkIndex, HrefOrID) {
+		if (HrefOrID="TradingVariables") {
+			ShowToolTip("[ Add TradingVariables tooltip here ]")
+		}
 	}
 
     Universal_OnActionTypeChange(whichTab) {
@@ -3124,8 +3125,10 @@ Class GUI_Settings {
 		; Set the forced content if contains any, otherwise make content empty
 		if (forcedContent)
 			GUI_Settings.Universal_SetActionContent(whichTab, forcedContent)
-		else
-			GUI_Settings.Universal_SetActionContent(whichTab, "")
+		else if IsIn(actionShortName, "SEND_MSG,WRITE_MSG,WRITE_THEN_GO_BACK,SENDINPUT,SENDEVENT")
+			GUI_Settings.Universal_SetActionContent(whichTab, actionContent)
+		; else
+			; GUI_Settings.Universal_SetActionContent(whichTab, "")
 
 		; Update currently selected action
 		selectedRow := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
@@ -3207,8 +3210,7 @@ Class GUI_Settings {
 	}
 
     Universal_ListViewModifySelectedAction(whichTab, actionType="", actionContent="") {
-		global PROGRAM, ACTIONS_WRITE
-
+		global PROGRAM, ACTIONS_WRITE, ACTIONS_EMPTY
 		actionTypeCtrlName := whichTab="Buying"?"hDDL_CustomizationBuyingActionType"
 			: whichTab="Selling"?"hDDL_CustomizationSellingActionType"
 			: whichTab="Hotkeys"?"hDDL_HotkeyActionType"
@@ -3254,7 +3256,13 @@ Class GUI_Settings {
 			GUI_Settings.SetDefaultListViewBasedOnTabName(whichTab)
 			lvCtrlName := GUI_Settings.GetListViewControlNameBasedOnTabName(whichTab)
 			GUI.DisableControlFunction("GUI_Settings", "Settings", lvCtrlName)
-			LV_Modify(selectedRow, , selectedRow, actionType, actionContent) ; Replacing before last line with our action
+			 ; Replacing before last line with our action
+			if IsIn(actionShortName, ACTIONS_EMPTY)
+				LV_Modify(selectedRow, , selectedRow, actionType, "")
+			else if (actionShortName="SLEEP" && !IsNum(actionContent))
+				LV_Modify(selectedRow, , selectedRow, actionType, 10)
+			else
+				LV_Modify(selectedRow, , selectedRow, actionType, actionContent)
 			GUI.EnableControlFunction("GUI_Settings", "Settings", lvCtrlName)
 		}
 		
@@ -3294,7 +3302,7 @@ Class GUI_Settings {
 			actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 			if (actionType)
 			*/
-				GUI_Settings.Universal_AddNewAction(whichTab, ACTIONS_TEXT_NAME.SEND_TO_BUYER, ACTIONS_FORCED_CONTENT.SEND_TO_BUYER)
+				GUI_Settings.Universal_AddNewAction(whichTab, ACTIONS_TEXT_NAME.SEND_MSG, "@%buyer% Write something here")
 		return
 
 		Universal_OnListviewRightClick_RemoveSelectedAction:
@@ -3675,9 +3683,9 @@ Class GUI_Settings {
 		}
 	}
 
-	Get_ActionContentPlaceholder_From_ShortName(shortName) {
-		global ACTIONS_DEFAULT_CONTENT
-		return ACTIONS_DEFAULT_CONTENT[shortName]
+	Get_ActionTypeTip_From_ShortName(shortName) {
+		global ACTIONS_TIPS
+		return ACTIONS_TIPS[shortName]
 	}
 
 	Get_ActionLongName_From_ShortName(shortName) {
