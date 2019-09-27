@@ -354,6 +354,46 @@ Update_LocalSettings() {
 			INI.Set(iniFile, "GENERAL", "UpdateKickMyselfOutOfPartyHideoutHotkey", "False")
 		}
 
+		if (iniSettings.GENERAL.HasUpdatedActionsAfter1_15_BETA_ActionsRevamp != "True") {
+			Loop {
+				cbIndex := A_Index
+				loopedSetting := iniSettings["SETTINGS_CUSTOM_BUTTON_" cbIndex]
+				if IsObject(loopedSetting) {
+					Loop {
+						loopActionIndex := A_Index
+						loopedActionContent := loopedSetting["Action_" loopActionIndex "_Content"]
+						loopedActionType := loopedSetting["Action_" loopActionIndex "_Type"]
+
+						if (!loopedActionType) || (loopedActionType = "") || (loopActionIndex > 50)
+							Break
+
+						if IsIn(loopedActionType, "SEND_TO_LAST_WHISPER,SEND_TO_LAST_WHISPER_SENT,SEND_TO_BUYER,INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
+						. ",CMD_AFK,CMD_AUTOREPLY,CMD_DND,CMD_HIDEOUT,CMD_OOS,CMD_REMAINING,CMD_WHOIS") {
+							INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_TYPE", "SEND_MSG")
+							AppendToLogs(A_ThisFunc "(): Replaced " loopedActionType " action with SEND_MSG to button:"
+							. "`n" "ID: """ cbIndex """ - Action index: """ loopActionIndex """")
+						}
+						else if IsIn(loopedActionType, "WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_LAST_WHISPER_SENT,WRITE_TO_BUYER") {
+							INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_TYPE", "WRITE_MSG")
+							AppendToLogs(A_ThisFunc "(): Replaced " loopedActionType " action with WRITE_MSG to button:"
+							. "`n" "ID: """ cbIndex """ - Action index: """ loopActionIndex """")
+						}
+						else if (loopedActionType = "WRITE_THEN_GO_BACK") {
+							loopedActionContent := StrReplace(loopedActionContent, "{X}", "%goBackHere%")
+							INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_CONTENT", loopedActionContent)
+							AppendToLogs(A_ThisFunc "(): Replaced {X} with %goBackHere% to button:"
+							. "`n" "ID: """ cbIndex """ - Action index: """ loopActionIndex """")
+						}
+					}
+				}
+				else if (cbIndex > 20)
+					Break
+				else
+					Break
+			}
+			INI.Set(iniFile, "GENERAL", "HasUpdatedActionsAfter1_15_BETA_ActionsRevamp", "True")
+		}
+
 		if (PROGRAM.IS_BETA = "True")
 			INI.Set(iniFile, "UPDATING", "UseBeta", "True")
 
@@ -545,11 +585,11 @@ Get_LocalSettings_DefaultValues() {
 						"Text": "Invite",
 						"Actions": {
 							"1": {
-								"Type": "INVITE_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"/invite `%buyer`%\""
 							},
 							"2": {
-								"Type": "SEND_TO_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%buyer`% Ready to be picked up - (`%item`% for `%price`%)\""
 							}
 						}
@@ -558,7 +598,7 @@ Get_LocalSettings_DefaultValues() {
 						"Text": "Trade",
 						"Actions": {
 							"1": {
-								"Type": "TRADE_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"/tradewith `%buyer`%\""
 							}
 						}
@@ -567,11 +607,11 @@ Get_LocalSettings_DefaultValues() {
 						"Text": "Thanks",
 						"Actions": {
 							"1": {
-								"Type": "SEND_TO_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%buyer`% Thank you & good luck!\""
 							},
 							"2": {
-								"Type": "KICK_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"/kick `%buyer`%\""
 							},
 							"3": {
@@ -591,7 +631,7 @@ Get_LocalSettings_DefaultValues() {
 						"Text": "Busy",
 						"Actions": {
 							"1": {
-								"Type": "SEND_TO_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%buyer`% Busy for now, will invite asap - (`%item`% for `%price`%)\""
 							}
 						}
@@ -616,7 +656,7 @@ Get_LocalSettings_DefaultValues() {
 						"Text": "Sold",
 						"Actions": {
 							"1": {
-								"Type": "SEND_TO_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%buyer`% Already sold, sorry - (`%item`% for `%price`%)\""
 							},
 							"2": {
@@ -635,7 +675,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Whisper",
 						"Actions": {
 							"1": {
-								"Type": "WRITE_TO_BUYER",
+								"Type": "WRITE_MSG",
 								"Content": "\"@`%buyer`% \""
 							}
 						}
@@ -644,7 +684,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Invite",
 						"Actions": {
 							"1": {
-								"Type": "INVITE_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"/invite `%buyer`%\""
 							}
 						}
@@ -653,7 +693,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Trade",
 						"Actions": {
 							"1": {
-								"Type": "TRADE_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"/tradewith `%buyer`%\""
 							}
 						}
@@ -662,7 +702,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Kick",
 						"Actions": {
 							"1": {
-								"Type": "KICK_BUYER",
+								"Type": "SEND_MSG",
 								"Content": "\"/kick `%buyer`%\""
 							},
 							"2": {
@@ -694,7 +734,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Whisper",
 						"Actions": {
 							"1": {
-								"Type": "WRITE_TO_SELLER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%seller`% \""
 							}
 						}
@@ -703,7 +743,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Hideout",
 						"Actions": {
 							"1": {
-								"Type": "HIDEOUT_SELLER",
+								"Type": "SEND_MSG",
 								"Content": "\"/hideout `%seller`%\""
 							}
 						}
@@ -712,11 +752,11 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "ThumbsUp",
 						"Actions": {
 							"1": {
-								"Type": "SEND_TO_SELLER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%seller`% ty, gl!\""
 							},
 							"2": {
-								"Type": "KICK_MYSELF",
+								"Type": "SEND_MSG",
 								"Content": "\"/kick `%myself`%\""
 							},
 							"3": {
@@ -733,7 +773,7 @@ Get_LocalSettings_DefaultValues() {
 						"Text": "SRY",
 						"Actions": {
 							"1": {
-								"Type": "SEND_TO_SELLER",
+								"Type": "SEND_MSG",
 								"Content": "\"@`%seller`% sry, got another\""
 							},
 							"2": {
@@ -751,7 +791,7 @@ Get_LocalSettings_DefaultValues() {
 					"Hotkey": "F2",
 					"Actions": {
 						"1": {
-							"Type": "CMD_HIDEOUT",
+							"Type": "SEND_MSG",
 							"Content": "\"/hideout\""
 						}
 					}
@@ -761,11 +801,11 @@ Get_LocalSettings_DefaultValues() {
 					"Hotkey": "+F2",
 					"Actions": {
 						"1": {
-							"Type": "KICK_MYSELF",
+							"Type": "SEND_MSG",
 							"Content": "\"/kick `%myself`%\""
 						},
 						"2": {
-							"Type": "CMD_HIDEOUT",
+							"Type": "SEND_MSG",
 							"Content": "\"/hideout\""
 						}
 					}
