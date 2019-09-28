@@ -710,10 +710,10 @@
         ; GUI_Trades_V2.Minimize(guiName)
 
 		if !(_isPreview) {
-			OnMessage(0x200, "WM_MOUSEMOVE")
-			OnMessage(0x20A, "WM_MOUSEWHEEL")
-			OnMessage(0x201, "WM_LBUTTONDOWN")
-			OnMessage(0x202, "WM_LBUTTONUP")
+			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x200, "WM_MOUSEMOVE")
+			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x20A, "WM_MOUSEWHEEL")
+			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x201, "WM_LBUTTONDOWN")
+			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x202, "WM_LBUTTONUP")
 
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
@@ -961,8 +961,8 @@
 		if (newTabsCount > 0) {
 			GuiControl,Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"],% PROGRAM.NAME " (" newTabsCount ")"
 			; GuiControl,TradesMinimized:,% GuiTradesMinimized_Controls["hTEXT_Title"],% "(" GuiTrades.Tabs_Count ")"
-			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Compact.Settings.COLORS.Title_Trades,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"]
-			; GuiControl,% "TradesMinimized: +c" SKIN.Compact.Settings.COLORS.Title_Trades,% GuiTradesMinimized_Controls["hTEXT_Title"]
+			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Settings.COLORS.Title_Trades,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"]
+			; GuiControl,% "TradesMinimized: +c" SKIN.Settings.COLORS.Title_Trades,% GuiTradesMinimized_Controls["hTEXT_Title"]
 			GUI_Trades_V2.SetTransparency_Active(_buyOrSell)
 			GUI_Trades_V2.Disable_ClickThrough(_buyOrSell)
 			GUI_Trades_V2.Redraw(_buyOrSell)
@@ -1669,16 +1669,16 @@
 
 		GuiControlGet, search, Trades%_buyOrSell%SearchHidden:,% GuiTrades_Controls[_buyOrSell].hEDIT_HiddenSearchBar
 		if (search!="") {
-			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Compact.Settings.COLORS.SearchBar_NotEmpty,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake
+			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Settings.COLORS.SearchBar_NotEmpty,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake
 			GuiControl, Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake,% search
 		}
 		else {
-			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Compact.Settings.COLORS.SearchBar_Empty,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake
+			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Settings.COLORS.SearchBar_Empty,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake
 			GuiControl, Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake,% "..."
 		}
 
 		if (makeEmpty=True) {
-			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Compact.Settings.COLORS.SearchBar_Empty,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake
+			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Settings.COLORS.SearchBar_Empty,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake
 			GuiControl, Trades%_buyOrSell%SearchHidden:,% GuiTrades_Controls[_buyOrSell].hEDIT_HiddenSearchBar,% ""
 			GuiControl, Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell].hTEXT_SearchBarFake,% "..."
 		}
@@ -1929,9 +1929,9 @@
 		; Do stuff if tabs count is zero
 		if (GuiTrades[_buyOrSell].Tabs_Count = 0) {
 			GuiControl,Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"],% PROGRAM.NAME
-			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Compact.Settings.COLORS.Title_No_Trades,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"]
+			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Settings.COLORS.Title_No_Trades,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"]
 			; GuiControl,TradesMinimized:,% GuiTradesMinimized_Controls["hTEXT_Title"],% "(0)"
-			; GuiControl,% "TradesMinimized: +c" SKIN.Compact.Settings.COLORS.Title_No_Trades,% GuiTradesMinimized_Controls["hTEXT_Title"]
+			; GuiControl,% "TradesMinimized: +c" SKIN.Settings.COLORS.Title_No_Trades,% GuiTradesMinimized_Controls["hTEXT_Title"]
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
 				GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AutoMinimizeOnAllTabsClosed = "True")
@@ -2826,6 +2826,136 @@
 	Redraw(_buyOrSell) {
 		Gui, Trades%_buyOrSell%:+LastFound
 		WinSet, Redraw
+	}
+
+	WM_LBUTTONDOWN() {
+		global GuiTrades, GuiTrades_Controls
+
+		if !IsContaining(A_Gui, "Trades")
+			return
+
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+		underMouseHwnd := Get_UnderMouse_CtrlHwnd(), underMouseName := Gui.Get_CtrlVarName_From_Hwnd(A_Gui, underMouseHwnd)
+		RegExMatch(A_Gui, "\d+", slotNum)
+
+		if (underMouseName = "hTEXT_AdditionalMessage") {
+			tabContent := Gui_Trades_V2.GetTabContent(_buyOrSell, slotNum)
+			if (tabContent.AdditionalMessageFull) {
+				GuiTrades[_buyOrSell].HasToolTip := True
+				ShowToolTip( StrReplace(tabContent.AdditionalMessageFull,"\n","`n") , , , 20, 20)
+			}
+		}
+		else if IsContaining(underMouseName, "hIMG_TradeVerify") {
+			tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
+			GUI_Trades_V2.VerifyItemPrice(tabContent)
+		}
+		else if IsContaining(A_Gui, "Search")
+			GuiTrades[_buyOrSell].HasClickedSearch := True
+	}
+
+	WM_LBUTTONUP() {
+		global GuiTrades, GuiTrades_Controls
+
+		if !IsContaining(A_Gui, "Trades")
+			return
+
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+		underMouseHwnd := Get_UnderMouse_CtrlHwnd(), underMouseName := Gui.Get_CtrlVarName_From_Hwnd(A_Gui, underMouseHwnd)
+		RegExMatch(A_Gui, "\d+", slotNum)
+
+		if (GuiTrades[_buyOrSell].HasToolTip) {
+			RemoveToolTip()
+			GuiTrades[_buyOrSell].HasToolTip := False
+		}
+		
+		if (GuiTrades[_buyOrSell].HasClickedSearch && IsContaining(A_Gui, "Search")) {
+			DetectHiddenWindows("On")
+			GUI_Trades_V2.SetFakeSearch(_buyOrSell, makeEmpty:=True) 
+			WinActivate,% "ahk_id " GuiTrades_Controls[_buyOrSell].GuiSearchHiddenHandle
+			DetectHiddenWindows("")
+		}
+		; GUI_Trades.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
+		GuiTrades[_buyOrSell].HasClickedSearch := False
+	}
+
+	WM_MOUSEMOVE() {
+		global PROGRAM, DEBUG
+		global GuiTrades, GuiTrades_Controls
+		static mouseX, mouseY, prevMouseX, prevMouseY
+		static ctrlToolTip, underMouseHwnd, prevUnderMouseHwnd
+
+		if !IsContaining(A_Gui, "Trades")
+			return
+		MouseGetPos, mouseX, mouseY
+		if (mouseX = prevMouseX && mouseY = prevMouseY)
+			Return
+
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+		underMouseHwnd := Get_UnderMouse_CtrlHwnd(), underMouseName := Gui.Get_CtrlVarName_From_Hwnd(A_Gui, underMouseHwnd)
+		RegExMatch(A_Gui, "\d+", slotNum)
+
+		ctrlToolTip := (underMouseName = "hBTN_CloseTab") ? "Close this trade window"
+			: (underMouseName = "hBTN_Minimize") ? "Minimize this interface"
+			: (underMouseName = "hBTN_Maximize") ? "Maximize this interface"
+			: (underMouseName = "hBTN_Hideout") ? "Go to your hideout"
+			: (underMouseName = "hBTN_LeagueHelp") ? "See league informative sheets"
+			: (underMouseName = "hBTN_LeftArrow") ? "Scroll to the left"
+			: (underMouseName = "hBTN_RightArrow") ? "Scroll to the right"		
+			: (underMouseName = "hTEXT_BuyerName" && GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).BuyerIsCut) ? GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).Buyer
+			: (underMouseName = "hTEXT_SellerName" && GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).SellerIsCut) ? GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).Seller
+			: (underMouseName = "hTEXT_ItemName" && GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).IsItemCut) ? GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).Item
+			: (underMouseName = "hIMG_CurrencyIMG") ? GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).PriceCurrency
+			: (underMouseName = "hTEXT_AdditionalMessage" && ( GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).AdditionalMessage != GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).AdditionalMessageFull ) ) ? StrReplace(GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).AdditionalMessageFull, "\n", "`n")
+			: IsContaining(A_Gui, "Search") ? "Search by name or item"
+			: ""
+		if IsContaining(underMouseName, "hIMG_TradeVerify") {
+			ctrlToolTip := GUI_Trades_V2.GetTabContent("Sell", slotNum).TradeVerify
+			ctrlToolTip := StrReplace(ctrlToolTip, "\n", "`n")
+		}
+		; Tooltip % A_Gui "`n" underMouseName "`n" underMouseHwnd "`n" ctrlToolTip	
+		
+		If (underMouseHwnd != prevUnderMouseHwnd) {
+			if (ctrlToolTip) {
+				timer := DEBUG.SETTINGS.instant_settings_tooltips ? -10
+					: IsContaining(underMouseName, "hIMG_TradeVerify") ? -10
+					: IsIn(underMouseName, "hIMG_CurrencyIMG,hTEXT_BuyerName,hTEXT_SellerName,hTEXT_ItemName,hTEXT_AdditionalMessage") ? -10
+					: -1000
+				SetTimer, GUI_Trades_V2_WM_MOUSEMOVE_DisplayToolTip,% timer
+				if (underMouseName="hTEXT_AdditionalMessage" && _buyOrSell="Sell")
+					GUI_Trades_V2.UnSetTabStyleWhisperReceived(slotNum)
+			}
+
+			prevUnderMouseHwnd := underMouseHwnd
+		}
+
+		prevMouseX := mouseX, prevMouseY := mouseY
+		return
+
+		GUI_Trades_V2_WM_MOUSEMOVE_DisplayToolTip:
+			if (Get_UnderMouse_CtrlHwnd() != underMouseHwnd)
+				return
+
+			try ShowToolTip(ctrlToolTip)
+			SetTimer, GUI_Trades_V2_WM_MOUSEMOVE_RemoveToolTip, -5000
+		return
+
+		GUI_Trades_V2_WM_MOUSEMOVE_RemoveToolTip:
+			RemoveToolTip()
+		return
+	}
+
+	WM_MOUSEWHEEL(wParam, lParam) {
+		if !IsContaining(A_Gui, "Trades")
+			return
+
+		WheelDelta := 120 << 16
+		isWheelUp := WheelDelta=wParam?True:False
+		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+
+		if (isWheelUp)
+			GUI_Trades_V2.ScrollUp(_buyOrSell)
+		else
+			GUI_Trades_V2.ScrollDown(_buyOrSell)
 	}
 }
 

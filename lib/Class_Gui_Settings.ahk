@@ -458,10 +458,8 @@ Class GUI_Settings {
 		DetectHiddenWindows, On
 		WinWait,% "ahk_id " GuiSettings.Handle
 		DetectHiddenWindows, %detectHiddenWin%
-		
-		OnMessage(0x201, "WM_LBUTTONDOWN")
-		OnMessage(0x202, "WM_LBUTTONUP")
-		OnMessage(0x200, "WM_MOUSEMOVE")
+
+		Gui.OnMessageBind("GUI_Settings", "Settings", 0x200, "WM_MOUSEMOVE")
 
 		if (whichTab)
 			Gui_Settings.OnTabBtnClick(whichTab)
@@ -3907,6 +3905,67 @@ Class GUI_Settings {
 		}
 
 		GUI_Settings.Redraw()
+	}
+
+	WM_MOUSEMOVE() {
+		/* Settings: Allow dragging custom buttons
+		*/
+		global PROGRAM, DEBUG
+		global GuiSettings, GuiSettings_Controls
+		static mouseX, mouseY, prevMouseX, prevMouseY
+		static ctrlToolTip, underMouseHwnd, prevUnderMouseHwnd, prevUnderMouseName
+
+		if !IsContaining(A_Gui, "Settings")
+			return
+		MouseGetPos, mouseX, mouseY
+		if (mouseX = prevMouseX && mouseY = prevMouseY)
+			Return
+
+		underMouseHwnd := Get_UnderMouse_CtrlHwnd(), underMouseName := Gui.Get_CtrlVarName_From_Hwnd(A_Gui, underMouseHwnd)
+		if (underMouseHwnd != prevUnderMouseHwnd) {
+
+			ctrlToolTip := GUI_Settings.GetControlToolTip(underMouseName)
+			if (ctrlToolTip)
+				SetTimer, GUI_Settings_WM_MOUSEMOVE_DisplayToolTip,% DEBUG.SETTINGS.instant_settings_tooltips ? -10 : -1000
+			else
+				Gosub, GUI_Settings_WM_MOUSEMOVE_RemoveToolTip
+
+			if IsIn(underMouseName, "hDDL_CustomizationBuyingActionType,hDDL_CustomizationSellingActionType,hDDL_HotkeyActionType") { ; Resize the action type DDL to fit all actions
+				static ddlBak, editBak
+				actionContentCtrlName := StrReplace(underMouseName, "hDDL_", "hEDIT_"), actionContentCtrlName := StrReplace(actionContentCtrlName, "ActionType", "ActionContent")
+				ddlBak := Gui.GetControlPos(A_Gui, underMouseName), editBak := Gui.GetControlPos(A_Gui, actionContentCtrlName)
+				Gui.MoveControl(A_Gui, underMouseName, "w" GuiSettings.AlternativeActionTypeDDLWidth)
+				Gui.MoveControl(A_Gui, actionContentCtrlName, "x" ddlBak.X+GuiSettings.AlternativeActionTypeDDLWidth+(editBak.X- (ddlBak.X+ddlBak.W) ) " w" editBak.W-(GuiSettings.AlternativeActionTypeDDLWidth-ddlBak.W))
+			}
+			else if IsIn(prevUnderMouseName, "hDDL_CustomizationBuyingActionType,hDDL_CustomizationSellingActionType,hDDL_HotkeyActionType") { ; Put the controls back to normal size
+				actionContentCtrlName := StrReplace(prevUnderMouseName, "hDDL_", "hEDIT_"), actionContentCtrlName := StrReplace(actionContentCtrlName, "ActionType", "ActionContent")
+				Gui.MoveControl(A_Gui, prevUnderMouseName, "w" ddlBak.W)
+				Gui.MoveControl(A_Gui, actionContentCtrlName, "x" editBak.X " w" editBak.W)
+			}
+
+			prevUnderMouseHwnd := underMouseHwnd, prevUnderMouseName := underMouseName
+		}
+		return
+
+		prevMouseX := mouseX, prevMouseY := mouseY
+		return
+
+		GUI_Settings_WM_MOUSEMOVE_DisplayToolTip:
+			if (Get_UnderMouse_CtrlHwnd() != underMouseHwnd)
+				return
+
+			if (ctrlToolTip) {
+				try ShowToolTip(ctrlToolTip)
+				SetTimer, GUI_Settings_WM_MOUSEMOVE_RemoveToolTip, -20000
+			}
+			else {
+				RemoveToolTip()
+			}
+		return
+
+		GUI_Settings_WM_MOUSEMOVE_RemoveToolTip:
+			RemoveToolTip()
+		return
 	}
 }
 

@@ -778,14 +778,14 @@ Parse_GameLogs(strToParse, preview=False) {
 				Loop % GuiTrades.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
-						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
 						GUI_Trades_V2.SetTabStyleWhisperReceived(whispName)
 					}
 				}
 				Loop % GuiTradesBuyCompact.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetSlotContent("Buy", A_Index)
 					if (tabInfos.Seller = whispName) {
-						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMsgFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
 					}
 				}
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.RegularWhisperSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.RegularWhisperSFXPath) {
@@ -826,13 +826,13 @@ Parse_GameLogs(strToParse, preview=False) {
 				Loop % GuiTradesBuyCompact.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetSlotContent("Buy", A_Index)
 					if (tabInfos.Seller = whispName) {
-						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMsgFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
 					}
 				}
 				Loop % GuiTrades.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
-						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "OtherFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
+						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
 					}
 				}
 			}

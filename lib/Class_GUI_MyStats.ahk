@@ -92,14 +92,14 @@
 		*/
 
 		GUI_MyStats.EnableSubroutines()
+
+		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x83, "WM_NCCALCSIZE")
+		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x84, "WM_NCHITTEST")
+		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x86, "WM_NCACTIVATE")
+		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x201, "WM_LBUTTONDOWN")
+		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x202, "WM_LBUTTONUP")
+
         Gui.Show("MyStats", "h" guiHeight " w" guiWidth-1 " NoActivate Hide")
-
-		OnMessage(0x201, "WM_LBUTTONDOWN")
-		OnMessage(0x202, "WM_LBUTTONUP")
-		OnMessage(0x84, "WM_NCHITTEST")
-		OnMessage(0x83, "WM_NCCALCSIZE")
-		OnMessage(0x86, "WM_NCACTIVATE")
-
 		Gui.Show("MyStats", "h" guiHeight " w" guiWidth " NoActivate Hide")
 
         Return
@@ -192,6 +192,7 @@
 	}
 
 	RemoveSelectedEntry() {
+		; TO_DO_V2
 		global PROGRAM
 		global GuiMyStats, GuiMyStats_Controls
 		iniFile := PROGRAM.TRADES_HISTORY_FILE
@@ -222,6 +223,7 @@
 	}
 
 	GetData() {
+		; TO_DO_V2
 		global PROGRAM
 		statsIniFile := PROGRAM.TRADES_HISTORY_FILE
 
@@ -654,5 +656,70 @@
 	Redraw() {
 		Gui, MyStats:+LastFound
 		WinSet, Redraw
+	}
+
+	WM_NCCALCSIZE() {
+		; Credits: Lexikos - autohotkey.com/board/topic/23969-resizable-window-border/?p=155480
+		; Sizes the client area to fill the entire window.
+
+		if (A_Gui != "MyStats")
+			return
+		
+		return 0
+	}
+
+	WM_NCACTIVATE() {
+		; Credits: Lexikos - autohotkey.com/board/topic/23969-resizable-window-border/?p=155480
+		; Prevents a border from being drawn when the window is activated.
+
+		if (A_Gui != "MyStats")
+			return
+
+		if (A_Gui)
+			return 1
+	}
+
+	WM_NCHITTEST(wParam, lParam) {
+		; Credits: Lexikos - autohotkey.com/board/topic/23969-resizable-window-border/?p=155480
+		; Redefine where the sizing borders are.  This is necessary since
+		; returning 0 for WM_NCCALCSIZE effectively gives borders zero size.
+		static border_size = 6
+
+		if (A_Gui != "MyStats")
+			return		
+		
+		WinGetPos, gX, gY, gW, gH
+		
+		x := lParam<<48>>48, y := lParam<<32>>48
+		
+		hit_left    := x <  gX+border_size
+		hit_right   := x >= gX+gW-border_size
+		hit_top     := y <  gY+border_size
+		hit_bottom  := y >= gY+gH-border_size
+		
+		if hit_top
+		{
+			if hit_left
+				return 0xD
+			else if hit_right
+				return 0xE
+			else
+				return 0xC
+		}
+		else if hit_bottom
+		{
+			if hit_left
+				return 0x10
+			else if hit_right
+				return 0x11
+			else
+				return 0xF
+		}
+		else if hit_left
+			return 0xA
+		else if hit_right
+			return 0xB
+		
+		; else let default hit-testing be done
 	}
 }
