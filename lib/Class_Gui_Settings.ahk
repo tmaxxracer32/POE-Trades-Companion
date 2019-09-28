@@ -79,7 +79,7 @@ Class GUI_Settings {
 		global ACTIONS_FORCED_CONTENT := {}
 
 		global ACTIONS_READONLY := "APPLY_ACTIONS_TO_BUY_INTERFACE,APPLY_ACTIONS_TO_SELL_INTERFACE,CLOSE_TAB"
-		. ",CLOSE_SIMILAR_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB,IGNORE_SIMILAR_TRADE"
+		. ",CLOSE_SIMILAR_TABS,CLOSE_ALL_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB,IGNORE_SIMILAR_TRADE"
 		. ",SAVE_TRADE_STATS,FORCE_MAX,FORCE_MIN,TOGGLE_MIN_MAX,SHOW_LEAGUE_SHEETS"
 		Loop 9 ; TO_DO_V2
 			ACTIONS_READONLY .= ",CUSTOM_BUTTON_" A_Index
@@ -103,6 +103,7 @@ Class GUI_Settings {
 		. "| "
 		. "|" ACTIONS_TEXT_NAME.CLOSE_TAB
 		. "|" ACTIONS_TEXT_NAME.CLOSE_SIMILAR_TABS
+		. "|" ACTIONS_TEXT_NAME.CLOSE_ALL_TABS
 		. "|" ACTIONS_TEXT_NAME.COPY_ITEM_INFOS
 		. "|" ACTIONS_TEXT_NAME.GO_TO_NEXT_TAB
 		. "|" ACTIONS_TEXT_NAME.GO_TO_PREVIOUS_TAB
@@ -2612,7 +2613,7 @@ Class GUI_Settings {
 		lastActionShortName := GUI_Settings.Get_ActionShortName_From_LongName(lastAction)
 
 		if (whatDo = "Replace" && whichPos < lvCount)
-		&& IsIn(actionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB") {
+		&& IsIn(actionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB,CLOSE_ALL_TABS") {
 			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_ThisActionCanOnlyBeLast)
 			Return
 		}
@@ -2628,21 +2629,21 @@ Class GUI_Settings {
 			newAllActions := GUI_Settings.TabHotkeysAdvanced_GetCurrentHotkeysActionsList()
 
 			if (whichPos = "") {
-				if IsIn(actionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB")
+				if IsIn(actionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB,CLOSE_ALL_TABS")
 				&& IsIn(lastActionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER") {
 					boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsWrite, "%thisAction%", actionType)
 					boxTxt := StrReplace(boxTxt, "%lastAction%", lastAction)
 					MsgBox(4096, "", boxTxt)
 					return
 				}
-				else if IsIn(actionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB")
-				&& IsIn(lastActionShortName, "CLOSE_TAB") {
+				else if IsIn(actionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB,CLOSE_ALL_TABS")
+				&& IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS") {
 					boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsCloseTab, "%thisAction%", actionType)
 					boxTxt := StrReplace(boxTxt, "%lastAction%", lastAction)
 					MsgBox(4096, "", boxTxt)
 					return
 				}
-				else if IsIn(lastActionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB")
+				else if IsIn(lastActionShortName, "WRITE_THEN_GO_BACK,WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_BUYER,CLOSE_TAB,CLOSE_ALL_TABS")
 					whichPos := lvCount
 				else whichPos := lvCount+1
 			}
@@ -2716,13 +2717,13 @@ Class GUI_Settings {
 			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveUpBcsItsWrite)
 			Return
 		}
-		else if (lastActionShortName = "CLOSE_TAB")
+		else if IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS")
 		&& (lastActionNum = acNum+1) && (side = "Down") {
 			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveDownBcsLastIsCloseTab, "%lastAction%", lastActionType)
 			MsgBox(4096, "", boxTxt)
 			Return
 		}	
-		else if (lastActionShortName = "CLOSE_TAB")
+		else if IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS")
 		&& (lastActionNum = acNum) && (side = "Up") {
 			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveUpBcsItsCloseTab)
 			Return
@@ -3235,7 +3236,7 @@ Class GUI_Settings {
 			return
 		}
 		; Prevent adding action if it does a write/close action and the last action is write
-		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB,CLOSE_ALL_TABS") && ( selectedRow != LV_GetCount() )
 		&& IsIn(lastActionShortName, ACTIONS_WRITE) {
 			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsWrite, "%thisAction%", actionType)
 			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
@@ -3243,8 +3244,8 @@ Class GUI_Settings {
 			return
 		}
 		; Prevent adding action if it does a write/close action and last action is close
-		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
-		&& IsIn(lastActionShortName, "CLOSE_TAB") {
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB,CLOSE_ALL_TABS") && ( selectedRow != LV_GetCount() )
+		&& IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS") {
 			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsCloseTab, "%thisAction%", actionType)
 			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
 			MsgBox(4096, "", boxTxt)
@@ -3339,7 +3340,7 @@ Class GUI_Settings {
 			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveUpBcsItsWrite)
 			Return
 		}
-		else if (lastActionShortName = "CLOSE_TAB")
+		else if IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS")
 		&& (lastActionNum = actionNum) {
 			MsgBox(4096, "", PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveUpBcsItsCloseTab)
 			Return
@@ -3377,7 +3378,7 @@ Class GUI_Settings {
 			Return
 		}
 
-		else if (lastActionShortName = "CLOSE_TAB")
+		else if IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS")
 		&& (lastActionNum = actionNum+1) {
 			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_CannotMoveDownBcsLastIsCloseTab, "%lastAction%", lastActionType)
 			MsgBox(4096, "", boxTxt)
@@ -3460,7 +3461,7 @@ Class GUI_Settings {
 			return
 		}
 		; Prevent adding action if it does a write/close action and the last action is write
-		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB,CLOSE_ALL_TABS") && ( selectedRow != LV_GetCount() )
 		&& IsIn(lastActionShortName, ACTIONS_WRITE) {
 			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsWrite, "%thisAction%", actionType)
 			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
@@ -3468,8 +3469,8 @@ Class GUI_Settings {
 			return
 		}
 		; Prevent adding action if it does a write/close action and last action is close
-		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB") && ( selectedRow != LV_GetCount() )
-		&& IsIn(lastActionShortName, "CLOSE_TAB") {
+		else if IsIn(actionShortName, ACTIONS_WRITE ",CLOSE_TAB,CLOSE_ALL_TABS") && ( selectedRow != LV_GetCount() )
+		&& IsIn(lastActionShortName, "CLOSE_TAB,CLOSE_ALL_TABS") {
 			boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_LastActionIsCloseTab, "%thisAction%", actionType)
 			boxTxt := StrReplace(boxTxt, "%lastAction%", lastActionType)
 			MsgBox(4096, "", boxTxt)
@@ -3477,7 +3478,7 @@ Class GUI_Settings {
 		}
 
 		; Decides where to add the new action
-		if IsIn(lastActionShortName, ACTIONS_WRITE ",CLOSE_TAB")
+		if IsIn(lastActionShortName, ACTIONS_WRITE ",CLOSE_TAB,CLOSE_ALL_TABS")
 			isLastCloseOrWrite := True
 		; Adding the new action
 		if (isLastCloseOrWrite) { ; Adding new blank action, then modifying list to accomodate and make new action previous to last

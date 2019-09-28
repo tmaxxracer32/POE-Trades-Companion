@@ -333,6 +333,7 @@
 
 			"CLOSE_TAB" : "Close the currently focused tab",
 			"CLOSE_SIMILAR_TABS" : "Close all other tabs with the same item",
+			"CLOSE_ALL_TABS" : "Close all tabs at once",
 			"COPY_ITEM_INFOS" : "Copy the currently active tab item informations",
 			"GO_TO_NEXT_TAB" : "Focus the next tab",
 			"GO_TO_PREVIOUS_TAB" : "Focus the previous tab",
@@ -359,6 +360,7 @@
 
 			"CLOSE_TAB" : "Close the currently focused tab/slot.",
 			"CLOSE_SIMILAR_TABS" : "Close all other tabs or slots with the same combination of item name, price and stash location as the currently focused tab/slot.",
+			"CLOSE_ALL_TABS" : "Close all tabs at once, including the currently active tab.",
 			"COPY_ITEM_INFOS" : "Copy the currently active tab/slot item informations, for usage with the in-game stash search.",
 			"GO_TO_NEXT_TAB" : "Focus the next tab/slot",
 			"GO_TO_PREVIOUS_TAB" : "Focus the previous tab/slot",
