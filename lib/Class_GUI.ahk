@@ -349,6 +349,11 @@ Class GUI {
 		GuiControl, %guiName%:+g,% Gui%guiName%_Controls[ctrlName],% __f
 	}
 
+	Get_CtrlVarName_From_Hwnd(guiName, ctrlHwnd) {
+	GuiControlGet, ctrlName, %guiName%:Name,% ctrlHwnd
+	return ctrlName
+}
+
 	SetDefault(guiName) {
 		global
 		Gui,%guiName%:Default
