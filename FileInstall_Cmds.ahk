@@ -1353,156 +1353,6 @@ if (ErrorLevel) {
 if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ArrowLeft.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeft.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ArrowLeft.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeft.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ArrowLeft.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeft.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowLeft.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeft.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowLeft.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeft.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ArrowLeftHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ArrowLeftHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ArrowLeftHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowLeftHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowLeftHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ArrowLeftPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ArrowLeftPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ArrowLeftPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowLeftPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowLeftPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowLeftPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ArrowRight.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRight.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ArrowRight.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRight.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ArrowRight.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRight.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowRight.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRight.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowRight.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRight.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ArrowRightHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ArrowRightHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ArrowRightHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowRightHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowRightHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ArrowRightPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ArrowRightPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ArrowRightPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowRightPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ArrowRightPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ArrowRightPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
 FileInstall, resources\skins\Dark Blue\Assets.ini, % PROGRAM.SKINS_FOLDER "\Dark Blue\Assets.ini", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
@@ -1545,23 +1395,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonClipboard.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboard.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericBackground.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonClipboard.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboard.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericBackground.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonClipboard.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboard.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericBackground.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonClipboard.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboard.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonClipboard.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboard.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground.png"
 	.	"`nFlag: " 2
 }
 
@@ -1570,23 +1420,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonClipboardHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericBackground2.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonClipboardHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardHover.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericBackground2.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonClipboardHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardHover.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericBackground2.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonClipboardHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardHover.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground2.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonClipboardHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardHover.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground2.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2.png"
 	.	"`nFlag: " 2
 }
 
@@ -1595,23 +1445,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonClipboardPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardPress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericBackground2Hover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Hover.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonClipboardPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardPress.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericBackground2Hover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Hover.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonClipboardPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardPress.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericBackground2Hover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Hover.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonClipboardPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardPress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground2Hover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Hover.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonClipboardPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonClipboardPress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground2Hover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Hover.png"
 	.	"`nFlag: " 2
 }
 
@@ -1620,23 +1470,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonHideout.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideout.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericBackground2Press.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Press.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonHideout.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideout.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericBackground2Press.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Press.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonHideout.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideout.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericBackground2Press.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Press.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideout.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground2Press.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Press.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideout.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackground2Press.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackground2Press.png"
 	.	"`nFlag: " 2
 }
 
@@ -1645,23 +1495,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonHideoutHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericBackgroundHover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundHover.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonHideoutHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutHover.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericBackgroundHover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundHover.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonHideoutHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutHover.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericBackgroundHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundHover.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutHover.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackgroundHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundHover.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutHover.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackgroundHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundHover.png"
 	.	"`nFlag: " 2
 }
 
@@ -1670,23 +1520,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonHideoutPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutPress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericBackgroundPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundPress.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonHideoutPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutPress.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericBackgroundPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundPress.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonHideoutPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutPress.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericBackgroundPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundPress.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutPress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackgroundPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundPress.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonHideoutPress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericBackgroundPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericBackgroundPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -1695,23 +1545,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonInvite.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvite.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericEdge.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdge.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonInvite.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvite.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericEdge.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdge.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonInvite.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvite.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericEdge.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdge.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonInvite.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvite.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericEdge.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdge.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonInvite.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvite.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericEdge.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdge.png"
 	.	"`nFlag: " 2
 }
 
@@ -1720,23 +1570,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonInviteHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInviteHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericEdgeHover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdgeHover.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonInviteHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInviteHover.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericEdgeHover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdgeHover.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonInviteHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInviteHover.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericEdgeHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdgeHover.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonInviteHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInviteHover.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericEdgeHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdgeHover.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonInviteHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInviteHover.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericEdgeHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericEdgeHover.png"
 	.	"`nFlag: " 2
 }
 
@@ -1745,23 +1595,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonInvitePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvitePress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericLeftRightPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericLeftRightPress.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonInvitePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvitePress.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericLeftRightPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericLeftRightPress.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonInvitePress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvitePress.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericLeftRightPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericLeftRightPress.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonInvitePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvitePress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericLeftRightPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericLeftRightPress.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonInvitePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonInvitePress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericLeftRightPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericLeftRightPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -1770,673 +1620,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonKick.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKick.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonGenericTopBottomPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericTopBottomPress.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonKick.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKick.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonGenericTopBottomPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericTopBottomPress.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonKick.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKick.png", 1
+	FileInstall, resources\skins\Dark Blue\ButtonGenericTopBottomPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericTopBottomPress.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonKick.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKick.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericTopBottomPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericTopBottomPress.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonKick.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKick.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonKickHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonKickHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonKickHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonKickHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonKickHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonKickPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonKickPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonKickPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonKickPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonKickPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonKickPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonOneThird.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThird.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonOneThird.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThird.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonOneThird.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThird.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonOneThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThird.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonOneThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThird.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonOneThirdHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonOneThirdHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonOneThirdHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonOneThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonOneThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonOneThirdPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonOneThirdPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonOneThirdPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonOneThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonOneThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonOneThirdPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonThanks.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanks.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonThanks.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanks.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonThanks.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanks.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThanks.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanks.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThanks.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanks.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonThanksHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonThanksHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonThanksHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThanksHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThanksHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonThanksPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonThanksPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonThanksPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThanksPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThanksPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThanksPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonThreeThird.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThird.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonThreeThird.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThird.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonThreeThird.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThird.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThreeThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThird.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThreeThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThird.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonThreeThirdHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonThreeThirdHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonThreeThirdHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThreeThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThreeThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonThreeThirdPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonThreeThirdPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonThreeThirdPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThreeThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonThreeThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonThreeThirdPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonTrade.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTrade.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonTrade.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTrade.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonTrade.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTrade.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTrade.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTrade.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTrade.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTrade.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonTradeHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradeHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonTradeHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradeHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonTradeHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradeHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTradeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradeHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTradeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradeHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonTradePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradePress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonTradePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradePress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonTradePress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradePress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTradePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradePress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTradePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTradePress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonTwoThird.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThird.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonTwoThird.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThird.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonTwoThird.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThird.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTwoThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThird.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTwoThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThird.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonTwoThirdHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonTwoThirdHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonTwoThirdHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTwoThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTwoThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonTwoThirdPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonTwoThirdPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonTwoThirdPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTwoThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonTwoThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonTwoThirdPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonWhisper.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisper.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonWhisper.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisper.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonWhisper.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisper.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonWhisper.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisper.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonWhisper.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisper.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonWhisperHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonWhisperHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonWhisperHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonWhisperHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonWhisperHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ButtonWhisperPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ButtonWhisperPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ButtonWhisperPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonWhisperPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ButtonWhisperPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonWhisperPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\CloseTab.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTab.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\CloseTab.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTab.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\CloseTab.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTab.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTab.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTab.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTab.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTab.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\CloseTabHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\CloseTabHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\CloseTabHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\CloseTabPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\CloseTabPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\CloseTabPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\CloseTabVertical.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVertical.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\CloseTabVertical.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVertical.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\CloseTabVertical.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVertical.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabVertical.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVertical.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabVertical.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVertical.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\CloseTabVerticalHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\CloseTabVerticalHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\CloseTabVerticalHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabVerticalHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabVerticalHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\CloseTabVerticalPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\CloseTabVerticalPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\CloseTabVerticalPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabVerticalPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\CloseTabVerticalPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\CloseTabVerticalPress.png"
+	.	"`nSource: resources\skins\Dark Blue\ButtonGenericTopBottomPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ButtonGenericTopBottomPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -2545,23 +1745,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\Maximize.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\Maximize.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconArrowLeft.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowLeft.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\Maximize.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\Maximize.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconArrowLeft.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowLeft.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\Maximize.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\Maximize.png", 1
+	FileInstall, resources\skins\Dark Blue\IconArrowLeft.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowLeft.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\Maximize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\Maximize.png"
+	.	"`nSource: resources\skins\Dark Blue\IconArrowLeft.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowLeft.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\Maximize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\Maximize.png"
+	.	"`nSource: resources\skins\Dark Blue\IconArrowLeft.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowLeft.png"
 	.	"`nFlag: " 2
 }
 
@@ -2570,23 +1770,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\MaximizeHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizeHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconArrowRight.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowRight.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\MaximizeHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizeHover.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconArrowRight.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowRight.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\MaximizeHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizeHover.png", 1
+	FileInstall, resources\skins\Dark Blue\IconArrowRight.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowRight.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MaximizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizeHover.png"
+	.	"`nSource: resources\skins\Dark Blue\IconArrowRight.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowRight.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MaximizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizeHover.png"
+	.	"`nSource: resources\skins\Dark Blue\IconArrowRight.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconArrowRight.png"
 	.	"`nFlag: " 2
 }
 
@@ -2595,23 +1795,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\MaximizePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizePress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconClipboard.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconClipboard.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\MaximizePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizePress.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconClipboard.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconClipboard.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\MaximizePress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizePress.png", 1
+	FileInstall, resources\skins\Dark Blue\IconClipboard.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconClipboard.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MaximizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizePress.png"
+	.	"`nSource: resources\skins\Dark Blue\IconClipboard.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconClipboard.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MaximizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MaximizePress.png"
+	.	"`nSource: resources\skins\Dark Blue\IconClipboard.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconClipboard.png"
 	.	"`nFlag: " 2
 }
 
@@ -2620,23 +1820,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\Minimize.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\Minimize.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconCross.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconCross.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\Minimize.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\Minimize.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconCross.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconCross.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\Minimize.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\Minimize.png", 1
+	FileInstall, resources\skins\Dark Blue\IconCross.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconCross.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\Minimize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\Minimize.png"
+	.	"`nSource: resources\skins\Dark Blue\IconCross.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconCross.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\Minimize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\Minimize.png"
+	.	"`nSource: resources\skins\Dark Blue\IconCross.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconCross.png"
 	.	"`nFlag: " 2
 }
 
@@ -2645,23 +1845,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\MinimizeHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizeHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconHideout.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconHideout.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\MinimizeHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizeHover.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconHideout.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconHideout.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\MinimizeHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizeHover.png", 1
+	FileInstall, resources\skins\Dark Blue\IconHideout.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconHideout.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MinimizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizeHover.png"
+	.	"`nSource: resources\skins\Dark Blue\IconHideout.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconHideout.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MinimizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizeHover.png"
+	.	"`nSource: resources\skins\Dark Blue\IconHideout.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconHideout.png"
 	.	"`nFlag: " 2
 }
 
@@ -2670,23 +1870,223 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\MinimizePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizePress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconInvite.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconInvite.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\MinimizePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizePress.png"
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconInvite.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconInvite.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\MinimizePress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizePress.png", 1
+	FileInstall, resources\skins\Dark Blue\IconInvite.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconInvite.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MinimizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizePress.png"
+	.	"`nSource: resources\skins\Dark Blue\IconInvite.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconInvite.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\MinimizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\MinimizePress.png"
+	.	"`nSource: resources\skins\Dark Blue\IconInvite.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconInvite.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconKick.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconKick.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconKick.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconKick.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconKick.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconKick.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconKick.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconKick.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconKick.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconKick.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconMaximize.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconMaximize.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconMaximize.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconMaximize.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconMaximize.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconMaximize.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconMaximize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconMaximize.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconMaximize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconMaximize.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconMinimize.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconMinimize.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconMinimize.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconMinimize.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconMinimize.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconMinimize.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconMinimize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconMinimize.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconMinimize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconMinimize.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconSheet.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconSheet.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconSheet.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconSheet.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconSheet.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconSheet.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconSheet.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconSheet.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconSheet.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconSheet.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconThumbsDown.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsDown.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconThumbsDown.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsDown.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconThumbsDown.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsDown.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconThumbsDown.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsDown.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconThumbsDown.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsDown.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconThumbsUp.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsUp.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconThumbsUp.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsUp.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconThumbsUp.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsUp.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconThumbsUp.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsUp.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconThumbsUp.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconThumbsUp.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconTrade.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconTrade.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconTrade.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconTrade.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconTrade.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconTrade.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconTrade.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconTrade.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconTrade.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconTrade.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\IconWhisper.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconWhisper.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\IconWhisper.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconWhisper.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\IconWhisper.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\IconWhisper.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconWhisper.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconWhisper.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\IconWhisper.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\IconWhisper.png"
 	.	"`nFlag: " 2
 }
 
@@ -2936,6 +2336,31 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
 
 if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\TabsUnderline.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\TabsUnderline.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\Dark Blue\TabsUnderline.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\TabsUnderline.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\Dark Blue\TabsUnderline.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\TabsUnderline.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\TabsUnderline.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\TabsUnderline.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\Dark Blue\TabsUnderline.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\TabsUnderline.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
+
+if (A_IsCompiled) {
 	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\TabWhisperActive.png")
 	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\TabWhisperActive.png"
 }
@@ -3003,156 +2428,6 @@ if (ErrorLevel) {
 	errorLog .= "`n`n""Failed to extract file!"
 	.	"`nSource: resources\skins\Dark Blue\TabWhisperInactive.png"
 	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\TabWhisperInactive.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ToolbarHideout.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideout.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ToolbarHideout.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideout.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ToolbarHideout.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideout.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideout.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideout.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ToolbarHideoutHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ToolbarHideoutHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ToolbarHideoutHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ToolbarHideoutPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ToolbarHideoutPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ToolbarHideoutPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarHideoutPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ToolbarSheet.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheet.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ToolbarSheet.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheet.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ToolbarSheet.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheet.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarSheet.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheet.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarSheet.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheet.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ToolbarSheetHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ToolbarSheetHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ToolbarSheetHover.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarSheetHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarSheetHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Dark Blue"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Dark Blue"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Dark Blue\ToolbarSheetPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Dark Blue\ToolbarSheetPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Dark Blue\ToolbarSheetPress.png, % PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarSheetPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Dark Blue\ToolbarSheetPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Dark Blue\ToolbarSheetPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -4152,31 +3427,6 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\Maximize.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\Maximize.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\Path of Exile\Maximize.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\Maximize.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\Path of Exile\Maximize.png, % PROGRAM.SKINS_FOLDER "\Path of Exile\Maximize.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\Path of Exile\Maximize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\Maximize.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\Path of Exile\Maximize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\Path of Exile\Maximize.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\Path of Exile"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\Path of Exile"
-
-if (A_IsCompiled) {
 	sourceFileSize := Get_ResourceSize("resources\skins\Path of Exile\Preview_Buy.png")
 	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\Path of Exile\Preview_Buy.png"
 }
@@ -4592,156 +3842,6 @@ if (ErrorLevel) {
 if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ArrowLeft.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowLeft.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ArrowLeft.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowLeft.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ArrowLeft.png, % PROGRAM.SKINS_FOLDER "\White\ArrowLeft.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowLeft.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowLeft.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowLeft.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowLeft.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ArrowLeftHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowLeftHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ArrowLeftHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowLeftHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ArrowLeftHover.png, % PROGRAM.SKINS_FOLDER "\White\ArrowLeftHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowLeftHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowLeftHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowLeftHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowLeftHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ArrowLeftPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowLeftPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ArrowLeftPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowLeftPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ArrowLeftPress.png, % PROGRAM.SKINS_FOLDER "\White\ArrowLeftPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowLeftPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowLeftPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowLeftPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowLeftPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ArrowRight.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowRight.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ArrowRight.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowRight.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ArrowRight.png, % PROGRAM.SKINS_FOLDER "\White\ArrowRight.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowRight.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowRight.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowRight.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowRight.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ArrowRightHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowRightHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ArrowRightHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowRightHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ArrowRightHover.png, % PROGRAM.SKINS_FOLDER "\White\ArrowRightHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowRightHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowRightHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowRightHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowRightHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ArrowRightPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowRightPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ArrowRightPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ArrowRightPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ArrowRightPress.png, % PROGRAM.SKINS_FOLDER "\White\ArrowRightPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowRightPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowRightPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ArrowRightPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ArrowRightPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
 FileInstall, resources\skins\White\Assets.ini, % PROGRAM.SKINS_FOLDER "\White\Assets.ini", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
@@ -4784,23 +3884,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonClipboard.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboard.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericBackground.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonClipboard.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboard.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericBackground.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonClipboard.png, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboard.png", 1
+	FileInstall, resources\skins\White\ButtonGenericBackground.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonClipboard.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonClipboard.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonClipboard.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonClipboard.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground.png"
 	.	"`nFlag: " 2
 }
 
@@ -4809,23 +3909,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonClipboardHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboardHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericBackground2.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonClipboardHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboardHover.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericBackground2.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonClipboardHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboardHover.png", 1
+	FileInstall, resources\skins\White\ButtonGenericBackground2.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonClipboardHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonClipboardHover.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground2.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonClipboardHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonClipboardHover.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground2.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2.png"
 	.	"`nFlag: " 2
 }
 
@@ -4834,23 +3934,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonClipboardPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboardPress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericBackground2Hover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Hover.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonClipboardPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboardPress.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericBackground2Hover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Hover.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonClipboardPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonClipboardPress.png", 1
+	FileInstall, resources\skins\White\ButtonGenericBackground2Hover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Hover.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonClipboardPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonClipboardPress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground2Hover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Hover.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonClipboardPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonClipboardPress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground2Hover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Hover.png"
 	.	"`nFlag: " 2
 }
 
@@ -4859,23 +3959,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonHideout.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonHideout.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericBackground2Press.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Press.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonHideout.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonHideout.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericBackground2Press.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Press.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonHideout.png, % PROGRAM.SKINS_FOLDER "\White\ButtonHideout.png", 1
+	FileInstall, resources\skins\White\ButtonGenericBackground2Press.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Press.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonHideout.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground2Press.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Press.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonHideout.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackground2Press.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackground2Press.png"
 	.	"`nFlag: " 2
 }
 
@@ -4884,23 +3984,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonHideoutHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonHideoutHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericBackgroundHover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundHover.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonHideoutHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonHideoutHover.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericBackgroundHover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundHover.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonHideoutHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonHideoutHover.png", 1
+	FileInstall, resources\skins\White\ButtonGenericBackgroundHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundHover.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonHideoutHover.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackgroundHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundHover.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonHideoutHover.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackgroundHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundHover.png"
 	.	"`nFlag: " 2
 }
 
@@ -4909,23 +4009,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonHideoutPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonHideoutPress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericBackgroundPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundPress.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonHideoutPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonHideoutPress.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericBackgroundPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundPress.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonHideoutPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonHideoutPress.png", 1
+	FileInstall, resources\skins\White\ButtonGenericBackgroundPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundPress.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonHideoutPress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackgroundPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundPress.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonHideoutPress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericBackgroundPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericBackgroundPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -4934,23 +4034,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonInvite.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonInvite.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericEdge.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdge.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonInvite.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonInvite.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericEdge.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdge.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonInvite.png, % PROGRAM.SKINS_FOLDER "\White\ButtonInvite.png", 1
+	FileInstall, resources\skins\White\ButtonGenericEdge.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdge.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonInvite.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonInvite.png"
+	.	"`nSource: resources\skins\White\ButtonGenericEdge.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdge.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonInvite.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonInvite.png"
+	.	"`nSource: resources\skins\White\ButtonGenericEdge.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdge.png"
 	.	"`nFlag: " 2
 }
 
@@ -4959,23 +4059,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonInviteHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonInviteHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericEdgeHover.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdgeHover.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonInviteHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonInviteHover.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericEdgeHover.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdgeHover.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonInviteHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonInviteHover.png", 1
+	FileInstall, resources\skins\White\ButtonGenericEdgeHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdgeHover.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonInviteHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonInviteHover.png"
+	.	"`nSource: resources\skins\White\ButtonGenericEdgeHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdgeHover.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonInviteHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonInviteHover.png"
+	.	"`nSource: resources\skins\White\ButtonGenericEdgeHover.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericEdgeHover.png"
 	.	"`nFlag: " 2
 }
 
@@ -4984,23 +4084,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonInvitePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonInvitePress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericLeftRightPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericLeftRightPress.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonInvitePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonInvitePress.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericLeftRightPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericLeftRightPress.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonInvitePress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonInvitePress.png", 1
+	FileInstall, resources\skins\White\ButtonGenericLeftRightPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericLeftRightPress.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonInvitePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonInvitePress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericLeftRightPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericLeftRightPress.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonInvitePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonInvitePress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericLeftRightPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericLeftRightPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -5009,673 +4109,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonKick.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonKick.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonGenericTopBottomPress.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericTopBottomPress.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonKick.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonKick.png"
+	FileGetSize, sourceFileSize, resources\skins\White\ButtonGenericTopBottomPress.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericTopBottomPress.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonKick.png, % PROGRAM.SKINS_FOLDER "\White\ButtonKick.png", 1
+	FileInstall, resources\skins\White\ButtonGenericTopBottomPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonGenericTopBottomPress.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonKick.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonKick.png"
+	.	"`nSource: resources\skins\White\ButtonGenericTopBottomPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericTopBottomPress.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonKick.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonKick.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonKickHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonKickHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonKickHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonKickHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonKickHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonKickHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonKickHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonKickHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonKickHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonKickHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonKickPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonKickPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonKickPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonKickPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonKickPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonKickPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonKickPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonKickPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonKickPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonKickPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonOneThird.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThird.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonOneThird.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThird.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonOneThird.png, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThird.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonOneThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonOneThird.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonOneThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonOneThird.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonOneThirdHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonOneThirdHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonOneThirdHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonOneThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonOneThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonOneThirdPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonOneThirdPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonOneThirdPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonOneThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonOneThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonOneThirdPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonThanks.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThanks.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonThanks.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThanks.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonThanks.png, % PROGRAM.SKINS_FOLDER "\White\ButtonThanks.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThanks.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThanks.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThanks.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThanks.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonThanksHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThanksHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonThanksHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThanksHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonThanksHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonThanksHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThanksHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThanksHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThanksHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThanksHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonThanksPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThanksPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonThanksPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThanksPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonThanksPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonThanksPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThanksPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThanksPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThanksPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThanksPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonThreeThird.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThird.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonThreeThird.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThird.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonThreeThird.png, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThird.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThreeThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThreeThird.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThreeThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThreeThird.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonThreeThirdHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonThreeThirdHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonThreeThirdHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThreeThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThreeThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonThreeThirdPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonThreeThirdPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonThreeThirdPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThreeThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonThreeThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonThreeThirdPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonTrade.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTrade.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonTrade.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTrade.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonTrade.png, % PROGRAM.SKINS_FOLDER "\White\ButtonTrade.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTrade.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTrade.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTrade.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTrade.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonTradeHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTradeHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonTradeHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTradeHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonTradeHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonTradeHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTradeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTradeHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTradeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTradeHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonTradePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTradePress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonTradePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTradePress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonTradePress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonTradePress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTradePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTradePress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTradePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTradePress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonTwoThird.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThird.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonTwoThird.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThird.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonTwoThird.png, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThird.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTwoThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTwoThird.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTwoThird.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTwoThird.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonTwoThirdHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonTwoThirdHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonTwoThirdHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTwoThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTwoThirdHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonTwoThirdPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonTwoThirdPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonTwoThirdPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTwoThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonTwoThirdPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonTwoThirdPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonWhisper.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisper.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonWhisper.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisper.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonWhisper.png, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisper.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonWhisper.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonWhisper.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonWhisper.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonWhisper.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonWhisperHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisperHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonWhisperHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisperHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonWhisperHover.png, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisperHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonWhisperHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonWhisperHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonWhisperHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonWhisperHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ButtonWhisperPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisperPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ButtonWhisperPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisperPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ButtonWhisperPress.png, % PROGRAM.SKINS_FOLDER "\White\ButtonWhisperPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonWhisperPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonWhisperPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ButtonWhisperPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonWhisperPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\CloseTab.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTab.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\CloseTab.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTab.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\CloseTab.png, % PROGRAM.SKINS_FOLDER "\White\CloseTab.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTab.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTab.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTab.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTab.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\CloseTabHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\CloseTabHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\CloseTabHover.png, % PROGRAM.SKINS_FOLDER "\White\CloseTabHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\CloseTabPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\CloseTabPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\CloseTabPress.png, % PROGRAM.SKINS_FOLDER "\White\CloseTabPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\CloseTabVertical.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabVertical.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\CloseTabVertical.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabVertical.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\CloseTabVertical.png, % PROGRAM.SKINS_FOLDER "\White\CloseTabVertical.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabVertical.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabVertical.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabVertical.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabVertical.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\CloseTabVerticalHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\CloseTabVerticalHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\CloseTabVerticalHover.png, % PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabVerticalHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabVerticalHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\CloseTabVerticalPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\CloseTabVerticalPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\CloseTabVerticalPress.png, % PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabVerticalPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\CloseTabVerticalPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\CloseTabVerticalPress.png"
+	.	"`nSource: resources\skins\White\ButtonGenericTopBottomPress.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ButtonGenericTopBottomPress.png"
 	.	"`nFlag: " 2
 }
 
@@ -5784,23 +4234,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\Maximize.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\Maximize.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconArrowLeft.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconArrowLeft.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\Maximize.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\Maximize.png"
+	FileGetSize, sourceFileSize, resources\skins\White\IconArrowLeft.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconArrowLeft.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\Maximize.png, % PROGRAM.SKINS_FOLDER "\White\Maximize.png", 1
+	FileInstall, resources\skins\White\IconArrowLeft.png, % PROGRAM.SKINS_FOLDER "\White\IconArrowLeft.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\Maximize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\Maximize.png"
+	.	"`nSource: resources\skins\White\IconArrowLeft.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconArrowLeft.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\Maximize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\Maximize.png"
+	.	"`nSource: resources\skins\White\IconArrowLeft.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconArrowLeft.png"
 	.	"`nFlag: " 2
 }
 
@@ -5809,23 +4259,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\MaximizeHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MaximizeHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconArrowRight.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconArrowRight.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\MaximizeHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MaximizeHover.png"
+	FileGetSize, sourceFileSize, resources\skins\White\IconArrowRight.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconArrowRight.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\MaximizeHover.png, % PROGRAM.SKINS_FOLDER "\White\MaximizeHover.png", 1
+	FileInstall, resources\skins\White\IconArrowRight.png, % PROGRAM.SKINS_FOLDER "\White\IconArrowRight.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\MaximizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MaximizeHover.png"
+	.	"`nSource: resources\skins\White\IconArrowRight.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconArrowRight.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\MaximizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MaximizeHover.png"
+	.	"`nSource: resources\skins\White\IconArrowRight.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconArrowRight.png"
 	.	"`nFlag: " 2
 }
 
@@ -5834,23 +4284,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\MaximizePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MaximizePress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconClipboard.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconClipboard.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\MaximizePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MaximizePress.png"
+	FileGetSize, sourceFileSize, resources\skins\White\IconClipboard.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconClipboard.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\MaximizePress.png, % PROGRAM.SKINS_FOLDER "\White\MaximizePress.png", 1
+	FileInstall, resources\skins\White\IconClipboard.png, % PROGRAM.SKINS_FOLDER "\White\IconClipboard.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\MaximizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MaximizePress.png"
+	.	"`nSource: resources\skins\White\IconClipboard.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconClipboard.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\MaximizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MaximizePress.png"
+	.	"`nSource: resources\skins\White\IconClipboard.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconClipboard.png"
 	.	"`nFlag: " 2
 }
 
@@ -5859,23 +4309,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\Minimize.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\Minimize.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconCross.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconCross.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\Minimize.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\Minimize.png"
+	FileGetSize, sourceFileSize, resources\skins\White\IconCross.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconCross.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\Minimize.png, % PROGRAM.SKINS_FOLDER "\White\Minimize.png", 1
+	FileInstall, resources\skins\White\IconCross.png, % PROGRAM.SKINS_FOLDER "\White\IconCross.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\Minimize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\Minimize.png"
+	.	"`nSource: resources\skins\White\IconCross.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconCross.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\Minimize.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\Minimize.png"
+	.	"`nSource: resources\skins\White\IconCross.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconCross.png"
 	.	"`nFlag: " 2
 }
 
@@ -5884,23 +4334,23 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\MinimizeHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MinimizeHover.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconHideout.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconHideout.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\MinimizeHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MinimizeHover.png"
+	FileGetSize, sourceFileSize, resources\skins\White\IconHideout.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconHideout.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\MinimizeHover.png, % PROGRAM.SKINS_FOLDER "\White\MinimizeHover.png", 1
+	FileInstall, resources\skins\White\IconHideout.png, % PROGRAM.SKINS_FOLDER "\White\IconHideout.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\MinimizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MinimizeHover.png"
+	.	"`nSource: resources\skins\White\IconHideout.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconHideout.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\MinimizeHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MinimizeHover.png"
+	.	"`nSource: resources\skins\White\IconHideout.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconHideout.png"
 	.	"`nFlag: " 2
 }
 
@@ -5909,23 +4359,223 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\MinimizePress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MinimizePress.png"
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconInvite.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconInvite.png"
 }
 else {
-	FileGetSize, sourceFileSize, resources\skins\White\MinimizePress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\MinimizePress.png"
+	FileGetSize, sourceFileSize, resources\skins\White\IconInvite.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconInvite.png"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\MinimizePress.png, % PROGRAM.SKINS_FOLDER "\White\MinimizePress.png", 1
+	FileInstall, resources\skins\White\IconInvite.png, % PROGRAM.SKINS_FOLDER "\White\IconInvite.png", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\MinimizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MinimizePress.png"
+	.	"`nSource: resources\skins\White\IconInvite.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconInvite.png"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\MinimizePress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\MinimizePress.png"
+	.	"`nSource: resources\skins\White\IconInvite.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconInvite.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconKick.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconKick.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconKick.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconKick.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconKick.png, % PROGRAM.SKINS_FOLDER "\White\IconKick.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconKick.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconKick.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconKick.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconKick.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconMaximize.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconMaximize.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconMaximize.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconMaximize.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconMaximize.png, % PROGRAM.SKINS_FOLDER "\White\IconMaximize.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconMaximize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconMaximize.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconMaximize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconMaximize.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconMinimize.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconMinimize.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconMinimize.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconMinimize.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconMinimize.png, % PROGRAM.SKINS_FOLDER "\White\IconMinimize.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconMinimize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconMinimize.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconMinimize.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconMinimize.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconSheet.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconSheet.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconSheet.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconSheet.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconSheet.png, % PROGRAM.SKINS_FOLDER "\White\IconSheet.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconSheet.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconSheet.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconSheet.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconSheet.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconThumbsDown.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconThumbsDown.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconThumbsDown.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconThumbsDown.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconThumbsDown.png, % PROGRAM.SKINS_FOLDER "\White\IconThumbsDown.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconThumbsDown.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconThumbsDown.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconThumbsDown.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconThumbsDown.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconThumbsUp.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconThumbsUp.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconThumbsUp.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconThumbsUp.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconThumbsUp.png, % PROGRAM.SKINS_FOLDER "\White\IconThumbsUp.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconThumbsUp.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconThumbsUp.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconThumbsUp.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconThumbsUp.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconTrade.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconTrade.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconTrade.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconTrade.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconTrade.png, % PROGRAM.SKINS_FOLDER "\White\IconTrade.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconTrade.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconTrade.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconTrade.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconTrade.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\IconWhisper.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconWhisper.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\IconWhisper.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\IconWhisper.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\IconWhisper.png, % PROGRAM.SKINS_FOLDER "\White\IconWhisper.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconWhisper.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconWhisper.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\IconWhisper.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\IconWhisper.png"
 	.	"`nFlag: " 2
 }
 
@@ -6175,6 +4825,31 @@ if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
 	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
 
 if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("resources\skins\White\TabsUnderline.png")
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\TabsUnderline.png"
+}
+else {
+	FileGetSize, sourceFileSize, resources\skins\White\TabsUnderline.png
+	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\TabsUnderline.png"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, resources\skins\White\TabsUnderline.png, % PROGRAM.SKINS_FOLDER "\White\TabsUnderline.png", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: resources\skins\White\TabsUnderline.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\TabsUnderline.png"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: resources\skins\White\TabsUnderline.png"
+	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\TabsUnderline.png"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
+	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
+
+if (A_IsCompiled) {
 	sourceFileSize := Get_ResourceSize("resources\skins\White\TabWhisperActive.png")
 	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\TabWhisperActive.png"
 }
@@ -6242,156 +4917,6 @@ if (ErrorLevel) {
 	errorLog .= "`n`n""Failed to extract file!"
 	.	"`nSource: resources\skins\White\TabWhisperInactive.png"
 	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\TabWhisperInactive.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ToolbarHideout.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideout.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ToolbarHideout.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideout.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ToolbarHideout.png, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideout.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarHideout.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarHideout.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarHideout.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ToolbarHideoutHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ToolbarHideoutHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ToolbarHideoutHover.png, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarHideoutHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ToolbarHideoutPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ToolbarHideoutPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ToolbarHideoutPress.png, % PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarHideoutPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarHideoutPress.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ToolbarSheet.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheet.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ToolbarSheet.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheet.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ToolbarSheet.png, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheet.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarSheet.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarSheet.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarSheet.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarSheet.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ToolbarSheetHover.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheetHover.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ToolbarSheetHover.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheetHover.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ToolbarSheetHover.png, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheetHover.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarSheetHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarSheetHover.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarSheetHover.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarSheetHover.png"
-	.	"`nFlag: " 2
-}
-
-; ----------------------------
-if !InStr(FileExist(PROGRAM.SKINS_FOLDER "\White"), "D")
-	FileCreateDir,% PROGRAM.SKINS_FOLDER "\White"
-
-if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("resources\skins\White\ToolbarSheetPress.png")
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheetPress.png"
-}
-else {
-	FileGetSize, sourceFileSize, resources\skins\White\ToolbarSheetPress.png
-	FileGetSize, destFileSize, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheetPress.png"
-}
-if (sourceFileSize != destFileSize)
-	FileInstall, resources\skins\White\ToolbarSheetPress.png, % PROGRAM.SKINS_FOLDER "\White\ToolbarSheetPress.png", 1
-if (ErrorLevel) {
-	AppendToLogs("Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarSheetPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarSheetPress.png"
-	.	"`nFlag: " 2)
-	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: resources\skins\White\ToolbarSheetPress.png"
-	.	"`nDest: " PROGRAM.SKINS_FOLDER "\White\ToolbarSheetPress.png"
 	.	"`nFlag: " 2
 }
 

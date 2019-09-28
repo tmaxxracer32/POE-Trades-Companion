@@ -571,16 +571,15 @@
 				}
 				; Creating buttons
 				userThisRowMaxCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
+				spaceBetweenBtns := 0
 				if (_isPreview) {
 					Loop % rowNum=4?5:10 {
 						thisRowMaxCount := A_Index
 
 						Loop % thisRowMaxCount {
-							btnsCount := thisRowMaxCount, spaceBetweenBtns := 0
-							btnWidth := (rowW/btnsCount), btnHeight := rowH
-							btnNum := A_Index, spaceBetweenBtns := 0
+							btnsCount := thisRowMaxCount, btnNum := A_Index
 							btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
-							btnWidth := (rowW/btnsCount), btnHeight := rowH
+							btnWidth := Floor( (rowW/btnsCount) ), btnHeight := rowH
 							btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 							btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 							styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
@@ -620,11 +619,9 @@
 				}
 				else {
 					Loop % userThisRowMaxCount {
-						btnsCount := userThisRowMaxCount, spaceBetweenBtns := 0
-						btnWidth := (rowW/btnsCount), btnHeight := rowH
-						btnNum := A_Index, spaceBetweenBtns := 0
+						btnsCount := thisRowMaxCount, btnNum := A_Index
 						btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
-						btnWidth := (rowW/btnsCount), btnHeight := rowH
+						btnWidth := Floor( (rowW/btnsCount) ), btnHeight := rowH
 						btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 						btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 						styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
@@ -2581,12 +2578,7 @@
 
 	CreateGenericIconButtonStyle_2(ByRef styles, styleName, width, height, _icon, specialOpts="") {
 		global SKIN
-		options := {Top: {NoHeightScale:True, Fill:True}
-			, Bottom: {NoHeightScale:True, Fill:True}
-			, Left: {NoWidthScale:True, Fill:True, FillVertically:True}
-			, Right: {NoWidthScale:True, Fill:True, FillVertically:True}
-			, Background: {Fill:True, FillVertically:False, FillCentered:True}
-			, CenterRatio:0.60}
+		optionsDefault := {"CenterRatio":0.60},	options := JSON_Load(SKIN.Assets.Button_Generic2.Options), options := ObjMerge(optionsDefault, options)
 		if IsObject(specialOpts)
 			options := ObjMerge(specialOpts, options)
 
@@ -2608,38 +2600,45 @@
 		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options, debug:=False)
 	}
 
-	CreateGenericIconButtonStyle(ByRef styles, styleName, width, height, _icon, specificInfos="") {
+	CreateGenericIconButtonStyle(ByRef styles, styleName, width, height, _icon) {
 		global SKIN
-		styleObj := {}, assets := ["Background", "Left", "Right"]
+		optionsDefault := {"CenterRatio":0.60},	options := JSON_Load(SKIN.Assets.Button_Generic.Options), options := ObjMerge(optionsDefault, options)
+		styleObj := {}, assets := ["Background", "Left", "Right", "Top", "Bottom"]
 		for index, asset in assets {
-			styleObj[asset] := SKIN.Assets.Button_Generic[asset]
-			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic[asset "_Hover"]
-			styleObj[asset "Press"] := SKIN.Assets.Button_Generic[asset "_Press"]
-			styleObj[asset "Default"] := SKIN.Assets.Button_Generic[asset "_Default"]
+			if (options[asset].Skip)
+				Continue
+				
+			assetSuffix := asset = "Background" && options.Background.UseBackground2=True ? "2" : ""
+			styleObj[asset] := SKIN.Assets.Button_Generic[asset assetSuffix]
+			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic[asset assetSuffix "_Hover"]
+			styleObj[asset "Press"] := SKIN.Assets.Button_Generic[asset assetSuffix "_Press"]
+			styleObj[asset "Default"] := SKIN.Assets.Button_Generic[asset assetSuffix "_Default"]
 		}
 		styleObj.Center := SKIN.Assets.Icons[_icon], styleObj.CenterHover := SKIN.Assets.Icons[_icon], styleObj.CenterPress := SKIN.Assets.Icons[_icon], styleObj.CenterDefault := SKIN.Assets.Icons[_icon], 
 		styleObj.Color := SKIN.Settings.Colors.Button_Normal, styleObj.ColorHover := SKIN.Settings.Colors.Button_Hover, styleObj.ColorPress := SKIN.Settings.Colors.Button_Press, styleObj.ColorDefault := SKIN.Settings.Colors.Button_Default, styleObj.ColorTransparency := SKIN.Assets.Misc.Transparency_Color
 		styleObj.Width := width, styleObj.Height := height
-		options := {Background: {Fill:True}
-			, CenterRatio:0.60}
 
-		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options)
+		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options, debug:=false)
 	}
 
 	CreateGenericTextButtonStyle(byRef styles, styleName, width, height) {
 		global SKIN
-		styleObj := {}, assets := ["Background", "Left", "Right"]
+		options := JSON_Load(SKIN.Assets.Button_Generic.Options)
+		styleObj := {}, assets := ["Background", "Left", "Right", "Top", "Bottom"]
 		for index, asset in assets {
-			styleObj[asset] := SKIN.Assets.Button_Generic[asset]
-			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic[asset "_Hover"]
-			styleObj[asset "Press"] := SKIN.Assets.Button_Generic[asset "_Press"]
-			styleObj[asset "Default"] := SKIN.Assets.Button_Generic[asset "_Default"]
+			if (options[asset].Skip)
+				Continue
+				
+			assetSuffix := asset = "Background" && options.Background.UseBackground2=True ? "2" : ""
+			styleObj[asset] := SKIN.Assets.Button_Generic[asset assetSuffix]
+			styleObj[asset "Hover"] := SKIN.Assets.Button_Generic[asset assetSuffix "_Hover"]
+			styleObj[asset "Press"] := SKIN.Assets.Button_Generic[asset assetSuffix "_Press"]
+			styleObj[asset "Default"] := SKIN.Assets.Button_Generic[asset assetSuffix "_Default"]
 		}
 		styleObj.Color := SKIN.Settings.Colors.Button_Normal, styleObj.ColorHover := SKIN.Settings.Colors.Button_Hover, styleObj.ColorPress := SKIN.Settings.Colors.Button_Press, styleObj.ColorDefault := SKIN.Settings.Colors.Button_Default, styleObj.ColorTransparency := SKIN.Assets.Misc.Transparency_Color
 		styleObj.Width := width, styleObj.Height := height
-		options := {Background: {Fill:True}}
 
-		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options)
+		return GUI_Trades_V2.Create_Style(styles, styleName, styleObj, options, debug:=false)
 	}
 
 	Create_Style(ByRef styles, styleName, styleInfos, options="", debug=False) {
