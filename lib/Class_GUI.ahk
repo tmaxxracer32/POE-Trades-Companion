@@ -228,7 +228,7 @@ Class GUI {
 
 		if (type = "ImageButton") {
 			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-				Gui%name%["ImageButton_Errors"] .= vHwnd ": " ImageButton.LastError "`n"
+				Gui%name%["ImageButton_Errors"] .= "GUI: """ name """" " - Control: """ vHwnd """ - Error: """ ImageButton.LastError """`n"
 		}
 	}
 
