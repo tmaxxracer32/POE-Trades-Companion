@@ -2876,7 +2876,6 @@
 
 		if (GuiTrades[_buyOrSell].HasToolTip) {
 			RemoveToolTip()
-			GuiTrades[_buyOrSell].HasToolTip := False
 		}
 		
 		if (GuiTrades[_buyOrSell].HasClickedSearch && IsContaining(A_Gui, "Search")) {
@@ -2886,6 +2885,7 @@
 			DetectHiddenWindows("")
 		}
 		; GUI_Trades.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
+		GuiTrades[_buyOrSell].HasToolTip := False
 		GuiTrades[_buyOrSell].HasClickedSearch := False
 	}
 

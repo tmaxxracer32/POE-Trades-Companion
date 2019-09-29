@@ -467,6 +467,8 @@ Class GUI_Settings {
 		DetectHiddenWindows, %detectHiddenWin%
 
 		Gui.OnMessageBind("GUI_Settings", "Settings", 0x200, "WM_MOUSEMOVE")
+		Gui.OnMessageBind("GUI_Settings", "Settings", 0x201, "WM_LBUTTONDOWN")
+		Gui.OnMessageBind("GUI_Settings", "Settings", 0x202, "WM_LBUTTONUP")
 
 		if (whichTab)
 			Gui_Settings.OnTabBtnClick(whichTab)
@@ -720,6 +722,8 @@ Class GUI_Settings {
 
 			GUI_Trades_V2.SetTransparencyPercent("Buy", buyUserTrans)
 			GUI_Trades_V2.SetTransparencyPercent("Sell", sellUserTrans)
+			if (sellUserTrans)
+				GUI_Trades_V2.Disable_ClickThrough("Sell")
 		}
 	}
 
@@ -3942,7 +3946,7 @@ Class GUI_Settings {
 		static mouseX, mouseY, prevMouseX, prevMouseY
 		static ctrlToolTip, underMouseHwnd, prevUnderMouseHwnd, prevUnderMouseName
 
-		if !IsContaining(A_Gui, "Settings")
+		if (A_Gui != "Settings")
 			return
 		MouseGetPos, mouseX, mouseY
 		if (mouseX = prevMouseX && mouseY = prevMouseY)
@@ -3993,6 +3997,33 @@ Class GUI_Settings {
 		GUI_Settings_WM_MOUSEMOVE_RemoveToolTip:
 			RemoveToolTip()
 		return
+	}
+
+	WM_LBUTTONDOWN() {
+		global GuiSettings, GuiSettings_Controls
+
+		if (A_Gui != "Settings")
+			return
+
+		underMouseHwnd := Get_UnderMouse_CtrlHwnd(), underMouseName := Gui.Get_CtrlVarName_From_Hwnd(A_Gui, underMouseHwnd)
+
+		if (underMouseName = "hEDIT_HotkeyProfileHotkey") {
+			GuiSettings.HasClickedHotkeyEditBox := True
+		}
+	}
+
+	WM_LBUTTONUP() {
+		global GuiSettings, GuiSettings_Controls
+
+		if (A_Gui != "Settings")
+			return
+
+		underMouseHwnd := Get_UnderMouse_CtrlHwnd(), underMouseName := Gui.Get_CtrlVarName_From_Hwnd(A_Gui, underMouseHwnd)
+
+		if (GuiSettings.HasClickedHotkeyEditBox) {
+			GUI_Settings.TabHotkeys_ChangeHotkeyProfileHotkey()
+		}
+		GuiSettings.HasClickedHotkeyEditBox := False
 	}
 }
 
