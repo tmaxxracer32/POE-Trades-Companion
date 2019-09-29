@@ -702,7 +702,7 @@
 			guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 			savedXPos := PROGRAM.SETTINGS[guiIniSection].Pos_X, savedYPos := PROGRAM.SETTINGS[guiIniSection].Pos_Y
 			savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
-			Gui.Show(guiName, "x" savedXPos " y" savedXPos " h" guiFullHeight " w" guiFullWidth)
+			Gui.Show(guiName, "x" savedXPos " y" savedYPos " h" guiFullHeight " w" guiFullWidth)
 		}
         if (_guiMode="Stack") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " ")
@@ -2795,10 +2795,12 @@
 
 		; winHandle := GuiTrades.Is_Minimized ? GuiTradesMinimized.Handle : GuiTrades.Handle
 		winHandle := GuiTrades[_buyOrSell].Handle
+		if (!winHandle)
+			return
 		
 		if !IsWindowInScreenBoundaries(_win:="ahk_id " winHandle, _screen:="All", _adv:=False) {
 			bounds := IsWindowInScreenBoundaries(_win:="ahk_id " winHandle, _screen:="All", _adv:=True)
-			appendTxtFinal := "Win_X: " bounds[index].Win_X " | Win_Y: " bounds[index].Win_Y " - Win_W: " bounds[index].Win_W " | Win_H: " bounds[index].Win_H
+			appendTxtFinal := "Win_X: " bounds[1].Win_X " | Win_Y: " bounds[1].Win_Y " - Win_W: " bounds[1].Win_W " | Win_H: " bounds[1].Win_H
 			for index, nothing in bounds {
 				appendTxt := "Monitor ID: " index
 				. "`nMon_L: " bounds[index].Mon_L " | Mon_T: " bounds[index].Mon_T " | Mon_R: " bounds[index].Mon_R " | Mon_B: " bounds[index].Mon_B
