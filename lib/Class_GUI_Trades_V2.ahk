@@ -602,7 +602,7 @@
 										GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
 									else
 										GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
-									StylesData[styleName] := {Width:rowW, height:rowH}
+									StylesData[styleName] := {Width:btnWidth, height:btnHeight}
 							; 	}
 							}
 
@@ -625,7 +625,7 @@
 				}
 				else {
 					Loop % userThisRowMaxCount {
-						btnsCount := thisRowMaxCount, btnNum := A_Index
+						btnsCount := userThisRowMaxCount, btnNum := A_Index
 						btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
 						btnWidth := Floor( (rowW/btnsCount) ), btnHeight := rowH
 						btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
@@ -644,7 +644,7 @@
 									GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
 								else
 									GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
-								StylesData[styleName] := {Width:rowW, height:rowH}
+								StylesData[styleName] := {Width:btnWidth, height:btnHeight}
 							; }
 						}
 
@@ -680,7 +680,7 @@
 			Gui, ErrorLog:New, +AlwaysOnTop +ToolWindow +hwndhGuiErrorLog
 			Gui, ErrorLog:Add, Text, x10 y10,% "One or multiple error(s) occured while creating the Trades GUI imagebuttons."
 			. "`nIn case you are getting ""Couldn't get button's font"" errors, restarting your computer should fix it."
-			Gui, ErrorLog:Add, Edit, xp y+5 w500 R15 ReadOnly,% Gui%guiName%.ImageButton_Errors
+			Gui, ErrorLog:Add, Edit, xp y+5 w800 R30 ReadOnly,% Gui%guiName%.ImageButton_Errors
 			Gui, ErrorLog:Add, Link, xp y+5,% "If you need assistance, you can contact me on: "
 			. "<a href=""" PROGRAM.LINK_GITHUB """>GitHub</a> - <a href=""" PROGRAM.LINK_REDDIT """>Reddit</a> - <a href=""" PROGRAM.LINK_GGG """>PoE Forums</a> - <a href=""" PROGRAM.LINK_DISCORD """>Discord</a>"
 			Gui, ErrorLog:Show,xCenter yCenter,% PROGRAM.NAME " - Trades GUI Error log"
