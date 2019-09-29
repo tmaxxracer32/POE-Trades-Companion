@@ -782,13 +782,25 @@ Class GUI_Settings {
 	}
 
 	TabCustomizationSkins_EnableSubroutines() { ; TO_DO_V2 still needed? why not make settings:+disabled so user cant touch window at all
+		controlsList := "hLB_SkinPreset,hLB_SkinBase,hLB_SkinFont,hCB_UseRecommendedFontSettings,hEDIT_SkinFontSize"
+		. ",hUPDOWN_SkinFontSize,hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality,hEDIT_SkinScalingPercentage,hUPDOWN_SkinScalingPercentage"
+
 		Gui, Settings:-Disabled
-		; GUI_Settings.TabCustomizationSkins_ToggleSubroutines("Enable")
+		Loop, Parse, controlsList,% ","
+		{
+			GUI.EnableControlFunction("GUI_Settings", "Settings", A_LoopField)
+		}
 	}
 
 	TabCustomizationSkins_DisableSubroutines() {
+		controlsList := "hLB_SkinPreset,hLB_SkinBase,hLB_SkinFont,hCB_UseRecommendedFontSettings,hEDIT_SkinFontSize"
+		. ",hUPDOWN_SkinFontSize,hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality,hEDIT_SkinScalingPercentage,hUPDOWN_SkinScalingPercentage"
+
 		Gui, Settings:+Disabled
-		; GUI_Settings.TabCustomizationSkins_ToggleSubroutines("Disable")
+		Loop, Parse, controlsList,% ","
+		{
+			GUI.DisableControlFunction("GUI_Settings", "Settings", A_LoopField)
+		}
 	}
 
 
