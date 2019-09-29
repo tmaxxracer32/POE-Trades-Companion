@@ -16,14 +16,15 @@
 	; if (PROGRAM.IS_BETA = "True")
 		; Menu,Tray,Add,Beta tasks, Tray_OpenBetaTasks 
 	Menu,Tray,Add
-	Menu,Tray,Add,Disable buy interface?, Tray_ToggleDisableBuyInterface
 	Menu,TraySheetSub,Add,Betrayal, Tray_OpenSheet
 	Menu,TraySheetSub,Add,Delve, Tray_OpenSheet
 	Menu,TraySheetSub,Add,Essence, Tray_OpenSheet
 	Menu,TraySheetSub,Add,Incursion, Tray_OpenSheet
 	Menu,Tray,Add,Leagues Sheets, :TraySheetSub
 	Menu,Tray,Add
+	/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
 	Menu,Tray,Add,% trans.Clickthrough, Tray_ToggleClickthrough ; Clickthrough?
+	*/
 	Menu,Tray,Add,% trans.LockPosition, Tray_ToggleLockPosition ; Lock position?
 	Menu,Tray,Add
 	Menu,Tray,Add,% trans.ModeWindow, Tray_ModeWindow ; Mode: Window
@@ -36,11 +37,6 @@
 	Menu,Tray,Icon
 	Menu,Tray,Default,% trans.Settings ; On Double click
 
-	if (PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface = "True")
-		Menu, Tray, Check, Disable buy interface?
-	else
-		Menu, Tray, Uncheck, Disable buy interface?
-
 	; Pos lock check
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
 		Menu, Tray, Check,% trans.LockPosition
@@ -48,10 +44,12 @@
 		Menu, Tray, Uncheck,% trans.LockPosition
 
 	; Clickthrough check
+	/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True") 
 		Menu, Tray, Check,% trans.Clickthrough
 	else
 		Menu, Tray, Uncheck,% trans.Clickthrough
+	*/
 
 	; TradesGUI Mode check
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Window") 
@@ -67,21 +65,6 @@
 	Menu, Tray, Icon,% trans.Close,% PROGRAM.ICONS_FOLDER "\x.ico"
 }
 
-Tray_ToggleDisableBuyInterface() {
-	global PROGRAM
-
-	isTrue := PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface="True"?True:False
-	newToggle := isTrue?"False":"True"
-	Menu, Tray,% newToggle="True"?"Check":"Uncheck", Disable buy interface?
-
-	PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface := newToggle
-	Save_LocalSettings()
-
-	if (newToggle="True")
-		GUI_TradesBuyCompact.Destroy()
-	else
-		GUI_TradesBuyCompact.RecreateGUI()
-}
 Tray_OpenSheet() {
 	which := A_ThisMenuItem="Betrayal"?"Betrayal"
 		: A_ThisMenuItem="Delve"?"Delve"

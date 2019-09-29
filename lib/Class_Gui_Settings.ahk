@@ -205,8 +205,10 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_ItemGridHideNormalTabAndQuadTabForMaps", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTabAndQuadTabForMaps)
 
 		; * * Transparency
+		/*	Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
 		Gui.Add("Settings", "Checkbox", "xp y+12 Center hwndhCB_AllowClicksToPassThroughWhileInactive", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AllowClicksToPassThroughWhileInactive)
-		Gui.Add("Settings", "Text", "xp y+10 Center hwndhTEXT_NoTabsTransparency", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_NoTabsTransparency)
+		*/
+		Gui.Add("Settings", "Text", "xp y+20 Center hwndhTEXT_NoTabsTransparency", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_NoTabsTransparency)
 		Gui.Add("Settings", "Slider", "x+1 yp w120 AltSubmit ToolTip Range0-100 hwndhSLIDER_NoTabsTransparency")
 		Gui.Add("Settings", "Text", "x" leftMost2 " y+5 Center hwndhTEXT_TabsOpenTransparency", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_TabsOpenTransparency)
 		Gui.Add("Settings", "Slider", "x+1 yp w120 AltSubmit ToolTip Range30-100 hwndhSLIDER_TabsOpenTransparency")
@@ -289,6 +291,8 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Selling
 
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationSellingInterfaceDisabledText Center Hidden", "This interface is disabled.`nTo enable, go in the Settings tab and change the mode.")
+
 		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
@@ -312,6 +316,8 @@ Class GUI_Settings {
 		*	TAB Customization Buying
 		*/
 		Gui, Settings:Tab, Buying
+
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationBuyingInterfaceDisabledText Center Hidden", "This interface is disabled.`nTo enable, go in the Settings tab and change the mode.")
 
 		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
@@ -1394,6 +1400,22 @@ Class GUI_Settings {
 				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex],% "x" plusX " y" plusY
 			}
 		}
+
+		controlsList := "hBTN_Customization" whichTab "ButtonMinusRow1,hBTN_Customization" whichTab "ButtonPlusRow1,hBTN_Customization" whichTab "ButtonMinusRow2"
+		. ",hBTN_Customization" whichTab "ButtonPlusRow2,hBTN_Customization" whichTab "ButtonMinusRow3,hBTN_Customization" whichTab "ButtonPlusRow3"
+		. ",hBTN_Customization" whichTab "ButtonMinusRow4,hBTN_Customization" whichTab "ButtonPlusRow4,hDDL_Customization" whichTab "ButtonType"
+		. ",hEDIT_Customization" whichTab "ButtonName,hDDL_Customization" whichTab "ButtonIcon,hDDL_Customization" whichTab "ActionType"
+		. ",hEDIT_Customization" whichTab "ActionContent,hTEXT_Customization" whichTab "ActionTypeTip,hLV_Customization" whichTab "ActionsList"
+
+		showOrHide := GUI_Trades_V2.Exists(_buyOrSell) ? "Show" : "Hide"
+		Loop, Parse, controlsList,% ","
+		{
+			GuiControl, Settings:%showOrHide%,% GuiSettings_Controls[A_LoopField]
+		}
+		if GUI_Trades_V2.Exists(_buyOrSell)
+			GuiControl, Settings:Hide,% GuiSettings_Controls["hTEXT_Customization" whichTab "InterfaceDisabledText"]
+		else
+			GuiControl, Settings:Show,% GuiSettings_Controls["hTEXT_Customization" whichTab "InterfaceDisabledText"]
 	}
 
 	Customization_SellingBuying_LoadButtonSettings(whichTab, rowNum, btnNum) {
@@ -3713,17 +3735,21 @@ Class GUI_Settings {
 		prevTab := whichTab
 		
 		if (whichTab = "Selling") {
-			Gui, TradesSellPreview:+LastFound +AlwaysOnTop
-			Gui, TradesSellPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.SellPreview.Width/2) " y" GuiSettings.UpMost2
+			if GUI_Trades_V2.Exists("SellPreview") {
+				Gui, TradesSellPreview:+LastFound +AlwaysOnTop
+				Gui, TradesSellPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.SellPreview.Width/2) " y" GuiSettings.UpMost2
+			}
 			GUI_Settings.Customization_Selling_AdjustPreviewControls()
 		}
 		else
 			Gui, TradesSellPreview:Hide
 
 		if (whichTab = "Buying") {
-			Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
-			Gui, TradesBuyPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.BuyPreview.Width/2) " y" GuiSettings.UpMost2
-			GUI_Settings.Customization_Buying_AdjustPreviewControls()
+			if GUI_Trades_V2.Exists("BuyPreview") {
+				Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
+				Gui, TradesBuyPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.BuyPreview.Width/2) " y" GuiSettings.UpMost2
+			}
+			GUI_Settings.Customization_Buying_AdjustPreviewControls()	
 		}
 		else
 			Gui, TradesBuyPreview:Hide

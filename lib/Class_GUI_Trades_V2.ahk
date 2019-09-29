@@ -192,22 +192,26 @@
         scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100
         windowsDPI := Get_DpiFactor()
         _tabsToRender := IsNum(_tabsToRender)?_tabsToRender:50
-        if !IsIn(_buyOrSell, "Buy,Sell") {
-            MsgBox(4096, "", "ERROR NOT Buy OR Sell: " _buyOrSell)
+		
+        if !IsIn(_buyOrSell, "Buy,Sell") || !IsIn(_guiMode, "Tabs,Stack,Disabled") {
+			errorMsg := "Failed to create " _buyOrSell " Interface due to a wrong parameter:"
+			. "`n_buyOrSell: " _buyOrSell
+			. "`n_guiMode: " _guiMode
+			AppendToLogs(A_ThisFunc ": " errorMsg)
+            MsgBox(4096+16, "", errorMsg)
             return
         }
-        if !IsIn(_guiMode, "Tabs,Stack") {
-            MsgBox(4096, "", "ERROR NOT Tabs OR Stack: " _guiMode)
-            return
-        }		
 
         ; = = Init GUI Obj
 		if (_isPreview)
 			_buyOrSell .= "Preview"
         guiName := "Trades" _buyOrSell
 
-		if (guiName = "TradesBuy" && PROGRAM.SETTINGS.BUY_INTERFACE.Mode="Disabled")
+		if (_guiMode="Disabled") {
+			AppendToLogs(A_ThisFunc ": Cancel to create interface """ _buyOrSell """ due to _guiMode being """ _guiMode """.")
+			GUI_Trades_V2.Destroy(guiName)
 			return
+		}
 
         GUI_Trades_V2.Destroy(guiName)
 		if (_isPreview=True)
@@ -409,10 +413,12 @@
 		Gui.Add(guiName, "Picture", "x" Header_X " y" Header_Y " w" Header_W " h" Header_H " hwndhIMG_Header BackgroundTrans", SKIN.Assets.Misc.Header)
 		Gui.Add(guiName, "ImageButton", "x" MinMax_X " y" MinMax_Y " w" MinMax_W " h" MinMax_H " BackgroundTrans hwndhBTN_Minimize", "", styles.Minimize, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 		Gui.Add(guiName, "ImageButton", "x" MinMax_X " y" MinMax_Y " w" MinMax_W " h" MinMax_H " BackgroundTrans hwndhBTN_Maximize Hidden", "", styles.Maximize, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.Add(guiName, "ImageButton", "x" ToolBar_Button1_X " y" ToolBar_Button1_Y " w" ToolBar_Button1_W " h" ToolBar_Button1_H " BackgroundTrans hwndhBTN_Hideout", "", Styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_LeagueHelp", "", styles.Toolbar_Sheet, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What2 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What3 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+		if IsContaining(_buyOrSell, "Sell") {
+			Gui.Add(guiName, "ImageButton", "x" ToolBar_Button1_X " y" ToolBar_Button1_Y " w" ToolBar_Button1_W " h" ToolBar_Button1_H " BackgroundTrans hwndhBTN_Hideout", "", Styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+			Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_LeagueHelp", "", styles.Toolbar_Sheet, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+			Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What2 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+			Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What3 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+		}
         Gui.Add(guiName, "Text", "x" Header_X " y" Header_Y " w" Header_W " h" Header_H " hwndhTXT_HeaderGhost BackgroundTrans", "") ; Empty text ctrl to allow moving the gui by dragging the title bar
 
         minBtnPos := Gui.GetControlPos(guiName, "hBTN_Minimize"), lastToolBtnPos := Gui.GetControlPos(guiName, "hBTN_What3")
@@ -713,8 +719,10 @@
 			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x202, "WM_LBUTTONUP")
 
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
+			/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
 				GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
+			*/
 
 			GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 
@@ -910,8 +918,8 @@
         isTabs          := GuiTrades[_buyOrSell].Is_Tabs
 		isFirstTab      := tabsCount=0 ? True : False
 
-		; if (PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface="True") ; TO_DO_V2
-			; return
+		if (_buyOrSell="Buy" && PROGRAM.SETTINGS.BUY_INTERFACE.Mode="Disabled")
+			return
 		
         ; Comparing if we already have a tab with same exact infos
 		existingTabID := GUI_Trades_V2.IsTabAlreadyExisting(_buyOrSell, infos)
@@ -1929,8 +1937,10 @@
 			GuiControl,% "Trades" _buyOrSell ": +c" SKIN.Settings.COLORS.Title_No_Trades,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"]
 			; GuiControl,TradesMinimized:,% GuiTradesMinimized_Controls["hTEXT_Title"],% "(0)"
 			; GuiControl,% "TradesMinimized: +c" SKIN.Settings.COLORS.Title_No_Trades,% GuiTradesMinimized_Controls["hTEXT_Title"]
+			/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
 				GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
+			*/
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AutoMinimizeOnAllTabsClosed = "True")
 				GUI_Trades_V2.Minimize(_buyOrSell)
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
@@ -2034,8 +2044,10 @@
 		}
 		else  {
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
+			/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
 				GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
+			*/
 		}
 	}
 
@@ -2518,7 +2530,7 @@
 
 	SetTransparency_Inactive(_buyOrSell) {
 		global PROGRAM, GuiTrades
-		transPercent := PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency
+		transPercent := IsContaining(_buyOrSell, "Buy") ? 0 : PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency
 		GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, transPercent)
 		if (transPercent = 0)
 			GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)

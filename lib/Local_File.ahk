@@ -466,7 +466,7 @@ Update_LocalSettings() {
 		}
 		CustomButtons := ObjFullyClone(CustomButtons_3), CustomButtons_1 := CustomButtons_2 := CustomButtons_3 := ""
 
-		; Prepating the obj
+		; Preparing the obj
 		newJsonSettings.SELL_INTERFACE := {}
 		newJsonSettings.SELL_INTERFACE.Mode := "Tabs"
 		; Adding special buttons row
@@ -488,6 +488,11 @@ Update_LocalSettings() {
 				newJsonSettings.SELL_INTERFACE.CUSTOM_BUTTON_ROW_1[A_Index] := CustomButtons[A_Index]
 			else
 				newJsonSettings.SELL_INTERFACE.CUSTOM_BUTTON_ROW_2[A_Index-5] := CustomButtons[A_Index]
+		}
+		if (iniSettings.SETTINGS_MAIN.DisableBuyInterface = "True") {
+			if !IsObject(newJsonSettings.BUY_INTERFACE)
+				newJsonSettings.BUY_INTERFACE := {}
+			newJsonSettings.BUY_INTERFACE.Mode := "Disabled"
 		}
 		; Now converting ini into json
 		Save_LocalSettings(newJsonSettings)
@@ -547,7 +552,6 @@ Get_LocalSettings_DefaultValues() {
 				"ShowTabbedTrayNotificationOnWhisper": "True",
 				"TradesGUI_Mode": "Window",
 				"TradesGUI_Locked": "False",
-				"AllowClicksToPassThroughWhileInactive": "False",
 				"PushBulletToken": "",
 				"PushBulletOnTradingWhisper": "True",
 				"PushBulletOnPartyMessage": "False",
