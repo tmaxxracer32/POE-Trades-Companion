@@ -254,8 +254,8 @@ Get_SkinAssetsAndSettings() {
 	}
 
 	skinSettings := {}
-	if (presetName = "User Defined") {
-		userSkinSettings := INI.Get(iniFile, "SETTINGS_CUSTOMIZATION_SKINS_UserDefined",, 1)
+	if (presetName = "Custom") {
+		userSkinSettings := INI.Get(iniFile, "SETTINGS_CUSTOMIZATION_SKINS_Custom",, 1)
 		skinSettings.FONT := {}
 		skinSettings.COLORS := {}
 

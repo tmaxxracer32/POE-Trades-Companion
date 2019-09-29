@@ -403,8 +403,9 @@ Update_LocalSettings() {
 		newJsonSettings.SETTINGS_MAIN := iniSettings.SETTINGS_MAIN
 		newJsonSettings.UPDATING := iniSettings.UPDATING
 
-		Loop 2 { ; Normal and UserDefined
-			iniSection := A_Index=1?"SETTINGS_CUSTOMIZATION_SKINS":"SETTINGS_CUSTOMIZATION_SKINS_UserDefined"
+		Loop 2 { ; Normal and Custom
+			iniSections := ["SETTINGS_CUSTOMIZATION_SKINS","SETTINGS_CUSTOMIZATION_SKINS_UserDefined"]
+			jsonSections := ["SETTINGS_CUSTOMIZATION_SKINS","SETTINGS_CUSTOMIZATION_SKINS_Custom"]
 			newJsonSettings[iniSection] := {}, newJsonSettings[iniSection].COLORS := {}
 			for key, value in iniSettings[iniSection] {
 				if RegExMatch(key, "iO)Color_(.*)", keyOut)
@@ -489,6 +490,7 @@ Update_LocalSettings() {
 			else
 				newJsonSettings.SELL_INTERFACE.CUSTOM_BUTTON_ROW_2[A_Index-5] := CustomButtons[A_Index]
 		}
+
 		if (iniSettings.SETTINGS_MAIN.DisableBuyInterface = "True") {
 			if !IsObject(newJsonSettings.BUY_INTERFACE)
 				newJsonSettings.BUY_INTERFACE := {}
@@ -508,7 +510,7 @@ Get_LocalSettings_DefaultValues() {
 	; Getting current preset and skin settings
 	if Is_JSON(PROGRAM.SETTINGS_FILE) {
 		currentPreset := JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS.Preset
-		currentSkin := currentPreset="User Defined"?JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS_UserDefined.Skin
+		currentSkin := currentPreset="Custom"?JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS_Custom.Skin
 					: JSON_Load(PROGRAM.SETTINGS_FILE).SETTINGS_CUSTOMIZATION_SKINS.Skin
 		currentSkin := (currentSkin && currentSkin != "" && currentSkin != "ERROR") ? currentSkin : settings.SETTINGS_CUSTOMIZATION_SKINS.Skin
 	}
@@ -577,7 +579,7 @@ Get_LocalSettings_DefaultValues() {
 				}
 			},
 
-			"SETTINGS_CUSTOMIZATION_SKINS_UserDefined": {
+			"SETTINGS_CUSTOMIZATION_SKINS_Custom": {
 				
 			},
 
@@ -722,7 +724,7 @@ Get_LocalSettings_DefaultValues() {
 				}
 			},
 			"BUY_INTERFACE": {
-				"Mode": "Tabs",
+				"Mode": "Stack",
 				"CUSTOM_BUTTON_ROW_1": {
 					"Buttons_Count": 0
 				},
@@ -887,7 +889,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 			else if (parents.1 = "HOTKEYS") {
 				isValid := True 
 			}
-			else if IsIn(parents.1, "SETTINGS_CUSTOMIZATION_SKINS,SETTINGS_CUSTOMIZATION_SKINS_UserDefined") {
+			else if IsIn(parents.1, "SETTINGS_CUSTOMIZATION_SKINS,SETTINGS_CUSTOMIZATION_SKINS_Custom") {
 				if (lastParent="Colors")
 					isValid := IsHex(userValue) && (StrLen(userValue) = 8) ? True : False
 				else if (k="Font")
@@ -1063,7 +1065,7 @@ LocalSettings_Verify() {
 	skinList := GUI_Settings.TabCustomizationSkins_GetAvailablePresets(), skinsList := StrReplace(skinsList, "|", ",")
 	fontsList := GUI_Settings.TabCustomizationSkins_GetAvailableFonts(), fontsList := StrReplace(fontsList, "|", ",")
 	Loop 2 {
-		sectionKey := A_Index=1?"SETTINGS_CUSTOMIZATION_SKINS":"SETTINGS_CUSTOMIZATION_SKINS_UserDefined"
+		sectionKey := A_Index=1?"SETTINGS_CUSTOMIZATION_SKINS":"SETTINGS_CUSTOMIZATION_SKINS_Custom"
 		for key in defaultSettings[sectionKey] {
 			value := settings[sectionKey][key], defValue := defaultSettings[sectionKey][key]
 

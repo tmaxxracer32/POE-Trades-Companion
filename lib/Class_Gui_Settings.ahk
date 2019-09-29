@@ -808,12 +808,12 @@ Class GUI_Settings {
 	TabCustomizationSkins_GetPresetSettings(presetName) {
 		global PROGRAM
 
-		if (presetName = "User Defined") { ; Get settings from user ini
-			userDefSettings := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined)
-			; presetSettings := {	Name: userDefSettings.Name,	Skin: userDefSettings.Skin,	Font: userDefSettings.Font,	FontSize: userDefSettings.FontSize
-				; , FontQuality: userDefSettings.FontQuality, ScalingPercentage: userDefSettings.ScalingPercentage, UseRecommendedFontSettings: userDefSettings.UseRecommendedFontSettings }
+		if (presetName = "Custom") { ; Get settings from user ini
+			userCustomSettings := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom)
+			; presetSettings := {	Name: userCustomSettings.Name,	Skin: userCustomSettings.Skin,	Font: userCustomSettings.Font,	FontSize: userCustomSettings.FontSize
+				; , FontQuality: userCustomSettings.FontQuality, ScalingPercentage: userCustomSettings.ScalingPercentage, UseRecommendedFontSettings: userCustomSettings.UseRecommendedFontSettings }
 			presetSettings := {}
-			for iniKey, iniValue in userDefSettings
+			for iniKey, iniValue in userCustomSettings
 				presetSettings[iniKey] := iniValue
 		}
 		else { ; Get settings from fonts folder ini
@@ -850,7 +850,7 @@ Class GUI_Settings {
 	TabCustomizationSkins_GetAvailablePresets() {
 		global PROGRAM
 
-		availablePresets := "User Defined|"
+		availablePresets := "Custom|"
 
 		Loop,% PROGRAM.SKINS_FOLDER "\*", 1, 0
 		{
@@ -957,14 +957,14 @@ Class GUI_Settings {
 	    MyColor := ChooseColor(presetSettings["Color_" typeShortName], GuiSettings.Handle, , , Colors*)
 		GuiControl, Settings:+Background%MyColor%,% GuiSettings_Controls.hPROGRESS_ColorSquarePreview
 		if (!ErrorLevel && MyColor != presetSettings["Color_" typeShortName]) {
-			GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
-			PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined.COLORS[typeShortName] := MyColor
+			GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
+			PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom.COLORS[typeShortName] := MyColor
 			GUI_Settings.TabCustomizationSkins_SaveSettings()
 			Save_LocalSettings()
 		}
 	}
 
-	TabCustomizationSkins_SaveDefaultSkinSettings_To_UserDefined(skinName) {
+	TabCustomizationSkins_SaveDefaultSkinSettings_To_Custom(skinName) {
 		global PROGRAM
 
 		if !(skinName)
@@ -973,20 +973,20 @@ Class GUI_Settings {
 		skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(GUI_Settings.Submit("hLB_SkinBase"))
 		for key, value in skinDefSettings {
 			if InStr(key, "Color_") {
-				PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined.COLORS[key] := skinDefSettings[key]
+				PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom.COLORS[key] := skinDefSettings[key]
 			}
 		}
 		Save_LocalSettings()
 	}
 
-	TabCustomizationSkins_SaveSettings(saveAsUserDefined=False) {
+	TabCustomizationSkins_SaveSettings(saveAsCustom=False) {
 		global PROGRAM
 		global GuiSettings, GuiSettings_Controls, GuiSettings_Submit
 
 		GUI_Settings.Submit()
 		sub := GuiSettings_Submit
 
-		iniSection := (saveAsUserDefined)?("SETTINGS_CUSTOMIZATION_SKINS_UserDefined"):("SETTINGS_CUSTOMIZATION_SKINS")
+		iniSection := (saveAsCustom)?("SETTINGS_CUSTOMIZATION_SKINS_Custom"):("SETTINGS_CUSTOMIZATION_SKINS")
 
 		PROGRAM.SETTINGS[iniSection].Preset := sub.hLB_SkinPreset
 		PROGRAM.SETTINGS[iniSection].Skin := sub.hLB_SkinBase
@@ -996,9 +996,9 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS[iniSection].FontQuality := sub.hEDIT_SkinFontQuality
 		PROGRAM.SETTINGS[iniSection].UseRecommendedFontSettings := sub.hCB_UseRecommendedFontSettings=0?"False":"True"
 
-		if (saveAsUserDefined) {
+		if (saveAsCustom) {
 			skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(sub.hLB_SkinBase)
-			userSkinSettings := Get_LocalSettings().SETTINGS_CUSTOMIZATION_SKINS_UserDefined
+			userSkinSettings := Get_LocalSettings().SETTINGS_CUSTOMIZATION_SKINS_Custom
 			for key, value in skinDefSettings {
 				if InStr(key, "Color_") {
 					presetVal := skinDefSettings[key], userVal := userSkinSettings[key]
@@ -1011,9 +1011,9 @@ Class GUI_Settings {
 
 		Save_LocalSettings()
 
-		if (saveAsUserDefined=True)
+		if (saveAsCustom=True)
 			Return
-		else if (sub.hLB_SkinPreset = "User Defined")
+		else if (sub.hLB_SkinPreset = "Custom")
 			GUI_Settings.TabCustomizationSkins_SaveSettings(True)
 	}
 
@@ -1131,7 +1131,7 @@ Class GUI_Settings {
 			Return
 
 		selectedFont := GUI_Settings.Submit("hLB_SkinFont")
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 
 		fontSettings := GUI_Settings.TabCustomizationSkins_GetFontRecommendedSettings(selectedFont)
 		GUI_Settings.TabCustomizationSkins_SetFontSizeAndQuality(fontSettings.Size, fontSettings.Quality)
@@ -1146,9 +1146,9 @@ Class GUI_Settings {
 		if (GuiSettings.Is_Changing_Preset)
 			Return
 
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 
-		GUI_Settings.TabCustomizationSkins_SaveDefaultSkinSettings_To_UserDefined(GUI_Settings.Submit("hLB_SkinBase"))
+		GUI_Settings.TabCustomizationSkins_SaveDefaultSkinSettings_To_Custom(GUI_Settings.Submit("hLB_SkinBase"))
 		GUI_Settings.TabCustomizationSkins_SaveSettings()
 		GUI_Settings.TabCustomizationSkins_SetChangeableFontColorTypes()
 	}
@@ -1174,7 +1174,7 @@ Class GUI_Settings {
 		SetTimer, GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub, -500
 
 		; scalePercent := GUI_Settings.Submit("hEDIT_SkinScalingPercentage")
-		; GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+		; GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 
 		; GUI_Settings.TabCustomizationSkins_SaveSettings()
 	}
@@ -1186,7 +1186,7 @@ Class GUI_Settings {
 			Return
 
 		; fontQual := GUI_Settings.Submit("hEDIT_SkinFontQuality")
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 
 		GUI_Settings.TabCustomizationSkins_SaveSettings()
@@ -1199,7 +1199,7 @@ Class GUI_Settings {
 			Return
 
 		; fontSize := GUI_Settings.Submit("hEDIT_SkinFontSize")
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 
 		GUI_Settings.TabCustomizationSkins_SaveSettings()
@@ -1213,7 +1213,7 @@ Class GUI_Settings {
 			Return
 
 		; cbState := GUI_Settings.Submit("hCB_UseRecommendedFontSettings")
-		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 
 		GUI_Settings.TabCustomizationSkins_SaveSettings()
@@ -4129,6 +4129,6 @@ return
 
 
 GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub:
-	GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "User Defined"
+	GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
 	GUI_Settings.TabCustomizationSkins_SaveSettings()
 return

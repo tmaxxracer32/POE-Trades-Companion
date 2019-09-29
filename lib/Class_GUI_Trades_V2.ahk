@@ -222,14 +222,14 @@
 
         ; = = Define font name and size
         settingsSkinPreset := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Preset, useRecommendedFontSettings := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.UseRecommendedFontSettings
-        userDefinedCopy := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_UserDefined)
-        guifontName := settingsSkinPreset="User Defined" && useRecommendedFontSettings!="1" ? userDefinedCopy.Font : SKIN.Settings.FONT.Name
-        guifontSize := settingsSkinPreset="User Defined" && useRecommendedFontSettings!="1" ? userDefinedCopy.FontSize : SKIN.Settings.FONT.Size
-        guifontQual := settingsSkinPreset="User Defined" && useRecommendedFontSettings!="1" ? userDefinedCopy.FontQuality : SKIN.Settings.FONT.Quality
+        userCustomCopy := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom)
+        guifontName := settingsSkinPreset="Custom" && useRecommendedFontSettings!="1" ? userCustomCopy.Font : SKIN.Settings.FONT.Name
+        guifontSize := settingsSkinPreset="Custom" && useRecommendedFontSettings!="1" ? userCustomCopy.FontSize : SKIN.Settings.FONT.Size
+        guifontQual := settingsSkinPreset="Custom" && useRecommendedFontSettings!="1" ? userCustomCopy.FontQuality : SKIN.Settings.FONT.Quality
         Gui.Font(guiName, guifontName, guifontSize, guifontQual) 
         Gui.Color(guiName, SKIN.Assets.Misc.Transparency_Color)
         Gui.Margin(guiName, 0, 0)
-        guifontName := guifontSize := guifontQual := useRecommendedFontSettings := useRecommendedFontSettings := userDefinedCopy := ""
+        guifontName := guifontSize := guifontQual := useRecommendedFontSettings := useRecommendedFontSettings := userCustomCopy := ""
 
         ; = = Define general gui size
         borderSize := Floor(1*scaleMult), borderSize := borderSize >= 1 ? borderSize : 1
