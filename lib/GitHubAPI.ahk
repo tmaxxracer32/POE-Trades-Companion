@@ -32,7 +32,7 @@ GitHubAPI_GetReleases(user, repo, which="releases_only", latestOnly=False, pageI
     options := "TimeOut: 25"
     . "`n"     "Charset: UTF-8"
 
-    WinHttpRequest(url, data:="", headers, options), html := data
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data
     
 	if GitHubAPI_IsRateLimitExceeded(html, reqHeaders)
 		Return

@@ -8,13 +8,13 @@ GGG_API_GetLastActiveCharacter(accName) {
     if !(accName)
         return
 
-    url := "https://www.pathofexile.com/character-window/get-characters?accountName=" accName
+    url := "https://www.pathofexile.com/character-window/get-characters?accountName=" UriEncode(accName)
     headers := "Content-Type: application/json"
     . "`n"     "Cache-Control: no-store, no-cache, must-revalidate"
     options := "TimeOut: 7"
     . "`n"     "Charset: UTF-8"
 
-    WinHttpRequest(url, data:="", headers, options), charsJSON := data
+    WinHttpRequest_cURL(url, data:="", headers, options), charsJSON := data
     charsJSON := JSON.Load(charsJSON)
 
     Loop % charsJSON.Count() {
@@ -36,7 +36,7 @@ GGG_API_CreateDataFiles() {
 		headers := "Content-Type:application/json;charset=UTF-8"
 		options := "TimeOut: 25"
 		. "`n"  "Charset: UTF-8"
-		WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
+		WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
 		for sect in jsonData.result {
 			if !IsObject(jsonFinal[sect])
@@ -62,7 +62,7 @@ GGG_API_CreateDataFiles() {
 		headers := "Content-Type:application/json;charset=UTF-8"
 		options := "TimeOut: 25"
 		. "`n"  "Charset: UTF-8"
-		WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
+		WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
 		Loop % jsonData.result.Count() {
 			resultIndex := A_Index
@@ -199,11 +199,11 @@ GGG_API_BuildExchangeSearchObj(obj) {
 GGG_API_GetMatchingExchangeData(obj) {
     ; Building the search obj based on provided infos, then retrieving results
     poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildExchangeSearchObj(obj)
-    url := poeURL "/api/trade/exchange/" obj.League "?source=" JSON.Dump(poeSearchObj)
+    url := poeURL "/api/trade/exchange/" obj.League "?source=" UriEncode(JSON.Dump(poeSearchObj))
     headers := "Content-Type:application/json;charset=UTF-8"
     options := "TimeOut: 25"
     . "`n"  "Charset: UTF-8"
-    WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
     ; Making result list, retrieving individual items, then parsing those
     resultsListCount := 0, resultsIDList := ""
@@ -217,7 +217,7 @@ GGG_API_GetMatchingExchangeData(obj) {
             headers := "Content-Type:application/json;charset=UTF-8"
             options := "TimeOut: 25"
             . "`n"  "Charset: UTF-8"
-            WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+            WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
 
             Loop % resultsListCount {
                 thisResult := jsonData.result[A_Index]
@@ -294,11 +294,11 @@ GGG_API_IsExchangeDataMatching(obj, obj2) {
 GGG_API_GetMatchingItemsData(obj) {
     ; Building the search obj based on provided infos, then retrieving results
     poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildItemSearchObj(obj)
-    url := poeURL "/api/trade/search/" obj.League "?source=" JSON.Dump(poeSearchObj)
+    url := poeURL "/api/trade/search/" obj.League "?source=" UriEncode(JSON.Dump(poeSearchObj))
     headers := "Content-Type:application/json;charset=UTF-8"
     options := "TimeOut: 25"
     . "`n"  "Charset: UTF-8"
-    WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
 
     ; Making result list, retrieving individual items, then parsing those
     resultsListCount := 0, resultsIDList := ""
@@ -312,7 +312,7 @@ GGG_API_GetMatchingItemsData(obj) {
             headers := "Content-Type:application/json;charset=UTF-8"
             options := "TimeOut: 25"
             . "`n"  "Charset: UTF-8"
-            WinHttpRequest(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+            WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
 
             Loop % resultsListCount {
                 loopedResult := jsonData.result[A_Index]

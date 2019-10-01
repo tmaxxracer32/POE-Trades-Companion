@@ -1,4 +1,48 @@
-﻿CaculateCenter(howManyElements, startingX, startingY, elementWidth, elementHeight, maxElementsPerRow, spaceWidth) {
+﻿WinHttpRequest_cURL(URL, ByRef data="", ByRef headers="", options="", isBinaryDL=false) {
+	sentData := data, sentHeaders := headers, sentOptions := options
+	httpRet := WinHttpRequest(URL, data, headers, options)
+	if (httpRet != "") {
+		return httpRet
+	}
+	else {
+		logsStr := "Failed WinHttpRequest:"
+		. "`n-------URL-------`n" url
+		. "`n`n-------SENT DATA-------`n" sentData
+		. "`n`n-------SENT HEADERS-------`n" sentHeaders
+		. "`n`n-------SENT OPTIONS-------`n" sentOptions
+		. "`n`n-------RETURNED DATA-------`n" data
+		. "`n`n-------RETURNED HEADERS-------`n" headers
+		AppendToLogs(logsStr)
+	}
+
+	; Try a cURL request
+	data := sentData, headers := sentHeaders, options := sentOptions
+	headersObj := []
+	Loop, Parse, headers,% "`n"
+	{
+		headersObj.Push(A_LoopField)
+	}
+	data := cURL_Download(url, data, headersObj, options, useFallback:=false, critical:=False, binaryDL:=isBinaryDL, "", curlHeaders, handleAccessForbidden:=True, returnCurlCmd:=True)
+	headers := headersObj, curlCmd := returnCurlCmd
+
+	if (data != "") {
+		return
+	}
+	else {
+		logsStr := "Failed cURL Request:"
+		. "`n-------URL-------`n" url
+		. "`n`n-------CURL HEADERS-------`n" curlHeaders
+		. "`n`n-------CURL CMD-------`n" curlCmd
+		. "`n`n-------SENT DATA-------`n" sentData
+		. "`n`n-------SENT HEADERS-------`n" sentHeaders
+		. "`n`n-------SENT OPTIONS-------`n" sentOptions
+		. "`n`n-------RETURNED DATA-------`n" data
+		. "`n`n-------RETURNED HEADERS-------`n" headers
+		AppendToLogs(logsStr)
+	}	
+}
+
+CaculateCenter(howManyElements, startingX, startingY, elementWidth, elementHeight, maxElementsPerRow, spaceWidth) {
 	; Calculate the space between each
 	spaceBetweenElements := (spaceWidth/howManyElements)
 

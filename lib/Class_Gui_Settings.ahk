@@ -2193,7 +2193,7 @@ Class GUI_Settings {
     	options := "TimeOut: 7"
     	. "`n"     "Charset: UTF-8"
 
-    	WinHttpRequest(url, data:="", headers, options), html := data
+    	WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
 		hallOfFame := ""
 		if RegExMatch(html,"\<table\>(.*)\<\/table\>", match) {

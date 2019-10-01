@@ -25,7 +25,7 @@
 	. "`n" 		"User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"
 	options := "TimeOut: 25"
 	
-	WinHttpRequest(url, data:="", headers, options), leaguesJSON := data
+	WinHttpRequest_cURL(url, data:="", headers, options), leaguesJSON := data
 
 	; Parse league names
 	apiLeagues		:= ""
@@ -55,7 +55,7 @@
 		url := "http://raw.githubusercontent.com/" PROGRAM.GITHUB_USER "/" PROGRAM.GITHUB_REPO "/master/data/TradingLeagues.txt"
 
 		options := "TimeOut: 25"
-		WinHttpRequest(url, data:="", headers:="", options), rawFile := data
+		WinHttpRequest_cURL(url, data:="", headers:="", options), rawFile := data
 
 		if IsContaining(rawFile, "Error,404") {
 			AppendToLogs(A_ThisFunc "(forceScriptLeagues=" forceScriptLeagues "): Failed to get leagues from GitHub file."

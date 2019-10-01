@@ -51,4 +51,5 @@ PushBulletNotification(cmdLineParams) {
 #Include %A_ScriptDir%/third-party
 #Include cURL.ahk
 #Include StdOutStream.ahk
+#Include UriEncode.ahk
 #Include WinHttpRequest.ahk

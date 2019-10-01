@@ -148,7 +148,7 @@ Start_Script() {
 	PROGRAM.LINK_UPDATER 			:= "https://raw.githubusercontent.com/lemasato/POE-Trades-Companion/master/Updater_v2.exe"
 	PROGRAM.LINK_CHANGELOG 			:= "https://raw.githubusercontent.com/lemasato/POE-Trades-Companion/master/resources/changelog.txt"
 
-	PROGRAM.CURL_EXECUTABLE			:= PROGRAM.MAIN_FOLDER "\curl.exe"
+	PROGRAM.CURL_EXECUTABLE			:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\curl.exe":"\lib\third-party\curl.exe")
 
 	PROGRAM.LINK_REDDIT 			:= "https://www.reddit.com/user/lemasato/submitted/"
 	PROGRAM.LINK_GGG 				:= "https://www.pathofexile.com/forum/view-thread/1755148/"
@@ -419,6 +419,7 @@ Return
 #Include StdOutStream.ahk
 #Include StringtoHex.ahk
 #Include TilePicture.ahk
+#Include UriEncode.ahk
 #Include WinHttpRequest.ahk
 
 

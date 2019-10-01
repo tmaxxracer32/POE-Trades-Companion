@@ -5,7 +5,7 @@
 	headers := "Content-Type: text/html; charset=UTF-8"
     options := "TimeOut: 25"
 
-    WinHttpRequest(url, data:="", headers, options), html := data
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
     mapsJSON := JSON.Load(html)
     return mapsJSON
@@ -19,7 +19,7 @@ PoeNinja_GetUniqueMapOverview(league) {
 	headers := "Content-Type: text/html; charset=UTF-8"
     options := "TimeOut: 25"
 
-    WinHttpRequest(url, data:="", headers, options), html := data
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
     uniqueMapsJSON := JSON.Load(html)
     return uniqueMapsJSON
@@ -30,7 +30,7 @@ PoeNinja_GetCurrencyOverview(league) {
 	headers := "Content-Type: text/html; charset=UTF-8"
     options := "TimeOut: 25"
 
-    WinHttpRequest(url, data:="", headers, options), html := data
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
     currencyJSON := JSON.Load(html)
     return currencyJSON

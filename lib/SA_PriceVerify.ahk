@@ -299,4 +299,5 @@ VerifyItemPrice(cmdLineParams) {
 #Include cURL.ahk
 #Include JSON.ahk
 #Include StdOutStream.ahk
+#Include UriEncode.ahk
 #Include WinHttpRequest.ahk
