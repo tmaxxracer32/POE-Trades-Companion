@@ -1912,7 +1912,7 @@ Class GUI_Settings {
 	TabHotkeys_AddNewHotkeyProfile() {
 		global PROGRAM, GuiSettings_Controls
 		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
-		PROGRAM.SETTINGS.HOTKEYS[hotkeysCount+1] := {Name: "New hotkey " hotkeysCount+1, Hotkey: "", Actions: {}}
+		PROGRAM.SETTINGS.HOTKEYS[hotkeysCount+1] := {Name: "New hotkey " hotkeysCount+1, Hotkey: "", Actions: [{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE",Content:""}]}
 		Save_LocalSettings()
 		GUI_Settings.TabHotkeys_SetUserSettings()
 		GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% hotkeysCount+1
@@ -1923,7 +1923,7 @@ Class GUI_Settings {
 		global PROGRAM, GuiSettings_Controls
 		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		MsgBox(4096+4, "", PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name
-		. "Are you sure to delete this hotkey profile?")
+		. "`n" "Are you sure to delete this hotkey profile?")
 		IfMsgBox, Yes
 		{
 			hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
