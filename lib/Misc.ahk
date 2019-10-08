@@ -211,6 +211,7 @@ Replace_TradeVariables(_buyOrSell, tabNum, string) {
 	tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum)
 
 	string := StrReplace(string, "%buyer%", tabContent.Buyer), string := StrReplace(string, "%buyerName%", tabContent.Buyer)
+	string := StrReplace(string, "%seller%", tabContent.Seller), string := StrReplace(string, "%sellerName%", tabContent.Seller)
 	string := StrReplace(string, "%item%", tabContent.Item), string := StrReplace(string, "%itemName%", tabContent.Item)
 	string := StrReplace(string, "%price%", tabContent.Price != ""?tabContent.Price : "[unpriced]"), string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
 	string := StrReplace(string, "%lastWhisper%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lastWhisperReceived%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lwr%", GuiTrades.Last_Whisper_Name)

@@ -710,7 +710,7 @@
         }
         GuiTrades[_buyOrSell].Is_Created := True		
 
-        ; GUI_Trades_V2.Minimize(guiName)
+        GUI_Trades_V2.Minimize(_buyOrSell)
 
 		if !(_isPreview) {
 			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x200, "WM_MOUSEMOVE")
@@ -1649,6 +1649,8 @@
 		global PROGRAM
 
 		if IsContaining(_buyOrSell, "Preview")
+			return
+		if (!GuiTrades[buyOrSell].Tabs_Count)
 			return
 
         Detect_HiddenWindows("On")

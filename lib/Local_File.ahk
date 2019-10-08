@@ -740,7 +740,7 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Whisper",
 						"Actions": {
 							"1": {
-								"Type": "SEND_MSG",
+								"Type": "WRITE_MSG",
 								"Content": "\"@`%seller`% \""
 							}
 						}
