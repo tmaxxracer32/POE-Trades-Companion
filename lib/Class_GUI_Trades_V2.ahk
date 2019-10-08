@@ -702,13 +702,13 @@
 			guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 			savedXPos := PROGRAM.SETTINGS[guiIniSection].Pos_X, savedYPos := PROGRAM.SETTINGS[guiIniSection].Pos_Y
 			savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
-			Gui.Show(guiName, "x" savedXPos " y" savedYPos " h" guiFullHeight " w" guiFullWidth)
+			Gui.Show(guiName, "x" savedXPos " y" savedYPos " h" guiFullHeight " w" guiFullWidth " Hide")
 		}
         if (_guiMode="Stack") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " ")
             Gui.Show(guiName "SearchHidden", "x0 y0 w0 h0 NoActivate") ; Not hidden on purpose so it can work with ShellMessage to empty on click
         }
-        GuiTrades[_buyOrSell].Is_Created := True		
+        GuiTrades[_buyOrSell].Is_Created := True
 
         GUI_Trades_V2.Minimize(_buyOrSell)
 
@@ -717,6 +717,8 @@
 			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x20A, "WM_MOUSEWHEEL")
 			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x201, "WM_LBUTTONDOWN")
 			Gui.OnMessageBind("GUI_Trades_V2", guiName, 0x202, "WM_LBUTTONUP")
+			WinGet, activeHwnd, ID, A
+			ShellMessage(4, activeHwnd)
 
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
 			/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
@@ -1650,8 +1652,8 @@
 
 		if IsContaining(_buyOrSell, "Preview")
 			return
-		if (!GuiTrades[buyOrSell].Tabs_Count)
-			return
+		; if (!GuiTrades[buyOrSell].Tabs_Count)
+			; return
 
         Detect_HiddenWindows("On")
 		WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% GuiTrades[_buyOrSell].Height_Maximized * GuiTrades[_buyOrSell].Windows_DPI

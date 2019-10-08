@@ -717,7 +717,7 @@ Class GUI_Settings {
 		GUI_Trades_V2.SetTransparencyPercent("Sell", sliderValue)
 
 		if IsIn(A_GuiControlEvent,"Normal,4") {
-			buyUserTrans := GuiTrades.Buy.Tabs_Count ? PROGRAM.SETTINGS.SETTINGS_MAIN.TabsOpenTransparency : PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency
+			buyUserTrans := GuiTrades.Buy.Tabs_Count ? PROGRAM.SETTINGS.SETTINGS_MAIN.TabsOpenTransparency : 0
 			sellUserTrans := GuiTrades.Sell.Tabs_Count ? PROGRAM.SETTINGS.SETTINGS_MAIN.TabsOpenTransparency : PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency
 
 			GUI_Trades_V2.SetTransparencyPercent("Buy", buyUserTrans)

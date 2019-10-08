@@ -27,8 +27,9 @@ ShellMessage(wParam,lParam) {
 
 	if ( wParam=4 || wParam=32772 || wParam=5 ) { ; 4=HSHELL_WINDOWACTIVATED | 32772=HSHELL_RUDEAPPACTIVATED | 5=HSHELL_GETMINRECT 
 		if IsIn(lParam, GuiTrades.Buy.Handle "," GuiTrades.Sell.Handle "," GuiTrades.BuyPreview.Handle "," GuiTrades.SellPreview.Handle) {
+			/* Does not do anything since adding the E0x08000000 style (prevent focus)
+			*/
 			; Prevent these keyboard presses from interacting with the Trades GUI
-			; Does not do anything since adding the E0x08000000 style (prevent focus)
 			Hotkey, IfWinActive,% "ahk_id " lParam
 			Hotkey, NumpadEnter, DoNothing, On
 			Hotkey, Escape, DoNothing, On
@@ -83,11 +84,19 @@ ShellMessage(wParam,lParam) {
 						Gui, TradesBuy:Hide
 				}
 			}
-			else {
-				if (sellWinExists)
-					Gui, TradesSell:Show, NoActivate						
-				if (buyWinExists)
-					Gui, TradesBuy:Show, NoActivate
+			else { ; only show if tabs_count or poe is active
+				if (sellWinExists) {
+					if (GuiTrades.Sell.Tabs_Count || WinActive("ahk_group POEGameGroup") || WinActive("ahk_pid "))
+						Gui, TradesSell:Show, NoActivate					
+					else
+						Gui, TradesSell:Hide
+				}
+				if (buyWinExists) {
+					if (GuiTrades.Buy.Tabs_Count || WinActive("ahk_group POEGameGroup") || WinActive("ahk_pid "))
+						Gui, TradesBuy:Show, NoActivate
+					else
+						Gui, TradesBuy:Hide
+				}
 			}
 
 			if ( PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Dock") {
