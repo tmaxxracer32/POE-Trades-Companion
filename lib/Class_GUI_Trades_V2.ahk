@@ -188,7 +188,7 @@
         global GuiTrades, GuiTrades_Controls
         global GuiTradesBuy, GuiTradesBuy_Controls
         global GuiTradesSell, GuiTradesSell_Controls
-		static Styles, StylesData
+		static AllStyles, AllStylesData
         scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100
         windowsDPI := Get_DpiFactor()
         _tabsToRender := IsNum(_tabsToRender)?_tabsToRender:50
@@ -360,11 +360,18 @@
 		Gui%guiName%.Tabs_Limit := _tabsToRender
 		Gui%guiName%.Max_Tabs_Per_Row := maxTabsToShow
 		Gui%guiName%.Is_Created := False
-        Gui%guiName%.Is_Tabs := _guiMode="Tabs"?True:False
-        Gui%guiName%.Is_Stack := _guiMode="Stack"?True:False
+		Gui%guiName%.Is_Tabs := _guiMode="Tabs"?True:False
+		Gui%guiName%.Is_Stack := _guiMode="Stack"?True:False
+		Gui%guiName%.Skin := SKIN.Skin
 
-		if !IsObject(Styles)
-			Styles := GUI_Trades_V2.Get_Styles(), StylesData := {}
+		; = = Creating styles obj
+		if !IsObject(AllStyles)
+			AllStyles := {}, AllStylesData := {}
+		if !IsObject(AllStyles[SKIN.Skin])
+			AllStyles[SKIN.Skin] := GUI_Trades_V2.Get_Styles(), AllStylesData[SKIN.Skin] := {}
+
+		Styles := ObjFullyClone(AllStyles[SKIN.Skin])
+		StylesData := ObjFullyClone(AllStylesData[SKIN.Skin])
 
         ; = = Borders
         if (_guiMode="Stack") {
