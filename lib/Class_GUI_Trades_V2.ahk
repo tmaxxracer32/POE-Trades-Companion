@@ -408,6 +408,8 @@
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Toolbar_Hideout", ToolBar_Button1_W, ToolBar_Button1_H, "Hideout", {CenterRatio:0.70})
 		if !IsObject(Styles.Toolbar_Sheet)
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Toolbar_Sheet", ToolBar_Button1_W, ToolBar_Button1_H, "Sheet", {CenterRatio:0.70})
+		if !IsObject(Styles.Toolbar_Link)
+			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Toolbar_Link", ToolBar_Button1_W, ToolBar_Button1_H, "Link", {CenterRatio:0.70})
 		if !IsObject(Styles.Arrow_Left)
 			GUI_Trades_V2.CreateGenericIconButtonStyle_2(Styles, "Arrow_Left", LeftArrow_W, LeftArrow_H, "ArrowLeft", {CenterRatio:0.70, Right:{Skip:True}})
 		if !IsObject(Styles.Arrow_Right)
@@ -423,8 +425,7 @@
 		if IsContaining(_buyOrSell, "Sell") {
 			Gui.Add(guiName, "ImageButton", "x" ToolBar_Button1_X " y" ToolBar_Button1_Y " w" ToolBar_Button1_W " h" ToolBar_Button1_H " BackgroundTrans hwndhBTN_Hideout", "", Styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 			Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_LeagueHelp", "", styles.Toolbar_Sheet, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-			Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What2 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-			Gui.Add(guiName, "Button", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_What3 Hidden", "", styles.Toolbar_Hideout, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
+			Gui.Add(guiName, "ImageButton", "x+" ToolBar_SpaceBetweenButtons " yp wp hp BackgroundTrans hwndhBTN_QuickLinks", "", styles.Toolbar_Link, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 		}
         Gui.Add(guiName, "Text", "x" Header_X " y" Header_Y " w" Header_W " h" Header_H " hwndhTXT_HeaderGhost BackgroundTrans", "") ; Empty text ctrl to allow moving the gui by dragging the title bar
 
@@ -438,8 +439,7 @@
         
         Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_Hideout", "HotBarButton", _buyOrSell, "Hideout")
         Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_LeagueHelp", "HotBarButton", _buyOrSell, "LeagueHelp")
-        Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_What2", "HotBarButton", _buyOrSell, "What")
-        Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_What3", "HotBarButton", _buyOrSell, "What")
+		Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_QuickLinks", "HotBarButton", _buyOrSell, "QuickLinks")
 
         ; = = Header 2
 		/*	Due to the fact that we want to use a skinned search box, we have to simulate it by:
@@ -1617,10 +1617,39 @@
 			Menu, HelpMenu, Add, Incursion, GUI_Trades_V2_LeagueHelpMenu
 			Menu, HelpMenu, Show
 		}
+		else if (btnType="QuickLinks") {
+			try Menu, QuickLinksMenu, DeleteAll
+			Menu, QuickLinksMenu, Add, poe.trade, GUI_Trades_V2_QuickLinksMenu
+			Menu, QuickLinksMenu, Add, poeapp.com, GUI_Trades_V2_QuickLinksMenu
+			Menu, QuickLinksMenu, Add, pathofexile.com, GUI_Trades_V2_QuickLinksMenu
+			Menu, QuickLinksMenu, Add,
+			Menu, QuickLinksMenu, Add, poemap.live, GUI_Trades_V2_QuickLinksMenu
+			Menu, QuickLinksMenu, Add, poelab.com, GUI_Trades_V2_QuickLinksMenu
+			Menu, QuickLinksMenu, Add, poe.ninja, GUI_Trades_V2_QuickLinksMenu
+			Menu, QuickLinksMenu, Add,
+			Menu, QuickLinksMenu, Add, Vorici Chromatic Calc, GUI_Trades_V2_QuickLinksMenu
+
+			Menu, QuickLinksMenu, Show
+		}
 		else {
 			ShowToolTip("This button isn't implemented yet.")
 			SetTimer, RemoveToolTip, -2000
 		}		
+		return
+
+		GUI_Trades_V2_QuickLinksMenu:
+			link := A_ThisMenuItem="poe.trade"?"https://poe.trade"
+				: A_ThisMenuItem="poeapp.com"?"https://www.poeapp.com"
+				: A_ThisMenuItem="pathofexile.com"?"https://www.pathofexile.com/trade"
+				: A_ThisMenuItem="poemap.live"?"https://poemap.live"
+				: A_ThisMenuItem="poelab.com"?"https://www.poelab.com/nttsb"
+				: A_ThisMenuItem="poe.ninja"?"https://poe.ninja/nttsb"
+				: A_ThisMenuItem="Vorici Chromatic Calc"?"https://siveran.github.io/calc.html"
+				: ""
+			if (!link)
+				return
+
+			Run,% link
 		return
 
 		GUI_Trades_V2_LeagueHelpMenu:
