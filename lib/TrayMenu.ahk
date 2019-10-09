@@ -53,9 +53,9 @@
 
 	; TradesGUI Mode check
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Window") 
-		GUI_Trades.Use_WindowMode(True)
+		GUI_Trades_V2.Use_WindowMode(True)
 	else if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Dock")
-		GUI_Trades.Use_DockMode(True)
+		GUI_Trades_V2.Use_DockMode(True)
 
 	; Icons
 	Menu, Tray, Icon,% trans.Settings,% PROGRAM.ICONS_FOLDER "\gear.ico"
@@ -105,7 +105,8 @@ Tray_OpenStats() {
 Tray_ModeWindow() {
 	global PROGRAM
 
-	GUI_Trades.Use_WindowMode()
+	GUI_Trades_V2.Use_WindowMode("Sell")
+	GUI_Trades_V2.Use_WindowMode("Buy")
 	Tray_ToggleLockPosition("Uncheck")
 	Declare_LocalSettings()
 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ModeWindowEnabled_Title, PROGRAM.TRANSLATIONS.TrayNotifications.ModeWindowEnabled_Msg)
@@ -113,14 +114,14 @@ Tray_ModeWindow() {
 Tray_ModeDock() {
 	global PROGRAM
 
-	GUI_Trades.Use_DockMode()
+	GUI_Trades_V2.Use_DockMode()
 	Tray_ToggleLockPosition("Check")
 	Declare_LocalSettings()
 	trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ModeDockEnabled_Msg, "%cycleDock%", PROGRAM.TRANSLATIONS.TrayMenu.CycleDock)
 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ModeDockEnabled_Title, trayMsg)
 }
 Tray_CycleDock() {
-	GUI_Trades.DockMode_Cycle()
+	GUI_Trades_V2.DockMode_Cycle()
 }
 Tray_ToggleClickthrough() {
 	global PROGRAM, GuiSettings_Controls

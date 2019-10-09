@@ -97,7 +97,7 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 		RegExMatch(actionType, "\D+", actionType_NoNum)
 		RegExMatch(actionType, "\d+", actionType_NumOnly)
 
-		GUI_Trades.DoTradeButtonAction(actionType_NumOnly, "Custom")
+		GUI_Trades_V2.DoTradeButtonAction(actionType_NumOnly, "Custom")
 
 		; ControlClick,,% "ahk_id " GuiTrades.Handle " ahk_id " GuiTrades_Controls["hBTN_Custom" actionType_NumOnly],,,, NA
 	}

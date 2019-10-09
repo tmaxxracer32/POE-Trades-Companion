@@ -2,8 +2,8 @@
 	global PROGRAM, GuiTrades
 	static lastAvailable, lastTime
 
-	activeTab := GUI_Trades.GetActiveTab()
-	tabContent := GUI_Trades.GetTabContent(activeTab)
+	activeTab := GUI_Trades_V2.GetActiveTab("Sell")
+	tabContent := GUI_Trades_V2.GetTabContent("Sell", activeTab)
 	if !IsNum(activeTab) || !RegExMatch(tabContent.Item, "\d+") || (GuiTrades.Is_Minimized = True) { ; No tabs || not currency trade || gui minimized
 		GoSub %A_ThisFunc%_SendHotkeyKeys
 		return
@@ -59,7 +59,7 @@
 		}
 
 		withdrawn := withdrawn + amount ;update for tooltip
-		GUI_Trades.UpdateSlotContent(activeTab, "WithdrawTally", withdrawn)
+		GUI_Trades_V2.UpdateSlotContent("Sell", activeTab, "WithdrawTally", withdrawn)
 		Gosub %A_ThisFunc%_ShowToolTip
 		; If transfering individual stacks, add a 250ms delay to account for lag and remove lastAvailable. Otherwise next click will do nothing
 		if (available == stackSize) {

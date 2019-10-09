@@ -709,7 +709,7 @@
 			guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 			savedXPos := PROGRAM.SETTINGS[guiIniSection].Pos_X, savedYPos := PROGRAM.SETTINGS[guiIniSection].Pos_Y
 			savedXPos := IsNum(savedXPos) ? savedXPos : 0, savedYPos := IsNum(savedYPos) ? savedYPos : 0
-			Gui.Show(guiName, "x" savedXPos " y" savedYPos " h" guiFullHeight " w" guiFullWidth " Hide")
+			Gui.Show(guiName, "x" savedXPos " y" savedYPos " h" guiMinimizedHeight " w" guiFullWidth " Hide")
 		}
         if (_guiMode="Stack") { 
             Gui.Show(guiName "Search", "x" SearchBox_X " y" SearchBox_Y " ")
@@ -984,20 +984,25 @@
 
         ; Update the GUI height if the mode is slots
         if (isStack) {
-			heightDiff := GuiTrades[_buyOrSell].Height_Maximized
-            GuiTrades[_buyOrSell].Height_Maximized := guiHeight := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_Minimized
-                : newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
-                : newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
-                : newTabsCount = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
-                : newTabsCount >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
-                : GuiTrades[_buyOrSell].Height_Maximized_FourSlot
-			heightDiff := GuiTrades[_buyOrSell].Height_Maximized - heightDiff 
+			gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+			GuiTrades[_buyOrSell].Height_Maximized := guiHeightMax := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_Minimized
+				: newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
+				: newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
+				: newTabsCount = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
+				: newTabsCount >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
+				: GuiTrades[_buyOrSell].Height_Maximized_FourSlot
+			sizeDiff := GuiTrades[_buyOrSell].Height_Maximized-gtPos.H
 
-			if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
-				gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
-				WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-heightDiff
+			if (GuiTrades[_buyOrSell].Is_Minimized) {
+				Gui.Show("Trades" _buyOrSell, "h" GuiTrades[_buyOrSell].Height_Minimized " NoActivate")
 			}
-            Gui.Show("Trades" _buyOrSell, "h" guiHeight " NoActivate")
+			else if (GuiTrades[_buyOrSell].Is_Maximized) {
+				if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
+					
+					WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-sizeDiff
+				}
+				Gui.Show("Trades" _buyOrSell, "h" guiHeightMax " NoActivate")
+			}
         }
 		if (_buyOrSell="Sell") 
 			GUI_Trades_V2.VerifyItemPrice( GUI_Trades_V2.GetTabContent(_buyOrSell, newTabsCount) )
@@ -1340,11 +1345,12 @@
 		global PROGRAM, GuiTrades
 
 		if (checkOnly=False) {
-			
-			INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", "TradesGUI_Mode", "Window")
+			PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode := "Window"
 			GuiTrades.Docked_Window_Handle := ""
 
-			GUI_Trades.ResetPosition()
+			GUI_Trades_V2.ResetPosition("Buy")
+			GUI_Trades_V2.ResetPosition("Sell")
+			Save_LocalSettings()
 		}
 
 		Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
@@ -1359,10 +1365,11 @@
 		global PROGRAM, GuiTrades
 
 		if (checkOnly=False) {
-			INI.Set(PROGRAM.INI_FILE, "SETTINGS_MAIN", "TradesGUI_Mode", "Dock")
+			INPROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode := "Dock"
 			GuiTrades.Docked_Window_Handle := ""
 
-			GUI_Trades.ResetPosition()
+			GUI_Trades_V2.ResetPosition("Buy")
+			GUI_Trades_V2.ResetPosition("Sell")
 		}
 
 		Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
@@ -1372,7 +1379,7 @@
 		Tray_ToggleLockPosition("Check")
 		Menu, Tray, Disable,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
 
-		GUI_Trades.DockMode_Cycle()
+		GUI_Trades_V2.DockMode_Cycle()
 	}
 
 	DockMode_Cycle(dontSetPos=False) {
@@ -1388,7 +1395,7 @@
 		GuiTrades.Docked_Window_Handle := gameInstances[cycleIndex]["Hwnd"]
 
 		if (dontSetPos=False)
-			Gui_Trades.DockMode_SetPosition()
+			GUI_Trades_V2.DockMode_SetPosition()
 	}
 
 	DockMode_SetPosition() {
@@ -1396,7 +1403,7 @@
 		global GuiTrades, GuiTradesMinimized
 
 		if !WinExist("ahk_id " GuiTrades.Docked_Window_Handle " ahk_group POEGameGroup") {
-			GUI_Trades.DockMode_Cycle(dontSetPos:=True)
+			GUI_Trades_V2.DockMode_Cycle(dontSetPos:=True)
 			return
 		}
 
@@ -1410,7 +1417,7 @@
 		clientInfos := GetWindowClientInfos("ahk_id " GuiTrades.Docked_Window_Handle)
 		dockedX -= clientInfos.X, dockedY += clientInfos.Y
 		
-		gtPos := GUI_Trades.GetPosition()
+		gtPos := GUI_Trades_V2.GetPosition()
 		gtmPos := GUI_TradesMinimized.GetPosition()
 		
 		if (GuiTrades.Is_Minimized)
@@ -1423,8 +1430,9 @@
 		}
 		else if !IsNum(dockedX) || (isWinMinimized) {
 			AppendToLogs(A_ThisFunc "(): Couldn't dock Trades GUI to game window. Resetting pos and cycling to next game window.")
-			GUI_Trades.ResetPosition(dontWrite:=True)
-			GUI_Trades.DockMode_Cycle(dontSetPos:=True)
+			GUI_Trades_V2.ResetPosition("Buy", dontWrite:=True)
+			GUI_Trades_V2.ResetPosition("Sell", dontWrite:=True)
+			GUI_Trades_V2.DockMode_Cycle(dontSetPos:=True)
 		}
 		else {
 			if (GuiTrades.Is_Minimized)
@@ -1434,8 +1442,10 @@
 
 		if (GuiTrades.Is_Minimized)
 			GUI_TradesMinimized.SavePosition()
-		else 
-			GUI_Trades.SavePosition()
+		else  {
+			GUI_Trades_V2.SavePosition("Buy")
+			GUI_Trades_V2.SavePosition("Sell")
+		}
 		
 		DetectHiddenWindows, %hiddenWin%
 	}
@@ -1447,7 +1457,7 @@
 			return
 
 		if !(setOrUnset) || !(playerOrTab) || (!tabStyle) {
-			MsgBox(4096, "", "Invalid use of GUI_Trades.SetOrUnsetTabStyle()`n`nsetOrUnset: " setOrUnset "`nplayerOrTab: " playerOrTab "`ntabStyle: " tabStyle)
+			MsgBox(4096, "", "Invalid use of GUI_Trades_V2.SetOrUnsetTabStyle()`n`nsetOrUnset: " setOrUnset "`nplayerOrTab: " playerOrTab "`ntabStyle: " tabStyle)
 			return
 		}
 
@@ -1509,7 +1519,7 @@
 		}
 
 ;		if (styleChanged = True) {
-;			GUI_Trades_V2.SetActiveTab( tabName:=GUI_Trades.GetActiveTab(), autoScroll:=True, skipError:=False, styleChanged:=True )
+;			GUI_Trades_V2.SetActiveTab( tabName:=GUI_Trades_V2.GetActiveTab(), autoScroll:=True, skipError:=False, styleChanged:=True )
 ;		}
 	}
 
@@ -1786,38 +1796,21 @@
 
     ResetPosition(_buyOrSell, dontWrite=False) {
 		global PROGRAM, GuiTrades
-		guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 
-		gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)	
-		; gtmPos := GUI_TradesMinimized.GetPosition()
+		if (GuiTrades[_buyOrSell].Is_Minimized)
+			GUI_Trades_V2.Maximize(_buyOrSell)
 
-		try {
-			; if (GuiTrades.Is_Minimized)
-			; 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToBottomLeft)
-			; 		Gui, TradesMinimized:Show,% "NoActivate x" Ceil(A_ScreenWidth-gtPos.W) " y"  Ceil(0+gtPos.H-gtmPos.H)
-			; 	else
-			; 		Gui, TradesMinimized:Show,% "NoActivate x" Ceil(A_ScreenWidth-gtmPos.W) " y0"
-			; else 
-			Gui, Trades%_buyOrSell%:Show,% "NoActivate x" Ceil(A_ScreenWidth-gtPos.W) " y0"
-			
-			if !(dontWrite) {
-				; if (GuiTrades.Is_Minimized)
-					; Gui_TradesMinimized.SavePosition()
-				; else 
-					GUI_Trades_V2.SavePosition(_buyOrSell)
-			}
-		}
-		catch e {
-			AppendToLogs(A_ThisFunc "(dontWrite=" dontWrite "): Failed to set GUI pos based on screen width. Setting to 0,0.")
-			; if (GuiTrades.Is_Minimized)
-				; Gui, TradesMinimized:Show,% "NoActivate x0 y0"
-			; else
-			Gui, Trades%_buyOrSell%:Show,% "NoActivate x0 y0"
-			
-			if !(dontWrite) {
-				PROGRAM.SETTINGS[guiIniSection].Pos_X := 0, PROGRAM.SETTINGS[guiIniSection].Pos_Y := 0
-			}
-		}
+		gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+
+		; try {
+			; Gui.Show("Trades" _buyOrSell, "x" Ceil(A_ScreenWidth-gtPos.W) " y0 NoActivate")
+		; }
+		; catch e {
+			; AppendToLogs(A_ThisFunc "(dontWrite=" dontWrite "): Failed to set GUI pos based on screen width. Setting to 0,0.")
+			Gui.Show("Trades" _buyOrSell, "x0 y0 NoActivate")
+		; }
+		if (dontWrite=False)
+			GUI_Trades_V2.SavePosition(_buyOrSell)
 	}
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -1955,14 +1948,14 @@
 		GuiTrades[_buyOrSell].Tabs_Count := GuiTrades[_buyOrSell].Tabs_Count <= 0 ? 0 : GuiTrades[_buyOrSell].Tabs_Count-1
 		; Updating height var if is stack
 		if (isStack) {
-			heightDiff := GuiTrades[_buyOrSell].Height_Maximized
-			GuiTrades[_buyOrSell].Height_Maximized := GuiTrades[_buyOrSell].Tabs_Count = 0 ? GuiTrades[_buyOrSell].Height_NoRow
+			gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+			GuiTrades[_buyOrSell].Height_Maximized := GuiTrades[_buyOrSell].Tabs_Count = 0 ? GuiTrades[_buyOrSell].Height_Minimized
 				: GuiTrades[_buyOrSell].Tabs_Count = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
 				: GuiTrades[_buyOrSell].Tabs_Count = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
 				: GuiTrades[_buyOrSell].Tabs_Count = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
 				: GuiTrades[_buyOrSell].Tabs_Count >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
 				: GuiTrades[_buyOrSell].Height_Maximized_FourSlot
-			heightDiff := GuiTrades[_buyOrSell].Height_Maximized - heightDiff 
+			sizeDiff := GuiTrades[_buyOrSell].Height_Maximized-gtPos.H
 		}
 		; Do stuff if tabs count is zero
 		if (GuiTrades[_buyOrSell].Tabs_Count = 0) {
@@ -1984,8 +1977,7 @@
 			GuiControl,Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"],% PROGRAM.NAME " (" GuiTrades[_buyOrSell].Tabs_Count ")"
 			if (isStack) {
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
-					gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
-					WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-heightDiff
+					WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-sizeDiff
 				}
 				Gui.Show("Trades" _buyOrSell, "h" GuiTrades[_buyOrSell].Height_Maximized " NoActivate")
 			}
@@ -2813,10 +2805,16 @@
 		if !IsNum(gtPos.X) || !IsNum(gtPos.Y)
 			Return
 
-		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True" && GuiTrades[_buyOrSell].Is_Minimized) {
+		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
 			heightMin := GuiTrades[_buyOrSell].Height_Minimized, heightMax := GuiTrades[_buyOrSell].Height_Maximized, winDPI := GuiTrades[_buyOrSell].Windows_DPI
-			savedX := gtPos.X, savedY := gtPos.Y+gtPos.H-(heightMax*winDPI)
-			PROGRAM.SETTINGS[guiIniSection].Pos_X := savedX, PROGRAM.SETTINGS[guiIniSection].Pos_Y := savedY
+			if (GuiTrades[_buyOrSell].Is_Minimized) {	
+				savedX := gtPos.X, savedY := gtPos.Y
+				PROGRAM.SETTINGS[guiIniSection].Pos_X := savedX, PROGRAM.SETTINGS[guiIniSection].Pos_Y := savedY
+			}
+			else if (GuiTrades[_buyOrSell].Is_Maximized) {
+				savedX := gtPos.X, savedY := gtPos.Y+gtPos.H-(heightMin*winDPI)
+				PROGRAM.SETTINGS[guiIniSection].Pos_X := savedX, PROGRAM.SETTINGS[guiIniSection].Pos_Y := savedY
+			}
 		}
 		else
 			PROGRAM.SETTINGS[guiIniSection].Pos_X := gtPos.X, PROGRAM.SETTINGS[guiIniSection].Pos_Y := gtPos.Y
@@ -2932,7 +2930,7 @@
 			WinActivate,% "ahk_id " GuiTrades_Controls[_buyOrSell].GuiSearchHiddenHandle
 			DetectHiddenWindows("")
 		}
-		; GUI_Trades.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
+		; GUI_Trades_V2.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
 		GuiTrades[_buyOrSell].HasToolTip := False
 		GuiTrades[_buyOrSell].HasClickedSearch := False
 	}
