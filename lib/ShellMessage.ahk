@@ -86,13 +86,13 @@ ShellMessage(wParam,lParam) {
 			}
 			else { ; only show if tabs_count or poe is active
 				if (sellWinExists) {
-					if (GuiTrades.Sell.Tabs_Count || WinActive("ahk_group POEGameGroup") || WinActive("ahk_pid "))
+					if (GuiTrades.Sell.Tabs_Count || WinActive("ahk_group POEGameGroup") || WinActive("ahk_pid " PROGRAM.PID))
 						Gui, TradesSell:Show, NoActivate					
 					else
 						Gui, TradesSell:Hide
 				}
 				if (buyWinExists) {
-					if (GuiTrades.Buy.Tabs_Count || WinActive("ahk_group POEGameGroup") || WinActive("ahk_pid "))
+					if (GuiTrades.Buy.Tabs_Count || WinActive("ahk_group POEGameGroup") || WinActive("ahk_pid " PROGRAM.PID))
 						Gui, TradesBuy:Show, NoActivate
 					else
 						Gui, TradesBuy:Hide

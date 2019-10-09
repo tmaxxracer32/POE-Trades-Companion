@@ -703,8 +703,10 @@
 	    GuiTrades[_buyOrSell] := Gui%guiName%, GuiTrades_Controls[_buyOrSell] := Gui%guiName%_Controls
 		GuiTrades.Styles := Styles, GuiTrades.StylesData := StylesData
 
-		if (_isPreview)
-        	Gui.Show(guiName, "x0 y0 h" guiFullHeight " w" guiFullWidth " Hide")
+		if (_isPreview) {
+			showHeight := _guiMode="Stack" ? Gui%guiName%.Height_Maximized_OneSlot : Gui%guiName%.Height_Maximized
+        	Gui.Show(guiName, "x0 y0 h" showHeight " w" guiFullWidth " Hide")
+		}
 		else {
 			guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 			savedXPos := PROGRAM.SETTINGS[guiIniSection].Pos_X, savedYPos := PROGRAM.SETTINGS[guiIniSection].Pos_Y
