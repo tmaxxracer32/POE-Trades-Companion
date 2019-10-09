@@ -984,17 +984,24 @@
 
         ; Update the GUI height if the mode is slots
         if (isStack) {
+			heightDiff := GuiTrades[_buyOrSell].Height_Maximized
             GuiTrades[_buyOrSell].Height_Maximized := guiHeight := newTabsCount = 0 ? GuiTrades[_buyOrSell].Height_Minimized
                 : newTabsCount = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
                 : newTabsCount = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
                 : newTabsCount = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
                 : newTabsCount >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
                 : GuiTrades[_buyOrSell].Height_Maximized_FourSlot
+			heightDiff := GuiTrades[_buyOrSell].Height_Maximized - heightDiff 
 
+			if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
+				gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+				WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-heightDiff
+			}
             Gui.Show("Trades" _buyOrSell, "h" guiHeight " NoActivate")
         }
 		if (_buyOrSell="Sell") 
 			GUI_Trades_V2.VerifyItemPrice( GUI_Trades_V2.GetTabContent(_buyOrSell, newTabsCount) )
+		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 	}
 
 	SetSlotContent(params*) {
@@ -1629,12 +1636,18 @@
     Minimize(_buyOrSell) {
 		global GuiTrades, GuiTrades_Controls
 		global PROGRAM
+		heightMin := GuiTrades[_buyOrSell].Height_Minimized, heightMax := GuiTrades[_buyOrSell].Height_Maximized, winDPI := GuiTrades[_buyOrSell].Windows_DPI
 
 		if IsContaining(_buyOrSell, "Preview")
 			return
 
 		Detect_HiddenWindows("On")
-		WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% GuiTrades[_buyOrSell].Height_Minimized * GuiTrades[_buyOrSell].Windows_DPI
+		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
+			gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y+gtPos.H-(heightMin*winDPI), ,% heightMin*winDPI
+		}
+		else
+			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% heightMin*winDPI
 		Detect_HiddenWindows()
 
 		GuiControl, Trades%_buyOrSell%:Show,% GuiTrades_Controls[_buyOrSell].hBTN_Maximize
@@ -1656,6 +1669,7 @@
     Maximize(_buyOrSell) {
 		global GuiTrades, GuiTrades_Controls
 		global PROGRAM
+		heightMin := GuiTrades[_buyOrSell].Height_Minimized, heightMax := GuiTrades[_buyOrSell].Height_Maximized, winDPI := GuiTrades[_buyOrSell].Windows_DPI
 
 		if IsContaining(_buyOrSell, "Preview")
 			return
@@ -1663,7 +1677,13 @@
 			; return
 
         Detect_HiddenWindows("On")
-		WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% GuiTrades[_buyOrSell].Height_Maximized * GuiTrades[_buyOrSell].Windows_DPI
+		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
+			gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y+gtPos.H-(heightMax*winDPI), ,% heightMax*winDPI
+		}
+		else {
+			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% heightMax*winDPI
+		}
 		Detect_HiddenWindows()
 
 		GuiControl, Trades%_buyOrSell%:Show,% GuiTrades_Controls[_buyOrSell].hBTN_Minimize
@@ -1935,12 +1955,14 @@
 		GuiTrades[_buyOrSell].Tabs_Count := GuiTrades[_buyOrSell].Tabs_Count <= 0 ? 0 : GuiTrades[_buyOrSell].Tabs_Count-1
 		; Updating height var if is stack
 		if (isStack) {
+			heightDiff := GuiTrades[_buyOrSell].Height_Maximized
 			GuiTrades[_buyOrSell].Height_Maximized := GuiTrades[_buyOrSell].Tabs_Count = 0 ? GuiTrades[_buyOrSell].Height_NoRow
 				: GuiTrades[_buyOrSell].Tabs_Count = 1 ? GuiTrades[_buyOrSell].Height_Maximized_OneSlot
 				: GuiTrades[_buyOrSell].Tabs_Count = 2 ? GuiTrades[_buyOrSell].Height_Maximized_TwoSlot
 				: GuiTrades[_buyOrSell].Tabs_Count = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
 				: GuiTrades[_buyOrSell].Tabs_Count >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
 				: GuiTrades[_buyOrSell].Height_Maximized_FourSlot
+			heightDiff := GuiTrades[_buyOrSell].Height_Maximized - heightDiff 
 		}
 		; Do stuff if tabs count is zero
 		if (GuiTrades[_buyOrSell].Tabs_Count = 0) {
@@ -1960,10 +1982,16 @@
 		; Do stuff if tabs count is not zero
 		else {
 			GuiControl,Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"],% PROGRAM.NAME " (" GuiTrades[_buyOrSell].Tabs_Count ")"
-			if (isStack)
+			if (isStack) {
+				if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
+					gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
+					WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-heightDiff
+				}
 				Gui.Show("Trades" _buyOrSell, "h" GuiTrades[_buyOrSell].Height_Maximized " NoActivate")
+			}
 			; GuiControl,TradesBuyCompact:,% GuiTradesMinimized_Controls["hTEXT_Title"],% "(" GuiTrades.Tabs_Count ")"
 		}
+		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 	}
 
 	SetActiveTab(_buyOrSell, tabName, autoScroll=True, skipError=False, styleChanged=False) {
@@ -2785,7 +2813,14 @@
 		if !IsNum(gtPos.X) || !IsNum(gtPos.Y)
 			Return
 
-		PROGRAM.SETTINGS[guiIniSection].Pos_X := gtPos.X, PROGRAM.SETTINGS[guiIniSection].Pos_Y := gtPos.Y
+		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True" && GuiTrades[_buyOrSell].Is_Minimized) {
+			heightMin := GuiTrades[_buyOrSell].Height_Minimized, heightMax := GuiTrades[_buyOrSell].Height_Maximized, winDPI := GuiTrades[_buyOrSell].Windows_DPI
+			savedX := gtPos.X, savedY := gtPos.Y+gtPos.H-(heightMax*winDPI)
+			PROGRAM.SETTINGS[guiIniSection].Pos_X := savedX, PROGRAM.SETTINGS[guiIniSection].Pos_Y := savedY
+		}
+		else
+			PROGRAM.SETTINGS[guiIniSection].Pos_X := gtPos.X, PROGRAM.SETTINGS[guiIniSection].Pos_Y := gtPos.Y
+		
 		Save_LocalSettings()
 	}
 

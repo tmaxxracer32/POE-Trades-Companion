@@ -560,7 +560,7 @@ Get_LocalSettings_DefaultValues() {
 				"PushBulletOnWhisperMessage": "False",
 				"PushBulletOnlyWhenAfk": "True",
 				"PoeAccounts": {},
-				"MinimizeInterfaceToBottomLeft": "False",
+				"MinimizeInterfaceToTheBottom": "True",
 				"ItemGridHideNormalTab": "False",
 				"ItemGridHideQuadTab": "False",
 				"ItemGridHideNormalTabAndQuadTabForMaps": "False"
@@ -907,7 +907,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 			else if (parents.1 = "SETTINGS_MAIN") {
 				if IsIn(k, "AllowClicksToPassThroughWhileInactive,AutoFocusNewTabs,AutoMaximizeOnFirstNewTab,AutoMinimizeOnAllTabsClosed,BuyerJoinedAreaSFXToggle"
 				. ",CopyItemInfosOnTabChange,HideInterfaceWhenOutOfGame,ItemGridHideNormalTab,ItemGridHideNormalTabAndQuadTabForMaps,ItemGridHideQuadTab"
-				. ",MinimizeInterfaceToBottomLeft,PushBulletOnlyWhenAfk,PushBulletOnPartyMessage,PushBulletOnTradingWhisper,PushBulletOnWhisperMessage,"
+				. ",MinimizeInterfaceToTheBottom,PushBulletOnlyWhenAfk,PushBulletOnPartyMessage,PushBulletOnTradingWhisper,PushBulletOnWhisperMessage,"
 				. ",RegularWhisperSFXToggle,SendTradingWhisperUponCopyWhenHoldingCTRL,ShowTabbedTrayNotificationOnWhisper,TradesGUI_Locked,TradingWhisperSFXToggle")
 					isValid := IsIn(userValue, "True,False") ? True : False
 				else if IsIn(k, "BuyerJoinedAreaSFXPath,RegularWhisperSFXPath,TradingWhisperSFXPath")
@@ -1047,7 +1047,7 @@ LocalSettings_Verify() {
 		if IsIn(key, "TradingWhisperSFXToggle,RegularWhisperSFXToggle,BuyerJoinedAreaSFXToggle"
 		. ",HideInterfaceWhenOutOfGame,CopyItemInfosOnTabChange,AutoFocusNewTabs,AutoMinimizeOnAllTabsClosed,AutoMaximizeOnFirstNewTab,SendTradingWhisperUponCopyWhenHoldingCTRL"
 		. ",TradesGUI_Locked,AllowClicksToPassThroughWhileInactive,ShowTabbedTrayNotificationOnWhisper,PushBulletOnlyWhenAfk,PushBulletOnTradingWhisper,PushBulletOnPartyMessage,PushBulletOnWhisperMessage"
-		. ",MinimizeInterfaceToBottomLeft,ItemGridHideNormalTab,ItemGridHideQuadTab,ItemGridHideNormalTabAndQuadTabForMaps,ShowItemGridWithoutInvite,DisableBuyInterface")
+		. ",MinimizeInterfaceToTheBottom,ItemGridHideNormalTab,ItemGridHideQuadTab,ItemGridHideNormalTabAndQuadTabForMaps,ShowItemGridWithoutInvite,DisableBuyInterface")
 			isValid := IsIn(value, "True,False") ? True : False
 		else if IsIn(key, "TradingWhisperSFXPath,RegularWhisperSFXPath,BuyerJoinedAreaSFXPath")
 			isValid := FileExist(value) ? True : False
