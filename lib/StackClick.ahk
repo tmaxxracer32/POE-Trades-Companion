@@ -4,7 +4,7 @@
 
 	activeTab := GUI_Trades_V2.GetActiveTab("Sell")
 	tabContent := GUI_Trades_V2.GetTabContent("Sell", activeTab)
-	if !IsNum(activeTab) || !RegExMatch(tabContent.Item, "\d+") || (GuiTrades.Is_Minimized = True) { ; No tabs || not currency trade || gui minimized
+	if !IsNum(activeTab) || !RegExMatch(tabContent.Item, "\d+") || (GuiTrades.Sell.Is_Minimized = True) { ; No tabs || not currency trade || gui minimized
 		GoSub %A_ThisFunc%_SendHotkeyKeys
 		return
 	}
@@ -27,7 +27,7 @@
 		stackSize := RegexReplace(match2, "[,.]")
 
 		RegExMatch(tabContent.Item, "\d+", required) ; get required amount
-		withdrawn := tabContent.WithdrawTally
+		withdrawn := tabContent.WithdrawTally ? tabContent.WithdrawTally : 0
 		amount := (available >= stackSize) ? stackSize : available
 
 		; if available amount hasn't changed, it's likely the previous click hasn't gone through yet
