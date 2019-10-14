@@ -1914,6 +1914,7 @@ Class GUI_Settings {
 		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
 		PROGRAM.SETTINGS.HOTKEYS[hotkeysCount+1] := {Name: "New hotkey " hotkeysCount+1, Hotkey: "", Actions: [{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE",Content:""}]}
 		Save_LocalSettings()
+		UpdateHotkeys()
 		GUI_Settings.TabHotkeys_SetUserSettings()
 		GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% hotkeysCount+1
 		GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
@@ -1939,6 +1940,7 @@ Class GUI_Settings {
 				PROGRAM.SETTINGS.HOTKEYS.Delete(hotkeysCount)
 			}
 			Save_LocalSettings()
+			UpdateHotkeys()
 			GUI_Settings.TabHotkeys_SetUserSettings()
 			GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% (hotkeysCount > selectedHkNum ? selectedHkNum : hotkeysCount-1)
 			GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
@@ -1995,6 +1997,7 @@ Class GUI_Settings {
 
 		PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name := hkName
 		Save_LocalSettings()
+		UpdateHotkeys()
 		GUI_Settings.TabHotkeys_UpdateAvailableProfiles()
 
 		if (doAgainAfter500ms=True)
@@ -2027,6 +2030,7 @@ Class GUI_Settings {
 		profileNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		PROGRAM.SETTINGS.HOTKEYS[profileNum].Hotkey := hkStr
 		Save_LocalSettings()
+		UpdateHotkeys()
 	}
 
 	TabHotkeys_OnHotkeyProfileHotkeyChange() {
@@ -2307,6 +2311,7 @@ Class GUI_Settings {
 		}
 
 		Save_LocalSettings()
+		UpdateHotkeys()
 	}
 
 	Universal_ShowActionTypeTip(whichTab, actionTypeShort) {

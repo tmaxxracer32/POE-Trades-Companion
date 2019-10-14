@@ -68,23 +68,9 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 	if (ACTIONS_FORCED_CONTENT[actionType]) && !(actionContent)
 		actionContent := ACTIONS_FORCED_CONTENT[actionType]
 
-	if (tabNum) {
-		actionContentWithVariables := Replace_TradeVariables(_buyOrSell, tabNum, actionContent)
-		StringSplit, contentWords, actionContentWithVariables,% A_Space
-		if ( SubStr(actionContentWithVariables, 1, 2) = "@ ") {
-			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarEmpty_Msg, "%name%", contentWords1)
-			trayMsg := StrReplace(trayMsg, "%variable%", actionContent)
-			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
-			return
-		}
-		else if ( SubStr(contentWords1, 2, 1) = "%" || SubStr(contentWords1, 0, 1) = "%" ) {
-			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarTypo_Msg, "%variable%", actionContent)
-			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
-			return
-		}
-	}
-	else
-		actionContentWithVariables := actionContent
+	actionContentWithVariables := Replace_TradeVariables(_buyOrSell, tabNum, actionContent)
+	if !VerifyActionContentValidity(actionContent, actionContentWithVariables)
+		return
 
 	if IsIn(prevActionType, "COPY_ITEM_INFOS,WRITE_MSG,SENDINPUT,SENDEVENT") {
 		; AppendToLogs(A_thisFunc "(actionType=" actionType ", actionContent=" actionContent ", isHotkey=" isHotkey ", uniqueNum=" uniqueNum "):"
@@ -158,6 +144,24 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 	prevNum := uniqueNum, prevActionType := actionType, prevActionContent := actionContentWithVariables	
 }
 
+VerifyActionContentValidity(acContent, acContentWithVar) {
+	global PROGRAM
+
+	StringSplit, contentWords, acContentWithVar,% A_Space
+	if ( SubStr(acContentWithVar, 1, 2) = "@ ") {
+		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarEmpty_Msg, "%name%", contentWords1)
+		trayMsg := StrReplace(trayMsg, "%variable%", acContent)
+		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
+		return 0
+	}
+	else if ( SubStr(contentWords1, 2, 1) = "%" || SubStr(contentWords1, 0, 1) = "%" ) {
+		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceledVarTypo_Msg, "%variable%", acContent)
+		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MessageCanceled_Title, trayMsg)
+		return 0
+	}
+	return 1
+}
+
 Get_Changelog(removeTrails=False) {
 	global PROGRAM
 
@@ -204,16 +208,17 @@ Reset_Clipboard() {
 		Clipboard := ""
 }
 
-Replace_TradeVariables(_buyOrSell, tabNum, string) {
+Replace_TradeVariables(_buyOrSell, tabNum="", string="") {
 	global PROGRAM, GuiTrades
 	static lastCharacterLogged, timeSinceRetrievedChar
 
-	tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum)
-
-	string := StrReplace(string, "%buyer%", tabContent.Buyer), string := StrReplace(string, "%buyerName%", tabContent.Buyer)
-	string := StrReplace(string, "%seller%", tabContent.Seller), string := StrReplace(string, "%sellerName%", tabContent.Seller)
-	string := StrReplace(string, "%item%", tabContent.Item), string := StrReplace(string, "%itemName%", tabContent.Item)
-	string := StrReplace(string, "%price%", tabContent.Price != ""?tabContent.Price : "[unpriced]"), string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
+	if (tabNum) {
+		tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum)
+		string := StrReplace(string, "%buyer%", tabContent.Buyer), string := StrReplace(string, "%buyerName%", tabContent.Buyer)
+		string := StrReplace(string, "%seller%", tabContent.Seller), string := StrReplace(string, "%sellerName%", tabContent.Seller)
+		string := StrReplace(string, "%item%", tabContent.Item), string := StrReplace(string, "%itemName%", tabContent.Item)
+		string := StrReplace(string, "%price%", tabContent.Price != ""?tabContent.Price : "[unpriced]"), string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
+	}
 	string := StrReplace(string, "%lastWhisper%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lastWhisperReceived%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lwr%", GuiTrades.Last_Whisper_Name)
 	string := StrReplace(string, "%sentWhisper%", GuiTrades.Last_Whisper_Sent_Name), string := StrReplace(string, "%lastWhisperSent%", GuiTrades.Last_Whisper_Sent_Name), string := StrReplace(string, "%lws%", GuiTrades.Last_Whisper_Sent_Name)
 

@@ -1,5 +1,5 @@
 ﻿OnHotkeyPress() {
-	global PROGRAM
+	global PROGRAM, GuiTrades
 	static uniqueNum
 	hkPressed := A_ThisHotkey
 	uniqueNum := !uniqueNum
@@ -9,13 +9,42 @@
 	KeyWait, Alt, U
 	keysState := GetKeyStateFunc("Ctrl,LCtrl,RCtrl")
 	hkSettings := PROGRAM.HOTKEYS[hkPressed]
+
+	buyMode := GuiTrades.Buy.Is_Tabs ? "Tabs" : "Stack"
+	sellMode := GuiTrades.Sell.Is_Tabs ? "Tabs" : "Stack"
+	tradesVariables := "%buyer%,%buyerName%,%seller%,%sellerName%,%item%,%itemName%,%price%,%itemPrice%"
+	_buyOrSell := "Sell"
+	
 	Loop % hkSettings.Actions.Count() {
 		thisAction := hkSettings.Actions[A_Index]
-		/* TO_DO_V2 stuff to automate action replace and notifications in case of mess up
-		*/
-		Do_Action(thisAction.Type, thisAction.Content, "Sell", "1", uniqueNum)
-		; actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum
+		actionType := thisAction.Type, actionContent := thisAction.Content
+
+		if (actionType = "APPLY_ACTIONS_TO_BUY_INTERFACE")
+			_buyOrSell := "Buy"
+		else if (actionType = "APPLY_ACTIONS_TO_SELL_INTERFACE")
+			_buyOrSell := "Sell"
+
+		if (actionType != "COPY_ITEM_INFOS") { ; Make sure to only copy item infos after all actions have been done
+			if IsContaining(actionContent, tradesVariables) && (GuiTrades[_buyOrSell].Is_Stack)
+				TrayNotifications.Show("Action in Stack mode not supported yet.", ""
+				. "This action cannot be done because it contains one of the following variables: ""%buyer%,%item%,%price%""."
+				. "`n`n" "Stack mode doesn't provide any way to mark a stack as selected currently.", {Fade_Timer:12000})
+			else if IsContaining(actionType, "CUSTOM_BUTTON") && (GuiTrades[_buyOrSell].Is_Stack) {
+				TrayNotifications.Show("Action in Stack mode not supported yet.", ""
+				. "This action cannot be done because it refers to a custom button."
+				. "`n`n" "Stack mode doesn't provide any way to mark a stack as selected currently.", {Fade_Timer:12000})
+			}
+			else
+				Do_Action(actionType,  actionContent, _buyOrSell, GuiTrades[_buyOrSell].Active_Tab, uniqueNum)
+		}
+		else 
+			doCopyActionAtEnd := True
 	}
+	if (doCopyActionAtEnd=True) {
+		Sleep 100
+		Do_Action("COPY_ITEM_INFOS", "", _buyOrSell, GuiTrades[_buyOrSell].Active_Tab, uniqueNum)
+	}
+
 	SetKeyStateFunc(keysState)
 }
 

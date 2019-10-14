@@ -858,12 +858,13 @@
 
 				if (actionType = "APPLY_ACTIONS_TO_BUY_INTERFACE")
 					_buyOrSell := "Buy"
-				else if (acitonType = "APPLY_ACTIONS_TO_SELL_INTERFACE")
+				else if (actionType = "APPLY_ACTIONS_TO_SELL_INTERFACE")
 					_buyOrSell := "Sell"
 
 				if (actionType != "COPY_ITEM_INFOS") ; Make sure to only copy item infos after all actions have been done
 					Do_Action(actionType, actionContent, _buyOrSell, tabNum, uniqueNum)
-				else doCopyActionAtEnd := True
+				else
+					doCopyActionAtEnd := True
 			}
 			if (doCopyActionAtEnd=True) {
 				Sleep 100

@@ -34,6 +34,7 @@
 ; https://autohotkey.com/board/topic/47439-user-defined-dynamic-hotkeys/
 
 	; List of keys supported
+	*F4::
 	*AppsKey::
 	*BackSpace::
 	*Delete::
