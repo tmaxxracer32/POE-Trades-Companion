@@ -16,7 +16,7 @@
  *     Email:      - cocobelgica <at> gmail <dot> com
  */
 
- Is_JSON(fileOrObj) {
+Is_JSON(fileOrObj) {
 	if !IsObject(fileOrObj)
 		FileRead, fileContent,% fileOrObj
 	else fileContent := fileOrObj
@@ -30,9 +30,9 @@
 	}
 	catch e
 		return False
- }
+}
 
- JSON_Load(fileOrObj, debug=False) {
+JSON_Load(fileOrObj) {
 	if !IsObject(fileOrObj) && FileExist(fileOrObj)
 		FileRead, fileContent,% fileOrObj
 	else
@@ -45,6 +45,10 @@
 		. "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
 		. "`n`nfileOrObj: " fileOrObj
 	}
+}
+
+JSON_Dump(jsonObj) {
+	return JSON.Dump(jsonObj, "", "`t")
 }
 
 /**
