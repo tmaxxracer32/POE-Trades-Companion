@@ -378,6 +378,16 @@ Update_LocalSettings_IniFile() {
 			cbIndex := A_Index
 			loopedSetting := iniSettings["SETTINGS_CUSTOM_BUTTON_" cbIndex]
 			if IsObject(loopedSetting) {
+				thisBtnActionsCount := 0
+				Loop {
+					loopActionIndex := A_Index
+					loopedActionType := loopedSetting["Action_" loopActionIndex "_Type"]
+
+					if (!loopedActionType) || (loopedActionType = "") || (loopActionIndex > 50)
+						Break
+					
+					thisBtnActionsCount++
+				}
 				Loop {
 					loopActionIndex := A_Index
 					loopedActionContent := loopedSetting["Action_" loopActionIndex "_Content"]
@@ -402,6 +412,22 @@ Update_LocalSettings_IniFile() {
 						INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_CONTENT", loopedActionContent)
 						AppendToLogs(A_ThisFunc "(): Replaced {X} with %goBackHere% to button:"
 						. "`n" "ID: """ cbIndex """ - Action index: """ loopActionIndex """")
+					}
+					else if (loopedActionType = "SHOW_GRID") {
+						; Reduce action num by one, for every action after SHOW_GRID
+						startReplaceIndex := loopActionIndex
+						Loop % thisBtnActionsCount - loopActionIndex {
+							newAcContent := loopedSetting["Action_" startReplaceIndex+1 "_Content"]
+							newAcContent := SubStr(newAcContent, 1, 1) = """" ? newAcContent : """" newAcContent, newAcContent := SubStr(newAcContent, 0, 1) = """" ? newAcContent : newAcContent """"
+							INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" startReplaceIndex "_Content", newAcContent)
+							INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" startReplaceIndex "_Type", loopedSetting["Action_" startReplaceIndex+1 "_Type"])
+							startReplaceIndex++
+
+							AppendToLogs(A_ThisFunc "(): Reducing action index by one for button with" . "`t" "ID: """ cbIndex """ - Action index: """ loopActionIndex """. Action ID: """ startReplaceIndex+1 """")
+						}
+						; Remove SHOW_GRID action
+						INI.Remove(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" thisBtnActionsCount "_Content")
+						INI.Remove(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" thisBtnActionsCount "_Type")	
 					}
 				}
 			}
