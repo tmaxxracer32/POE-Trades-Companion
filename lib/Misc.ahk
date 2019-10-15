@@ -135,7 +135,7 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 	else if (actionType = "SENDEVENT")
 		SendEvent,%actionContentWithVariables%
 	else if (actionType = "IGNORE_SIMILAR_TRADE")
-		GUI_Trades_V2.AddTrade_To_IgnoreList(tabNum)
+		GUI_Trades_V2.AddTrade_To_IgnoreList(tabNum, actionContent)
 	else if (actionType = "CLOSE_SIMILAR_TABS")
 		GUI_Trades_V2.CloseOtherTabsForSameItem(_buyOrSell, tabNum)
 	else if (actionType = "SHOW_GRID")

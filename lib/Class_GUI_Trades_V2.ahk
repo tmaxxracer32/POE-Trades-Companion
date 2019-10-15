@@ -937,7 +937,7 @@
 		existingTabID := GUI_Trades_V2.IsTabAlreadyExisting(_buyOrSell, infos)
 		if (existingTabID)
 			Return "TabAlreadyExists"
-		if GUI_Trades_V2.IsTrade_In_IgnoreList(FINISHED_V2) {
+		if GUI_Trades_V2.IsTrade_In_IgnoreList(infos) {
 			AppendToLogs(A_ThisFunc "(): Canceled creating new tab due to trade being in ignore list:" 
 			. "Buyer: """ tabInfos.Buyer """ - Item: """ tabInfos.Item """ - Price: """ tabInfos.Price """ - Stash:""" tabInfos.Stash """")
 			return "TabIgnored"
@@ -2222,72 +2222,85 @@
 	IsTrade_In_IgnoreList(tradeInfos) {
 		global TRADES_IGNORE_LIST
 		
-		for key, value in TRADES_IGNORE_LIST
-			ignoreIndex := key
-
-		isInList := False
-		Loop % ignoreIndex {
+		Loop % TRADES_IGNORE_LIST.Count() {
 			loopIndex := A_Index
+
 			if (TRADES_IGNORE_LIST[loopIndex].Item = tradeInfos.Item)
-			 && (TRADES_IGNORE_LIST[loopIndex].Price = tradeInfos.Price)
-			 && (TRADES_IGNORE_LIST[loopIndex].Stash = tradeInfos.Stash) {
-			 	isInList := True
-				Break
+			 && (TRADES_IGNORE_LIST[loopIndex].ItemCurrency = tradeInfos.ItemCurrency)
+			 && (TRADES_IGNORE_LIST[loopIndex].ItemCount = tradeInfos.ItemCount)
+			 && (TRADES_IGNORE_LIST[loopIndex].PriceCurrency = tradeInfos.PriceCurrency)
+			 && (TRADES_IGNORE_LIST[loopIndex].PriceCount = tradeInfos.PriceCount)
+			 && (TRADES_IGNORE_LIST[loopIndex].StashTab = tradeInfos.StashTab)
+			 && (TRADES_IGNORE_LIST[loopIndex].StashX = tradeInfos.StashX)
+			 && (TRADES_IGNORE_LIST[loopIndex].StashY = tradeInfos.StashY)
+			 && (TRADES_IGNORE_LIST[loopIndex].GemLevel = tradeInfos.GemLevel)
+			 && (TRADES_IGNORE_LIST[loopIndex].GemQuality = tradeInfos.GemQuality) {
+			 	return loopIndex
 			}
 		}
 		
-		return isInList
+		return False
 	}
 
-	AddTrade_To_IgnoreList(tabNum) {
+	AddTrade_To_IgnoreList(tabNum, duration=10) {
 		global GuiTrades, TRADES_IGNORE_LIST
+		duration := IsNum(duration)?duration:10
+		matchingElements := ["Item","ItemCurrency","ItemCount","PriceCurrency","PriceCount","StashTab","StashX","StashY","GemLevel","GemQuality"]
 		if !IsObject(TRADES_IGNORE_LIST)
 			TRADES_IGNORE_LIST := {}
-
-		for key, value in TRADES_IGNORE_LIST
-			ignoreIndex := key
-		ignoreIndex++
 		
 		if !IsNum(tabNum || tabNum=0)
 			return
 
 		tabContent := GUI_Trades_V2.GetTabContent("Sell", tabNum)
-		if GUI_Trades_V2.IsTrade_In_IgnoreList(tabContent) {
-			AppendToLogs(A_ThisFunc "(): Tab is already in ignore list. Canceling."
-			. "`nBuyer: """ tabContent.Buyer """ - Item: """ tabContent.Item """ - Price: """ tabContent.Price """ - Stash: """ tabContent.Stash """")
+		inIgnoreIndex := GUI_Trades_V2.IsTrade_In_IgnoreList(tabContent)
+		if (inIgnoreIndex) {
+			TRADES_IGNORE_LIST[inIgnoreIndex].IgnoreDuration := duration
+			; AppendToLogs(A_ThisFunc "(): Tab is already in ignore list. Canceling."
+			; . "`nBuyer: """ tabContent.Buyer """ - Item: """ tabContent.Item """ - Price: """ tabContent.Price """ - Stash: """ tabContent.Stash """")
 			return
 		}
 		if !(tabContent.Item) {
 			return
 		}
 
-		TRADES_IGNORE_LIST[ignoreIndex+1] := {}
-		TRADES_IGNORE_LIST[ignoreIndex+1].Item := tabContent.Item
-		TRADES_IGNORE_LIST[ignoreIndex+1].Price := tabContent.Price
-		TRADES_IGNORE_LIST[ignoreIndex+1].Stash := tabContent.Stash
-		TRADES_IGNORE_LIST[ignoreIndex+1].Time := A_Now
-		AppendToLogs(A_ThisFunc "(): Successfully added tab to ignore list."
+		ignoreCount := TRADES_IGNORE_LIST.Count() ? TRADES_IGNORE_LIST.Count() : 0
+		TRADES_IGNORE_LIST[ignoreCount+1] := {}
+		Loop % matchingElements.Count()
+			TRADES_IGNORE_LIST[ignoreCount+1][matchingElements[A_Index]] := tabContent[matchingElements[A_Index]]
+		TRADES_IGNORE_LIST[ignoreCount+1].Time := A_Now
+		TRADES_IGNORE_LIST[ignoreCount+1].IgnoreDuration := duration
+
+		AppendToLogs(A_ThisFunc "(): Successfully added tab to ignore list for " duration "mins: "
 		. "`nBuyer: """ tabContent.Buyer """ - Item: """ tabContent.Item """ - Price: """ tabContent.Price """ - Stash: """ tabContent.Stash """")
 	}
 	
 	RefreshIgnoreList() {
 		global TRADES_IGNORE_LIST
-		timeToIgnore := 10 ; Time in mins
+		
+		if !TRADES_IGNORE_LIST.Count()
+			return
 
-		for key, value in TRADES_IGNORE_LIST
-			ignoreIndex := key
-		Loop % ignoreIndex {
+		Loop % TRADES_IGNORE_LIST.Count() {
 			loopIndex := A_Index
-			timeDif := A_Now, timeAdded := TRADES_IGNORE_LIST[loopIndex].Time
-			timeDif -= timeAdded, Minutes
+			timeAdded := TRADES_IGNORE_LIST[loopIndex].Time, timeDif := A_Now
+			timeDif -= timeAdded, Seconds
+			ignoreDuration := TRADES_IGNORE_LIST[loopIndex].IgnoreDuration*60 ; convert mins into seconds
 
-			if (timeDif > timeToIgnore) {
-				for key, value in TRADES_IGNORE_LIST[loopIndex]
-					TRADES_IGNORE_LIST[loopIndex].Delete(key)
-				TRADES_IGNORE_LIST.Delete(loopIndex)
-				; AppendToLogs(A_ThisFunc "(): Removed item from ignore list after " timeToIgnore "mins.")
+			if (timeDif > ignoreDuration) {
+				replaceIndex := loopIndex
+
+				Loop % TRADES_IGNORE_LIST.Count() - loopIndex {
+					TRADES_IGNORE_LIST[replaceIndex] := {}
+					TRADES_IGNORE_LIST[replaceIndex] := ObjFullyClone(TRADES_IGNORE_LIST[replaceIndex+1])
+					replaceIndex++
+				}
+				TRADES_IGNORE_LIST.Delete(TRADES_IGNORE_LIST.Count())
+				GUI_Trades_V2.RefreshIgnoreList()
+				return
+				; AppendToLogs(A_ThisFunc "(): Removed item from ignore list after " ignoreDuration "mins.")
 			}
-		}
+		}			
 	}
 
 	CopyItemInfos(_buyOrSell, tabID="") {
@@ -2608,7 +2621,7 @@
 
 		if IsContaining(_buyOrSell, "Preview")
 			return
-			
+
 		transPercent := PROGRAM.SETTINGS.SETTINGS_MAIN.TabsOpenTransparency
 		GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, transPercent)
 	}

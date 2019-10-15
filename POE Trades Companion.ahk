@@ -330,7 +330,7 @@ Start_Script() {
 
 	; Clipboard change funcs + refresh list
 	OnClipboardChange("OnClipboardChange_Func")
-	SetTimer, GUI_Trades_V2_Sell_RefreshIgnoreList, 60000 ; One min
+	SetTimer, GUI_Trades_V2_Sell_RefreshIgnoreList, 35000 ; 35s
 
 	; Showing tray notification
 	trayMsg := PROGRAM.TRANSLATIONS.TrayNotifications.AppLoaded_Msg
