@@ -79,7 +79,7 @@ Class GUI_Settings {
 		global ACTIONS_FORCED_CONTENT := {}
 
 		global ACTIONS_READONLY := "APPLY_ACTIONS_TO_BUY_INTERFACE,APPLY_ACTIONS_TO_SELL_INTERFACE,CLOSE_TAB"
-		. ",CLOSE_SIMILAR_TABS,CLOSE_ALL_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB,IGNORE_SIMILAR_TRADE"
+		. ",CLOSE_SIMILAR_TABS,CLOSE_ALL_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB"
 		. ",SAVE_TRADE_STATS,FORCE_MAX,FORCE_MIN,TOGGLE_MIN_MAX,SHOW_LEAGUE_SHEETS"
 		Loop 9 ; TO_DO_V2
 			ACTIONS_READONLY .= ",CUSTOM_BUTTON_" A_Index
@@ -1183,7 +1183,7 @@ Class GUI_Settings {
 			Return
 
 		KeyWait, LButton, U
-		SetTimer, GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub, -500
+		SetTimer, GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub, -100
 
 		; scalePercent := GUI_Settings.Submit("hEDIT_SkinScalingPercentage")
 		; GuiControl, Settings:ChooseString,% GuiSettings_Controls.hLB_SkinPreset,% "Custom"
@@ -1249,7 +1249,7 @@ Class GUI_Settings {
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingButtonIcon", "Customization_Buying_OnButtonIconChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingActionType", "Customization_Buying_OnActionTypeChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_CustomizationBuyingActionTypeTip", "Universal_OnActionTypeTipLinkClick") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingActionContent", "Customization_Buying_OnActionContentChange", doAgainAfter500ms:=True) 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingActionContent", "Customization_Buying_OnActionContentChange", doAgainAfter100ms:=True) 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationBuyingActionsList", "Customization_Buying_OnListviewClick") 
 	}
 
@@ -1263,7 +1263,7 @@ Class GUI_Settings {
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonIcon", "Customization_Selling_OnButtonIconChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingActionType", "Customization_Selling_OnActionTypeChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_CustomizationSellingActionTypeTip", "Universal_OnActionTypeTipLinkClick") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingActionContent", "Customization_Selling_OnActionContentChange", doAgainAfter500ms:=True) 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingActionContent", "Customization_Selling_OnActionContentChange", doAgainAfter100ms:=True) 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_CustomizationSellingActionsList", "Customization_Selling_OnListviewClick") 
 	}
 
@@ -1607,8 +1607,8 @@ Class GUI_Settings {
 		return GUI_Settings.Universal_OnActionTypeChange(whichTab)
 	}
 	
-	Customization_SellingBuying_OnActionContentChange(whichTab, doAgainAfter500ms=False) {
-		return GUI_Settings.Universal_OnActionContentChange(whichTab, doAgainAfter500ms)
+	Customization_SellingBuying_OnActionContentChange(whichTab, doAgainAfter100ms=False) {
+		return GUI_Settings.Universal_OnActionContentChange(whichTab, doAgainAfter100ms)
 	}
 
 	Customization_SellingBuying_ListViewModifySelectedAction(whichTab, actionType="", actionContent="") {
@@ -1864,7 +1864,7 @@ Class GUI_Settings {
 			if (ctrlName="hLB_HotkeyProfiles")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileChange")
 			else if (ctrlName="hEDIT_HotkeyProfileName")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter500ms:=True)
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter100ms:=True)
 			else if IsIn(ctrlName,"hEDIT_HotkeyProfileHotkey")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileHotkeyChange")
 			else if (ctrlName="hDDL_HotkeyActionType")
@@ -1983,7 +1983,7 @@ Class GUI_Settings {
 		return GUI_Settings.Submit("hEDIT_HotkeyProfileName")
 	}
 
-	TabHotkeys_OnHotkeyProfileNameChange(doAgainAfter500ms=False) {
+	TabHotkeys_OnHotkeyProfileNameChange(doAgainAfter100ms=False) {
 		global PROGRAM
 		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		hkName := GUI_Settings.TabHotkeys_GetHotkeyProfileName()
@@ -2000,7 +2000,7 @@ Class GUI_Settings {
 		UpdateHotkeys()
 		GUI_Settings.TabHotkeys_UpdateAvailableProfiles()
 
-		if (doAgainAfter500ms=True)
+		if (doAgainAfter100ms=True)
 			GoSub, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange
 	}
 
@@ -2042,7 +2042,7 @@ Class GUI_Settings {
 	}
 
 	TabHotkeys_OnActionContentChange() {
-		return GUI_Settings.Universal_OnActionContentChange("Hotkeys", doAgainAfter500ms:=True)
+		return GUI_Settings.Universal_OnActionContentChange("Hotkeys", doAgainAfter100ms:=True)
 	}
 
 	TabHotkeys_LoadHotkeyActions(hkNum) {
@@ -2409,8 +2409,8 @@ Class GUI_Settings {
 		}
 	}
 
-    Universal_OnActionContentChange(whichTab, doAgainAfter500ms=False) {
-		/* The doAgainAfter500ms trick allows to make sure that the function is ran correctly if the user typed way too fast somehow
+    Universal_OnActionContentChange(whichTab, doAgainAfter100ms=False) {
+		/* The doAgainAfter100ms trick allows to make sure that the function is ran correctly if the user typed way too fast somehow
 		*/
 		global PROGRAM, GuiSettings, GuiSettings_Controls
 
@@ -2445,19 +2445,28 @@ Class GUI_Settings {
 				ShowToolTip("The string has to start with """ actionForcedContent """")
 				tipWarn := True, actionContent := actionForcedContent
 			}
-			else if (actionShortName = "SLEEP") {
-				AutoTrimStr(actionContent)
+		}
+		else if (actionShortName = "SLEEP") {
+			AutoTrimStr(actionContent)
 
-				if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
-					GUI_Settings.Universal_SetActionContent(whichTab, 100)
-					ShowToolTip("This value can only be an integer.")
-					tipWarn := True, actionContent := 100
-				}
-				else if IsDigit(actionContent) && (actionContent > 1000) {
-					GUI_Settings.Universal_SetActionContent(whichTab, 1000)
-					ShowToolTip("Max value is 1000 milliseconds.")
-					tipWarn := True, actionContent := 1000
-				}
+			if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
+				GUI_Settings.Universal_SetActionContent(whichTab, 100)
+				ShowToolTip("This value can only be an integer.")
+				tipWarn := True, actionContent := 100
+			}
+			else if IsDigit(actionContent) && (actionContent > 5000) {
+				GUI_Settings.Universal_SetActionContent(whichTab, 5000)
+				ShowToolTip("Max value is 5000 milliseconds.")
+				tipWarn := True, actionContent := 1000
+			}
+		}
+		else if (actionShortName = "IGNORE_SIMILAR_TRADE") {
+			AutoTrimStr(actionContent)
+
+			if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
+				GUI_Settings.Universal_SetActionContent(whichTab, 10)
+				ShowToolTip("This value can only be an integer.")
+				tipWarn := True, actionContent := 10
 			}
 		}
 
@@ -2468,10 +2477,10 @@ Class GUI_Settings {
 		}
 
 		; Show a tooltip of current contet
-		if (!tipWarn) && (actionContent) && (actionContent != actionForcedContent)
-			ShowToolTip(actionContent)
+		; if (!tipWarn) && (actionContent) && (actionContent != actionForcedContent)
+			; ShowToolTip(actionContent)
 		
-		if (doAgainAfter500ms=True) {
+		if (doAgainAfter100ms=True) {
 			if (whichTab="Selling")
 				GoSub, GUI_Settings_Customization_Selling_OnActionContentChange_Timer
 			else if (whichTab="Buying")
@@ -2797,16 +2806,28 @@ Class GUI_Settings {
 	}
 
     Universal_SetActionType(whichTab, actionType, dontTriggerSub=True) {
-		global GuiSettings_Controls
+		global GuiSettings_Controls, ACTIONS_READONLY
 		actionTypeCtrlName := whichTab="Buying"?"hDDL_CustomizationBuyingActionType"
 			: whichTab="Selling"?"hDDL_CustomizationSellingActionType"
 			: whichTab="Hotkeys"?"hDDL_HotkeyActionType"
 			: ""
-		ctrlHwnd := GuiSettings_Controls[actionTypeCtrlName]
+		actionContentCtrlName := whichTab="Buying"?"hEDIT_CustomizationBuyingActionContent"
+			: whichTab="Selling"?"hEDIT_CustomizationSellingActionContent"
+			: whichTab="Hotkeys"?"hEDIT_HotkeyActionContent"
+			: ""
+		actionTypeHwnd := GuiSettings_Controls[actionTypeCtrlName]
+		actionContentHwnd := GuiSettings_Controls[actionContentCtrlName]
+
+		; Make read only if action is supposed to be
+		actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+		if IsIn(actionShortName, ACTIONS_READONLY)
+			GuiControl, Settings:+ReadOnly,% actionContentHwnd
+		else
+			GuiControl, Settings:-ReadOnly,% actionContentHwnd
 
 		if (dontTriggerSub)
 			GUI.DisableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
-		GuiControl, Settings:ChooseString,% ctrlHwnd,% actionType
+		GuiControl, Settings:ChooseString,% actionTypeHwnd,% actionType
 		if (dontTriggerSub)
 			GUI.EnableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
 	}
@@ -3263,99 +3284,99 @@ Class GUI_Settings {
 */
 
 GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions:
-	global SaveAllCurrentSellingActions_After500ms
+	global SaveAllCurrentSellingActions_After100ms
 	GUI_Settings.Customization_Selling_SaveAllCurrentButtonActions(isTimedSave:=True)
-	if (SaveAllCurrentSellingActions_After500ms=True) {
-		SaveAllCurrentSellingActions_After500ms := False
+	if (SaveAllCurrentSellingActions_After100ms=True) {
+		SaveAllCurrentSellingActions_After100ms := False
 		GoSub GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer_2
 	}
 return
 GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer:
-	global SaveAllCurrentSellingActions_After500ms
-	SaveAllCurrentSellingActions_After500ms := True
+	global SaveAllCurrentSellingActions_After100ms
+	SaveAllCurrentSellingActions_After100ms := True
 	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -100
 return
 GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions_Timer_2:
-	; Starts 500ms after saving to make sure save is ok
-	global SaveAllCurrentSellingActions_After500ms
+	; Starts 100ms after saving to make sure save is ok
+	global SaveAllCurrentSellingActions_After100ms
 	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Customization_Selling_SaveAllCurrentButtonActions, -100
 return
 
 GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions:
-	global SaveAllCurrentBuyingActions_After500ms
+	global SaveAllCurrentBuyingActions_After100ms
 	GUI_Settings.Customization_Buying_SaveAllCurrentButtonActions(isTimedSave:=True)
-	if (SaveAllCurrentBuyingActions_After500ms=True) {
-		SaveAllCurrentBuyingActions_After500ms := False
+	if (SaveAllCurrentBuyingActions_After100ms=True) {
+		SaveAllCurrentBuyingActions_After100ms := False
 		GoSub GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer_2
 	}
 return
 GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer:
-	global SaveAllCurrentBuyingActions_After500ms
-	SaveAllCurrentBuyingActions_After500ms := True
+	global SaveAllCurrentBuyingActions_After100ms
+	SaveAllCurrentBuyingActions_After100ms := True
 	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -100
 return
 GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions_Timer_2:
-	; Starts 500ms after saving to make sure save is ok
-	global SaveAllCurrentBuyingActions_After500ms
+	; Starts 100ms after saving to make sure save is ok
+	global SaveAllCurrentBuyingActions_After100ms
 	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, Delete
-	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -500
+	SetTimer, GUI_Settings_Customization_Buying_SaveAllCurrentButtonActions, -100
 return
 
 GUI_Settings_Hotkeys_SaveAllActions:
-	global SaveAllHotkeysActions_After500ms
+	global SaveAllHotkeysActions_After100ms
 	GUI_Settings.Universal_SaveAllActions("Hotkeys", isTimedSave:=True)
-	if (SaveAllHotkeysActions_After500ms=True) {
-		SaveAllHotkeysActions_After500ms := False
+	if (SaveAllHotkeysActions_After100ms=True) {
+		SaveAllHotkeysActions_After100ms := False
 		GoSub GUI_Settings_Hotkeys_SaveAllActions_Timer_2
 	}
 return
 GUI_Settings_Hotkeys_SaveAllActions_Timer:
-	global SaveAllHotkeysActions_After500ms
-	SaveAllHotkeysActions_After500ms := True
+	global SaveAllHotkeysActions_After100ms
+	SaveAllHotkeysActions_After100ms := True
 	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, Delete
-	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -500
+	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -100
 return
 GUI_Settings_Hotkeys_SaveAllActions_Timer_2:
-	; Starts 500ms after saving to make sure save is ok
-	global SaveAllHotkeysActions_After500ms
+	; Starts 100ms after saving to make sure save is ok
+	global SaveAllHotkeysActions_After100ms
 	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, Delete
-	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -500
+	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -100
 return
 
 
 GUI_Settings_Customization_Selling_OnActionContentChange:
-	GUI_Settings.Customization_Selling_OnActionContentChange(doAgainAfter500ms:=False)
+	GUI_Settings.Customization_Selling_OnActionContentChange(doAgainAfter100ms:=False)
 return
 GUI_Settings_Customization_Selling_OnActionContentChange_Timer:
 	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, Delete
-	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, -500
+	SetTimer, GUI_Settings_Customization_Selling_OnActionContentChange, -100
 return
 
 GUI_Settings_Customization_Buying_OnActionContentChange:
-	GUI_Settings.Customization_Buying_OnActionContentChange(doAgainAfter500ms:=False)
+	GUI_Settings.Customization_Buying_OnActionContentChange(doAgainAfter100ms:=False)
 return
 GUI_Settings_Customization_Buying_OnActionContentChange_Timer:
 	SetTimer, GUI_Settings_Customization_Buying_OnActionContentChange, Delete
-	SetTimer, GUI_Settings_Customization_Buying_OnActionContentChange, -500
+	SetTimer, GUI_Settings_Customization_Buying_OnActionContentChange, -100
 return
 
 GUI_Settings_Hotkeys_OnActionContentChange:
-	GUI_Settings.Universal_OnActionContentChange("Hotkeys", doAgainAfter500ms:=False)
+	GUI_Settings.Universal_OnActionContentChange("Hotkeys", doAgainAfter100ms:=False)
 return
 GUI_Settings_Hotkeys_OnActionContentChange_Timer:
 	SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
-	SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, -500
+	SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, -100
 return
 
 GUI_Settings_Hotkeys_OnHotkeyProfileNameChange:
-	GUI_Settings.TabHotkeys_OnHotkeyProfileNameChange(doAgainAfter500ms:=False)
+	GUI_Settings.TabHotkeys_OnHotkeyProfileNameChange(doAgainAfter100ms:=False)
 return
 GUI_Settings_Hotkeys_OnHotkeyProfileNameChange_Timer:
 	SetTimer, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange, Delete
-	SetTimer, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange, -500
+	SetTimer, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange, -100
 return
 
 
