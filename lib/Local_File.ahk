@@ -429,6 +429,11 @@ Update_LocalSettings_IniFile() {
 						INI.Remove(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" thisBtnActionsCount "_Content")
 						INI.Remove(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" thisBtnActionsCount "_Type")	
 					}
+					else if (loopedActionType = "IGNORE_SIMILAR_TRADE") {
+						INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_CONTENT", "10")
+						AppendToLogs(A_ThisFunc "(): Set 10 as IGNORE_SIMILAR_TRADE value to button:"
+						. "`n" "ID: """ cbIndex """ - Action index: """ loopActionIndex """")
+					}
 				}
 			}
 			else if (cbIndex > 20)
