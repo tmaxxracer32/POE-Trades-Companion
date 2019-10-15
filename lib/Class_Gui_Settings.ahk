@@ -293,23 +293,23 @@ Class GUI_Settings {
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationSellingInterfaceDisabledText Center Hidden", "This interface is disabled.`nTo enable, go in the Settings tab and change the mode.")
 
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow2 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow2 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow3 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow3 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationSellingButtonMinusRow4 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1", "Text|Icon")
-		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
-		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationSellingActionContent")
-		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationSellingActionTypeTip")
-		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1 Hidden", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName Hidden", "Button Name")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1 Hidden", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2 Hidden", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
+		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationSellingActionContent Hidden")
+		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationSellingActionTypeTip Hidden")
+		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10 Hidden", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationSellingActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -319,23 +319,23 @@ Class GUI_Settings {
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationBuyingInterfaceDisabledText Center Hidden", "This interface is disabled.`nTo enable, go in the Settings tab and change the mode.")
 
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow2", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow2", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow3", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow3", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow4", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow2 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow2 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow3 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow3 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y+3 wp hp hwndhBTN_CustomizationBuyingButtonMinusRow4 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1", "Text|Icon")
-		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
-		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationBuyingActionContent")
-		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationBuyingActionTypeTip")
-		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
+		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1 Hidden", "Text|Icon")
+		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName Hidden", "Button Name")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1 Hidden", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2 Hidden", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
+		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationBuyingActionContent Hidden")
+		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationBuyingActionTypeTip Hidden")
+		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10 Hidden", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationBuyingActionsList, "0x0b6fcc", "0xFFFFFF")
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -1274,10 +1274,10 @@ Class GUI_Settings {
 		btnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		guiName := "Trades" _buyOrSell "_Slot1"
-		
-		if ( IsBetween(rowNum, 1, 3) && (btnsCount=10) )
-		|| ( (rowNum=4) && (btnsCount=5))
-			return
+
+		if (rowNum=1 && btnsCount=5)
+		|| (IsBetween(rowNum, 2, 4) && btnsCount=10)
+			return		
 
 		GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]++ ; new var for buy sell TO_DO
 		newBtnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
@@ -1534,7 +1534,7 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Text")
 		Save_LocalSettings()
 
-		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
+		btnMax := rowNum=1 ? 5 : IsBetween(rowNum, 2, 4) ? 10 : 0
 		Loop % btnMax {
 			if (btnNum <= A_Index) { ; Otherwise it can't exist, eg: Num3 can't exist if Max2
 				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
@@ -1576,7 +1576,7 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Icon")
 		Save_LocalSettings()
 
-		btnMax := IsBetween(rowNum, 1, 3) ? 10 : rowNum=4 ? 5 : 0
+		btnMax := rowNum=1 ? 5 : IsBetween(rowNum, 2, 4) ? 10 : 0
 		Loop % btnMax {
 			if (btnNum <= A_Index) { ; Otherwise it can't exist, eg: Num3 can't exist if Max2
 				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
@@ -2914,14 +2914,14 @@ Class GUI_Settings {
 	ResetToDefaultSettings() {
 		global PROGRAM
 
-		boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_ConfirmResetToDefault, "%folder%", PROGRAM.MAIN_FOLDER)
+		boxTxt := StrReplace(PROGRAM.TRANSLATIONS.MessageBoxes.Settings_ConfirmResetToDefault, "%folder%", PROGRAM.TEMP_FOLDER)
 		MsgBox(4096+48+4, "", boxTxt)
 
 		IfMsgBox, Yes
 		{
 			settingsFile := PROGRAM.SETTINGS_FILE
-			SplitPath, settingsFile, fileName, folder
-			FileMove,% settingsFile,% folder "\" A_Now "_" fileName, 1
+			SplitPath, settingsFile, fileName
+			FileMove,% settingsFile,% PROGRAM.TEMP_FOLDER "\" A_Now "_" fileName, 1
 			Reload()
 		}
 	}

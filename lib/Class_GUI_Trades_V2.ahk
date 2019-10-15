@@ -238,16 +238,16 @@
 		TabContentSlot_H_Temp := twoTextLineSize+(20*borderSize)
 
 		guiIniSection := IsContaining(_buyOrSell, "Sell")?"SELL_INTERFACE":"BUY_INTERFACE"
-		buttonRowsCount := IsContaining(_buyOrSell, "Preview") ? 3
-			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_3.Buttons_Count ? 3
-			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_2.Buttons_Count ? 2
-			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_1.Buttons_Count ? 1
+		additionalRowsCount := IsContaining(_buyOrSell, "Preview") ? 3
+			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_4.Buttons_Count ? 3
+			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_3.Buttons_Count ? 2
+			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_2.Buttons_Count ? 1
 			: 0
 
         if (_guiMode="Stack") {
 			Gui%guiName%.Height_Minimized			:= guiMinimizedHeight := (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
-			Gui%guiName%.Height_Maximized 	 	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
-			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) )
+			Gui%guiName%.Height_Maximized 	 	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( additionalRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
+			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( additionalRowsCount*((25*scaleMult)+(5*scaleMult)) )
 			Gui%guiName%.Slot_Height				:= TabContentSlot_H := Gui%guiName%.Height_Maximized_OneSlot-guiMinimizedHeight-(22*scaleMult)
 			Gui%guiName%.Height_Maximized_TwoSlot 	:= Gui%guiName%.Height_Maximized_OneSlot + Gui%guiName%.Slot_Height
 			Gui%guiName%.Height_Maximized_ThreeSlot := Gui%guiName%.Height_Maximized_TwoSlot + Gui%guiName%.Slot_Height
@@ -262,7 +262,7 @@
         }
         else if (_guiMode="Tabs") {
             Gui%guiName%.Height_Minimized	:= guiMinimizedHeight 	:= (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
-			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( buttonRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
+			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( additionalRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
 			Gui%guiName%.Slot_Height		:= TabContentSlot_H 	:= guiFullHeight-guiMinimizedHeight-(22*scaleMult)
 			Gui%guiName%.Height 			:= guiMinimizedHeight
 			Gui%guiName%.Width 				:= guiFullWidth 		:= (398*scaleMult)+(2*borderSize)
@@ -558,9 +558,9 @@
 
 			Loop 4 { ; Max 4 rows
 				rowNum := A_Index
-				rowH := SmallButton_H, rowW := rowNum=4 ? TabContentSlot_W-SellerName_X-5 : TabContentSlot_W-(5+5)
-				row1Y := SmallButton_Y+rowH+5, row2Y := row1Y+rowH+5, row3Y := row2Y+rowH+5, row4Y := SmallButton_Y
-				rowX := IsBetween(rowNum, 1, 3) ? 6 : SmallButton_X, rowY := row%rowNum%Y
+				rowH := SmallButton_H, rowW := rowNum=1 ? TabContentSlot_W-SellerName_X-5 : TabContentSlot_W-(5+5)
+				row1Y := SmallButton_Y, row2Y := SmallButton_Y+rowH+5, row3Y := row2Y+rowH+5, row4Y := row3Y+rowH+5
+				rowX := IsBetween(rowNum, 2, 4) ? 6 : SmallButton_X, rowY := row%rowNum%Y
 
 				; Preview only - Creating row button and style
 				if (_isPreview=True) {				
@@ -586,7 +586,7 @@
 				userThisRowMaxCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
 				spaceBetweenBtns := 0
 				if (_isPreview) {
-					Loop % rowNum=4?5:10 {
+					Loop % rowNum=1?5:10 {
 						thisRowMaxCount := A_Index
 
 						Loop % thisRowMaxCount {
@@ -909,8 +909,8 @@
 		histfileObj[histfileObj.Count()+1] := ObjFullyClone(tabContent)
 
 		; Making backup of old file
-		SplitPath, histFile, fileName, fileFolder
-		FileMove,% histFile,% fileFolder "\" fileName ".bak", 1
+		SplitPath, histFile, fileName
+		FileMove,% histFile,% PROGRAM.TEMP_FOLDER "\" fileName ".bak", 1
 		; Setting content into the settings file
 		jsonText := JSON.Dump(histfileObj, "", "`t")
 		hFile := FileOpen(histFile, "w", "UTF-16")
@@ -2593,6 +2593,10 @@
 
 	SetTransparency_Inactive(_buyOrSell) {
 		global PROGRAM, GuiTrades
+
+		if IsContaining(_buyOrSell, "Preview")
+			return
+
 		transPercent := IsContaining(_buyOrSell, "Buy") ? 0 : PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency
 		GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, transPercent)
 		if (transPercent = 0)
@@ -2601,6 +2605,10 @@
 
 	SetTransparency_Active(_buyOrSell) {
 		global PROGRAM, GuiTrades
+
+		if IsContaining(_buyOrSell, "Preview")
+			return
+			
 		transPercent := PROGRAM.SETTINGS.SETTINGS_MAIN.TabsOpenTransparency
 		GUI_Trades_V2.SetTransparencyPercent(_buyOrSell, transPercent)
 	}
