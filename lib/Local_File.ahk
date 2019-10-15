@@ -962,7 +962,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 			}
 			else isValid := False
 
-			if (!isValid) {
+			if (!isValid && defaultSettingsObj.HasKey(k)) {
 				userSettingsObj[k] := defaultValue
 				GoSub LocalSettings_VerifyValuesValidity_AppendToLogs
 			}
