@@ -217,27 +217,27 @@ GGG_API_GetMatchingExchangeData(obj) {
             headers := "Content-Type:application/json;charset=UTF-8"
             options := "TimeOut: 25"
             . "`n"  "Charset: UTF-8"
-            WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+            WinHttpRequest_cURL(url, data:="", headers, options), html := data, resultsJson := JSON_Load(html)
 
             Loop % resultsListCount {
-                thisResult := jsonData.result[A_Index]
+                thisResult := resultsJson.result[A_Index]
                 isDataMatching := GGG_API_IsExchangeDataMatching(obj, {Ratio:thisResult.listing.price.exchange.amount / thisResult.listing.price.item.amount})
                 if (isDataMatching) {
                     matchingObj := {}
-                    matchingObj.1 := jsonData.result[A_Index]
+                    matchingObj.1 := resultsJson.result[A_Index]
                     Break
                 }
                 else {
                     matchIndex++
-                    matchingObj[matchIndex] := jsonData.result[A_Index]
+                    matchingObj[matchIndex] := resultsJson.result[A_Index]
                 }
             }
 
             if (isDataMatching)
                 Break
 
-            FileDelete, html.txt
-            FileAppend,% JSON.Beautify(jsonData), html.txt, utf-8
+            ; FileDelete, html.txt
+            ; FileAppend,% JSON.Beautify(resultsJson), html.txt, utf-8
             resultsIDList := 0, resultsIDList := ""
         }
     }
@@ -298,7 +298,7 @@ GGG_API_GetMatchingItemsData(obj) {
     headers := "Content-Type:application/json;charset=UTF-8"
     options := "TimeOut: 25"
     . "`n"  "Charset: UTF-8"
-    WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+    WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
     ; Making result list, retrieving individual items, then parsing those
     resultsListCount := 0, resultsIDList := ""
@@ -312,19 +312,19 @@ GGG_API_GetMatchingItemsData(obj) {
             headers := "Content-Type:application/json;charset=UTF-8"
             options := "TimeOut: 25"
             . "`n"  "Charset: UTF-8"
-            WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON.Load(html)
+            WinHttpRequest_cURL(url, data:="", headers, options), html := data, resultsJson := JSON_Load(html)
 
             Loop % resultsListCount {
-                loopedResult := jsonData.result[A_Index]
+                loopedResult := resultsJson.result[A_Index]
                 isDataMatching := GGG_API_IsItemDataMatching(obj, {StashTab:loopedResult.listing.stash.name, StashX:loopedResult.listing.stash.x+1, StashY:loopedResult.listing.stash.y+1})
                 if (isDataMatching) {
                     matchingObj := {}
-                    matchingObj.1 := jsonData.result[A_Index]
+                    matchingObj.1 := resultsJson.result[A_Index]
                     Break
                 }
                 else {
                     matchIndex++
-                    matchingObj[matchIndex] := jsonData.result[A_Index]
+                    matchingObj[matchIndex] := resultsJson.result[A_Index]
                 }
             }
 
