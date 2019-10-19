@@ -999,15 +999,17 @@ Class GUI_Settings {
 		sub := GuiSettings_Submit
 
 		iniSection := (saveAsCustom)?("SETTINGS_CUSTOMIZATION_SKINS_Custom"):("SETTINGS_CUSTOMIZATION_SKINS")
+		skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(sub.hLB_SkinBase)
 
 		PROGRAM.SETTINGS[iniSection].Preset := sub.hLB_SkinPreset
 		PROGRAM.SETTINGS[iniSection].Skin := sub.hLB_SkinBase
 		PROGRAM.SETTINGS[iniSection].Font := sub.hLB_SkinFont
-		PROGRAM.SETTINGS[iniSection].ScalingPercentage := sub.hEDIT_SkinScalingPercentage
-		PROGRAM.SETTINGS[iniSection].FontSize := sub.hEDIT_SkinFontSize
-		PROGRAM.SETTINGS[iniSection].FontQuality := sub.hEDIT_SkinFontQuality
-		PROGRAM.SETTINGS[iniSection].UseRecommendedFontSettings := sub.hCB_UseRecommendedFontSettings=0?"False":"True"
+		PROGRAM.SETTINGS[iniSection].ScalingPercentage := IsNum(sub.hEDIT_SkinScalingPercentage) ? sub.hEDIT_SkinScalingPercentage : 100
+		PROGRAM.SETTINGS[iniSection].FontSize := IsNum(sub.hEDIT_SkinFontSize) ? sub.hEDIT_SkinFontSize : skinDefSettings.FontSize
+		PROGRAM.SETTINGS[iniSection].FontQuality := IsNum(sub.hEDIT_SkinFontQuality) ? sub.hEDIT_SkinFontQuality : skinDefSettings.FontQuality
+		PROGRAM.SETTINGS[iniSection].UseRecommendedFontSettings := sub.hCB_UseRecommendedFontSettings=0 ? "False" : "True"
 
+		/*
 		if (saveAsCustom) {
 			skinDefSettings := Gui_Settings.TabCustomizationSkins_GetSkinDefaultSettings(sub.hLB_SkinBase)
 			userSkinSettings := Get_LocalSettings().SETTINGS_CUSTOMIZATION_SKINS_Custom
@@ -1020,6 +1022,7 @@ Class GUI_Settings {
 				}
 			}
 		}
+		*/
 
 		Save_LocalSettings()
 
@@ -1089,7 +1092,7 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_SetRecommendedFontSettings(checkState) {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
-		checkState := checkState="True"?1 : checkState="False"?0 : checkState
+		checkState := checkState=1 || checkState="True" ? 1 : checkState=0 || checkState="False" ? 0 : 1
 		GuiControl, Settings:,% GuiSettings_Controls.hCB_UseRecommendedFontSettings,% checkState
 		GUI_Settings.TabCustomizationSkins_SetFontSettingsState(GUI_Settings.Submit("hCB_UseRecommendedFontSettings"))
 	}

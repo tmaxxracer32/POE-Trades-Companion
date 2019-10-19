@@ -540,7 +540,7 @@ Convert_IniSettings_To_JsonSettings() {
 	; Now converting ini into json
 	Save_LocalSettings(newJsonSettings)
 	SplitPath, iniFile, fileName
-	; FileMove,% iniFile,% PROGRAM.TEMP_FOLDER "\" A_Now "_" fileName, 1
+	FileMove,% iniFile,% PROGRAM.TEMP_FOLDER "\" A_Now "_" fileName, 1
 }
 
 Get_LocalSettings_DefaultValues() {
