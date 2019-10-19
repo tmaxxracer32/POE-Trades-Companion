@@ -238,7 +238,7 @@ Get_SkinAssetsAndSettings() {
 	global PROGRAM
 
 	presetName := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Preset
-	skinName := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Skin
+	skinName := presetName="Custom" ? PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom.Skin : PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Skin
 	skinFolder := PROGRAM.SKINS_FOLDER "\" skinName
 	skinAssetsFile := PROGRAM.SKINS_FOLDER "\" skinName "\Assets.ini"
 	skinSettingsFile := PROGRAM.SKINS_FOLDER "\" skinName "\Settings.ini"
@@ -260,15 +260,25 @@ Get_SkinAssetsAndSettings() {
 	}
 
 	skinSettings := {}
-	if (presetName = "Custom") {
-		userSkinSettings := INI.Get(iniFile, "SETTINGS_CUSTOMIZATION_SKINS_Custom",, 1)
-		skinSettings.FONT := {}
-		skinSettings.COLORS := {}
+	skinSettingsFile := PROGRAM.SKINS_FOLDER "\" skinName "\Settings.ini"
+	iniSections := INI.Get(skinSettingsFile)
+	Loop, Parse, iniSections, `n, `r
+	{
+		skinSettings[A_LoopField] := {}
+		keysAndValues := INI.Get(skinSettingsFile, A_LoopField,, 1)
 
+		for key, value in keysAndValues {
+			skinSettings[A_LoopField][key] := value
+		}
+	}
+
+	if (presetName = "Custom") {
+		userSkinSettings := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom
 		skinSettings.FONT.Name := userSkinSettings.Font
 		skinSettings.FONT.Size := userSkinSettings.FontSize
 		skinSettings.FONT.Quality := userSkinSettings.FontQuality
 
+		/*
 		for iniKey, iniValue in userSkinSettings {
 			iniKeySubStr := SubStr(iniKey, 1, 6)
 			if (iniKeySubStr = "Color_" ) {
@@ -276,20 +286,10 @@ Get_SkinAssetsAndSettings() {
 				skinSettings.COLORS[iniKeyRestOfStr] := iniValue
 			}
 		}
+		*/
 	}
-	else {
-		skinSettingsFile := PROGRAM.SKINS_FOLDER "\" skinName "\Settings.ini"
-		iniSections := INI.Get(skinSettingsFile)
-		Loop, Parse, iniSections, `n, `r
-		{
-			skinSettings[A_LoopField] := {}
-			keysAndValues := INI.Get(skinSettingsFile, A_LoopField,, 1)
 
-			for key, value in keysAndValues {
-				skinSettings[A_LoopField][key] := value
-			}
-		}
-	}
+
 
 	Skin := {}
 	Skin.Preset := presetName

@@ -189,7 +189,7 @@
         global GuiTradesBuy, GuiTradesBuy_Controls
         global GuiTradesSell, GuiTradesSell_Controls
 		static AllStyles, AllStylesData
-        scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100
+        scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100, scaleMult := _isPreview ? 1 : scaleMult
         windowsDPI := Get_DpiFactor()
         _tabsToRender := IsNum(_tabsToRender)?_tabsToRender:50
 		

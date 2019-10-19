@@ -1129,15 +1129,18 @@ Class GUI_Settings {
 	TabCustomizationSkins_RecreateTradesGUI() {
 		global PROGRAM
 
+		Gui, Settings:+Disabled
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Msg)
 		UpdateHotkeys()
 		Declare_SkinAssetsAndSettings()
 		; Gui_TradesMinimized.Create()
 		GUI_Trades_V2.RecreateGUI("Buy")
 		GUI_Trades_V2.RecreateGUI("Sell")
+		GUI_Trades_V2.CreatePreview("Sell", PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
+		GUI_Trades_V2.CreatePreview("Buy", PROGRAM.SETTINGS.BUY_INTERFACE.Mode)
+		Sleep 500
+		Gui, Settings:-Disabled
 	}
-
-
 
 	TabCustomizationSkins_OnFontChange() {
 		global PROGRAM, GuiSettings, GuiSettings_Controls
