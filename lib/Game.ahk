@@ -226,12 +226,15 @@ Get_RunningInstances() {
 	runningInstances := {}
 	runningInstances.Count := 0
 
+	matchingHwnd := "",	hiddenWin := A_DetectHiddenWindows
+	DetectHiddenWindows, Off
 	for id, pName in POEGameArr {
 		hwndList := Get_Windows_ID(pName, "ahk_exe")
 		if (hwndList) {
 			matchingHwnd .= hwndList ","
 		}
 	}
+	DetectHiddenWindows, %hiddenWin%
 	StringTrimRight, matchingHwnd, matchingHwnd, 1
 
 	Loop, Parse, matchingHwnd,% ","

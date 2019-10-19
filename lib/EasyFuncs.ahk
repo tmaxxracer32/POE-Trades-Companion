@@ -602,12 +602,13 @@ Get_Windows_List(_filter, _filterType, _delimiter, _what) {
 	WinGet, winHwnds, List
 	Loop, %winHwnds% {
 		loopField := winHwnds%A_Index%
+		WinGetTitle, winTitle, %filter% ahk_id %loopField%
 		if (_what = "Title")
-			WinGetTitle, value, %filter% ahk_id %loopField%
+			value := winTitle
 		else 
 			WinGet, value, %Cmd%, %filter% ahk_id %loopField%
 
-		if (value) && !IsIn(value, valuesList) {
+		if (value) && !IsIn(value, valuesList) && !IsIn(winTitle, "MSCTFIME UI,Default IME") {
 			valuesList := (valuesList)?(valuesList "," value):(value)
 
 			if IsIn(_delimiter, "Array,[]")
