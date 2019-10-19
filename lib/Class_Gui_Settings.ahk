@@ -1274,6 +1274,7 @@ Class GUI_Settings {
 		btnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		guiName := "Trades" _buyOrSell "_Slot1"
+		guiSkin := GuiTrades[_buyOrSell].Skin
 
 		if (rowNum=1 && btnsCount=5)
 		|| (IsBetween(rowNum, 2, 4) && btnsCount=10)
@@ -1298,16 +1299,16 @@ Class GUI_Settings {
 			btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 			btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 			styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
-			if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
+			if !IsObject(GuiTrades.AllStyles[guiSkin][styleName]) && (skipCreateStyle=False) {
 				style%styleName%DidntExist := True
-				GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.Styles, styleName, btnIcon?btnIcon:btnName)
+				GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.AllStyles[guiSkin], styleName, btnIcon?btnIcon:btnName)
 			}
 			if (style%styleName%DidntExist && btnIcon)
-				Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				Gui.ImageButtonUpdate(btnHwnd, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			else if (style%styleName%DidntExist && btnName)
-				Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			else if (style%styleName%DidntExist && !btnIcon && !btnName)
-				Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				
 			GuiControl, %guiName%:Show,% btnHwnd
 		}
@@ -1324,6 +1325,7 @@ Class GUI_Settings {
 		btnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
 		guiName := "Trades" _buyOrSell "_Slot1"
+		guiSkin := GuiTrades[_buyOrSell].Skin
 		
 		if (!btnsCount)
 			return
@@ -1345,16 +1347,16 @@ Class GUI_Settings {
 				btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 				styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" newBtnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
-				if !IsObject(GuiTrades.Styles[styleName]) && (skipCreateStyle=False) {
+				if !IsObject(GuiTrades.AllStyles[guiSkin][styleName]) && (skipCreateStyle=False) {
 					style%styleName%DidntExist := True
-					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.Styles, styleName, btnIcon?btnIcon:btnName)
+					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, btnIcon?"Icon":"Text", GuiTrades.AllStyles[guiSkin], styleName, btnIcon?btnIcon:btnName)
 				}
 				if (style%styleName%DidntExist && btnIcon)
-					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				else if (style%styleName%DidntExist && btnName)
-					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				else if (style%styleName%DidntExist && !btnIcon && !btnName)
-					Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 
 				GuiControl, %guiName%:Show,% btnHwnd
 			}
@@ -1513,6 +1515,7 @@ Class GUI_Settings {
 		ddlHwnd := GuiSettings_Controls["hDDL_Customization" whichTab "ButtonIcon"]
 		ddlContent := GUI_Settings.Submit("hDDL_Customization" whichTab "ButtonIcon")
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
+		guiSkin := GuiTrades[_buyOrSell].Skin
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1540,10 +1543,10 @@ Class GUI_Settings {
 				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
 				btnIcon := ddlContent
 				styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnMax, styleName .= "_Icon_" btnIcon
-				if !IsObject(GuiTrades.Styles[styleName]) 
-					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Icon", GuiTrades.Styles, styleName, btnIcon)
+				if !IsObject(GuiTrades.AllStyles[guiSkin][styleName]) 
+					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Icon", GuiTrades.AllStyles[guiSkin], styleName, btnIcon)
 				else
-					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			}
 		}
 	}
@@ -1555,6 +1558,7 @@ Class GUI_Settings {
 		editBoxHwnd := GuiSettings_Controls["hEDIT_Customization" whichTab "ButtonName"]
 		editBoxContent := GUI_Settings.Submit("hEDIT_Customization" whichTab "ButtonName")
 		guiIniSection := whichTab="Selling"?"SELL_INTERFACE":"BUY_INTERFACE"
+		guiSkin := GuiTrades[_buyOrSell].Skin
 
 		; Getting activated button variables
 		rowNum := GuiSettings.CUSTOM_BUTTON_SELECTED_ROW
@@ -1582,10 +1586,10 @@ Class GUI_Settings {
 				btnMax := A_Index, btnHwnd := GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnMax "Num" btnNum]
 				btnName := editBoxContent
 				styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnMax, styleName .= "_Text"
-				if !IsObject(GuiTrades.Styles[styleName])
-					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Text", GuiTrades.Styles, styleName, btnName)
+				if !IsObject(GuiTrades.AllStyles[guiSkin][styleName])
+					GUI_Trades_V2.CreateGenericStyleAndUpdateButton(btnHwnd, "Text", GuiTrades.AllStyles[guiSkin], styleName, btnName)
 				else
-					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			}
 		}
 	}

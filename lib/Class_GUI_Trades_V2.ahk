@@ -368,10 +368,9 @@
 		if !IsObject(AllStyles)
 			AllStyles := {}, AllStylesData := {}
 		if !IsObject(AllStyles[SKIN.Skin])
-			AllStyles[SKIN.Skin] := GUI_Trades_V2.Get_Styles(), AllStylesData[SKIN.Skin] := {}
+			AllStyles[SKIN.Skin] := GUI_Trades_V2.Get_Styles()
 
 		Styles := ObjFullyClone(AllStyles[SKIN.Skin])
-		StylesData := ObjFullyClone(AllStylesData[SKIN.Skin])
 
         ; = = Borders
         if (_guiMode="Stack") {
@@ -570,11 +569,11 @@
 							; otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
 							; if IsObject(Styles[otherRowStyleName]) {
 							; 	Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
-							; 	StylesData[styleName] := ObjFullyClone(StylesData[otherRowStyleName])
+							; 	AllStylesData[styleName] := ObjFullyClone(AllStylesData[otherRowStyleName])
 							; }
 							; else {
 								GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, rowW, rowH)
-								StylesData[styleName] := {Width:rowW, height:rowH}
+								AllStylesData[styleName] := {Width:rowW, height:rowH}
 							; }
 						; }
 					}					
@@ -602,24 +601,24 @@
 							; 	otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
 							; 	if IsObject(Styles[otherRowStyleName]) {
 							; 		Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
-							; 		StylesData[styleName] := ObjFullyClone(StylesData[otherRowStyleName])
+							; 		AllStylesData[styleName] := ObjFullyClone(AllStylesData[otherRowStyleName])
 							; 	}
 							; 	else {
 									if (btnIcon)
 										GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
 									else
 										GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
-									StylesData[styleName] := {Width:btnWidth, height:btnHeight}
+									AllStylesData[styleName] := {Width:btnWidth, height:btnHeight}
 							; 	}
 							}
 
 							; Preview only - Button size data, used to create imagebuttons later
 							if (_isPreview) {
-								if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"])
-									StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"] := {Width:btnWidth, height:btnHeight}
+								if !IsObject(AllStylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"])
+									AllStylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Text"] := {Width:btnWidth, height:btnHeight}
 								for iconName, iconFile in SKIN.Assets.Icons
-									if !IsObject(StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName])
-										StylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName] := {Width:btnWidth, height:btnHeight}
+									if !IsObject(AllStylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName])
+										AllStylesData["CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount "_Icon_" iconName] := {Width:btnWidth, height:btnHeight}
 							}
 
 							if (_isPreview && btnsCount != userThisRowMaxCount)
@@ -644,14 +643,14 @@
 							; otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
 							; if IsObject(Styles[otherRowStyleName]) {
 							; 	Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
-							; 	StylesData[styleName] := ObjFullyClone(StylesData[otherRowStyleName])
+							; 	AllStylesData[styleName] := ObjFullyClone(AllStylesData[otherRowStyleName])
 							; }
 							; else {
 								if (btnIcon)
 									GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
 								else
 									GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
-								StylesData[styleName] := {Width:btnWidth, height:btnHeight}
+								AllStylesData[styleName] := {Width:btnWidth, height:btnHeight}
 							; }
 						}
 
@@ -701,7 +700,8 @@
         if !IsObject(GuiTrades_Controls)
             GuiTrades_Controls := {}
 	    GuiTrades[_buyOrSell] := Gui%guiName%, GuiTrades_Controls[_buyOrSell] := Gui%guiName%_Controls
-		GuiTrades.Styles := Styles, GuiTrades.StylesData := StylesData
+		AllStyles[SKIN.Skin] := ObjFullyClone(Styles)
+		GuiTrades.AllStyles := ObjFullyClone(AllStyles), GuiTrades.AllStylesData := ObjFullyClone(AllStylesData)
 
 		if (_isPreview) {
 			showHeight := _guiMode="Stack" ? Gui%guiName%.Height_Maximized_OneSlot : Gui%guiName%.Height_Maximized
@@ -2660,7 +2660,7 @@
 
 	CreateGenericStyleAndUpdateButton(btnHwnd, btnType, ByRef Styles, styleName, iconOrText="") {
 		global GuiTrades, PROGRAM
-		width := GuiTrades.StylesData[styleName].Width, height := GuiTrades.StylesData[styleName].Height
+		width := GuiTrades.AllStylesData[styleName].Width, height := GuiTrades.AllStylesData[styleName].Height
 		if (btnType="Icon") {
 			ret := GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, width, height, iconOrText)
 			Gui.ImageButtonUpdate(btnHwnd, Styles[styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
