@@ -410,7 +410,8 @@ Update_LocalSettings_IniFile() {
 					else if (loopedActionType = "WRITE_THEN_GO_BACK") {
 						loopedActionContent := StrReplace(loopedActionContent, "{X}", "%goBackHere%")
 						INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_CONTENT", loopedActionContent)
-						AppendToLogs(A_ThisFunc "(): Replaced {X} with %goBackHere% to button:"
+						INI.Set(iniFile, "SETTINGS_CUSTOM_BUTTON_" cbIndex, "Action_" loopActionIndex "_TYPE", "WRITE_MSG")
+						AppendToLogs(A_ThisFunc "(): Replaced WRITE_THEN_GO_BACK to WRITE_MSG and {X} to %goBackHere% to button:"
 						. "`n" "ID: """ cbIndex """ - Action index: """ loopActionIndex """")
 					}
 					else if (loopedActionType = "SHOW_GRID") {

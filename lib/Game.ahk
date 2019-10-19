@@ -151,26 +151,10 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 		SendEvent,{Enter}
 	}
 	else if (actionType = "WRITE_DONT_SEND") {
-		While (Clipboard != msgString) {
-			Set_Clipboard(msgString)
-
-			if (Clipboard = msgString)
-				break
-
-			else if (A_Index > 100) {
-				err := True
-				break
-			}
-			Sleep 50
+		if IsContaining(msgString, "%goBackHere%") {
+			foundPos := InStr(msgString, "%goBackHere%"), _strLen := StrLen(msgString), leftPresses := _strLen-foundPos+1-StrLen("%goBackHere%")
+			msgString := StrReplace(msgString, "%goBackHere%", "")
 		}
-		if (!err)
-			SendEvent, ^{sc02F}
-		else
-			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-	}
-	else if (actionType = "WRITE_GO_BACK") {
-		foundPos := InStr(msgString, "{X}"), _strLen := StrLen(msgString), leftPresses := _strLen-foundPos+1-3
-		msgString := StrReplace(msgString, "{X}", "")
 
 		While (Clipboard != msgString) {
 			Set_Clipboard(msgString)
@@ -184,13 +168,13 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 			}
 			Sleep 50
 		}
-		if (!err)
+		if (!err) {
 			SendEvent, ^{sc02F}
+			if (leftPresses)
+				SendInput {Left %leftPresses%}
+		}
 		else
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-
-		if (!err)
-			SendInput {Left %leftPresses%}
 	}
 
 	SetTitleMatchMode, %titleMatchMode%
