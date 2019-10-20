@@ -105,8 +105,7 @@ Tray_OpenStats() {
 Tray_ModeWindow() {
 	global PROGRAM
 
-	GUI_Trades_V2.Use_WindowMode("Sell")
-	GUI_Trades_V2.Use_WindowMode("Buy")
+	GUI_Trades_V2.Use_WindowMode()
 	Tray_ToggleLockPosition("Uncheck")
 	Declare_LocalSettings()
 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ModeWindowEnabled_Title, PROGRAM.TRANSLATIONS.TrayNotifications.ModeWindowEnabled_Msg)

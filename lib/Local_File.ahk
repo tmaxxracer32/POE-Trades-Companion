@@ -648,6 +648,8 @@ Get_LocalSettings_DefaultValues() {
 
 			"SELL_INTERFACE": {
 				"Mode": "Tabs",
+				"Pos_X": "0",
+				"Pos_Y": "0",
 				"CUSTOM_BUTTON_ROW_1": {
 					"Buttons_Count": 4,
 					"1": {
@@ -788,6 +790,8 @@ Get_LocalSettings_DefaultValues() {
 			},
 			"BUY_INTERFACE": {
 				"Mode": "Stack",
+				"Pos_X": "405",
+				"Pos_Y": "0",
 				"CUSTOM_BUTTON_ROW_1": {
 					"Buttons_Count": 4,
 					"1": {

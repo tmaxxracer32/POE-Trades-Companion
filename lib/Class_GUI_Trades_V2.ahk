@@ -796,8 +796,6 @@
 		; Creating the menu
 		try Menu, RClickMenu, DeleteAll
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition, GUI_Trades_V2_ContextMenu_LockPosition
-		if (_buyOrSell)
-			Menu, RClickMenu, Add, Expand upwards?, GUI_Trades_V2_ContextMenu_ExpandUpwardsToggle
 		Menu, RClickMenu, Add
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
@@ -818,13 +816,8 @@
 			Menu,Tray,Show
 		return
 
-		GUI_Trades_V2_ContextMenu_ExpandUpwardsToggle:
-			TrayNotifications.Show("""Expand upwards""", "Feature not added yet")
-			SetTimer, RemoveToolTip, -2000
-		return
-
 		GUI_Trades_V2_ContextMenu_LockPosition:
-			Tray_ToggleLockPosition(_buyOrSell)
+			Tray_ToggleLockPosition()
 		Return
 
 		GUI_Trades_V2_ContextMenu_CloseAllTabs:
@@ -1834,19 +1827,24 @@
 
     ResetPosition(_buyOrSell, dontWrite=False) {
 		global PROGRAM, GuiTrades
+		windowsDPI := GuiTrades[_buyOrSell].Windows_DPI
+		scaleMult := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.ScalingPercentage / 100
 
 		if (GuiTrades[_buyOrSell].Is_Minimized)
 			GUI_Trades_V2.Maximize(_buyOrSell)
 
+		/*
 		gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
-
-		; try {
-			; Gui.Show("Trades" _buyOrSell, "x" Ceil(A_ScreenWidth-gtPos.W) " y0 NoActivate")
-		; }
-		; catch e {
-			; AppendToLogs(A_ThisFunc "(dontWrite=" dontWrite "): Failed to set GUI pos based on screen width. Setting to 0,0.")
+		try {
+			Gui.Show("Trades" _buyOrSell, "x" Ceil(A_ScreenWidth-gtPos.W) " y0 NoActivate")
+		}
+		catch e {
+			AppendToLogs(A_ThisFunc "(dontWrite=" dontWrite "): Failed to set GUI pos based on screen width. Setting to 0,0.")
 			Gui.Show("Trades" _buyOrSell, "x0 y0 NoActivate")
-		; }
+		}
+		*/
+		defaultSettings := Get_LocalSettings_DefaultValues()
+		Gui.Show("Trades" _buyOrSell, "x" defaultSettings[_buyOrSell "_INTERFACE"].Pos_X*windowsDPI*scaleMult " y" defaultSettings[_buyOrSell "_INTERFACE"].Pos_Y*windowsDPI*scaleMult " NoActivate")
 		if (dontWrite=False)
 			GUI_Trades_V2.SavePosition(_buyOrSell)
 	}
