@@ -908,8 +908,10 @@
 		}
 
 		histFile := _buyOrSell="Buy" ? PROGRAM.TRADES_BUY_HISTORY_FILE : PROGRAM.TRADES_SELL_HISTORY_FILE
-		if !histfileObj := JSON_Load(histFile)
-			histfileObj := []
+		if !FileExist(histFile)
+			histfileObj := {}
+		else
+			histfileObj := JSON_Load(histFile)
 		histfileObj[histfileObj.Count()+1] := ObjFullyClone(tabContent)
 
 		; Making backup of old file
