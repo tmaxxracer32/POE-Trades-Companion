@@ -587,15 +587,21 @@
 				}
 				; Creating buttons
 				userThisRowMaxCount := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count
-				spaceBetweenBtns := 0
+				spaceBetweenBtns := 4
 				if (_isPreview) {
 					Loop % rowNum=1?5:10 {
 						thisRowMaxCount := A_Index
 
 						Loop % thisRowMaxCount {
 							btnsCount := thisRowMaxCount, btnNum := A_Index
-							btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
-							btnWidth := Floor( (rowW/btnsCount) ), btnHeight := rowH
+							if ( Mod(btnNum, 2) = 0 ) {
+								btnX := btnNum=1?rowX:"+"Floor(spaceBetweenBtns/2), btnY := rowY
+								btnWidth := Floor(rowW/btnsCount), btnWidth := btnsCount>1 ? btnWidth - Floor(spaceBetweenBtns/2) : btnWidth, btnHeight := rowH
+							}
+							else {
+								btnX := btnNum=1?rowX:"+"Ceil(spaceBetweenBtns/2), btnY := rowY
+								btnWidth := Ceil(rowW/btnsCount), btnWidth := btnsCount>1 ? btnWidth - Ceil(spaceBetweenBtns/2) : btnWidth, btnHeight := rowH
+							}
 							btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 							btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 							styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
@@ -636,8 +642,14 @@
 				else {
 					Loop % userThisRowMaxCount {
 						btnsCount := userThisRowMaxCount, btnNum := A_Index
-						btnX := btnNum=1?rowX:"+" spaceBetweenBtns, btnY := rowY
-						btnWidth := Floor( (rowW/btnsCount) ), btnHeight := rowH
+						if ( Mod(btnNum, 2) = 0 ) {
+							btnX := btnNum=1?rowX:"+"Floor(spaceBetweenBtns/2), btnY := rowY
+							btnWidth := Floor(rowW/btnsCount), btnWidth := btnsCount>1 ? btnWidth - Floor(spaceBetweenBtns/2) : btnWidth, btnHeight := rowH
+						}
+						else {
+							btnX := btnNum=1?rowX:"+"Ceil(spaceBetweenBtns/2), btnY := rowY
+							btnWidth := Ceil(rowW/btnsCount), btnWidth := btnsCount>1 ? btnWidth - Ceil(spaceBetweenBtns/2) : btnWidth, btnHeight := rowH
+						}
 						btnName := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text
 						btnIcon := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon
 						styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"

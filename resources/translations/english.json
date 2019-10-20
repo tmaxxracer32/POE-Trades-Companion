@@ -326,7 +326,6 @@
         "TEXT_NAME" : {
 			"SEND_MSG" : "Send a message into chat",
 			"WRITE_MSG" : "Write a message into chat without sending",
-			"WRITE_THEN_GO_BACK" : "Write without sending and go back to %goBackHere%",
 
 			"APPLY_ACTIONS_TO_BUY_INTERFACE": "Apply following actions to the Buying Interface",
 			"APPLY_ACTIONS_TO_SELL_INTERFACE": "Apply following actions to the Selling Interface",
@@ -352,8 +351,7 @@
 
         "TIPS" : {
 			"SEND_MSG" : "Send a message into the chat. Can be used with <a id=\"TradingVariables\">Trading Variables</a>.",
-			"WRITE_MSG" : "Write a message into the chat without sending it. Can be used with <a id=\"TradingVariables\">Trading Variables</a>.",
-			"WRITE_THEN_GO_BACK" : "Write a message into chat without sending, and go back to %goBackHere%. This allows to change the message on-the-fly, by manually inputing how many maps you have for example. Can be used with <a id=\"TradingVariables\">Trading Variables</a>.",
+			"WRITE_MSG" : "Write a message into the chat without sending it. If %goBackHere% is included, the cursor will be set at that position; it allows to change the message on-the-fly (by manually inputing how many maps you have for example). Can be used with <a id=\"TradingVariables\">Trading Variables</a>.",
 
 			"APPLY_ACTIONS_TO_BUY_INTERFACE": "Any actions following this action will be applied to the Buying Interface.",
 			"APPLY_ACTIONS_TO_SELL_INTERFACE": "Any actions following this action will be applied to the Selling Interface",
