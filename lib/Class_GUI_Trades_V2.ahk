@@ -221,22 +221,16 @@
         Gui%guiName%.Windows_DPI := windowsDPI
 
         ; = = Define font name and size
-        settingsSkinPreset := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Preset, useRecommendedFontSettings := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.UseRecommendedFontSettings
-        userCustomCopy := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom)
-        guifontName := settingsSkinPreset="Custom" && useRecommendedFontSettings!="1" ? userCustomCopy.Font : SKIN.Settings.FONT.Name
-        guifontSize := settingsSkinPreset="Custom" && useRecommendedFontSettings!="1" ? userCustomCopy.FontSize : SKIN.Settings.FONT.Size
-        guifontQual := settingsSkinPreset="Custom" && useRecommendedFontSettings!="1" ? userCustomCopy.FontQuality : SKIN.Settings.FONT.Quality
+        skinPreset := PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS.Preset, skinSettings := skinPreset="Custom" ? PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS_Custom : PROGRAM.SETTINGS.SETTINGS_CUSTOMIZATION_SKINS
+        guifontName := skinSettings.Font
+        guifontSize := skinSettings.FontSize*scaleMult
+        guifontQual := skinSettings.FontQuality
         Gui.Font(guiName, guifontName, guifontSize, guifontQual) 
         Gui.Color(guiName, SKIN.Assets.Misc.Transparency_Color)
         Gui.Margin(guiName, 0, 0)
         guifontName := guifontSize := guifontQual := useRecommendedFontSettings := useRecommendedFontSettings := userCustomCopy := ""
 
         ; = = Define general gui size
-        borderSize := Floor(1*scaleMult), borderSize := borderSize >= 1 ? borderSize : 1
-        oneTextLineSize := Get_TextCtrlSize("SomeText", Gui%guiName%.Font, Gui%guiName%.Font_Size, "", "R1").H
-        twoTextLineSize := oneTextLineSize*2
-		TabContentSlot_H_Temp := twoTextLineSize+(20*borderSize)
-
 		guiIniSection := IsContaining(_buyOrSell, "Sell")?"SELL_INTERFACE":"BUY_INTERFACE"
 		additionalRowsCount := IsContaining(_buyOrSell, "Preview") ? 3
 			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_4.Buttons_Count ? 3
@@ -244,11 +238,19 @@
 			: PROGRAM.SETTINGS[guiIniSection].CUSTOM_BUTTON_ROW_2.Buttons_Count ? 1
 			: 0
 
+        borderSize := Floor(1*scaleMult), borderSize := borderSize >= 1 ? borderSize : 1
+        oneTextLineSize := Get_TextCtrlSize("SomeText", PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size, "", "R1").H
+		TabContentSlot_H := borderSize+(5*scaleMult)+oneTextLineSize+(5*scaleMult)+(25*scaleMult)+(5*scaleMult) ; minimal required // 25 = custom button height
+		if (additionalRowsCount) {
+			TabContentSlot_H := TabContentSlot_H + (additionalRowsCount*(25*scaleMult))
+			TabContentSlot_H := TabContentSlot_H + (additionalRowsCount*(5*scaleMult))
+		}
+		
         if (_guiMode="Stack") {
-			Gui%guiName%.Height_Minimized			:= guiMinimizedHeight := (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
-			Gui%guiName%.Height_Maximized 	 	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( additionalRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
-			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( additionalRowsCount*((25*scaleMult)+(5*scaleMult)) )
-			Gui%guiName%.Slot_Height				:= TabContentSlot_H := Gui%guiName%.Height_Maximized_OneSlot-guiMinimizedHeight-(22*scaleMult)
+			Gui%guiName%.Height_Minimized			:= guiMinimizedHeight 	:= (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
+			Gui%guiName%.Height_Maximized 			:= guiFullHeight		:= (guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H) ; 22=header2
+			Gui%guiName%.Height_Maximized_OneSlot 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H )
+			Gui%guiName%.Slot_Height				:= TabContentSlot_H
 			Gui%guiName%.Height_Maximized_TwoSlot 	:= Gui%guiName%.Height_Maximized_OneSlot + Gui%guiName%.Slot_Height
 			Gui%guiName%.Height_Maximized_ThreeSlot := Gui%guiName%.Height_Maximized_TwoSlot + Gui%guiName%.Slot_Height
 			Gui%guiName%.Height_Maximized_FourSlot 	:= guiFullHeight := Gui%guiName%.Height_Maximized_ThreeSlot + Gui%guiName%.Slot_Height
@@ -258,12 +260,13 @@
 			guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
             upMost := borderSize, downMost := guiHeight+borderSize
-			TabContentSlot_W := guiWidth-(15*scaleMult) ; 15=CloseTabVertical_W
+			TabContentSlot_W := guiWidth
+			TabContentAvailableWidth := TabContentSlot_W-(15*scaleMult) ; 15=CloseTabVertical_W
         }
         else if (_guiMode="Tabs") {
             Gui%guiName%.Height_Minimized	:= guiMinimizedHeight 	:= (borderSize)+(30*scaleMult)+(borderSize) ; 30=header
-			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H_Temp+(5*scaleMult) ) + ( additionalRowsCount*((25*scaleMult)+(5*scaleMult)) ) ; 22=header2, 25=btnHeight, 5=spacing
-			Gui%guiName%.Slot_Height		:= TabContentSlot_H 	:= guiFullHeight-guiMinimizedHeight-(22*scaleMult)
+			Gui%guiName%.Height_Maximized 	:= guiFullHeight	 	:= ( guiMinimizedHeight+(22*scaleMult)+TabContentSlot_H ) ; 22=header2
+			Gui%guiName%.Slot_Height		:= TabContentSlot_H
 			Gui%guiName%.Height 			:= guiMinimizedHeight
 			Gui%guiName%.Width 				:= guiFullWidth 		:= (398*scaleMult)+(2*borderSize)
 
@@ -271,6 +274,7 @@
             leftMost := borderSize, rightMost := guiWidth+borderSize ; +bordersize bcs of left border
             upMost := borderSize, downMost := guiHeight+borderSize
 			TabContentSlot_W := guiWidth
+			TabContentAvailableWidth := TabContentSlot_W
         }
 
         ; = = Define general gui slots
@@ -316,7 +320,7 @@
 
             TabButton1_Y := TabsBackground_Y, TabButton1_W := 39*scaleMult, TabButton1_H := TabsBackground_H
             Loop % maxTabsToShow
-                Gui%guiName%["TabButton" A_Index "_X"] := xpos := TabButton%A_Index%_X := A_Index=1 ? TabsBackground_X : xpos+TabButton1_W+1
+                Gui%guiName%["TabButton" A_Index "_X"] := xpos := TabButton%A_Index%_X := A_Index=1 ? TabsBackground_X : xpos+TabButton1_W+(1*scaleMult)
         }
 
             ; Tabs content
@@ -326,7 +330,7 @@
 			Time_W := (Time_W > txtCtrlSize.W)?(Time_W):(txtCtrlSize.W)
 		}
 
-        BackgroundImg_X := 0, BackgroundImg_Y := 0, BackgroundImg_W := Ceil(TabContentSlot_W*windowsDPI)*scaleMult, BackgroundImg_H := Ceil(TabcontentSlot_H*windowsDPI)*scaleMult
+        BackgroundImg_X := 0, BackgroundImg_Y := 0, BackgroundImg_W := Ceil(TabContentAvailableWidth*windowsDPI)*scaleMult, BackgroundImg_H := Ceil(TabcontentSlot_H*windowsDPI)*scaleMult
 
         CloseTabVertical_W := 15*scaleMult, CloseTabVertical_H := TabContentSlot_H, CloseTabVertical_X := rightMost-CloseTabVertical_W, CloseTabVertical_Y := 0
 
@@ -338,8 +342,8 @@
         ItemName_X := firstRowX, ItemName_Y := firstRowY, ItemName_W := ( (guiWidth-CloseTabVertical_W)/2 )-(5*scaleMult) ; ItemName_W: 5=spacing
         SellerName_X := ItemName_X+ItemName_W+(10*scaleMult), SellerName_Y := ItemName_Y, SellerName_W := ItemName_W ; SellerName_X: 10=spacing*2
         CurrencyImg_X := secondRowX, CurrencyImg_Y := secondRowY, CurrencyImg_W := 20*scaleMult, CurrencyImg_H := 20*scaleMult
-        PriceCount_X := CurrencyImg_X+CurrencyImg_W, PriceCount_Y := CurrencyImg_Y, PriceCount_W := 50
-        AdditionalMsg_X := PriceCount_X+PriceCount_W, AdditionalMsg_Y := PriceCount_Y, AdditionalMsg_W := 200
+        PriceCount_X := CurrencyImg_X+CurrencyImg_W, PriceCount_Y := CurrencyImg_Y+( (CurrencyImg_H-oneTextLineSize)/2 ), PriceCount_W := 50*scaleMult
+        AdditionalMsg_X := PriceCount_X+PriceCount_W, AdditionalMsg_Y := PriceCount_Y, AdditionalMsg_W := 200*scaleMult
         SmallButton_X := SellerName_X, SmallButton_Y := secondRowY, SmallButton_W := 35*scaleMult, SmallButton_H := 25*scaleMult, SmallButton_Space := 5*scaleMult, SmallButton_Count := 4
         if (_guiMode="Stack")
             Time_X := CloseTabVertical_X-Time_W-(3*scaleMult), Time_Y := 0 ; 3=spacing
@@ -352,7 +356,7 @@
 		CustomButtonLeft_X := leftMost+(5*scaleMult), CustomButtonMiddle_X := CustomButtonLeft_X+CustomButtonOneThird_W+(5*scaleMult), CustomButtonRight_X := CustomButtonMiddle_X+CustomButtonOneThird_W+(5*scaleMult)
 		CustomButton_H := 25*scaleMult
 
-        TradeVerify_W := 10*scaleMult, TradeVerify_H := TradeVerify_W, TradeVerify_X := Time_X-5-TradeVerify_W, TradeVerify_Y := Time_Y+3
+        TradeVerify_W := 10*scaleMult, TradeVerify_H := TradeVerify_W, TradeVerify_X := Time_X-(5*scaleMult)-TradeVerify_W, TradeVerify_Y := Time_Y+(3*scaleMult)
 
         ; = = Getting ready to create the GUI
 		Gui%guiName%.Active_Tab := 0
@@ -557,9 +561,9 @@
 
 			Loop 4 { ; Max 4 rows
 				rowNum := A_Index
-				rowH := SmallButton_H, rowW := rowNum=1 ? TabContentSlot_W-SellerName_X-5 : TabContentSlot_W-(5+5)
-				row1Y := SmallButton_Y, row2Y := SmallButton_Y+rowH+5, row3Y := row2Y+rowH+5, row4Y := row3Y+rowH+5
-				rowX := IsBetween(rowNum, 2, 4) ? 6 : SmallButton_X, rowY := row%rowNum%Y
+				rowH := SmallButton_H, rowW := rowNum=1 ? TabContentAvailableWidth-SellerName_X-5 : TabContentAvailableWidth-( (5*scaleMult)+(5*scaleMult) )
+				row1Y := SmallButton_Y, row2Y := SmallButton_Y+rowH+(5*scaleMult), row3Y := row2Y+rowH+(5*scaleMult), row4Y := row3Y+rowH+(5*scaleMult)
+				rowX := IsBetween(rowNum, 2, 4) ? leftMost+(5*scaleMult) : SmallButton_X, rowY := row%rowNum%Y
 
 				; Preview only - Creating row button and style
 				if (_isPreview=True) {				
@@ -667,7 +671,7 @@
                 Gui.BindFunctionToControl("GUI_Trades_V2", slotGuiName, "hBTN_CloseTab", "RemoveTab", _buyOrSell, tabNum) 
 
 			; Gui.Show(slotGuiName, "x0 y0 w" guiWidth+borderSize " h" TabContentSlot_H " Hide")	
-			Gui.Show(slotGuiName, "AutoSize Hide")	
+			Gui.Show(slotGuiName, "w" TabContentSlot_W " h" TabContentSlot_H " Hide")	
 
             Gui%guiName%.ImageButton_Errors .= Gui%guiName%["Slot" tabNum].ImageButton_Errors
         }
