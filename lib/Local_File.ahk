@@ -120,7 +120,7 @@ Update_LocalSettings() {
 		Update_LocalSettings_IniFile()
 		Convert_IniSettings_To_JsonSettings()
 		localSettings := Get_LocalSettings()
-		keysToRemove := {GENERAL:["AddShowGridActionToInviteButtons","HasAskedForImport","RemoveCopyItemInfosIfGridActionExists","ReplaceOldTradeVariables","UpdateKickMyselfOutOfPartyHideoutHotkey","HasUpdatedActionsAfter1_15_BETA_ActionsRevamp"]
+		keysToRemove := {GENERAL:["AddShowGridActionToInviteButtons","HasAskedForImport","RemoveCopyItemInfosIfGridActionExists","ReplaceOldTradeVariables","UpdateKickMyselfOutOfPartyHideoutHotkey","HasUpdatedActionsAfter1_15_ActionsRevamp","HasImportedTradesHistoryFromIniToJson"]
 			,SETTINGS_MAIN:["Compact_Pos_X","Compact_Pos_Y","AllowClicksToPassThroughWhileInactive","DisableBuyInterface","MinimizeInterfaceToBottomLeft","Pos_X","Pos_Y","SendMsgMode"]}
 		for sect in keysToRemove {
 			Loop % keysToRemove[sect].Count()
@@ -373,7 +373,7 @@ Update_LocalSettings_IniFile() {
 		INI.Set(iniFile, "GENERAL", "UpdateKickMyselfOutOfPartyHideoutHotkey", "False")
 	}
 
-	if (iniSettings.GENERAL.HasUpdatedActionsAfter1_15_BETA_ActionsRevamp != "True") {
+	if (iniSettings.GENERAL.HasUpdatedActionsAfter1_15_ActionsRevamp != "True") {
 		Loop {
 			cbIndex := A_Index
 			loopedSetting := iniSettings["SETTINGS_CUSTOM_BUTTON_" cbIndex]
@@ -442,7 +442,33 @@ Update_LocalSettings_IniFile() {
 			else
 				Break
 		}
-		INI.Set(iniFile, "GENERAL", "HasUpdatedActionsAfter1_15_BETA_ActionsRevamp", "True")
+		INI.Set(iniFile, "GENERAL", "HasUpdatedActionsAfter1_15_ActionsRevamp", "True")
+	}
+
+	if (iniSettings.GENERAL.HasImportedTradesHistoryFromIniToJson != "True") {
+		oldBuyFile := PROGRAM.TRADES_BUY_HISTORY_FILE_OLD, newBuyFile := PROGRAM.TRADES_BUY_HISTORY_FILE
+		oldSellFile := PROGRAM.TRADES_SELL_HISTORY_FILE_OLD, newSellFile := PROGRAM.TRADES_SELL_HISTORY_FILE
+
+		FileDelete,% oldBuyFile ; It was bugged, nothing was being saved inside
+
+		oldSellObj := class_EasyIni(oldSellFile)
+		newSellObj := {"Pre_1_15":{}}
+		Loop % oldSellObj.GENERAL.Index {
+			newSellObj["Pre_1_15"][A_Index] := ObjFullyClone(oldSellObj[A_Index])
+		}
+		; Making backup of old file
+		SplitPath, oldSellFile, fileName
+		FileMove,% oldSellFile,% PROGRAM.TEMP_FOLDER "\" A_Now "_" fileName ".bak", 1
+		; Making backup of new file if exist
+		SplitPath, newSellFile, fileName
+		FileMove,% newSellFile,% PROGRAM.TEMP_FOLDER "\" A_Now "_" fileName ".bak", 1
+		; Setting content into the settings file
+		jsonText := JSON.Dump(newSellObj, "", "`t")
+		hFile := FileOpen(newSellFile, "w", "UTF-16")
+		hFile.Write(jsonText)
+		hFile.Close()
+
+		INI.Set(iniFile, "GENERAL", "HasImportedTradesHistoryFromIniToJson", "True")
 	}
 
 	if (PROGRAM.IS_BETA = "True")
