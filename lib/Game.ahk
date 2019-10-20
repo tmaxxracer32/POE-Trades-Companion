@@ -745,7 +745,7 @@ Parse_GameLogs(strToParse, preview=False) {
 				
 				tradeInfos := {Seller:tradeBuyerName, Item:tradeItem, Price:tradePrice, AdditionalMessageFull:tradeOther
 				,ItemCurrency:itemCurrencyName, ItemCount:itemCurrencyCount
-				,PriceCurrency:currencyName, PriceCount:currencyCount
+				,PriceCurrency:priceCurrencyName, PriceCount:priceCurrencyCount
 				,League:tradeLeague, StashTab:tradeStashTab, StashX:tradeStashLeft, StashY:tradeStashTop
 				,Guild:tradeBuyerGuild
 				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual

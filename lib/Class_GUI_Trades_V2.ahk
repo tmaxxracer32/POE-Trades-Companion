@@ -1113,7 +1113,6 @@
 		}
 
         ; Creating the block of txt containing all infos
-		hiddenInfosWall := ""
 		for key, value in newContent
 			hiddenInfosWall .= "`n" key ":" value
 		if ( SubStr(hiddenInfosWall, 1, 1) = "`n" )
