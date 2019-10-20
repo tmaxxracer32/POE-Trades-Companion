@@ -927,6 +927,7 @@
 		global PROGRAM, SKIN
 		global GuiTrades, GuiTrades_Controls
 		static doOnlyOnce
+		windowsDPI 		:= GuiTrades[_buyOrSell].Windows_DPI
         tabsLimit       := GuiTrades[_buyOrSell].Tabs_Limit
 		tabsCount       := GuiTrades[_buyOrSell].Tabs_Count
         maxTabsToShow   := GuiTrades[_buyOrSell].Max_Tabs_Per_Row
@@ -998,17 +999,16 @@
 				: newTabsCount = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
 				: newTabsCount >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
 				: GuiTrades[_buyOrSell].Height_Maximized_FourSlot
-			sizeDiff := GuiTrades[_buyOrSell].Height_Maximized-gtPos.H
+			sizeDiff := (GuiTrades[_buyOrSell].Height_Maximized*windowsDPI)-gtPos.H
 
 			if (GuiTrades[_buyOrSell].Is_Minimized) {
 				Gui.Show("Trades" _buyOrSell, "h" GuiTrades[_buyOrSell].Height_Minimized " NoActivate")
 			}
 			else if (GuiTrades[_buyOrSell].Is_Maximized) {
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
-					
-					WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-sizeDiff
+					guiY := "y" gtPos.Y-sizeDiff
 				}
-				Gui.Show("Trades" _buyOrSell, "h" guiHeightMax " NoActivate")
+				Gui.Show("Trades" _buyOrSell, guiY " h" guiHeightMax " NoActivate")
 			}
         }
 		if (_buyOrSell="Sell") 
@@ -1153,7 +1153,7 @@
 					currencyPngFile := PROGRAM.CURRENCY_IMGS_FOLDER "\Unknown.png"
 
                 imgSlotPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG)				
-				hBitMap := Gdip_CreateResizedHBITMAP_FromFile(currencyPngFile, imgSlotPos.W*windowsDPI, imgSlotPos.H*windowsDPI, PreserveAspectRatio:=False)
+				hBitMap := Gdip_CreateResizedHBITMAP_FromFile(currencyPngFile, imgSlotPos.W, imgSlotPos.H, PreserveAspectRatio:=False)
 				SetImage(GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG, hBitmap)
 			}
 			GuiControl, Hide,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG ; basically "redraw", fixes old pic still there behind
@@ -1933,6 +1933,7 @@
 	RemoveTab(_buyOrSell, tabNum, massRemove=False) {
 		global PROGRAM, SKIN
 		global GuiTrades, GuiTrades_Controls
+		windowsDPI := GuiTrades[_buyOrSell].Windows_DPI
 		tabsCount := GuiTrades[_buyOrSell].Tabs_Count
 		tabsRange := GUI_Trades_V2.GetTabsRange(_buyOrSell)
 		isStack := GuiTrades[_buyOrSell].Is_Stack
@@ -1991,7 +1992,7 @@
 				: GuiTrades[_buyOrSell].Tabs_Count = 3 ? GuiTrades[_buyOrSell].Height_Maximized_ThreeSlot
 				: GuiTrades[_buyOrSell].Tabs_Count >= 4 ? GuiTrades[_buyOrSell].Height_Maximized_FourSlot
 				: GuiTrades[_buyOrSell].Height_Maximized_FourSlot
-			sizeDiff := GuiTrades[_buyOrSell].Height_Maximized-gtPos.H
+			sizeDiff := (GuiTrades[_buyOrSell].Height_Maximized*windowsDPI)-gtPos.H
 		}
 		; Do stuff if tabs count is zero
 		if (GuiTrades[_buyOrSell].Tabs_Count = 0) {
@@ -2013,9 +2014,9 @@
 			GuiControl,Trades%_buyOrSell%:,% GuiTrades_Controls[_buyOrSell]["hTEXT_Title"],% PROGRAM.NAME " (" GuiTrades[_buyOrSell].Tabs_Count ")"
 			if (isStack) {
 				if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
-					WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y-sizeDiff
+					guiY := "y" gtPos.Y-sizeDiff
 				}
-				Gui.Show("Trades" _buyOrSell, "h" GuiTrades[_buyOrSell].Height_Maximized " NoActivate")
+				Gui.Show("Trades" _buyOrSell, guiY " h" GuiTrades[_buyOrSell].Height_Maximized " NoActivate")
 			}
 			; GuiControl,TradesBuyCompact:,% GuiTradesMinimized_Controls["hTEXT_Title"],% "(" GuiTrades.Tabs_Count ")"
 		}

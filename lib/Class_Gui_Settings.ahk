@@ -5,11 +5,13 @@ Class GUI_Settings {
 		global GuiSettings, GuiSettings_Controls, GuiSettings_Submit
 		global GuiTrades, GuiTrades_Controls
 		static guiCreated
+		windowsDPI := Get_DpiFactor()
 	
 		; Initialize gui arrays
 		GUI_Settings.Destroy()
 		Gui.New("Settings", "-Caption -Border +LabelGUI_Settings_ +HwndhGuiSettings", "POE TC - " PROGRAM.TRANSLATIONS.TrayMenu.Settings)
 		GuiSettings.Is_Created := False
+		GuiSettings.Windows_DPI := windowsDPI
 
 		guiCreated := False
 		guiFullHeight := 600, guiFullWidth := 650, borderSize := 1, borderColor := "Black"
@@ -422,7 +424,7 @@ Class GUI_Settings {
 		Gui.Margin("SettingsFooter", 0, 0)
 		Gui.Color("SettingsFooter", "0b6fcc")
 		guiFooterW := guiWidth, guiFooterH := 50
-		guiFooterX := leftMost, guiFooterY := downMost-guiFooterH
+		guiFooterX := leftMost*windowsDPI, guiFooterY := (downMost-guiFooterH)*windowsDPI
 
 		Gui.Add("SettingsFooter", "Picture", "x5 y20 w35 h24 hwndhIMG_FlagUK BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_uk.png")
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagFrance BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_france.png")
@@ -1409,8 +1411,10 @@ Class GUI_Settings {
 	}
 
 	Customization_SellingBuying_AdjustPreviewControls(whichTab) {
-		global GuiTrades, GuiSettings_Controls
+		global GuiTrades, GuiSettings, GuiSettings_Controls
+		windowsDPI := GuiSettings.Windows_DPI
 		_buyOrSell := whichTab="Selling"?"Sell":"Buy", _buyOrSell .= "Preview"
+
 		Loop 4 {
 			rowIndex := A_Index
 			rowPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomRowSlot" rowIndex])
@@ -1420,8 +1424,8 @@ Class GUI_Settings {
 
 			if (rowPos.X && minusBtnPos.X) {
 				minusX := guiPos.X+guiPos.W+3, plusX := minusX+minusBtnPos.W+3, plusY := minusY := rowPos.Y
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonMinusRow" rowIndex],% "x" minusX " y" minusY
-				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex],% "x" plusX " y" plusY
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonMinusRow" rowIndex],% "x" minusX/windowsDPI " y" minusY/windowsDPI
+				GuiControl, Settings:Move,% GuiSettings_Controls["hBTN_Customization" whichTab "ButtonPlusRow" rowIndex],% "x" plusX/windowsDPI " y" plusY/windowsDPI
 			}
 		}
 
@@ -3002,8 +3006,10 @@ Class GUI_Settings {
 		
 		if (whichTab = "Selling") {
 			if GUI_Trades_V2.Exists("SellPreview") {
+				guiX := ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.SellPreview.Width/2), guiX *= GuiSettings.Windows_DPI
+				guiY := GuiSettings.UpMost2, guiY *= GuiSettings.Windows_DPI
 				Gui, TradesSellPreview:+LastFound +AlwaysOnTop
-				Gui, TradesSellPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.SellPreview.Width/2) " y" GuiSettings.UpMost2
+				Gui, TradesSellPreview:Show,% "x" guiX " y" guiY
 			}
 			GUI_Settings.Customization_Selling_AdjustPreviewControls()
 		}
@@ -3012,8 +3018,10 @@ Class GUI_Settings {
 
 		if (whichTab = "Buying") {
 			if GUI_Trades_V2.Exists("BuyPreview") {
+				guiX := ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.BuyPreview.Width/2), guiX *= GuiSettings.Windows_DPI
+				guiY := GuiSettings.UpMost2, guiY *= GuiSettings.Windows_DPI
 				Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
-				Gui, TradesBuyPreview:Show,% "x" ( (GuiSettings.RightMost2-GuiSettings.LeftMost2) /2)-(GuiTrades.BuyPreview.Width/2) " y" GuiSettings.UpMost2
+				Gui, TradesBuyPreview:Show,% "x" guiX " y" guiY
 			}
 			GUI_Settings.Customization_Buying_AdjustPreviewControls()	
 		}
