@@ -59,8 +59,8 @@
 	thisHotkey := A_ThisHotkey, modifiers := ""
 
 	; Getting modifiers, based on key down press
-	modifiers .= GetKeyState("Shift","P") ? "+" : "", modifiers .= GetKeyState("Ctrl","P") ? "^" : "", modifiers .= GetKeyState("Alt","P") ? "!" : ""
-	modifiers .= GetKeyState("RWin","P") ? "#" : "", modifiers .= GetKeyState("LWin","P") ? "#" : ""
+	modifiers .= GetKeyState("Shift") ? "+" : "", modifiers .= GetKeyState("Ctrl") ? "^" : "", modifiers .= GetKeyState("Alt") ? "!" : ""
+	modifiers .= GetKeyState("RWin") ? "#" : "", modifiers .= GetKeyState("LWin") ? "#" : ""
 
 	; Removing *~ from hotkey if containing
 	if ( SubStr(thisHotkey, 1, 2) = "~*" && StrLen(thisHotkey) > 2 )
@@ -151,7 +151,7 @@ Class GUI_SetHotkey {
 		global GuiSetHotkey, GuiSetHotkey_Controls
 
 		hkStr := GUI_SetHotkey.Submit("hHK_Hotkey") ; Getting hotkey value
-		modifiers .= GetKeyState("RWin","P") ? "#" : "", modifiers .= GetKeyState("LWin","P") ? "#" : "" ; Those modifiers aren't supported by the Hotkey control
+		modifiers .= GetKeyState("RWin") ? "#" : "", modifiers .= GetKeyState("LWin") ? "#" : "" ; Those modifiers aren't supported by the Hotkey control
 																										 ; This allows them to work with basic keys
 		hkStr := modifiers . hkStr
 

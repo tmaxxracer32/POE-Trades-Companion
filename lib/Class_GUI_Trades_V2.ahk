@@ -2860,7 +2860,7 @@
 		if ( PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Window" && PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "False" ) {
 			PostMessage, 0xA1, 2,,,% "ahk_id " GuiTrades[_buyOrSell].Handle
 		}
-		KeyWait, LButton, Up
+		KeyWait, LButton, L
 		GUI_Trades_V2.SavePosition(_buyOrSell)
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell)
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
