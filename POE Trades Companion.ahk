@@ -351,7 +351,7 @@ Start_Script() {
 	}
 
 	if (PROGRAM.SETTINGS.GENERAL.AskForLanguage = "True")
-		GUI_ChooseLang.Show()
+		GUI_ChooseLang.WaitForLang()
 	
 	TrayMenu()
 	EnableHotkeys()

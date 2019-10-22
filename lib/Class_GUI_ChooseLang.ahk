@@ -4,10 +4,12 @@
 		global PROGRAM, GAME
 		global GuiChooseLang, GuiChooseLang_Controls, GuiChooseLang_Submit
 		static guiCreated
+		windowsDPI := Get_DpiFactor()
 
 		GUI_ChooseLang.Destroy()
 		Gui.New("ChooseLang", "-Caption -Border +AlwaysOnTop +LabelGUI_ChooseLang_ +HwndhGuiChooseLang", "POE TC - Language")
 		GuiChooseLang.Is_Created := False
+		GuiChooseLang.Windows_DPI := windowsDPI
 
 		guiCreated := False
 		guiFullHeight := 200, guiFullWidth := 300, borderSize := 1, borderColor := "Black"
@@ -15,23 +17,25 @@
 		leftMost := borderSize, rightMost := guiWidth-borderSize
 		upMost := borderSize, downMost := guiHeight-borderSize
 
-		GuiChooseLang.Style_Tab := Style_Tab := [ [0, "0xEEEEEE", "", "Black", 0, , ""] ; normal
-			, [0, "0xdbdbdb", "", "Black", 0] ; hover
-			, [3, "0x44c6f6", "0x098ebe", "Black", 0]  ; press
-			, [3, "0x44c6f6", "0x098ebe", "White", 0 ] ] ; default
+		GuiChooseLang.Style_CloseBtn := Style_CloseBtn := [ [0, "0xe01f1f", "", "White"] ; normal
+			, [0, "0xb00c0c"] ; hover
+			, [0, "0x8a0a0a"] ] ; press
 
-		GuiChooseLang.Style_RedBtn := Style_RedBtn := [ [0, "0xff5c5c", "", "White", 0, , ""] ; normal
-			, [0, "0xff5c5c", "", "White", 0] ; hover
-			, [3, "0xe60000", "0xff5c5c", "Black", 0]  ; press
-			, [3, "0xff5c5c", "0xe60000", "White", 0 ] ] ; default
+		GuiChooseLang.Style_Button := Style_Button := [ [0, "0x132f44", "", "0xebebeb", , , "0xd6d6d6"] ; normal
+			, [0, "0x163850"] ; hover
+			, [0, "0x102638"] ] ; press
+
+		GuiChooseLang.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
+			, [0, "0x355e73"] ; hover
+			, [0, "0x122630"] ] ; press
 
 		/* * * * * * *
 		* 	CREATION
 		*/
 
 		Gui.Margin("ChooseLang", 0, 0)
-		Gui.Color("ChooseLang", "White")
-		Gui.Font("ChooseLang", "Segoe UI", "8")
+		Gui.Color("ChooseLang", "0x1c4563", "0x274554")
+		Gui.Font("ChooseLang", "Segoe UI", "8", "5", "0x80c4ff")
 		Gui, ChooseLang:Default 
 
 		; *	* Borders
@@ -49,14 +53,14 @@
 		Gui.Add("ChooseLang", "Text", "x" leftMost " y" upMost " w" guiWidth-(borderSize*2)-30 " h25 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
 		Gui.Add("ChooseLang", "Progress", "xp yp wp hp Background359cfc") ; Title bar background
 		Gui.Add("ChooseLang", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - Language") ; Title bar text
-		imageBtnLog .= Gui.Add("ChooseLang", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		imageBtnLog .= Gui.Add("ChooseLang", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		__f := GUI_ChooseLang.DragGui.bind(GUI_ChooseLang, GuiChooseLang.Handle)
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls.hTEXT_HeaderGhost,% __f
 		__f := GUI_ChooseLang.Close.bind(GUI_ChooseLang)
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls.hBTN_CloseGUI,% __f
 
 		; * * TOP TEXT
-		Gui.Add("ChooseLang", "Text", "x" leftMost+10 " y+20 w" guiWidth-20 " Center hwndhTEXT_TopText", "Thank you for using POE Trades Companion!`nBefore you can start trading,`nplease select your language below:")
+		Gui.Add("ChooseLang", "Text", "x" leftMost+10 " y+20 w" guiWidth-20 " Center BackgroundTrans hwndhTEXT_TopText", PROGRAM.TRANSLATIONS.GUI_ChooseLang.hTEXT_TopText)
 		; * * FLAGS
 		; Calculate the space between each
 		iconW := 35, iconH := 24, iconMax := 5
@@ -80,7 +84,7 @@
 		__f := GUI_ChooseLang.OnLanguageChange.bind(GUI_ChooseLang, "russian")
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls["hIMG_FlagRussia"],% __f
 
-		Gui.Add("ChooseLang", "Button", "x" leftMost+10 " y+15 w" guiWidth-20 " h30 hwndhBTN_AcceptLang", "Continue with: English")
+		Gui.Add("ChooseLang", "ImageButton", "x" leftMost+10 " y+15 w" guiWidth-20 " h30 hwndhBTN_AcceptLang", PROGRAM.TRANSLATIONS.GUI_ChooseLang.hBTN_AcceptLang, Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		__f := GUI_ChooseLang.AcceptLang.bind(GUI_ChooseLang)
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls["hBTN_AcceptLang"],% __f
 
@@ -88,37 +92,50 @@
 		*	SHOW
 		*/
 
+		GuiChooseLang.Flags := {english:"UK",french:"France",chinese_simplified:"China",chinese_traditional:"Taiwan",russian:"Russia"}
+		global GuiChooseLang_LANG_Temp := PROGRAM.SETTINGS.GENERAL.Language
+		GUI_ChooseLang.SelectFlagBasedOnLanguage(GuiChooseLang_LANG_Temp)
+
 		Gui.Show("ChooseLang", "h" guiHeight " w" guiWidth " Hide NoActivate")
 		
         Return
     }
 
 	AcceptLang() {
-		global PROGRAM, GuiChooseLang
+		global PROGRAM, GuiChooseLang, GuiChooseLang_LANG, GuiChooseLang_LANG_Temp
 
-		lang := GuiChooseLang.ChoosenLang != "" ? GuiChooseLang.ChoosenLang : "english"
-		PROGRAM.SETTINGS.GENERAL.Language := lang
+		GuiChooseLang_LANG_Temp := GuiChooseLang_LANG_Temp != "" ? GuiChooseLang_LANG_Temp : "english"
+		PROGRAM.SETTINGS.GENERAL.Language := GuiChooseLang_LANG_Temp
 		PROGRAM.SETTINGS.GENERAL.AskForLanguage := "False"
 		Save_LocalSettings()
-		PROGRAM.TRANSLATIONS := GetTranslations(lang)
+		PROGRAM.TRANSLATIONS := GetTranslations(GuiChooseLang_LANG_Temp)
 
+		GuiChooseLang_LANG := GuiChooseLang_LANG_Temp
 		GUI_ChooseLang.Destroy()
 	}
 
 	OnLanguageChange(lang, CtrlHwnd) {
-		global PROGRAM, GuiChooseLang, GuiChooseLang_Controls
+		global PROGRAM, GuiChooseLang, GuiChooseLang_Controls, GuiChooseLang_LANG_Temp
 		static prevLang
 		prevLang := prevLang?prevLang:PROGRAM.SETTINGS.GENERAL.Language
 
 		PROGRAM.SETTINGS.GENERAL.Language := lang
-		PROGRAM.TRANSLATIONS := GetTranslations(lang)
 		Save_LocalSettings()
 		
-		GuiChooseLang.ChoosenLang := lang
-		GUI_ChooseLang.SetTranslation(lang)
+		GuiChooseLang_LANG_Temp := lang
 		PROGRAM.TRANSLATIONS := GetTranslations(lang)
 
-		imgCoords := Get_ControlCoords("ChooseLang", CtrlHwnd)
+		prevLang := lang
+		GUI_ChooseLang.Create()
+	}
+
+	SelectFlagBasedOnLanguage(lang) {
+		global GuiChooseLang, GuiChooseLang_Controls
+
+		lang := lang != "" ? lang : "english"
+		flag := GuiChooseLang.Flags[lang]
+		imgCoords := Get_ControlCoords("ChooseLang", GuiChooseLang_Controls["hIMG_Flag" flag])
+
 		GuiControl, ChooseLang:Show,% GuiChooseLang_Controls["hPROGRESS_BorderSelectedTop"]
 		GuiControl, ChooseLang:Move,% GuiChooseLang_Controls["hPROGRESS_BorderSelectedTop"],% "x" imgCoords.X " y" imgCoords.Y-2
 		GuiControl, ChooseLang:Show,% GuiChooseLang_Controls["hPROGRESS_BorderSelectedLeft"]
@@ -127,77 +144,24 @@
 		GuiControl, ChooseLang:Move,% GuiChooseLang_Controls["hPROGRESS_BorderSelectedBottom"],% "x" imgCoords.X-2 " y" imgCoords.Y+imgCoords.H
 		GuiControl, ChooseLang:Show,% GuiChooseLang_Controls["hPROGRESS_BorderSelectedRight"]
 		GuiControl, ChooseLang:Move,% GuiChooseLang_Controls["hPROGRESS_BorderSelectedRight"],% "x" imgCoords.X+imgCoords.W " y" imgCoords.Y
-
-		prevLang := lang
 	}
 
-	SetTranslation(_lang="english", _ctrlName="") {
-		global PROGRAM, GuiChooseLang, GuiChooseLang_Controls
-		trans := PROGRAM.TRANSLATIONS.GUI_ChooseLang
+	WaitForLang() {
+		global GuiChooseLang, GuiChooseLang_LANG
 
-		GUI_ChooseLang.DestroyBtnImgList()
-
-		noResizeCtrls := "hBTN_CloseGUI,hBTN_AcceptLang"
-		noSmallerCtrls := "hTEXT_TopText"
-		needsCenterCtrls := "hTEXT_TopText"
-
-		if (_ctrlName) {
-			if (trans != "") ; selected trans
-				GuiControl, ChooseLang:,% GuiChooseLang_Controls[_ctrlName],% trans
+		; Create the gui if it doesn't exist already
+		if !WinExist("ahk_id " GuiChooseLang.Handle)
+			GUI_ChooseLang.Create()
+		
+		; Wait for the gui, and then wait until either the return var has been set or the gui has been closed
+		WinWait,% "ahk_id " GuiChooseLang.Handle
+		while !(GuiChooseLang_LANG) || WinExist("ahk_id " GuiChooseLang.Handle) {
+			if !WinExist("ahk_id " GuiChooseLang.Handle)
+				Break
+			Sleep 500
 		}
-		else {
-			for ctrlName, ctrlTranslation in trans {
-				if !( SubStr(ctrlName, -7) = "_ToolTip" ) { ; if not a tooltip
-					ctrlHandle := GuiChooseLang_Controls[ctrlName]
-
-					ctrlType := IsContaining(ctrlName, "hCB_") ? "CheckBox"
-							: IsContaining(ctrlName, "hTEXT_") ? "Text"
-							: IsContaining(ctrlName, "hBTN_") ? "Button"
-							: IsContaining(ctrlName, "hDDL_") ? "DropDownList"
-							: IsContaining(ctrlName, "hEDIT_") ? "Edit"
-							: IsContaining(ctrlName, "hGB_") ? "GroupBox"
-							: IsContaining(ctrlName, "hLV_") ? "ListView"
-							: "Text"
-
-					if !IsIn(ctrlName, noResizeCtrls) { ; Readjust size to fit translation
-						txtSize := Get_TextCtrlSize(txt:=ctrlTranslation, fontName:=GuiChooseLang.Font, fontSize:=GuiChooseLang.Font_Size, maxWidth:="", params:="", ctrlType)
-						txtPos := Get_ControlCoords("ChooseLang", ctrlHandle)
-
-						if (IsIn(ctrlName, noSmallerCtrls) && (txtSize.W > txtPos.W))
-						|| !IsIn(ctrlName, noSmallerCtrls)
-							GuiControl, ChooseLang:Move,% ctrlHandle,% "w" txtSize.W
-					}
-
-					if (ctrlHandle) { ; set translation
-						if (ctrlType = "DropDownList")
-							ddlValue := GUI_ChooseLang.Submit(ctrlName), ctrlTranslation := "|" ctrlTranslation
-
-						if (ctrlTranslation != "") { ; selected trans
-							if (ctrlType = "ListView") {
-								GUI_ChooseLang.SetDefaultListView(ctrlName)
-								Loop, Parse, ctrlTranslation, |
-									LV_ModifyCol(A_Index, Options, A_LoopField)
-							}
-							GuiControl, ChooseLang:,% ctrlHandle,% ctrlTranslation
-						}
-
-						if (ctrlType = "DropDownList")
-							GuiControl, ChooseLang:Choose,% ctrlHandle,% ddlValue
-					}
-
-					if IsIn(ctrlName, needsCenterCtrls) {
-						GuiControl, ChooseLang:-Center,% ctrlHandle
-						GuiControl, ChooseLang:+Center,% ctrlHandle
-					}
-
-				}
-			}
-			
-			GuiControl, ChooseLang:,% GuiChooseLang_Controls["hBTN_CloseGUI"],% "X"
-			ImageButton.Create(GuiChooseLang_Controls["hBTN_CloseGUI"], GuiChooseLang.Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)						
-		}
-
-		GUI_ChooseLang.Redraw()
+		GuiChooseLang_LANG := ""
+		return
 	}
 
 	DestroyBtnImgList() {
@@ -224,26 +188,6 @@
 	
     DragGui(GuiHwnd) {
 		PostMessage, 0xA1, 2,,,% "ahk_id " GuiHwnd
-	}
-
-    Show() {
-		global GuiChooseLang
-
-		hiddenWin := A_DetectHiddenWindows
-		DetectHiddenWindows, On
-		foundHwnd := WinExist("ahk_id " GuiChooseLang.Handle)
-		DetectHiddenWindows, %hiddenWin%
-
-		if (foundHwnd) {
-			Gui, ChooseLang:Show, xCenter yCenter
-		}
-		else {
-			AppendToLogs("GUI_ChooseLang.Show(): Non existent. Recreating.")
-			GUI_ChooseLang.Create()
-			Gui, ChooseLang:Show, xCenter yCenter
-		}
-		WinWait,% "ahk_id " GuiChooseLang.Handle
-		WinWaitClose,% "ahk_id " GuiChooseLang.Handle
 	}
 
     Close() {
