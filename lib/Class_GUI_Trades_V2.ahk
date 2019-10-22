@@ -655,19 +655,22 @@
 						styleName := "CustomButton_" _buyOrSell "_Row" rowNum "Max" btnsCount, styleName .= btnIcon ? "_Icon_" btnIcon : "_Text"
 
 						; Creating imagebutton style
-						if !IsObject(Styles[styleName]) {
-							; otherRowStyleName := RegExReplace(styleName, "_Row\d+", A_Index)
-							; if IsObject(Styles[otherRowStyleName]) {
-							; 	Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
-							; 	AllStylesData[styleName] := ObjFullyClone(AllStylesData[otherRowStyleName])
-							; }
-							; else {
-								if (btnIcon)
-									GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
-								else
-									GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
-								AllStylesData[styleName] := {Width:btnWidth, height:btnHeight}
-							; }
+						if !IsObject(Styles[styleName]) {		
+							Loop 4 {					
+								otherRowStyleName := RegExReplace(styleName, "_Row(\d+?)", "_Row" A_Index)
+								if IsObject(Styles[otherRowStyleName]) {
+									Styles[styleName] := ObjFullyClone(Styles[otherRowStyleName])
+									AllStylesData[styleName] := ObjFullyClone(AllStylesData[otherRowStyleName])
+									Break
+								}
+								else if (A_Index=4) {
+									if (btnIcon)
+										GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, btnWidth, btnHeight, btnIcon)
+									else
+										GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, btnWidth, btnHeight)
+									AllStylesData[styleName] := {Width:btnWidth, height:btnHeight}
+								}
+							}
 						}
 
 						Gui.Add(slotGuiName, "ImageButton", "x" btnX " y" btnY " w" btnWidth " h" btnHeight " hwndhBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum " c" SKIN.Settings.COLORS.Trade_Info_2, !btnIcon?btnName:"", Styles[styleName], PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
