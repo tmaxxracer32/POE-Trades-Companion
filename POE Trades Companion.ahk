@@ -58,19 +58,6 @@ Hotkey, IfWinActive,% "ahk_pid " DllCall("GetCurrentProcessId")
 ; }
 Return
 
-^numpad1::
-	; GUI_Trades_V2.Create(1, buyOrSell:="Sell", stackOrTabs:="Stack", preview:=True)
-	Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @From " RandomStr(5) ": Hi, I would like to buy your " RandomStr(5) " listed for 1 chaos in Standard offer 3 alch?")
-	; GUI_Settings.Show(whichTab:="Customization Selling")
-	; GUI_Settings.Redraw()
-Return
-^numpad2::
-; 	GUI_Trades_V2.Create(1, buyOrSell:="Sell", stackOrTabs:="Tabs", preview:=True)
-	Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @To " RandomStr(5) ": Hi, I would like to buy your " RandomStr(5) " listed for 1 chaos in Standard offer 3 alch?")
-; 	GUI_Settings.Show(whichTab:="Customization Selling")
-; 	GUI_Settings.Redraw()
-Return
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   
 SpaceRoutine() {
@@ -85,7 +72,6 @@ SpaceRoutine() {
 	}
 }
 
-F5::Reload()
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Start_Script() {
@@ -359,32 +345,23 @@ Start_Script() {
 	GUI_Intercom.Create()
 	; ImageButton_TestDelay()
 
-	; GUI_Trades_V2.Create(10, buyOrSell:="Sell", stackOrTabs:="Stack")
-	; Parse_GameLogs("2019/09/12 19:59:19 3979187 ac1 [INFO Client 1772] @From cacaca: Hi, I would like to buy your CACA listed for 1 chaos in Blight (stash tab ""~price 1 chaos""; position: left 9, top 776)")
-	; Parse_GameLogs("2019/09/12 19:59:19 3979187 ac1 [INFO Client 1772] @From caca1ca: Hi, I would like to buy your CACA listed for 1 chaos in Blight (stash tab ""~price 1 chaos""; position: left 9, top 776)")
-	; GUI_Trades_V2.Create(5, buyOrSell:="Buy", stackOrTabs:="Stack")
-	; Parse_GameLogs("2019/10/01 15:03:00 245822531 ac1 [INFO Client 2204] @To <HEIRS> ENOUGH_OF_THIS: Hi, I would like to buy your caca listed for 98 chaos in Standard (stash tab ""~price 999 mir""; position: left 6, top 1)")
-	; GUI_Trades_V2.LoadBackup("Sell")
-	; GUI_Trades_V2.LoadBackup("Buy")
+	GUI_Trades_V2.Create(5, buyOrSell:="Sell", stackOrTabs:=PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
+	GUI_Trades_V2.Create(5, buyOrSell:="Buy", stackOrTabs:=PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
+	GUI_Trades_V2.LoadBackup("Sell")
+	GUI_Trades_V2.LoadBackup("Buy")
 
 	; Parse debug msgs
-	; if (DEBUG.settings.use_chat_logs) {
-	; 	Loop % DEBUG.chatlogs.MaxIndex()
-	; 		Parse_GameLogs(DEBUG.chatlogs[A_Index])
-	; }
+	if (DEBUG.settings.use_chat_logs) {
+		Loop % DEBUG.chatlogs.MaxIndex()
+			Parse_GameLogs(DEBUG.chatlogs[A_Index])
+	}
 	Monitor_GameLogs()
-	; Return
 
 	global GuiSettings
-	; if !WinExist("ahk_id " GuiSettings.Handle)
-		; Gui_Settings.Create()
-	; if (DEBUG.settings.open_settings_gui)
-		; Gui_Settings.Show()
-
-	; Gui_Settings.Show("Skins")
-	; Gui_Settings.Show("Hotkeys")
-	Gui_Settings.Show("Buying")
-	; Gui_Settings.Show("Updating")
+	if !WinExist("ahk_id " GuiSettings.Handle)
+		Gui_Settings.Create()
+	if (DEBUG.settings.open_settings_gui)
+		Gui_Settings.Show()
 
 	if (DEBUG.settings.open_mystats_gui)
 		GUI_MyStats.Show()
@@ -396,7 +373,7 @@ Start_Script() {
 		Save_LocalSettings()
 		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.UpdateSuccessful_Msg, "%version%", PROGRAM.VERSION)
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.UpdateSuccessful_Title, trayMsg)
-		GUI_Settings.Show("Misc Updating")
+		GUI_Settings.Show("Updating")
 	}
 
 	; Shellmessage, after all gui are created	
