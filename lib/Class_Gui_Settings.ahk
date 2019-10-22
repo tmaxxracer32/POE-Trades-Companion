@@ -405,7 +405,7 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, About
 
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " Center hwndhTEXT_About" , "POE Trades Companion is a tool meant to enhance your trading experience. "
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " Center BackgroundTrans hwndhTEXT_About" , "POE Trades Companion is a tool meant to enhance your trading experience. "
 			. "`n`nUpon receiving a trading whisper (poe.trade / poeapp.com),"
 			. "`nthe most important informations from the trade will be shown in a convenient interface."
 			. "`n`nUp to nine custom buttons to interact with your buyer, five special smaller buttons to do the strict minimum, and many hotkeys are available to make trading more enjoyable.")
@@ -430,6 +430,7 @@ Class GUI_Settings {
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagFrance BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_france.png")
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagChina BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_china.png")
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagTaiwan BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_taiwan.png")
+		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagRussia BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_russia.png")
 
 		Gui.Add("SettingsFooter", "Picture", "x" guiFooterW-120 " y5 w115 h40 hwndhIMG_Paypal BackgroundTrans", PROGRAM.IMAGES_FOLDER "\DonatePaypal.png")
 		Gui.Add("SettingsFooter", "Picture", "xp-70 yp w40 h40 hwndhIMG_Discord BackgroundTrans", PROGRAM.IMAGES_FOLDER "\Discord.png")
@@ -441,6 +442,7 @@ Class GUI_Settings {
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagFrance", "OnLanguageChange", "french")
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagChina", "OnLanguageChange", "chinese_simplified")
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagTaiwan", "OnLanguageChange", "chinese_traditional")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagRussia", "OnLanguageChange", "russian")
 
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Paypal", "OnPictureLinkClick", "Paypal")
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Discord", "OnPictureLinkClick", "Discord")
@@ -1190,7 +1192,7 @@ Class GUI_Settings {
 		if (GuiSettings.Is_Changing_Preset)
 			Return
 
-		KeyWait, LButton, U
+		KeyWait, LButton, L
 		SetTimer, GUI_Settings_TabCustomizationSkins_OnScalePercentageChange_Sub, -100
 
 		; scalePercent := GUI_Settings.Submit("hEDIT_SkinScalingPercentage")
@@ -2371,8 +2373,8 @@ Class GUI_Settings {
 		; Avoid selecting actions with -> in name or empty
 		if IsContaining(actionType, "-> ") || (actionType = "") {
 			; Check if one arrow was being pressed
-			isUpPressed := GetKeyState("Up", "P"), isDownPressed := GetKeyState("Down", "P")
-			isLeftPressed := GetKeyState("Left", "P"), isRightPressed := GetKeyState("Right", "P")
+			isUpPressed := GetKeyState("Up"), isDownPressed := GetKeyState("Down")
+			isLeftPressed := GetKeyState("Left"), isRightPressed := GetKeyState("Right")
 			; Retrieve the number of the ddl item
 			GuiControl, Settings:+AltSubmit,% actionTypeHwnd
 			chosenItemNum := GUI_Settings.Submit(actionTypeCtrlName)

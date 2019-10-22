@@ -107,7 +107,7 @@ UpdateCheck(checkType="normal", notifOrBox="notif") {
 	autoupdate := PROGRAM.SETTINGS.UPDATING.DownloadUpdatesAutomatically
 	lastUpdateCheck := PROGRAM.SETTINGS.UPDATING.DownloadUpdatesAutomatically.LastUpdateCheck
 	if (checkType="forced") ; Fake the last update check, so it's higher than set limit
-		lastUpdateCheck := 1994042612310000
+		lastUpdateCheck := 1994010101010101
 
 	timeDif := A_Now
 	timeDif -= lastUpdateCheck, Minutes
@@ -220,11 +220,11 @@ DownloadAndRunUpdater(dl="") {
 		if FolderExist(A_ScriptDir "_backup")
 			FileRemoveDir,% A_ScriptDir "_backup", 1
 		FileCopyDir,% A_ScriptDir,% A_ScriptDir "_backup", 1 ; Make backup
-		FileCopyDir,% updateFolder,% A_ScriptDir, 1 ; Copy new files into current folder
+		FileCopyDir,% extractedFolder,% A_ScriptDir, 1 ; Copy new files into current folder
 		if (ErrorLevel) {
 			MsgBox(4096+16, "", "Failed to copy the new files into the folder.`nPlease try updating manually.")
 			FileRemoveDir,% A_ScriptDir ; Delete folder
-			FileCopyDir,% A_ScriptDir "_backup", A_ScriptDir, 1 ; Restore backup
+			FileCopyDir,% A_ScriptDir "_backup",% A_ScriptDir, 1 ; Restore backup
 			FileRemoveDir,% A_ScriptDir "_backup", 1
 			FileRemoveDir,% updateFolder, 1
 			LoadFonts()
@@ -255,7 +255,7 @@ Run_Updater(downloadLink) {
 
 	Run,% PROGRAM.UPDATER_FILENAME 
 	. " /Name=""" PROGRAM.NAME  """"
-	. " /File_Name=""" A_ScriptDir "\" PROGRAM.NAME ".exe" """"
+	. " /File_Name=""" A_ScriptFullPath """"
 	. " /Local_Folder=""" PROGRAM.MAIN_FOLDER """"
 	. " /Ini_File=""" PROGRAM.SETTINGS_FILE_OLD """" ; TO_DO_V2 change to json stuff?
 	. " /NewVersion_Link=""" downloadLink """"

@@ -4,9 +4,9 @@
 	hkPressed := A_ThisHotkey
 	uniqueNum := !uniqueNum
 
-	KeyWait, Ctrl, U
-	KeyWait, Shift, U
-	KeyWait, Alt, U
+	KeyWait, Ctrl, L
+	KeyWait, Shift, L
+	KeyWait, Alt, L
 	keysState := GetKeyStateFunc("Ctrl,LCtrl,RCtrl")
 	hkSettings := PROGRAM.HOTKEYS[hkPressed]
 

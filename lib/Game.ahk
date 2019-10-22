@@ -88,6 +88,7 @@
 Send_GameMessage(actionType, msgString, gamePID="") {
 	global PROGRAM, GAME
 	global MyDocuments
+	scanCode_v := PROGRAM.SCANCODES.v, scanCode_Enter := PROGRAM.SCANCODES.Enter
 
 	Thread, NoTimers
 
@@ -144,11 +145,11 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 			Sleep 50
 		}
 		if (!err)
-			SendEvent, ^{sc02F}
+			SendEvent, {Ctrl Down}{%scanCode_v%}{Ctrl Up}
 		else
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
 
-		SendEvent,{Enter}
+		SendEvent,{%scanCode_Enter%}
 	}
 	else if (actionType = "WRITE_DONT_SEND") {
 		if IsContaining(msgString, "%goBackHere%") {
@@ -169,7 +170,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 			Sleep 50
 		}
 		if (!err) {
-			SendEvent, ^{sc02F}
+			SendEvent, {Ctrl Down}{%scanCode_v%}{Ctrl Up}
 			if (leftPresses)
 				SendInput {Left %leftPresses%}
 		}
@@ -188,19 +189,44 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 
 	Send_GameMessage_OpenChat:
 		if IsIn(chatVK, "0x1,0x2,0x4,0x5,0x6,0x9C,0x9D,0x9E,0x9F") { ; Mouse buttons
-			keyDelay := A_KeyDelay, keyDuration := A_KeyDuration
+			keyDelay := A_KeyDelay, keyDuration := A_KeyDuration, titleMatchMode := A_TitleMatchMode, controlDelay := A_ControlDelay
+			keyName := chatVK="0x1"?"L" : chatVk="0x2"?"R" : chatVK="0x4"?"M" ; Left,Right,Middle
+				: chatVK="0x5"?"X1" : chatVK="0x6"?"X2" ; XButton1,XButton2
+				: chatVK="0x9C"?"WL" : chatVK="0x9D"?"WR" ; WheelLeft,WheelRight
+				: chatVK="0x9E"?"WD" : chatVK="0x9F"?"WU" ; WheelDown,WheelUp
+				: ""
+				
 			SetKeyDelay, 10, 10
-			if (gamePID)
-				ControlSend, ,{VK%keyVK%}, [a-zA-Z0-9_] ahk_groupe POEGameGroup ahk_pid %gamePID% ; Mouse buttons tend to activate the window under the cursor.
-																	  						  	  ; Therefore, we need to send the key to the actual game window.
+			SetTitleMatchMode, RegEx
+			SetControlDelay, -1
+			if WinExist("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
+				if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
+					WinActivate, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
+					WinWaitActive, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, , 3
+				}
+				ControlClick, , [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,%keyName%, 1, NA
+				/* Old way that seemed to be a bit buggy for some reason after creating the Settings GUI.
+				Sending the hotkey before the Settings GUI was created would make things work correctly.
+				But sending it after would effectively send the chat key, but not keep the chat window activated.
+				Probably related to some internal ahk variable or something. Doesn't matter, ControlClick is more reliable.
+				
+				ControlSend, ,{VK%chatVK%}, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID% ; Mouse buttons tend to activate the window under the cursor.
+																								  ;  Therefore, we need to send the key to the actual game window.
+				*/
+			}
 			else {
 				WinGet, activeWinHandle, ID, A
-				ControlSend, ,{VK%keyVK%}, [a-zA-Z0-9_] ahk_groupe POEGameGroup ahk_pid %activeWinHandle%
+				WinActivate, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%
+				WinWaitActive, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, , 3
+				ControlClick, , [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, ,%keyName%, 1, NA
 			}
 			SetKeyDelay,% keyDelay,% keyDuration
+			SetTitleMatchMode,% titleMatchMode
+			SetControlDelay,% controlDelay
 		}
 		else
 			SendEvent,{VK%chatVK%}
+		Sleep 10
 	Return
 }
 
@@ -267,36 +293,122 @@ Get_GameLogsFile() {
 }
 
 Monitor_GameLogs() {
-	global PROGRAM, RUNTIME_PARAMETERS
-	static logsFile
+	global PROGRAM, POEGameArr, RUNTIME_PARAMETERS
+	static gameLogsFileNames := ["Client.txt","KakaoClient.txt"]
+	static lastCheckTime, prevTimer
+	static allLogsObj, gameFoldersObj
+	if !(lastCheckTime)
+		lastCheckTime := 1994010101010101
+	if !IsObject(gameFoldersObj)
+		gameFoldersObj := []
+	if !IsObject(allLogsObj)
+		allLogsObj := {}
 
-	if !(logsFile) { ; no game instance found yet
-		SetTimer,% A_ThisFunc, Delete
+	; Retrieve new folders if it has been more than 5 mins
+	minsSinceLast := A_Now
+	minsSinceLast -= lastCheckTime, Minutes
+	if (minsSinceLast >= 5) {
+		GoSub Monitor_GameLogs_GetFolders
+	}
 
-		if (RUNTIME_PARAMETERS.GameFolder)
-			logsFile := RUNTIME_PARAMETERS.GameFolder "\logs\Client.txt"
-		else
-			logsFile := Get_GameLogsFile()
+	; Parse all logs file
+	Loop % allLogsObj.Count() {
+		allLogsObjIndex := A_Index
+		Loop % allLogsObj[allLogsObjIndex].Count() {
+			allLogsObjSubIndex := A_Index
+			tempFileObj := FileOpen(allLogsObj[allLogsObjIndex][allLogsObjSubIndex].FilePath, "r", "UTF-8")
+			tempFileObj.Pos := allLogsObj[allLogsObjIndex][allLogsObjSubIndex].Pos
+			newFileContent := tempFileObj.Read(), allLogsObj[allLogsObjIndex][allLogsObjSubIndex].Pos := tempFileObj.Pos
+			if (newFileContent) {
+				Loop, Parse,% newFileContent,`n,`r
+				{
+					if !(A_LoopField)
+						Continue
+					Parse_GameLogs(A_LoopField)
+				}
+			}
+			tempFileObj.Close(), tempFileObj := ""
+		}
+	}
+	return
 
-		if (logsFile) {
-			SetTimer,% A_ThisFunc, 500
-			AppendToLogs("Monitoring logs file: """ logsFile """.")
-			if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Dock")
-				GUI_Trades_V2.DockMode_Cycle("Sell")
-			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Msg, "%file%", logsFile)
+	Monitor_GameLogs_GetFolders:
+		foldersObjCount := gameFoldersObj.Count()
+
+		; Add instance folders to gameFoldersObj
+		if (RUNTIME_PARAMETERS.GameFolder) { ; Detected GameFolder parameter, use that folder only
+			lastCheckTime := 2050010101010101 ; So that it never checks again
+			gameFoldersObj[foldersObjCount+1] := RUNTIME_PARAMETERS.GameFolder
+		}
+		else { ; No param detected, loop all running instances
+			lastCheckTime := A_Now, gameInstances := Get_RunningInstances() 
+			Loop % gameInstances.Count { ; Going through folders of all running instances
+				gameInstances_loopIndex := A_Index, gameInstances_loopFolder := gameInstances[gameInstances_loopIndex].Folder
+				Loop % loopEndIndex := foldersObjCount ? foldersObjCount : 1 { ; Make sure to loop at least once
+					gameFolders_loopIndex := A_Index, gameFolders_loopFolder := gameFoldersObj[gameFolders_loopIndex]
+					if (gameInstances_loopFolder = gameFolders_loopFolder) ; Already has the folder, skip to next
+						break
+					else if (gameFolders_loopIndex = loopEndIndex) ; Reached end of loop and no match, add to obj
+						gameFoldersObj.Push(gameInstances_loopFolder)
+				}
+			}
+		}
+
+		newFoldersObjCount := gameFoldersObj.Count()
+		if (newFoldersObjCount > foldersObjCount) {
+			; Add logs file to allLogsObj
+			loopIndex := foldersObjCount+1
+			Loop % newFoldersObjCount-foldersObjCount { ; Only newly added matches
+				loopedLogsFolder := gameFoldersObj[loopIndex]
+				allLogsObjNextIndex := allLogsObj.Count()+1
+				Loop % gameLogsFileNames.Count() { ; For every logs file name we know
+					loopedLogFileName := gameLogsFileNames[A_Index], loopedLogsFullPath := loopedLogsFolder "\logs\" loopedLogFileName
+					if FileExist(loopedLogsFullPath) { ; Make a sub array for this logs file in this folder
+						if !IsObject(allLogsObj[allLogsObjNextIndex])
+							allLogsObj[allLogsObjNextIndex] := {}
+						thisSubObjCount := allLogsObj[allLogsObjNextIndex].Count()
+						allLogsObj[allLogsObjNextIndex][thisSubObjCount+1] := {}
+						allLogsObj[allLogsObjNextIndex][thisSubObjCount+1].FilePath := loopedLogsFullPath
+						tempFileObj := FileOpen(loopedLogsFullPath, "r", "UTF-8"), tempFileObj.Read()
+						allLogsObj[allLogsObjNextIndex][thisSubObjCount+1].Pos := tempFileObj.Pos
+						tempFileObj.Close(), tempFileObj := ""
+						AppendToLogs("Monitoring logs file: """ loopedLogsFullPath """.")
+					}
+				}
+				loopIndex++
+			}
+
+			; Show a notification about folders being monitored
+			Loop % newFoldersObjCount {
+				gameFoldersStr .= "`n" """" gameFoldersObj[A_Index] """"
+			}
+			if ( SubStr(gameFoldersStr, 1, 2) = "`n" )
+				StringTrimLeft, gameFoldersStr, gameFoldersStr, 2
+
+			if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Dock" && !foldersObjCount) ; Cycle dock mode if its the first time
+				GUI_Trades_V2.DockMode_Cycle()
+
+			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Msg, "%file%", gameFoldersStr) ; TO_DO change to folder instead of file
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Title, trayMsg)
 		}
-		else {
-			SetTimer,% A_ThisFunc, -10000
+
+		; Deciding on timer based on if game is running or not
+		processExists := False
+		Loop,% POEGameArr.Count() {
+			Process, Exist,% POEGameArr[A_Index]
+			if (ErrorLevel) {
+				processExists := True
+				Break
+			}
 		}
-	}
-	else {
-		newFileContent := Read_GameLogs(logsFile)
-		if (newFileContent) {
-			Loop, Parse,% newFileContent,`n,`r
-				Parse_GameLogs(A_LoopField)
+		timer := processExists?500:5000
+		if (timer != prevTimer) || (!prevTimer) {
+			try SetTimer,% A_ThisFunc, Delete
+			SetTimer,% A_ThisFunc,% timer
+			; TO_DO_V2 tray notification
 		}
-	}
+		prevTimer := timer
+	return
 }
 
 Parse_GameLogs(strToParse, preview=False) {
@@ -603,7 +715,12 @@ Parse_GameLogs(strToParse, preview=False) {
 			leagueMatches := [], leagueMatchesIndex := 0
 			leaguesList := LEAGUES
 			if (GAME.CHALLENGE_LEAGUE_TRANS[whisperLang])
-				leaguesList .= "," GAME.CHALLENGE_LEAGUE_TRANS[whisperLang]
+				for index in GAME.CHALLENGE_LEAGUE_TRANS[whisperLang]
+					leaguesList .= "," GAME.CHALLENGE_LEAGUE_TRANS[whisperLang][index]
+			if (GAME.STANDARD_LEAGUE_TRANS[whisperLang])
+				for index in GAME.STANDARD_LEAGUE_TRANS[whisperLang]
+					leaguesList .= "," GAME.STANDARD_LEAGUE_TRANS[whisperLang][index]
+			
 			Loop, Parse, leaguesList,% ","
 			{
 				parsedLeague := A_LoopField
@@ -849,30 +966,6 @@ Parse_GameLogs(strToParse, preview=False) {
 		
 		Run,% saFile_run_cmd,% A_ScriptDir
 	return
-}
-
-Read_GameLogs(logsFile) {
-	global PROGRAM
-	global sLOGS_FILE, sLOGS_TIMER
-	static logsFileObj
-
-	if (!logsFileObj && logsFile) {
-		logsFileObj := FileOpen(logsFile, "r")
-		logsFileObj.Read()
-	}
-
-	if ( logsFileObj.pos < logsFileObj.length ) {
-		newFileContent := logsFileObj.Read()
-		return newFileContent 
-	}
-	else if (logsFileObj.pos > logsFileObj.length) || (logsFileObj.pos < 0) && (logsFileObj) {
-		AppendToLogs(A_ThisFunc "(logsFile=" logsFile "): Restarting logs file monitor."
-		. "logsFileObj.pos: """ logsFileObj.pos """ - logsFileObj.length: """ logsFileObj.length """")
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RestartingGameLogsMonitoring_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RestartingGameLogsMonitoring_Msg)
-		logsFileObj.Close()
-		logsFileObj := FileOpen(logsFile, "r")
-		logsFileObj.Read()
-	}
 }
 
 SplitNameAndGuild(str) {
