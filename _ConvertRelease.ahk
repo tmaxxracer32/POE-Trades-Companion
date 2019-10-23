@@ -1,5 +1,12 @@
 ﻿#SingleInstance, Force
+#KeyHistory 0
+#Persistent
 #NoEnv
+
+DetectHiddenWindows, Off
+FileEncoding, UTF-8 ; Cyrilic characters
+SetWinDelay, 0
+ListLines, Off
 
 if (!A_IsAdmin) {
 	ReloadWithParams("", getCurrentParams:=True, asAdmin:=True)
@@ -8,6 +15,7 @@ if (!A_IsAdmin) {
 PROGRAM := {"CURL_EXECUTABLE": A_ScriptDir "\lib\third-party\curl.exe"}
 generateCurrencyData := True
 generateLeagueTxt := True
+generateTranslations := True
 
 ; Basic tray menu
 if ( !A_IsCompiled && FileExist(A_ScriptDir "\resources\icon.ico") )
@@ -26,6 +34,33 @@ ver := StrReplace(ver, "_", "99.") ; If _ detected (beta), use 99 as ver
 StringReplace ver,ver,`.,`.,UseErrorLevel
 
 ; Alternative files
+if (generateTranslations) {
+	; First loading eng json and re-saving it to make it ordered
+	FileRead, engJSON,% A_ScriptDir "\resources\translations\english.json"
+	engJSON := JSON_Load(engJSON)
+	jsonText := JSON_Dump(engJSON, skipRx:=True)
+	hFile := FileOpen(A_ScriptDir "\resources\translations\english.json", "w", "UTF-8")
+	hFile.Write(jsonText)
+	hFile.Close()
+
+	; Then going through other languages and adding non-existent keys
+	Loop, Files,% A_ScriptDir "\resources\translations\*.json"
+	{
+		if (A_LoopFileName="english.json")
+			Continue
+		else if !Is_Json(A_LoopFileFullPath) {
+			MsgBox Error file not json: %A_LoopFileFullPath%
+			Continue
+		}
+		thisLangJSON := JSON_Load(A_LoopFileFullPath)
+		thisLangJSON := ObjMerge(thisLangJSON, engJSON)
+		jsonText := JSON_Dump(thisLangJSON, skipRx:=True)
+		
+		hFile := FileOpen(A_LoopFileFullPath, "w", "UTF-8")
+		hFile.Write(jsonText)
+		hFile.Close()
+	}
+}
 if (generateCurrencyData) {
 	ToolTip, Creating poeTradeCurrencyData.json
 	PoeTrade_GenerateCurrencyData()
@@ -138,4 +173,5 @@ ReloadWithParams(params, getCurrentParams=False, asAdmin=False) {
 #Include IEComObj.ahk
 #Include JSON.ahk
 #Include StdOutStream.ahk
+#Include UriEncode.ahk
 #Include WinHttpRequest.ahk
