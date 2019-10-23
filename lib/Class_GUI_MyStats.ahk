@@ -194,7 +194,7 @@
 	}
 
 	RemoveSelectedEntry() {
-		; TO_DO_V2
+		; TO_DO_V2 TRADES_SELL_HISTORY_FILE
 		global PROGRAM
 		global GuiMyStats, GuiMyStats_Controls
 		iniFile := PROGRAM.TRADES_HISTORY_FILE
@@ -629,6 +629,9 @@
 
     Show() {
 		global PROGRAM, GuiMyStats
+
+		MsgBox(4096, "", "My Stats GUI has been temporarily disabled.") ; TO_DO_V2
+		return
 
 		hiddenWin := A_DetectHiddenWindows
 		DetectHiddenWindows, On
