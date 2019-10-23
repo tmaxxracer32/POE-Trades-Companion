@@ -464,7 +464,7 @@ Update_LocalSettings_IniFile() {
 		FileMove,% newSellFile,% PROGRAM.TEMP_FOLDER "\" A_Now "_" fileName ".bak", 1
 		; Setting content into the settings file
 		jsonText := JSON.Dump(newSellObj, "", "`t")
-		hFile := FileOpen(newSellFile, "w", "UTF-16")
+		hFile := FileOpen(newSellFile, "w", "UTF-8")
 		hFile.Write(jsonText)
 		hFile.Close()
 
@@ -1235,16 +1235,16 @@ LocalSettings_VerifyEncoding() {
 
 	; Opening obj and verifying encoding
 	hFile := FileOpen(settingsFile, "r")
-	if (hFile.Encoding != "UTF-16") { ; Wrong encoding
+	if (hFile.Encoding != "UTF-8") { ; Wrong encoding
 		; Read file content
-		AppendToLogs(A_ThisFunc "(): Wrong ini file encoding (" hFile.Encoding "). Making backup and creating new file with UTF-16 encoding.")
+		AppendToLogs(A_ThisFunc "(): Wrong ini file encoding (" hFile.Encoding "). Making backup and creating new file with UTF-8 encoding.")
 		fileContent := hFile.Read()
 		hFile.Close()
 		; Rename old file
 		SplitPath, settingsFile, fileName
 		FileMove,% settingsFile,% PROGRAM.TEMP_FOLDER "\" fileName ".bak", 1
 		; Make new file with old content
-		hFile := FileOpen(settingsFile, "w", "UTF-16")
+		hFile := FileOpen(settingsFile, "w", "UTF-8")
 		hFile.Write(fileContent)
 		hFile.Close()
 	}
@@ -1261,7 +1261,7 @@ Save_LocalSettings(settingsObj="") {
 	FileMove,% settingsFile,% PROGRAM.TEMP_FOLDER "\" fileName ".bak", 1
 	; Setting content into the settings file
 	jsonText := JSON.Dump(settingsObj, "", "`t")
-	hFile := FileOpen(settingsFile, "w", "UTF-16")
+	hFile := FileOpen(settingsFile, "w", "UTF-8")
 	hFile.Write(jsonText)
 	hFile.Close()
 	Declare_LocalSettings(settingsObj)

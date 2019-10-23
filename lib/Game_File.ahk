@@ -18,7 +18,7 @@
 		AppendtoLogs("Unable to read file: """ gameFile """ System Error Code: " A_LastError)
 	}
 
-	File := FileOpen(gameFileCopy, "w", "UTF-16")
+	File := FileOpen(gameFileCopy, "w", "UTF-8")
 	File.Write(fileContent)
 	if (ErrorLevel) {
 		AppendtoLogs("Unable to write in file: """ gameFileCopy """")
@@ -28,7 +28,7 @@
 
 	if (cantWriteCopy && fileContent) {
 		fileEncode := A_FileEncoding
-		FileEncoding, UTF-16
+		FileEncoding, UTF-8
 
 		FileDelete,% gameFileCopy
 		FileAppend,% fileContent,% gameFileCopy

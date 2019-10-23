@@ -930,7 +930,7 @@
 		FileMove,% histFile,% PROGRAM.TEMP_FOLDER "\" fileName ".bak", 1
 		; Setting content into the settings file
 		jsonText := JSON.Dump(histfileObj, "", "`t")
-		hFile := FileOpen(histFile, "w", "UTF-16")
+		hFile := FileOpen(histFile, "w", "UTF-8")
 		hFile.Write(jsonText)
 		hFile.Close()
 	}
@@ -2418,7 +2418,7 @@
 		}
 		
 		jsonText := JSON.Dump(tabInfos, "", "`t")
-		hFile := FileOpen(backupFile, "w", "UTF-16")
+		hFile := FileOpen(backupFile, "w", "UTF-8")
 		hFile.Write(jsonText)
 		hFile.Close()
 	}
