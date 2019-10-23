@@ -1,4 +1,8 @@
-﻿/**
+﻿/*	Slightly modified library for personal use
+	Added Is_JSON(), JSON_Load() and JSON_Dump() functions
+*/
+
+/**
  * Lib: JSON.ahk
  *     JSON lib for AutoHotkey.
  * Version:
@@ -47,7 +51,8 @@ JSON_Load(fileOrObj) {
 	}
 }
 
-JSON_Dump(jsonObj) {
+JSON_Dump(jsonObj, dontReplaceUnicode=False) {
+	global JSON_SKIP_rx_escapable := dontReplaceUnicode ? True : False
 	return JSON.Dump(jsonObj, "", "`t")
 }
 
@@ -361,8 +366,11 @@ class JSON
 				, string := StrReplace(string, "`t",  "\t")
 
 				static rx_escapable := A_AhkVersion<"2" ? "O)[^\x20-\x7e]" : "[^\x20-\x7e]"
-				while RegExMatch(string, rx_escapable, m)
-					string := StrReplace(string, m.Value, Format("\u{1:04x}", Ord(m.Value)))
+				global JSON_SKIP_rx_escapable
+				if (!JSON_SKIP_rx_escapable) {
+					while RegExMatch(string, rx_escapable, m)
+						string := StrReplace(string, m.Value, Format("\u{1:04x}", Ord(m.Value)))
+				}
 			}
 
 			return quot . string . quot
