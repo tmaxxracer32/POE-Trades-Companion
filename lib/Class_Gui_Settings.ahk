@@ -1470,7 +1470,7 @@ Class GUI_Settings {
 		else if (btnSettings.Icon) {
 			GUI_Settings.Customization_SellingBuying_ShowButtonIconControl(whichTab)
 			GUI_Settings.Customization_SellingBuying_SetButtonType(whichTab, "Icon", noTrigger:=True)
-			GUI_Settings.Customization_SellingBuying_SeztButtonIcon(whichTab, btnSettings.Icon, noTrigger:=True)
+			GUI_Settings.Customization_SellingBuying_SetButtonIcon(whichTab, btnSettings.Icon, noTrigger:=True)
 		}
 
 		GUI_Settings.Customization_SellingBuying_LoadButtonActions(whichTab, rowNum, btnNum)
@@ -3080,6 +3080,7 @@ Class GUI_Settings {
 				Gui, TradesSellPreview:Show,% "x" guiX " y" guiY
 			}
 			GUI_Settings.Customization_Selling_AdjustPreviewControls()
+			GUI_Trades_V2.Preview_CustomizeThisCustomButton("Sell", GuiSettings.CUSTOM_BUTTON_SELECTED_ROW,	GuiSettings.CUSTOM_BUTTON_SELECTED_MAX,	GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 		}
 		else
 			Gui, TradesSellPreview:Hide
@@ -3091,7 +3092,8 @@ Class GUI_Settings {
 				Gui, TradesBuyPreview:+LastFound +AlwaysOnTop
 				Gui, TradesBuyPreview:Show,% "x" guiX " y" guiY
 			}
-			GUI_Settings.Customization_Buying_AdjustPreviewControls()	
+			GUI_Settings.Customization_Buying_AdjustPreviewControls()
+			GUI_Trades_V2.Preview_CustomizeThisCustomButton("Buy", GuiSettings.CUSTOM_BUTTON_SELECTED_ROW,	GuiSettings.CUSTOM_BUTTON_SELECTED_MAX,	GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 		}
 		else
 			Gui, TradesBuyPreview:Hide
