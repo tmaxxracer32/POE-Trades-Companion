@@ -118,6 +118,8 @@ class GUI_ItemGrid {
         global GuiItemGridMapMap, GuiItemGridMapMap_Controls, GuiItemGridMapMap_Submit
         global GuiItemGridMapArrow, GuiItemGridMapArrow_Controls, GuiItemGridMapArrow_Submit
 
+        delay := SetControlDelay(0), batch := SetBatchLines(-1)
+
         hideNormalTab := PROGRAM.SETTINGS.SETTINGS_MAIN.ItemGridHideNormalTab
         hideQuadTab := PROGRAM.SETTINGS.SETTINGS_MAIN.ItemGridHideQuadTab
         hideNormalAndQuadTabsForMaps := PROGRAM.SETTINGS.SETTINGS_MAIN.ItemGridHideNormalTabAndQuadTabForMaps
@@ -376,6 +378,7 @@ class GUI_ItemGrid {
             }
             DetectHiddenWindows, %hw%
         }
+        SetControlDelay(delay), SetBatchLines(batch)
     }
 
     Destroy() {

@@ -7,6 +7,7 @@ Class GUI_Settings {
 		static guiCreated
 		windowsDPI := Get_DpiFactor()
 	
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		; Initialize gui arrays
 		GUI_Settings.Destroy()
 		Gui.New("Settings", "-Caption -Border +LabelGUI_Settings_ +HwndhGuiSettings", "POE TC - " PROGRAM.TRANSLATIONS.TrayMenu.Settings)
@@ -486,6 +487,7 @@ Class GUI_Settings {
 		; GUI_Settings.TabMiscAbout_UpdateAllOfFame()
 
 		GuiSettings.Is_Created := True
+		SetControlDelay(delay), SetBatchLines(batch)
 		Return
 
 		GUI_Settings_Close:

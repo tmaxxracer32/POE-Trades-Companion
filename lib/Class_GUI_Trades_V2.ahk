@@ -213,6 +213,8 @@
 			return
 		}
 
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
+
         GUI_Trades_V2.Destroy(guiName)
 		if (_isPreview=True)
 			Gui.New(guiName, "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +LabelGUI_Trades_V2_ +ParentSettings +HwndhGui" guiName, "POE TC - Trades " _buyOrSell)
@@ -767,6 +769,7 @@
 			else
 				GUI_Settings.Customization_SellingBuying_SetPreviewPreferences("Selling")
 		}
+		SetControlDelay(delay), SetBatchLines(batch)
 		Return
 
 		GUI_Trades_V2_ContextMenu:

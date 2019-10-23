@@ -2,6 +2,7 @@
 
     Show(which) {
         global PROGRAM
+        global GuiCheatSheet, GuiCheatSheet_Controls
 
         filePng := which="Betrayal"?"Betrayal.png"
         : which="Delve"?"Delve.png"
@@ -11,8 +12,8 @@
 
         if (!filePng)
             return
-            
-        global GuiCheatSheet, GuiCheatSheet_Controls
+        
+        delay := SetControlDelay(0), batch := SetBatchLines(-1)
         GUI_CheatSheet.Destroy()
         Gui.New("CheatSheet", "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000 +HwndhGuiCheatSheet", "POE TC - CheatSheet")
         Gui.Color("CheatSheet","EEAA99")
@@ -26,6 +27,7 @@
         GuiControl, CheatSheet:+g,% GuiCheatSheet_Controls.hIMG_CheatSheet,% __f
 
         Gui.Show("CheatSheet", "xCenter yCenter AutoSize NoActivate")
+        SetControlDelay(delay), SetBatchLines(batch)
     }
 
     CheatSheetRemove() {

@@ -6,6 +6,7 @@ Class GUI_ImportPre1dot13Settings {
         global PROGRAM, MyDocuments
         global GuiImportPre1dot13Settings, GuiImportPre1dot13Settings_Controls, GuiImportPre1dot13Settings_Submit
         
+        delay := SetControlDelay(0), batch := SetBatchLines(-1)
         GUI_ImportPre1dot13Settings.Destroy()
 		Gui.New("ImportPre1dot13Settings", "-Caption -Border +LabelGUI_ImportPre1dot13Settings_ +HwndhGuiImportPre1dot13Settings", "POE TC - Importing pre-1.13 settings")
 		GuiImportPre1dot13Settings.Is_Created := False
@@ -65,6 +66,7 @@ Class GUI_ImportPre1dot13Settings {
 		GuiControl, ImportPre1dot13Settings:+g,% GuiImportPre1dot13Settings_Controls.hBTN_No,% __f
 
         Gui.Show("ImportPre1dot13Settings", "xCenter yCenter w" guiWidth " h" guiHeight)
+        SetControlDelay(delay), SetBatchLines(batch)
         return
     }
 

@@ -6,6 +6,7 @@
 		static guiCreated
 		windowsDPI := Get_DpiFactor()
 
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		GUI_ChooseLang.Destroy()
 		Gui.New("ChooseLang", "-Caption -Border +AlwaysOnTop +LabelGUI_ChooseLang_ +HwndhGuiChooseLang", "POE TC - Language")
 		GuiChooseLang.Is_Created := False
@@ -97,6 +98,7 @@
 		GUI_ChooseLang.SelectFlagBasedOnLanguage(GuiChooseLang_LANG_Temp)
 
 		Gui.Show("ChooseLang", "h" guiHeight " w" guiWidth " Hide NoActivate")
+		SetControlDelay(delay), SetBatchLines(batch)
 		
         Return
     }

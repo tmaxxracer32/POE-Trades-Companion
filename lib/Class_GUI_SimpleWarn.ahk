@@ -3,6 +3,8 @@
 	Show(_title, _msg, _colorBckgrnd, _colorMsg, params="") {
 		global GuiSimpleWarn, GuiSimpleWarn_Controls, GuiSimpleWarn_Submit
 
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
+
 		baseWidth := 350, baseHeight := 50
 		fontName := "Consolas", fontSize := "10 Bold"
 
@@ -34,6 +36,7 @@
 
 		Gui.Add("SimpleWarn", "Text", "x0 y0 w" guiWidth " h" guiHeight " BackgroundTrans gGUI_SimpleWarn_OnLeftClick")
 		Gui.Show("SimpleWarn", "w" guiWidth " h" guiHeight)
+		SetControlDelay(delay), SetBatchLines(batch)
 
 		WinWait,% "ahk_id " GUISimpleWarn.Hwnd
 

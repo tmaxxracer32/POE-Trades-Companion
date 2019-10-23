@@ -1,3 +1,15 @@
+SetBatchLines(value) {
+	current := A_BatchLines
+	SetBatchLines,%value%
+	return current
+}
+
+SetControlDelay(value) {
+	current := A_ControlDelay
+	SetControlDelay,%value%
+	return current
+}
+
 WinHttpRequest_cURL(URL, ByRef data="", ByRef headers="", options="", isBinaryDL=false) {
 	sentData := data, sentHeaders := headers, sentOptions := options
 	httpRet := WinHttpRequest(URL, data, headers, options)

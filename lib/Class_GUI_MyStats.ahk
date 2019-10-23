@@ -5,6 +5,7 @@
 		global GuiMyStats, GuiMyStats_Controls, GuiMyStats_Submit
 		static guiCreated
 
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		GUI_MyStats.Destroy()
 		Gui.New("MyStats", "-Caption +Resize -MaximizeBox +MinSize720x480  +LabelGUI_MyStats_ +HwndhGuiMyStats", "POE TC - " PROGRAM.TRANSLATIONS.TrayMenu.Stats)
 		; Gui.New("MyStats", "-Caption -Border +LabelGUI_MyStats_ +HwndhGuiMyStats", "MyStats")
@@ -102,6 +103,7 @@
         Gui.Show("MyStats", "h" guiHeight " w" guiWidth-1 " NoActivate Hide")
 		Gui.Show("MyStats", "h" guiHeight " w" guiWidth " NoActivate Hide")
 
+		SetControlDelay(delay), SetBatchLines(batch)
         Return
 
         Gui_MyStats_Size:
@@ -244,8 +246,7 @@
 		; Set GUI as default, needed for LV cmds. Set LV as default for gui.
 		GUI_MyStats.SetDefaultListView("hLV_Stats")
 
-		batchlines := A_BatchLines
-		SetBatchLines, -1
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 
 		; Get data and parse it
 		dataMaxIndex := GuiMyStats.Stats_Data.MaxIndex()
@@ -386,7 +387,7 @@
 			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_TabFilter,% filters.Tab
 		}	
 
-		SetBatchLines, %batchlines%
+		SetControlDelay(delay), SetBatchLines(batch)
 	}
 
     GetFilter(fType="All") {
@@ -423,8 +424,7 @@
 
 		GUI_MyStats.SetDefaultListView("hLV_Stats")
 
-		batchlines := A_BatchLines
-		SetBatchLines, -1
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		GuiControl, -Redraw,% GuiMyStats_Controls.hLV_Stats
 
 		filters := GUI_MyStats.GetFilter("All")
@@ -457,7 +457,7 @@
 		LV_ModifyCol(10, "NoSort")
 		LV_ModifyCol(10, 100)
 
-		SetBatchLines, %batchlines%
+		SetControlDelay(delay), SetBatchLines(batch)
 
 		GuiControl, +Redraw,% GuiMyStats_Controls.hLV_Stats
 	}

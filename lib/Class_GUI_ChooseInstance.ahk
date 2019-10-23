@@ -4,6 +4,7 @@
 		global GuiChooseInstance, GuiChooseInstance_Controls, GuiChooseInstance_Submit
 		static guiWidth, guiHeight
 
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		GUI_ChooseInstance.Destroy()
 		Gui.New("ChooseInstance", "+AlwaysOnTop +SysMenu -MinimizeBox -MaximizeBox +LabelGUI_ChooseInstance_ +HwndhGuiChooseInstance", "POE TC - Game Instances")
 
@@ -99,6 +100,7 @@
 
 		Gui.Show("ChooseInstance", "Hide")
 		Gui.Show("ChooseInstance", "w" guiWidth+5 " h" guiHeight+5)
+		SetControlDelay(delay), SetBatchLines(batch)
 		WinWait,% "ahk_id " GuiChooseInstance.Handle
 		WinWaitClose,% "ahk_id " GuiChooseInstance.Handle
 		chosenInstance := ObjFullyClone(CHOOSEN_INSTANCE)

@@ -83,6 +83,7 @@ Class GUI_SetHotkey {
     Create() {
 		global GuiSetHotkey, GuiSetHotkey_Controls
 
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
         GUI_SetHotkey.Destroy()
 		Gui.New("SetHotkey", "-Caption -Border +LabelGUI_SetHotkey_ +HwndhGuiSetHotkey", "Set Hotkey")
 		Gui.Margin("SetHotkey", 0, 0)
@@ -119,6 +120,7 @@ Class GUI_SetHotkey {
 		
 		GuiControl, SetHotkey:Focus,% GuiSetHotkey_Controls.hHK_Hotkey		
         Gui.Show("SetHotkey", "w" guiFullWidth " h" guiFullHeight)
+		SetControlDelay(delay), SetBatchLines(batch)
     }
 
 	SetHotkey(thisHotkey) {
