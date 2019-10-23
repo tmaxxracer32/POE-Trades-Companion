@@ -86,6 +86,7 @@ Start_Script() {
 
 	global LEAGUES 							:= [] ; Trading leagues
 	global MyDocuments
+	scriptStartTime := A_TickCount
 
 	; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	Handle_CmdLineParameters() 		; RUNTIME_PARAMETERS
@@ -345,8 +346,8 @@ Start_Script() {
 	GUI_Intercom.Create()
 	; ImageButton_TestDelay()
 
-	GUI_Trades_V2.Create(5, buyOrSell:="Sell", stackOrTabs:=PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
-	GUI_Trades_V2.Create(5, buyOrSell:="Buy", stackOrTabs:=PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
+	GUI_Trades_V2.Create(, buyOrSell:="Sell", stackOrTabs:=PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
+	GUI_Trades_V2.Create(, buyOrSell:="Buy", stackOrTabs:=PROGRAM.SETTINGS.BUY_INTERFACE.Mode)
 	GUI_Trades_V2.LoadBackup("Sell")
 	GUI_Trades_V2.LoadBackup("Buy")
 
@@ -392,6 +393,9 @@ Start_Script() {
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
 		trayMsg .= "`n`n" PROGRAM.TRANSLATIONS.TrayNotifications.AppLoadedClickthrough_Msg
 	TrayNotifications.Show(PROGRAM.NAME, trayMsg)
+
+	; msgbox % A_TickCount-scriptStartTime
+	AppendtoLogs("Took " A_TickCount-scriptStartTime " to start the script completely.")
 }
 
 DoNothing:
