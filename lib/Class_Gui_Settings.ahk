@@ -84,8 +84,13 @@ Class GUI_Settings {
 		global ACTIONS_READONLY := "APPLY_ACTIONS_TO_BUY_INTERFACE,APPLY_ACTIONS_TO_SELL_INTERFACE,CLOSE_TAB"
 		. ",CLOSE_SIMILAR_TABS,CLOSE_ALL_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB"
 		. ",SAVE_TRADE_STATS,FORCE_MAX,FORCE_MIN,TOGGLE_MIN_MAX,SHOW_LEAGUE_SHEETS"
-		Loop 9 ; TO_DO_V2
-			ACTIONS_READONLY .= ",CUSTOM_BUTTON_" A_Index
+		Loop 4 { ; four rows
+			rowIndex := A_Index
+			Loop 10 { ; then buttons max per row
+				btnIndex := A_Index
+				ACTIONS_READONLY .= ",CUSTOM_BUTTON_ROW_" rowIndex "_NUM_" btnIndex
+			}
+		}
 		global ACTIONS_EMPTY := ACTIONS_READONLY
 
 		global ACTIONS_WRITE := "WRITE_MSG,WRITE_THEN_GO_BACK"
@@ -112,12 +117,12 @@ Class GUI_Settings {
 		. "|" ACTIONS_TEXT_NAME.GO_TO_PREVIOUS_TAB
 		. "|" ACTIONS_TEXT_NAME.IGNORE_SIMILAR_TRADE
 		. "|" ACTIONS_TEXT_NAME.SAVE_TRADE_STATS
-		. "| "
+		. "|  "
 		. "|" ACTIONS_TEXT_NAME.FORCE_MAX
 		. "|" ACTIONS_TEXT_NAME.FORCE_MIN
 		. "|" ACTIONS_TEXT_NAME.TOGGLE_MIN_MAX
 		. "|" ACTIONS_TEXT_NAME.SHOW_LEAGUE_SHEETS
-		. "|  "
+		. "|   "
 		. "|-> " ACTIONS_SECTIONS.AutoHotKey_Commands
 		. "|" ACTIONS_TEXT_NAME.SENDINPUT
 		. "|" ACTIONS_TEXT_NAME.SENDEVENT
@@ -502,7 +507,7 @@ Class GUI_Settings {
 			else if (ctrlHwnd = GuiSettings_Controls.hLV_CustomizationBuyingActionsList)
 				GUI_Settings.Customization_Buying_OnListviewRightClick()
 			else if (ctrlHwnd = GuiSettings_Controls.hLV_HotkeyActionsList)
-				GUI_Settings.Hotkeys_OnListviewRightClick()
+				GUI_Settings.TabHotkeys_OnListviewRightClick()
 			else
 				GUI_Settings.ContextMenu(ctrlHwnd, ctrlName)
 		return
@@ -1296,6 +1301,7 @@ Class GUI_Settings {
 		newBtnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count := newBtnsCount
 		Save_LocalSettings()
+		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 
 		if (!btnsCount) {
 			; Hiding the row button
@@ -1346,6 +1352,7 @@ Class GUI_Settings {
 		newBtnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count := newBtnsCount
 		Save_LocalSettings()
+		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 
 		Loop % btnsCount ; Hiding previous buttons, skipCreateStyle=False
 			GuiControl, %guiName%:Hide,% GuiTrades[_buyOrSell]["Slot1_Controls"]["hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" A_Index]
@@ -1550,6 +1557,7 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Icon := ddlContent
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Text")
 		Save_LocalSettings()
+		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 
 		btnMax := rowNum=1 ? 5 : IsBetween(rowNum, 2, 4) ? 10 : 0
 		Loop % btnMax {
@@ -1593,6 +1601,7 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text := editBoxContent
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Delete("Icon")
 		Save_LocalSettings()
+		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 
 		btnMax := rowNum=1 ? 5 : IsBetween(rowNum, 2, 4) ? 10 : 0
 		Loop % btnMax {
@@ -1933,6 +1942,7 @@ Class GUI_Settings {
 		PROGRAM.SETTINGS.HOTKEYS[hotkeysCount+1] := {Name: "New hotkey " hotkeysCount+1, Hotkey: "", Actions: [{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE",Content:""}]}
 		Save_LocalSettings()
 		UpdateHotkeys()
+		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 		GUI_Settings.TabHotkeys_SetUserSettings()
 		GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% hotkeysCount+1
 		GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
@@ -1959,6 +1969,7 @@ Class GUI_Settings {
 			}
 			Save_LocalSettings()
 			UpdateHotkeys()
+			GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 			GUI_Settings.TabHotkeys_SetUserSettings()
 			GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% (hotkeysCount > selectedHkNum ? selectedHkNum : hotkeysCount-1)
 			GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
@@ -2076,8 +2087,59 @@ Class GUI_Settings {
 		return GUI_Settings.Universal_OnListviewClick("Hotkeys", params*)
 	}
 
-	Hotkeys_OnListviewRightClick() {
+	TabHotkeys_OnListviewRightClick() {
 		return GUI_Settings.Universal_OnListviewRightClick("Hotkeys")
+	}
+
+	TabHotkeys_UpdateActionsListAutomatically() {
+		global PROGRAM, GuiSettings_Controls, ACTIONS_AVAILABLE, ACTIONS_TEXT_NAME
+		miscTranslations := PROGRAM.TRANSLATIONS.MISC
+		GUI_Settings.SetDefaultListViewBasedOnTabName("Hotkeys")
+
+		actionTypeCtrlName := "hDDL_HotkeyActionType"
+		actionTypeHwnd := GuiSettings_Controls[actionTypeCtrlName]
+
+		; Retrieve the number of the ddl item
+		GuiControl, Settings:+AltSubmit,% actionTypeHwnd
+		chosenItemNum := GUI_Settings.Submit(actionTypeCtrlName)
+		GuiControl, Settings:-AltSubmit,% actionTypeHwnd
+
+		; Get informations about modifying this action
+		lvContent := GUI_Settings.Universal_GetListViewContent("Hotkeys")
+		applyToBuyOrSell := "SELL"
+		Loop % lvContent.Count() {
+			actionType := lvContent[A_Index].ActionType, actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
+			if (actionShortName="APPLY_ACTIONS_TO_BUY_INTERFACE")
+				applyToBuyOrSell := "BUY"
+			else if (actionShortName="APPLY_ACTIONS_TO_SELL_INTERFACE")
+				applyToBuyOrSell := "SELL"
+		}
+
+		guiIniSection := applyToBuyOrSell="BUY"?"BUY_INTERFACE":"SELL_INTERFACE"
+
+		hotkeysActionsAvailable := ACTIONS_AVAILABLE "|    |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_" guiIniSection]
+		Loop 4 { ; 4 rows
+			rowIndex := A_Index
+			if (rowIndex > 1 && PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex-1].Buttons_Count)
+				hotkeysActionsAvailable .= "|    "
+			Loop % PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex].Buttons_Count {
+				btnIndex := A_Index
+				thisBtnSettings := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex][btnIndex]
+				actionName := thisBtnSettings.Text ? thisBtnSettings.Text " (" miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
+					: thisBtnSettings.Icon ? miscTranslations.ICON " " thisBtnSettings.Icon " (" miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
+					: "(" miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
+
+				hotkeysActionsAvailable .= "|" actionName
+				ACTIONS_TEXT_NAME["CUSTOM_BUTTON_ROW_" rowIndex "_NUM_" btnIndex] := actionName
+			}
+		}
+		AutoTrimStr(hotkeysActionsAvailable)
+		if ( SubStr(hotkeysActionsAvailable, -1) = "|" )
+			hotkeysActionsAvailable := StrTrimRight(hotkeysActionsAvailable, 1)
+		GUI.DisableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
+		GuiControl, Settings:,% actionTypeHwnd,% "|" hotkeysActionsAvailable
+		GuiControl, Settings:Choose,% actionTypeHwnd,% chosenItemNum
+		GUI.EnableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -2330,6 +2392,8 @@ Class GUI_Settings {
 
 		Save_LocalSettings()
 		UpdateHotkeys()
+		if (whichTab="Hotkeys")
+			GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 	}
 
 	Universal_ShowActionTypeTip(whichTab, actionTypeShort) {

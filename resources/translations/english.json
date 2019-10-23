@@ -320,7 +320,9 @@
 		"SECTIONS" : {
 			"Chat_Messages" : "Chat Messages",
 			"TC_Interfaces" : "TC Interfaces",
-			"AutoHotKey_Commands" : "AutoHotKey Commands"
+			"AutoHotKey_Commands" : "AutoHotKey Commands",
+			"BUTTONS_SELL_INTERFACE": "Buttons (Sell Interface)",
+			"BUTTONS_BUY_INTERFACE": "Buttons (Buy Interface)"
 		},
 
         "TEXT_NAME" : {
@@ -373,6 +375,12 @@
 			"SENDINPUT" : "Use the SendInput command from AutoHotKey. Can be used with <a id=\"TradingVariables\">Trading Variables</a>.",
 			"SENDEVENT" : "Use the SendEvent command from AutoHotKey. Can be used with <a id=\"TradingVariables\">Trading Variables</a>.",
 			"SLEEP" : "Use the Sleep command from AutoHotKey, to add a delay before continuing with the next action."
-        }
-    }
+		}
+	},
+	
+	"MISC" : {
+		"Icon": "Icon",
+		"Row": "Row",
+		"Number": "Number"
+	}
 }

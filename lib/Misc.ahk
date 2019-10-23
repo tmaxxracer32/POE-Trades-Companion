@@ -78,13 +78,8 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 		Sleep 10
 	}
 
-	if IsContaining(actionType, "CUSTOM_BUTTON_") { 
-		; TO_DO_V2
-		RegExMatch(actionType, "\D+", actionType_NoNum)
-		RegExMatch(actionType, "\d+", actionType_NumOnly)
-
-		GUI_Trades_V2.DoTradeButtonAction(actionType_NumOnly, "Custom")
-
+	if RegExMatch(actionType, "iO)CUSTOM_BUTTON_ROW_(\d+)_NUM_(\d+)", matchObj) {
+		GUI_Trades_V2.DoCustomButtonAction(_buyOrSell, matchObj.1, matchObj.2, tabNum)
 		; ControlClick,,% "ahk_id " GuiTrades.Handle " ahk_id " GuiTrades_Controls["hBTN_Custom" actionType_NumOnly],,,, NA
 	}
 	else if (actionType = "SEND_MSG") {
