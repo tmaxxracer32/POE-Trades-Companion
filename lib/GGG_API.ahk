@@ -49,7 +49,7 @@ GGG_API_CreateDataFiles() {
 		}
 	}
 	fileLocation := A_ScriptDir "/data/poeDotComStaticData.json"
-	jsonText := JSON.Dump(jsonFinal, "", "`t")
+	jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True)
 	hFile := FileOpen(fileLocation, "w", "UTF-8")
 	hFile.Write(jsonText)
 	hFile.Close()
@@ -80,7 +80,7 @@ GGG_API_CreateDataFiles() {
 		}
 	}
 	fileLocation := A_ScriptDir "/data/poeDotComItemsData.json"
-	jsonText := JSON.Dump(jsonFinal, "", "`t")
+	jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True)
 	hFile := FileOpen(fileLocation, "w", "UTF-8")
 	hFile.Write(jsonText)
 	hFile.Close()
@@ -92,7 +92,7 @@ GGG_API_CreateDataFiles() {
             sectFileName := StrReplace(sectFileName, " ", "")
             StringUpper, thisCat, thisCat, T
             fileLocation := A_ScriptDir "/data/poeDotCom" thisCat . sectFileName "Data.json"
-            jsonText := JSON.Dump(jsonFinal[sect], "", "`t")
+            jsonText := JSON_Dump(jsonFinal[sect], dontReplaceUnicode:=True)
             
             hFile := FileOpen(fileLocation, "w", "UTF-8")
             hFile.Write(jsonText)

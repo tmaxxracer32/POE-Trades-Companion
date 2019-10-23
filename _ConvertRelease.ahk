@@ -38,7 +38,7 @@ if (generateTranslations) {
 	; First loading eng json and re-saving it to make it ordered
 	FileRead, engJSON,% A_ScriptDir "\resources\translations\english.json"
 	engJSON := JSON_Load(engJSON)
-	jsonText := JSON_Dump(engJSON, skipRx:=True)
+	jsonText := JSON_Dump(engJSON, dontReplaceUnicode:=True)
 	hFile := FileOpen(A_ScriptDir "\resources\translations\english.json", "w", "UTF-8")
 	hFile.Write(jsonText)
 	hFile.Close()
@@ -54,7 +54,7 @@ if (generateTranslations) {
 		}
 		thisLangJSON := JSON_Load(A_LoopFileFullPath)
 		thisLangJSON := ObjMerge(thisLangJSON, engJSON)
-		jsonText := JSON_Dump(thisLangJSON, skipRx:=True)
+		jsonText := JSON_Dump(thisLangJSON, dontReplaceUnicode:=True)
 		
 		hFile := FileOpen(A_LoopFileFullPath, "w", "UTF-8")
 		hFile.Write(jsonText)
