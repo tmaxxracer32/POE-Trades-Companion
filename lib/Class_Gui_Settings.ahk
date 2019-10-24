@@ -191,10 +191,10 @@ Class GUI_Settings {
 		poeAccDdlPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_PoeAccounts)
 
 		; * * Buying selling modes
-		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_BuyingInterfaceMode", "Buying interface mode:"), buyIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_BuyingInterfaceMode)
+		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_BuyingInterfaceMode", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_BuyingInterfaceMode), buyIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_BuyingInterfaceMode)
 		Gui.Add("Settings", "DropDownList", "xp y+3 w" buyIntefaceTxtPos.W " AltSubmit hwndhDDL_BuyingInterfaceMode", "Tabs|Stack|Disabled")
 
-		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_SellingInterfaceMode", "Selling interface mode:"), sellIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_SellingInterfaceMode)
+		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_SellingInterfaceMode", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_SellingInterfaceMode), sellIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_SellingInterfaceMode)
 		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode", "Tabs|Stack")
 		topMost3 := poeAccDdlPos.Y+poeAccDdlPos.H+25
 		
@@ -243,7 +243,7 @@ Class GUI_Settings {
 		
 		; * * Reset
 		resetBtnW := Get_TextCtrlSize("RESET ALL SETTINGS TO DEFAULT", "Segoe UI", 8, "", "", ctrlType:="Button").W
-		Gui.Add("Settings", "ImageButton", "x" rightMost2-resetBtnW " y" downMost2-30 " h30 hwndhBTN_ResetToDefaultSettings", "RESET ALL SETTINGS TO DEFAULT", Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" rightMost2-resetBtnW " y" downMost2-30 " h30 hwndhBTN_ResetToDefaultSettings", PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_ResetToDefaultSettings, Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_ResetToDefaultSettings", "ResetToDefaultSettings")
 		
 		; User settings
@@ -255,28 +255,28 @@ Class GUI_Settings {
 		Gui, Settings:Tab, Skins
 
 		; * * Preset
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w130 Center hwndhTEXT_Preset", "Preset:")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w130 Center hwndhTEXT_Preset", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_Preset)
 		Gui.Add("Settings", "ListBox", "xp y+5 wp R5 hwndhLB_SkinPreset")
 
 		; * * Skin base
-		Gui.Add("Settings", "Text", "x+10 y" upMost2 " w130 Center hwndhTEXT_SkinBase", "Skin base:")
+		Gui.Add("Settings", "Text", "x+10 y" upMost2 " w130 Center hwndhTEXT_SkinBase", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_SkinBase)
 		Gui.Add("Settings", "ListBox", "xp y+5 wp R5 hwndhLB_SkinBase")
 		
 		; * * Font
-		Gui.Add("Settings", "Text", "x+10 y" upMost2 " w130 Center hwndhTEXT_TextFont", "Text font:")
+		Gui.Add("Settings", "Text", "x+10 y" upMost2 " w130 Center hwndhTEXT_TextFont", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_TextFont)
 		Gui.Add("Settings", "ListBox", "xp y+5 wp R5 hwndhLB_SkinFont")
 
 		; * * Options
-		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_UseRecommendedFontSettings","Use recommended font settings?")
-		Gui.Add("Settings", "Text", "xp y+10 hwndhTEXT_FontSize","Size:")
+		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_UseRecommendedFontSettings", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_UseRecommendedFontSettings)
+		Gui.Add("Settings", "Text", "xp y+10 hwndhTEXT_FontSize", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_FontSize)
 		Gui.Add("Settings", "Edit", "x+2 yp-3 w50 R1 ReadOnly hwndhEDIT_SkinFontSize")
 		Gui.Add("Settings", "UpDown", "Range1-24 hwndhUPDOWN_SkinFontSize")
 		fontSizeTextPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_FontSize)
-		Gui.Add("Settings", "Text", "x+10 y" fontSizeTextPos.Y " hwndhTEXT_FontQuality","Quality:")
+		Gui.Add("Settings", "Text", "x+10 y" fontSizeTextPos.Y " hwndhTEXT_FontQuality", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_FontQuality)
 		Gui.Add("Settings", "Edit", "x+2 yp-3 w50 R1 ReadOnly hwndhEDIT_SkinFontQuality")
 		Gui.Add("Settings", "UpDown", "Range0-5 hwndhUPDOWN_SkinFontQuality")
 		useFontSettingsCbPos := Get_ControlCoords("Settings", GuiSettings_Controls.hCB_UseRecommendedFontSettings)
-		Gui.Add("Settings", "Text", "x" useFontSettingsCbPos.X " y+15 hwndhTEXT_ScalingSize","Interface scaling (`%):")
+		Gui.Add("Settings", "Text", "x" useFontSettingsCbPos.X " y+15 hwndhTEXT_ScalingSize", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_ScalingSize)
 		Gui.Add("Settings", "Edit", "x+5 yp-3 w55 R1 ReadOnly hwndhEDIT_SkinScalingPercentage")
 		Gui.Add("Settings", "UpDown", "Range5-200 hwndhUPDOWN_SkinScalingPercentage")
 
@@ -288,7 +288,7 @@ Class GUI_Settings {
 		; Gui.Add("Settings", "Button", "x+5 yp-1  hwndhBTN_ShowColorPicker R1", "Show Color Picker")
 
 		; * * Preview btn
-		Gui.Add("Settings", "ImageButton", "x" rightMost2-215 " y" downMost2-30 " w215 h30 hwndhBTN_RecreateTradesGUI", "Apply skin changes now", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "ImageButton", "x" rightMost2-215 " y" downMost2-30 " w215 h30 hwndhBTN_RecreateTradesGUI", PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_RecreateTradesGUI, Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_RecreateTradesGUI", "TabCustomizationSkins_RecreateTradesGUI")
 
 		; * * Subroutines + User settings
@@ -299,7 +299,7 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Selling
 
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationSellingInterfaceDisabledText Center Hidden", "This interface is disabled.`nTo enable, go in the Settings tab and change the mode.")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationSellingInterfaceDisabledText Center Hidden", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_CustomizationSellingInterfaceDisabledText)
 
 		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationSellingButtonMinusRow1 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationSellingButtonPlusRow1 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
@@ -325,7 +325,7 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Buying
 
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationBuyingInterfaceDisabledText Center Hidden", "This interface is disabled.`nTo enable, go in the Settings tab and change the mode.")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " hwndhTEXT_CustomizationBuyingInterfaceDisabledText Center Hidden", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_CustomizationBuyingInterfaceDisabledText)
 
 		Gui.Add("Settings", "ImageButton", "x" leftMost2 " y" upMost2 " w25 h25 hwndhBTN_CustomizationBuyingButtonMinusRow1 Hidden", "-", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow1 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
@@ -356,17 +356,17 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ImageButton", "x+4 yp wp hp hwndhBTN_HotkeyAddNewProfile", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		centeredX := rightMost2-leftMost3-160-(160/2)-(15/2)
-		Gui.Add("Settings", "Text", "x" centeredX " y" upMost2 " Center hwndhTEXT_HotkeyProfileName", "Profile name:")
+		Gui.Add("Settings", "Text", "x" centeredX " y" upMost2 " Center hwndhTEXT_HotkeyProfileName", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_HotkeyProfileName)
 		Gui.Add("Settings", "Edit", "xp y+3 w160 hwndhEDIT_HotkeyProfileName", ""), editHkProfNamePos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyProfileName)
 		Gui.MoveControl("Settings", "hTEXT_HotkeyProfileName", "w" editHkProfNamePos.W)
 		
-		Gui.Add("Settings", "Text", "x+15 y" upMost2 " Center hwndhTEXT_HotkeyProfileHotkey", "Profile hotkey:")
+		Gui.Add("Settings", "Text", "x+15 y" upMost2 " Center hwndhTEXT_HotkeyProfileHotkey", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_HotkeyProfileHotkey)
 		Gui.Add("Settings", "Edit", "xp y+3 w130 hwndhEDIT_HotkeyProfileHotkey ReadOnly", ""), editHkProfHotkeyPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyProfileHotkey)
 		Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_EditHotkey", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8) ; TO_DO_V2 remove later
 		Gui.MoveControl("Settings", "hTEXT_HotkeyProfileHotkey", "w" editHkProfHotkeyPos.W)
 
 		availableWidth := rightMost2-leftMost3
-		Gui.Add("Settings", "Text", "x" leftMost3 " y+25 w" availableWidth " Center hwndhTEXT_Actions", "Actions:")
+		Gui.Add("Settings", "Text", "x" leftMost3 " y+25 w" availableWidth " Center hwndhTEXT_Actions", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_Actions)
 		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
 		Gui.Add("Settings", "Link", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
@@ -382,24 +382,24 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, Updating
 
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " hwndhTEXT_YourVersion", "Your version:")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " hwndhTEXT_YourVersion", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_YourVersion)
 		Gui.Add("Settings", "Text", "x+30 yp BackgroundTrans hwndhTEXT_ProgramVer")
 		yourVerCoords := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_YourVersion)
 		programVerCoords := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_ProgramVer)
 
-		Gui.Add("Settings", "Text", "x" yourVerCoords.X " y+10 hwndhTEXT_LatestStable", "Latest Stable:")
+		Gui.Add("Settings", "Text", "x" yourVerCoords.X " y+10 hwndhTEXT_LatestStable", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_LatestStable)
 		Gui.Add("Settings", "Text", "x" programVerCoords.X " yp BackgroundTrans hwndhTEXT_LatestStableVer")
-		Gui.Add("Settings", "Text", "x" yourVerCoords.X " y+5 hwndhTEXT_LatestBETA", "Latest BETA:")
+		Gui.Add("Settings", "Text", "x" yourVerCoords.X " y+5 hwndhTEXT_LatestBETA", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_LatestBETA)
 		Gui.Add("Settings", "Text", "x" programVerCoords.X " yp BackgroundTrans hwndhTEXT_LatestBetaVer")
-		Gui.Add("Settings", "ImageButton", "x" yourVerCoords.X " y+10 h25 hwndhBTN_CheckForUpdates", "Check for updates manually", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.Add("Settings", "Text", "x+5 yp+7 hwndhTEXT_MinsAgo", "(x mins ago)")
+		Gui.Add("Settings", "ImageButton", "x" yourVerCoords.X " y+10 h25 hwndhBTN_CheckForUpdates", PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_CheckForUpdates, Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("Settings", "Text", "x+5 yp+7 hwndhTEXT_MinsAgo", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_MinsAgo)
 
 		; Gui.Add("Settings", "Checkbox", "x400 y" upMost2+20 " hwndhCB_AllowToUpdateAutomaticallyOnStart", "Allow to update automatically on start?")
 		; Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_AllowPeriodicUpdateCheck", "Allow automatic update check every 2hours?")
-		Gui.Add("Settings", "Text", "x350 y" upMost2+10 " hwndhTEXT_CheckForUpdatesWhen", "Check for updates... ")
+		Gui.Add("Settings", "Text", "x350 y" upMost2+10 " hwndhTEXT_CheckForUpdatesWhen", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_CheckForUpdatesWhen)
 		Gui.Add("Settings", "DropDownList", "x+5 yp-2 w155 hwndhDDL_CheckForUpdate AltSubmit", "Only on application start|On start + every 5 hours|On start + every day")
-		Gui.Add("Settings", "Checkbox", "x350 y+10 hwndhCB_UseBeta", "Use the BETA branch?")		
-		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_DownloadUpdatesAutomatically", "Download updates`nautomatically?")
+		Gui.Add("Settings", "Checkbox", "x350 y+10 hwndhCB_UseBeta", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_UseBeta)
+		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_DownloadUpdatesAutomatically", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_DownloadUpdatesAutomatically)
 		
 		Gui.Add("Settings", "Edit", "x" leftMost2 " y" upMost2+125 " w" rightMost2-leftMost2 " R10 hwndhEDIT_ChangeLogs ReadOnly", Get_Changelog(removeTrails:=True) ), chgLogEditPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_ChangeLogs)
 		Gui.MoveControl("Settings", "hEDIT_ChangeLogs", "h" downMost2-chgLogEditPos.Y)
@@ -411,12 +411,9 @@ Class GUI_Settings {
 		*/
 		Gui, Settings:Tab, About
 
-		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " Center BackgroundTrans hwndhTEXT_About" , "POE Trades Companion is a tool meant to enhance your trading experience. "
-			. "`n`nUpon receiving a trading whisper (poe.trade / poeapp.com),"
-			. "`nthe most important informations from the trade will be shown in a convenient interface."
-			. "`n`nUp to nine custom buttons to interact with your buyer, five special smaller buttons to do the strict minimum, and many hotkeys are available to make trading more enjoyable.")
+		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w" rightMost2-leftMost2 " Center BackgroundTrans hwndhTEXT_About" , PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_About)
 
-		Gui.Add("Settings", "Edit", "x" leftMost2 " y+15 wp R10 ReadOnly Center hwndhEDIT_HallOfFame", "Hall of Fame`nThank you for your support!`n`n" "[Hall of Fame loading]"), hofPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HallOfFame)
+		Gui.Add("Settings", "Edit", "x" leftMost2 " y+15 wp R10 ReadOnly Center hwndhEDIT_HallOfFame", PROGRAM.TRANSLATIONS.GUI_Settings.hEDIT_HallOfFame), hofPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HallOfFame)
 		Gui.MoveControl("Settings", "hEDIT_HallOfFame", "h" downMost2-hofPos.Y)
 
 		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
@@ -1546,11 +1543,11 @@ Class GUI_Settings {
 		btnNum := GuiSettings.CUSTOM_BUTTON_SELECTED_NUM
 		; Couldnt save notification
 		if (!rowNum || !btnsCount || !btnNum) {
-			TrayNotifications.Show("", "COULDN'T SAVE BUTTON NAME"
-			. "`nRow: " rowNum
-			. "`nCount: " btnsCount
-			. "`nNum: " btnNum
-			. "`nTab: " whichTab)
+			; TrayNotifications.Show("", "COULDN'T SAVE BUTTON NAME"
+			; . "`nRow: " rowNum
+			; . "`nCount: " btnsCount
+			; . "`nNum: " btnNum
+			; . "`nTab: " whichTab)
 			return
 		}
 
@@ -1590,11 +1587,11 @@ Class GUI_Settings {
 		btnNum := GuiSettings.CUSTOM_BUTTON_SELECTED_NUM
 		; Couldnt save notification
 		if (!rowNum || !btnsCount || !btnNum) {
-			TrayNotifications.Show("", "COULDN'T SAVE BUTTON NAME"
-			. "`nRow: " rowNum
-			. "`nCount: " btnsCount
-			. "`nNum: " btnNum
-			. "`nTab: " whichTab)
+			; TrayNotifications.Show("", "COULDN'T SAVE BUTTON NAME"
+			; . "`nRow: " rowNum
+			; . "`nCount: " btnsCount
+			; . "`nNum: " btnNum
+			; . "`nTab: " whichTab)
 			return
 		}
 
@@ -1954,7 +1951,7 @@ Class GUI_Settings {
 		global PROGRAM, GuiSettings_Controls
 		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		MsgBox(4096+4, "", PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name
-		. "`n" "Are you sure to delete this hotkey profile?")
+		. "`n" PROGRAM.TRANSLATIONS.MessageBoxes.Settings_RemoveSelectedHotkeyProfile)
 		IfMsgBox, Yes
 		{
 			hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
@@ -2201,20 +2198,22 @@ Class GUI_Settings {
 		timeDiff -= lastTimeChecked, Minutes
 		timeDiff := timeDiffS < 61 ? 1 : timeDiff
 		; Set groupbox title
+		/* No longer used, no more GB control
 		if (UPDATE_TAGNAME != "")
 			GuiControl, Settings:,% GuiSettings_Controls.hGB_UpdateCheck,% updAvailable " is available!"
 		else GuiControl, Settings:,% GuiSettings_Controls.hGB_UpdateCheck,% "You are up to date!"
+		*/
 
 		; Set field content
 		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_ProgramVer,% PROGRAM.VERSION
 		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_LatestStableVer,% thisTabSettings.LatestStable
 		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_LatestBetaVer,% thisTabSettings.LatestBeta
-		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_MinsAgo,% "(" timeDiff " mins ago)"
+		GuiControl, Settings:,% GuiSettings_Controls.hTEXT_MinsAgo,% StrReplace(PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_MinsAgo, "%time%", timeDiff)
 		; Update control size
 		GuiControl, Settings:Move,% GuiSettings_Controls.hTEXT_ProgramVer,% "w" Get_TextCtrlSize(PROGRAM.VERSION, "Segoe UI", "8").W
 		GuiControl, Settings:Move,% GuiSettings_Controls.hTEXT_LatestStableVer,% "w" Get_TextCtrlSize(thisTabSettings.LatestStable, "Segoe UI", "8").W
 		GuiControl, Settings:Move,% GuiSettings_Controls.hTEXT_LatestBetaVer,% "w" Get_TextCtrlSize(thisTabSettings.LatestBeta, "Segoe UI", "8").W
-		GuiControl, Settings:Move,% GuiSettings_Controls.hTEXT_MinsAgo,% "w" Get_TextCtrlSize("(" timeDiff " mins ago)", "Segoe UI", "8").W
+		GuiControl, Settings:Move,% GuiSettings_Controls.hTEXT_MinsAgo,% "w" Get_TextCtrlSize(StrReplace(PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_MinsAgo, "%time%", timeDiff), "Segoe UI", "8").W
 	}
 
 	TabMiscUpdating_OnCheckboxToggle(CtrlName) {
@@ -2350,11 +2349,11 @@ Class GUI_Settings {
 			btnNum := GuiSettings.CUSTOM_BUTTON_SELECTED_NUM
 			; Couldnt save notification
 			if (!rowNum || !btnsCount || !btnNum) {
-				TrayNotifications.Show("", "COULDN'T SAVE BUTTON"
-				. "`nRow: " rowNum
-				. "`nCount: " btnsCount
-				. "`nNum: " btnNum
-				. "`nTab: " whichTab)
+				; TrayNotifications.Show("", "COULDN'T SAVE BUTTON"
+				; . "`nRow: " rowNum
+				; . "`nCount: " btnsCount
+				; . "`nNum: " btnNum
+				; . "`nTab: " whichTab)
 				return
 			}
 		}
@@ -2526,7 +2525,7 @@ Class GUI_Settings {
 
 			if (contentSubStr != actionForcedContent) {
 				GUI_Settings.Universal_SetActionContent(whichTab, actionForcedContent)
-				ShowToolTip("The string has to start with """ actionForcedContent """")
+				ShowToolTip( StrReplace(PROGRAM.TRANSLATIONS.ToolTips.StringHasToStartWith, "%text%", "actionForcedContent") )
 				tipWarn := True, actionContent := actionForcedContent
 			}
 		}
@@ -2535,12 +2534,12 @@ Class GUI_Settings {
 
 			if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
 				GUI_Settings.Universal_SetActionContent(whichTab, 100)
-				ShowToolTip("This value can only be an integer.")
+				ShowToolTip(PROGRAM.TRANSLATIONS.ToolTips.ValueCanBeIntegerOnly)
 				tipWarn := True, actionContent := 100
 			}
 			else if IsDigit(actionContent) && (actionContent > 5000) {
 				GUI_Settings.Universal_SetActionContent(whichTab, 5000)
-				ShowToolTip("Max value is 5000 milliseconds.")
+				ShowToolTip( StrReplace(PROGRAM.TRANSLATIONS.ToolTips.MaxValueIs, "%value%", 5000) )
 				tipWarn := True, actionContent := 1000
 			}
 		}
@@ -2549,7 +2548,7 @@ Class GUI_Settings {
 
 			if (actionContent) && ( !IsDigit(actionContent) || IsContaining(actionContent, ".") ) {
 				GUI_Settings.Universal_SetActionContent(whichTab, 10)
-				ShowToolTip("This value can only be an integer.")
+				ShowToolTip(PROGRAM.TRANSLATIONS.ToolTips.ValueCanBeIntegerOnly)
 				tipWarn := True, actionContent := 10
 			}
 		}
@@ -2974,12 +2973,11 @@ Class GUI_Settings {
 		TrayMenu() ; Re-creating tray menu
 		settingsWinExists := WinExist("ahk_id " GuiSettings.Handle)
 		if (settingsWinExists) {
-			if (lang = prevLang)
-				GUI_Settings.SetTranslation(lang)
-			else {
-				GUI_Settings.Create()
-				GUI_Settings.Show()
-			}
+			settingsTab := GUI_Settings.GetSelectedTab()
+			GUI_Trades_V2.Destroy("BuyPreview")
+			GUI_Trades_V2.Destroy("SellPreview")
+			GUI_Settings.Create()
+			GUI_Settings.Show(settingsTab)
 		}
 		else
 			GUI_Settings.Create()
@@ -3113,6 +3111,10 @@ Class GUI_Settings {
 	ContextMenu(CtrlHwnd, CtrlName) {
 		global PROGRAM, GuiSettings
 		
+	}
+
+	GetSelectedTab() {
+		return GUI_Settings.Submit("hTab_AllTabs")
 	}
 
 	GetControlToolTip(ctrlName) {

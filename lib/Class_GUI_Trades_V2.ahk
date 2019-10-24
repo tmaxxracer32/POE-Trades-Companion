@@ -2848,6 +2848,7 @@
 		Loop % GuiTrades[_buyOrSell].Tabs_Limit
 			Gui.Destroy("Trades" _buyOrSell "_Slot" A_Index)
 		Gui.Destroy(_buyOrSell)
+		GuiTrades.Delete(_buyOrSell)
 	}
 
 	Submit(_buyOrSell, CtrlName="") {
