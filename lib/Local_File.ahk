@@ -952,7 +952,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 				. ",ReplaceOldTradeVariables,UpdateKickMyselfOutOfPartyHideoutHotkey,ImportPre1Dot15IniSettings")
 					isValid := IsIn(userValue, "True,False") ? True : False
 				else if (k="Language")
-					isValid := IsIn(userValue, "chinese_simplified,chinese_traditional,english,french") ? True : False
+					isValid := IsIn(userValue, "chinese_simplified,chinese_traditional,english,french,russian,portuguese") ? True : False
 				else isValid := False
 			}
 			else if (parents.1 = "HOTKEYS") {
@@ -1114,7 +1114,7 @@ LocalSettings_Verify() {
 		. ",ReplaceOldTradeVariables,UpdateKickMyselfOutOfPartyHideoutHotkey,AskForLanguage")
 			isValid := IsIn(value, "True,False") ? True : False
 		else if (key = "Language")
-			isValid := IsIn(iniValue, "english,french,chinese_simplified,chinese_traditional") ? True : False
+			isValid := IsIn(iniValue, "english,french,chinese_simplified,chinese_traditional,russian,portuguese") ? True : False
 		else isValid := False
 
 		finalSettings.GENERAL[key] := isValid?value:defValue

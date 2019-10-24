@@ -437,6 +437,7 @@ Class GUI_Settings {
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagChina BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_china.png")
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagTaiwan BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_taiwan.png")
 		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagRussia BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_russia.png")
+		Gui.Add("SettingsFooter", "Picture", "x+3 yp wp hp hwndhIMG_FlagPortugal BackgroundTrans", PROGRAM.IMAGES_FOLDER "\flag_portugal.png")
 
 		Gui.Add("SettingsFooter", "Picture", "x" guiFooterW-120 " y5 w115 h40 hwndhIMG_Paypal BackgroundTrans", PROGRAM.IMAGES_FOLDER "\DonatePaypal.png")
 		Gui.Add("SettingsFooter", "Picture", "xp-70 yp w40 h40 hwndhIMG_Discord BackgroundTrans", PROGRAM.IMAGES_FOLDER "\Discord.png")
@@ -449,6 +450,7 @@ Class GUI_Settings {
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagChina", "OnLanguageChange", "chinese_simplified")
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagTaiwan", "OnLanguageChange", "chinese_traditional")
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagRussia", "OnLanguageChange", "russian")
+		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_FlagPortugal", "OnLanguageChange", "portuguese")
 
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Paypal", "OnPictureLinkClick", "Paypal")
 		Gui.BindFunctionToControl("GUI_Settings", "SettingsFooter", "hIMG_Discord", "OnPictureLinkClick", "Discord")

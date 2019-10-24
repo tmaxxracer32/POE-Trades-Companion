@@ -73,6 +73,7 @@
 		Gui.Add("ChooseLang", "Picture", "xp+" spaceBetweenIcons " yp wp hp hwndhIMG_FlagChina", PROGRAM.IMAGES_FOLDER "\flag_china.png")
 		Gui.Add("ChooseLang", "Picture", "xp+" spaceBetweenIcons " yp wp hp hwndhIMG_FlagTaiwan", PROGRAM.IMAGES_FOLDER "\flag_taiwan.png")
 		Gui.Add("ChooseLang", "Picture", "xp+" spaceBetweenIcons " yp wp hp hwndhIMG_FlagRussia", PROGRAM.IMAGES_FOLDER "\flag_russia.png")
+		Gui.Add("ChooseLang", "Picture", "xp+" spaceBetweenIcons " yp wp hp hwndhIMG_FlagPortugal", PROGRAM.IMAGES_FOLDER "\flag_portugal.png")
 
 		__f := GUI_ChooseLang.OnLanguageChange.bind(GUI_ChooseLang, "english")
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls["hIMG_FlagUK"],% __f
@@ -84,6 +85,8 @@
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls["hIMG_FlagTaiwan"],% __f
 		__f := GUI_ChooseLang.OnLanguageChange.bind(GUI_ChooseLang, "russian")
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls["hIMG_FlagRussia"],% __f
+		__f := GUI_ChooseLang.OnLanguageChange.bind(GUI_ChooseLang, "portuguese")
+		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls["hIMG_FlagPortugal"],% __f
 
 		Gui.Add("ChooseLang", "ImageButton", "x" leftMost+10 " y+15 w" guiWidth-20 " h30 hwndhBTN_AcceptLang", PROGRAM.TRANSLATIONS.GUI_ChooseLang.hBTN_AcceptLang, Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		__f := GUI_ChooseLang.AcceptLang.bind(GUI_ChooseLang)
@@ -93,7 +96,7 @@
 		*	SHOW
 		*/
 
-		GuiChooseLang.Flags := {english:"UK",french:"France",chinese_simplified:"China",chinese_traditional:"Taiwan",russian:"Russia"}
+		GuiChooseLang.Flags := {english:"UK",french:"France",chinese_simplified:"China",chinese_traditional:"Taiwan",russian:"Russia",portuguese:"Portugal"}
 		global GuiChooseLang_LANG_Temp := PROGRAM.SETTINGS.GENERAL.Language
 		GUI_ChooseLang.SelectFlagBasedOnLanguage(GuiChooseLang_LANG_Temp)
 
