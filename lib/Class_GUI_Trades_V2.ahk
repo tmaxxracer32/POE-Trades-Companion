@@ -704,16 +704,20 @@
             Gui%guiName%["Slot1_Pos"] := (TabsBackground_Y+TabsBackground_H)*windowsDPI
 
         if (Gui%guiName%.ImageButton_Errors) {
-			Gui, ErrorLog:New, +AlwaysOnTop +ToolWindow +hwndhGuiErrorLog
-			Gui, ErrorLog:Add, Text, x10 y10,% "One or multiple error(s) occured while creating the Trades GUI imagebuttons."
-			. "`nIn case you are getting ""Couldn't get button's font"" errors, restarting your computer should fix it."
-			Gui, ErrorLog:Add, Edit, xp y+5 w800 R30 ReadOnly,% Gui%guiName%.ImageButton_Errors
-			Gui, ErrorLog:Add, Link, xp y+5,% "If you need assistance, you can contact me on: "
-			. "<a href=""" PROGRAM.LINK_GITHUB """>GitHub</a> - <a href=""" PROGRAM.LINK_REDDIT """>Reddit</a> - <a href=""" PROGRAM.LINK_GGG """>PoE Forums</a> - <a href=""" PROGRAM.LINK_DISCORD """>Discord</a>"
-			Gui, ErrorLog:Show,xCenter yCenter,% PROGRAM.NAME " - Trades GUI Error log"
-			WinWait, ahk_id %hGuiErrorLog%
-            ; WinClose, ahk_id %hGuiErrorLog%
-			WinWaitClose, ahk_id %hGuiErrorLog%
+			global GuiErrorLogBuy, GuiErrorLogBuyPreview, GuiErrorLogSellPreview, GuiErrorLogSell
+			errorLog := errorLogNoTrim := Gui%guiName%.ImageButton_Errors
+			if ( StrLen(errorLog) > 60000 ) {
+				errorLog := StrTrimRight(errorLog, StrLen(errorLog) - 60000)
+				errorLog .= "`n`n`n[ Logs trimmed due to AHK length restriction ]"
+				AppendToLogs(errorLogNoTrim)
+			}
+			Gui.New("ErrorLog" guiName, "+AlwaysOnTop +ToolWindow +HwndhGui", "GUI Trades " _buyOrSell " Error Logs")
+			Gui.Add("ErrorLog" guiName, "Text", "x10 y10", "One or multiple error(s) occured while creating the Trades GUI imagebuttons."
+			. "`nIn case you are getting ""Couldn't get button's font"" errors, restarting your computer should fix it.")
+			Gui.Add("ErrorLog" guiName, "Edit", "xp y+5 w800 R30 ReadOnly", errorLog)
+			Gui.Add("ErrorLog" guiName, "Link", "xp y+5", "If you need assistance, you can contact me on: "
+			. "<a href=""" PROGRAM.LINK_GITHUB """>GitHub</a> - <a href=""" PROGRAM.LINK_REDDIT """>Reddit</a> - <a href=""" PROGRAM.LINK_GGG """>PoE Forums</a> - <a href=""" PROGRAM.LINK_DISCORD """>Discord</a>")
+			Gui.Show("ErrorLog" guiName, "xCenter yCenter")
 		}
 
         if !IsObject(GuiTrades)
