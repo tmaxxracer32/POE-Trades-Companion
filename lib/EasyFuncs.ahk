@@ -147,6 +147,55 @@ GetGlobalVar(var) {
 	return retValue
 }
 
+ObjReplace(obj1, obj2) {
+/*  Modified version of ObjFullyClone
+    Any key from obj2 will replace obj1 keys, as long as they also exist in obj1
+    If they don't exist, they will be deleted from the returned obj
+*/
+	if IsObject(obj1) && !IsObject(obj2)
+		return obj1
+	else if !IsObject(obj1) && IsObject(obj2)
+		return obj2 
+
+    nobj1 := obj1.Clone()
+    nobj2 := obj2.Clone()
+    nobj3 := obj1.Clone()
+
+    for k,v in nobj1 {
+        if IsObject(v) && !IsObject(nobj3[k]) && !nobj3.HasKey(k)
+            nobj3[k] := ObjFullyClone(v)
+        else if IsObject(v) && IsObject(nobj3[k])
+            nobj3[k] := A_ThisFunc.(nobj3[k], obj1[k])
+        else {
+            if !nobj3.HasKey(k)
+                nobj3[k] := v   
+            for k2,v2 in v
+                if !nobj3[k].HasKey(k2)
+                    nobj3[k][k2] := v2         
+        }
+    }
+ 
+    for k,v in nobj2 {
+        if IsObject(v) && IsObject(nobj1[k]) && nobj1.HasKey(k)
+            nobj3[k] := A_ThisFunc.(nobj1[k], v)
+        else if IsObject(v) && IsObject(nobj1[k])
+            nobj3[k] := A_ThisFunc.(nobj3[k], obj2[k])
+        else {
+            if (nobj1.HasKey(k)) && !IsObject(nobj1[k]) && !IsObject(v)
+                nobj3[k] := v
+            else if !nobj1.HasKey(k)
+                nobj3.Delete(k)
+            for k2,v2 in v
+                if nobj1[k].HasKey(k2)
+                    nobj3[k][k2] := v2
+                else
+                    nobj3[k].Delete(k2)
+        }
+    }
+
+	return nobj3
+}
+
 ObjMerge(obj1, obj2) {
 /*  Modified version of ObjFullyClone to allow merging two objects
 	In case value exists both in obj1 and obj2, obj1 will be prioritary
