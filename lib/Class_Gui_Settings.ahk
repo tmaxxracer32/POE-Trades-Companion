@@ -268,14 +268,13 @@ Class GUI_Settings {
 
 		; * * Options
 		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_UseRecommendedFontSettings", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_UseRecommendedFontSettings)
-		Gui.Add("Settings", "Text", "xp y+10 hwndhTEXT_FontSize", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_FontSize)
+		useFontSettingsCbPos := Get_ControlCoords("Settings", GuiSettings_Controls.hCB_UseRecommendedFontSettings)
+		Gui.Add("Settings", "Text", "x" useFontSettingsCbPos.X " y+10 hwndhTEXT_FontSize", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_FontSize)
 		Gui.Add("Settings", "Edit", "x+2 yp-3 w50 R1 ReadOnly hwndhEDIT_SkinFontSize")
 		Gui.Add("Settings", "UpDown", "Range1-24 hwndhUPDOWN_SkinFontSize")
-		fontSizeTextPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_FontSize)
-		Gui.Add("Settings", "Text", "x+10 y" fontSizeTextPos.Y " hwndhTEXT_FontQuality", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_FontQuality)
+		Gui.Add("Settings", "Text", "x" useFontSettingsCbPos.X " y+5 hwndhTEXT_FontQuality", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_FontQuality)
 		Gui.Add("Settings", "Edit", "x+2 yp-3 w50 R1 ReadOnly hwndhEDIT_SkinFontQuality")
 		Gui.Add("Settings", "UpDown", "Range0-5 hwndhUPDOWN_SkinFontQuality")
-		useFontSettingsCbPos := Get_ControlCoords("Settings", GuiSettings_Controls.hCB_UseRecommendedFontSettings)
 		Gui.Add("Settings", "Text", "x" useFontSettingsCbPos.X " y+15 hwndhTEXT_ScalingSize", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_ScalingSize)
 		Gui.Add("Settings", "Edit", "x+5 yp-3 w55 R1 ReadOnly hwndhEDIT_SkinScalingPercentage")
 		Gui.Add("Settings", "UpDown", "Range5-200 hwndhUPDOWN_SkinScalingPercentage")
@@ -316,7 +315,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1 Hidden", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2 Hidden", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
 		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationSellingActionContent Hidden")
-		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationSellingActionTypeTip Hidden")
+		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R3 hwndhTEXT_CustomizationSellingActionTypeTip Hidden")
 		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10 Hidden", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationSellingActionsList, "0x0b6fcc", "0xFFFFFF")
 
@@ -342,7 +341,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1 Hidden", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
 		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2 Hidden", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
 		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationBuyingActionContent Hidden")
-		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R2 hwndhTEXT_CustomizationBuyingActionTypeTip Hidden")
+		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R3 hwndhTEXT_CustomizationBuyingActionTypeTip Hidden")
 		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10 Hidden", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_CustomizationBuyingActionsList, "0x0b6fcc", "0xFFFFFF")
 
@@ -369,7 +368,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+25 w" availableWidth " Center hwndhTEXT_Actions", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_Actions)
 		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2", ACTIONS_AVAILABLE)
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
-		Gui.Add("Settings", "Link", "x" leftMost3 " y+5 w" availableWidth " R2 hwndhTEXT_HotkeyActionTypeTip")
+		Gui.Add("Settings", "Link", "x" leftMost3 " y+5 w" availableWidth " R3 hwndhTEXT_HotkeyActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_HotkeyActionsList, "0x0b6fcc", "0xFFFFFF")
 
@@ -2409,8 +2408,9 @@ Class GUI_Settings {
 	}
 
 	Universal_OnActionTypeTipLinkClick(CtrlHwnd, GuiEvent, LinkIndex, HrefOrID) {
+		global PROGRAM
 		if (HrefOrID="TradingVariables") {
-			ShowToolTip("[ Add TradingVariables tooltip here ]")
+			ShowToolTip(PROGRAM.TRANSLATIONS.ToolTips.TradingVariables)
 		}
 	}
 
@@ -2666,7 +2666,10 @@ Class GUI_Settings {
 			actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 			if (actionType)
 			*/
-				GUI_Settings.Universal_AddNewAction(whichTab, ACTIONS_TEXT_NAME.SEND_MSG, "@%buyer% Write something here")
+				actionText := "@%buyer% Write something here"
+				if (whichTab="Buying")
+					actionText := StrReplace("%buyer%", "%seller%")
+				GUI_Settings.Universal_AddNewAction(whichTab, ACTIONS_TEXT_NAME.SEND_MSG, actionText)
 		return
 
 		Universal_OnListviewRightClick_RemoveSelectedAction:
@@ -3316,6 +3319,10 @@ Class GUI_Settings {
 				actionContentCtrlName := StrReplace(prevUnderMouseName, "hDDL_", "hEDIT_"), actionContentCtrlName := StrReplace(actionContentCtrlName, "ActionType", "ActionContent")
 				Gui.MoveControl(A_Gui, prevUnderMouseName, "w" ddlBak.W)
 				Gui.MoveControl(A_Gui, actionContentCtrlName, "x" editBak.X " w" editBak.W)
+			}
+
+			if RegExMatch(underMouseName, "hTEXT_.*ActionTypeTip") {
+				ShowtoolTip(GUI_Settings.Submit(underMouseName))
 			}
 
 			prevUnderMouseHwnd := underMouseHwnd, prevUnderMouseName := underMouseName

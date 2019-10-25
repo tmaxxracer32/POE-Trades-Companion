@@ -173,8 +173,8 @@
 		"hTEXT_PushBulletNotifications_ToolTip": "Allows to receive notifications on mobile.",
 		"hTEXT_PushBulletToken": "Token:",
 		"hTEXT_PushBulletToken_ToolTip": "Your Pushbullet token, specific to your PushBullet account.\nhttps://www.pushbullet.com/#settings/account",
-		"hTEXT_ScalingSize": "Scaling size (%)",
-		"hTEXT_ScalingSize_ToolTip": "/!\\ ADVANCED USERS ONLY /!\\\nIncrease or decrease the global size of the interface.",
+		"hTEXT_ScalingSize": "Interface scaling (%)",
+		"hTEXT_ScalingSize_ToolTip": "/!\\ ADVANCED USERS ONLY /!\\\nIncrease or decrease the scaling size of the interface.",
 		"hTEXT_SellingInterfaceMode": "Selling interface mode:",
 		"hTEXT_SkinBase": "Skin base:",
 		"hTEXT_SkinBase_ToolTip": "/!\\ ADVANCED USERS ONLY /!\\\nSelect the assets of the skin you would like to use.",
@@ -220,6 +220,7 @@
 	"ToolTips": {
 		"MaxValueIs": "Max value is %value% milliseconds.",
 		"StringHasToStartWith": "The string has to start with %text%",
+		"TradingVariables": "%buyer%\tActive tab buyer name\nExample:\t/invite %buyer%\n\n%seller%\t\tActive tab seller name\nExample\t\t/hideout %seller%\n\n%item%\t\tActive tab item name\n%price%\t\tActive tab item price\nExample:\t@%buyer% Party invite sent for %item% for %price%\n\n%lws%\t\tName of the last person you whispered\n%lwr%\t\tName of the last person who whispered you\n\n%myself%\tYour logged in character\nExample:\t/kick %myself%",
 		"ValueCanBeIntegerOnly": "This value can only be an integer."
 	},
 	"TrayMenu": {
