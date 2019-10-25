@@ -390,8 +390,6 @@ Start_Script() {
 	trayMsg := PROGRAM.TRANSLATIONS.TrayNotifications.AppLoaded_Msg
 	if (PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency <= 20)
 		trayMsg .= "`n`n" . StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.AppLoadedTransparency_Msg, "%number%", PROGRAM.SETTINGS.SETTINGS_MAIN.NoTabsTransparency)
-	if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
-		trayMsg .= "`n`n" PROGRAM.TRANSLATIONS.TrayNotifications.AppLoadedClickthrough_Msg
 	TrayNotifications.Show(PROGRAM.NAME, trayMsg)
 
 	; msgbox % A_TickCount-scriptStartTime

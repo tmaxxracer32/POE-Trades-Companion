@@ -53,7 +53,7 @@ if (generateTranslations) {
 			Continue
 		}
 		thisLangJSON := JSON_Load(A_LoopFileFullPath)
-		thisLangJSON := ObjMerge(thisLangJSON, engJSON)
+		thisLangJSON := ObjReplace(engJSON, thisLangJSON)
 		jsonText := JSON_Dump(thisLangJSON, dontReplaceUnicode:=True)
 		
 		hFile := FileOpen(A_LoopFileFullPath, "w", "UTF-8")
