@@ -13,7 +13,7 @@
 		GuiChooseLang.Windows_DPI := windowsDPI
 
 		guiCreated := False
-		guiFullHeight := 200, guiFullWidth := 300, borderSize := 1, borderColor := "Black"
+		guiFullHeight := 200, guiFullWidth := 320, borderSize := 1, borderColor := "Black"
 		guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
 		leftMost := borderSize, rightMost := guiWidth-borderSize
 		upMost := borderSize, downMost := guiHeight-borderSize
@@ -64,8 +64,8 @@
 		Gui.Add("ChooseLang", "Text", "x" leftMost+10 " y+20 w" guiWidth-20 " Center BackgroundTrans hwndhTEXT_TopText", PROGRAM.TRANSLATIONS.GUI_ChooseLang.hTEXT_TopText)
 		; * * FLAGS
 		; Calculate the space between each
-		iconW := 35, iconH := 24, iconMax := 5
-		spaceBetweenIcons := ( (guiWidth-20) /iconMax), iconsPerRow := 5
+		iconW := 35, iconH := 24, iconMax := 6
+		spaceBetweenIcons := ( (guiWidth-20) /iconMax), iconsPerRow := 6
 		firstIconX := (guiWidth-(spaceBetweenIcons*(iconsPerRow-1)+iconW))/2 ; We retrieve the blank space after the lastest icon in the row
 																				 ;	then divide this space in two so icons are centered
 		Gui.Add("ChooseLang", "Picture", "x" firstIconX " y+35 w" iconW " h" iconH " hwndhIMG_FlagUK", PROGRAM.IMAGES_FOLDER "\flag_uk.png")

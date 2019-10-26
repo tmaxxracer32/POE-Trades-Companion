@@ -237,12 +237,12 @@ Class GUI_Settings {
 
 		Gui.Add("Settings", "Text", "x" secondColX " y+20 hwndhTEXT_PushBulletNotifications", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_PushBulletNotifications)
 		Gui.Add("Settings", "Text", "xp+10 y+10 hwndhTEXT_PushBulletToken", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_PushBulletToken)
-		Gui.Add("Settings", "Edit", "x+2 yp-3 w120 hwndhEDIT_PushBulletToken")
+		Gui.Add("Settings", "Edit", "x+2 yp-3 w180 hwndhEDIT_PushBulletToken")
 		Gui.Add("Settings", "CheckBox", "x" secondColX+10 " y+5 hwndhCB_PushBulletOnTradingWhisper", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_PushBulletOnTradingWhisper)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_PushBulletOnlyWhenAfk", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_PushBulletOnlyWhenAfk)
 		
 		; * * Reset
-		resetBtnW := Get_TextCtrlSize("RESET ALL SETTINGS TO DEFAULT", "Segoe UI", 8, "", "", ctrlType:="Button").W
+		resetBtnW := Get_TextCtrlSize(PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_ResetToDefaultSettings, "Segoe UI", 8, "", "", ctrlType:="Button").W
 		Gui.Add("Settings", "ImageButton", "x" rightMost2-resetBtnW " y" downMost2-30 " h30 hwndhBTN_ResetToDefaultSettings", PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_ResetToDefaultSettings, Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_ResetToDefaultSettings", "ResetToDefaultSettings")
 		

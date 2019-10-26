@@ -220,7 +220,7 @@
 	"ToolTips": {
 		"MaxValueIs": "Valeur maximale de %value% milliseconds.",
 		"StringHasToStartWith": "Le texte doit commencer avec %text%",
-		"TradingVariables": "%buyer%\tNom de l'acheteur de l'onglet actif\nExample:\t/invite %buyer%\n\n%seller%\t\tNom du vendeur de l'onglet actif\nExample\t\t/hideout %seller%\n\n%item%\t\tNom de l'article de l'onglet actif\n%price%\t\tPrix de l'article de l'onglet actif\nExample:\t@%buyer% Party invite sent for %item% for %price%\n\n%lws%\t\tNom de la dernière personne que vous avez chuchoté\n%lwr%\t\tNom de la dernière personne qui vous a chuchoté\n\n%myself%\tVotre personnage connecté\nExample:\t/kick %myself%",
+		"TradingVariables": "%buyer%\tNom de l'acheteur de l'onglet actif\nExample:\t/invite %buyer%\n\n%seller%\t\tNom du vendeur de l'onglet actif\nExample\t\t/hideout %seller%\n\n%item%\t\tNom de l'article de l'onglet actif\n%price%\t\tPrix de l'article de l'onglet actif\nExample:\t@%buyer% Party invite sent for %item% for %price%\n\n%lws%\t\tNom de la dernière personne que vous avez chuchoté\n%lwr%\t\tNom de la dernière personne qui vous a chuchoté\n\n%myself%\tVotre personnage connecté\nExample:\t/kick %myself%\n\n%tradingWhisper%\t\tLe message d'échange envoié à ce vendeur\nExample:\t\t@%seller% %tradingWhisper%",
 		"ValueCanBeIntegerOnly": "Cette valeur peut seulement être un nombre entier."
 	},
 	"TrayMenu": {

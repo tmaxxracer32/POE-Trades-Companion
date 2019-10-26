@@ -212,7 +212,8 @@ Replace_TradeVariables(_buyOrSell, tabNum="", string="") {
 		string := StrReplace(string, "%buyer%", tabContent.Buyer), string := StrReplace(string, "%buyerName%", tabContent.Buyer)
 		string := StrReplace(string, "%seller%", tabContent.Seller), string := StrReplace(string, "%sellerName%", tabContent.Seller)
 		string := StrReplace(string, "%item%", tabContent.Item), string := StrReplace(string, "%itemName%", tabContent.Item)
-		string := StrReplace(string, "%price%", tabContent.Price != ""?tabContent.Price : "[unpriced]"), string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
+		string := StrReplace(string, "%price%", tabContent.Price != ""? tabContent.Price : "[unpriced]"), string := StrReplace(string, "%itemPrice%", tabContent.Price != ""?tabContent.Price : "[unpriced]")
+		string := StrReplace(string, "%tradingWhisper%", tabContent.WhisperMsg), string := StrReplace(string, "%tradingWhisperMsg%", tabContent.WhisperMsg)
 	}
 	string := StrReplace(string, "%lastWhisper%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lastWhisperReceived%", GuiTrades.Last_Whisper_Name), string := StrReplace(string, "%lwr%", GuiTrades.Last_Whisper_Name)
 	string := StrReplace(string, "%sentWhisper%", GuiTrades.Last_Whisper_Sent_Name), string := StrReplace(string, "%lastWhisperSent%", GuiTrades.Last_Whisper_Sent_Name), string := StrReplace(string, "%lws%", GuiTrades.Last_Whisper_Sent_Name)

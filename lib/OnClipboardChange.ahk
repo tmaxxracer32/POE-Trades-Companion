@@ -58,6 +58,8 @@
 		ShowToolTip(PROGRAM.NAME " - " err "`nFailed to send the whisper in-game.")
 		Return
 	}
+	RegExMatch(clipboardStr, "iO)@(.*?) .*", match)
+	Send_GameMessage("WRITE_SEND", "/whois " match.1, LASTACTIVATED_GAMEPID)
 
 	; Update AUTOWHISPER_HISTORY array
 	if (AUTOWHISPER_HISTORY.MaxIndex() >= maxHistory) { ; Re-organize previous whispers array

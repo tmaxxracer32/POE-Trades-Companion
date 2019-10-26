@@ -116,7 +116,7 @@ Update_LocalSettings() {
 	iniSettings := class_EasyIni(iniFile)
 
 	importPre1Dot15IniSettings := localSettings.GENERAL.ImportPre1Dot15IniSettings
-	if (importPre1Dot15IniSettings = "True") {
+	if (importPre1Dot15IniSettings = "True" && FileExist(iniFile)) {
 		Update_LocalSettings_IniFile()
 		Convert_IniSettings_To_JsonSettings()
 		localSettings := Get_LocalSettings()
@@ -667,6 +667,10 @@ Get_LocalSettings_DefaultValues() {
 							"1": {
 								"Type": "SEND_MSG",
 								"Content": "\"/invite `%buyer`%\""
+							},
+							"2": {
+								"Type": "SEND_MSG",
+								"Content": "\"@`%buyer`% Party invite sent (`%item`% for `%price`%)\""
 							}
 						}
 					},
@@ -680,49 +684,7 @@ Get_LocalSettings_DefaultValues() {
 						}
 					},
 					"4": {
-						"Icon": "Kick",
-						"Actions": {
-							"1": {
-								"Type": "SEND_MSG",
-								"Content": "\"/kick `%buyer`%\""
-							},
-							"2": {
-								"Type": "SAVE_TRADE_STATS",
-								"Content": "\"\""
-							},
-							"3": {
-								"Type": "CLOSE_TAB",
-								"Content": "\"\""
-							}
-						}
-					}
-				},
-				"CUSTOM_BUTTON_ROW_2": {
-					"Buttons_Count": 3,
-					"1": {
-						"Text": "Invite",
-						"Actions": {
-							"1": {
-								"Type": "SEND_MSG",
-								"Content": "\"/invite `%buyer`%\""
-							},
-							"2": {
-								"Type": "SEND_MSG",
-								"Content": "\"@`%buyer`% Ready to be picked up - (`%item`% for `%price`%)\""
-							}
-						}
-					},
-					"2": {
-						"Text": "Trade",
-						"Actions": {
-							"1": {
-								"Type": "SEND_MSG",
-								"Content": "\"/tradewith `%buyer`%\""
-							}
-						}
-					},
-					"3": {
-						"Text": "Thanks",
+						"Icon": "ThumbsUp",
 						"Actions": {
 							"1": {
 								"Type": "SEND_MSG",
@@ -743,46 +705,41 @@ Get_LocalSettings_DefaultValues() {
 						}
 					}
 				},
-				"CUSTOM_BUTTON_ROW_3": {
-					"Buttons_Count": 4,
+				"CUSTOM_BUTTON_ROW_2": {
+					"Buttons_Count": 2,
 					"1": {
 						"Text": "Busy",
 						"Actions": {
 							"1": {
 								"Type": "SEND_MSG",
-								"Content": "\"@`%buyer`% Busy for now, will invite asap - (`%item`% for `%price`%)\""
+								"Content": "\"@`%buyer`% Busy for now, will invite asap (`%item`% for `%price`%)\""
+							},
+							"2": {
+								"Type": "FORCE_MIN",
+								"Content": "\"\""
 							}
 						}
 					},
 					"2": {
-						"Text": "?"
-					},
-					"3": {
-						"Text": "Ignore item",
-						"Actions": {
-							"1": {
-								"Type": "IGNORE_SIMILAR_TRADE",
-								"Content": "\"\""
-							},
-							"2": {
-								"Type": "CLOSE_TAB",
-								"Content": "\"\""
-							}
-						}
-					},
-					"4": {
-						"Text": "Sold",
+						"Text": "Sold+Ignore",
 						"Actions": {
 							"1": {
 								"Type": "SEND_MSG",
-								"Content": "\"@`%buyer`% Already sold, sorry - (`%item`% for `%price`%)\""
+								"Content": "\"@`%buyer`% Already sold, sorry (`%item`% for `%price`%)\""
 							},
 							"2": {
+								"Type": "IGNORE_SIMILAR_TRADE",
+								"Content": "\"\""
+							},
+							"3": {
 								"Type": "CLOSE_TAB",
 								"Content": "\"\""
 							}
 						}
 					}
+				},
+				"CUSTOM_BUTTON_ROW_3": {
+					"Buttons_Count": 0
 				},
 				"CUSTOM_BUTTON_ROW_4": {
 					"Buttons_Count": 0
@@ -798,8 +755,12 @@ Get_LocalSettings_DefaultValues() {
 						"Icon": "Whisper",
 						"Actions": {
 							"1": {
-								"Type": "WRITE_MSG",
-								"Content": "\"@`%seller`% \""
+								"Type": "SEND_MSG",
+								"Content": "\"@`%seller`% `%tradingWhisperMsg`%\""
+							},
+							"2": {
+								"Type": "SEND_MSG",
+								"Content": "\"/whois `%seller`%\""
 							}
 						}
 					},
@@ -834,11 +795,11 @@ Get_LocalSettings_DefaultValues() {
 						}
 					},
 					"4": {
-						"Text": "SRY",
+						"Icon": "ThumbsDown",
 						"Actions": {
 							"1": {
 								"Type": "SEND_MSG",
-								"Content": "\"@`%seller`% sry, got another\""
+								"Content": "\"@`%seller`% Sorry, got another\""
 							},
 							"2": {
 								"Type": "CLOSE_TAB",
