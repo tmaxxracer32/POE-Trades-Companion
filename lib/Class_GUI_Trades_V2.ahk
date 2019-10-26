@@ -943,7 +943,6 @@
         ; FINISHED_V2
 		global PROGRAM, SKIN
 		global GuiTrades, GuiTrades_Controls
-		static doOnlyOnce
 		windowsDPI 		:= GuiTrades[_buyOrSell].Windows_DPI
         tabsLimit       := GuiTrades[_buyOrSell].Tabs_Limit
 		tabsCount       := GuiTrades[_buyOrSell].Tabs_Count
@@ -988,12 +987,6 @@
 			GUI_Trades_V2.SetTransparency_Active(_buyOrSell)
             if (PROGRAM.SETTINGS.SETTINGS_MAIN.AutoMaximizeOnFirstNewTab = "True")
 			    GUI_Trades_V2.Maximize(_buyOrSell)
-		}
-
-        ; TO_DO is this needed?
-		if (doOnlyOnce != False) {
-			; Gui, Trades%_buyOrSell%Search:Show, NoActivate
-			doOnlyOnce := True
 		}
 
         ; Update the title text with new tabs count
@@ -1151,7 +1144,7 @@
 		; Reduce some controls size based on their content + move them to make it look better
             ; PriceCount - Cutting control size
         priceCountW := Get_TextCtrlSize(visiblePrice, GuiTrades[_buyOrSell].Font, GuiTrades[_buyOrSell].Font_Size, "", "R1").W
-		GuiControl, Move,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hTEXT_PriceCount,% "w" priceCountW*windowsDPI ; TO_DO_V2
+		GuiControl, Move,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hTEXT_PriceCount,% "w" priceCountW*windowsDPI
 		    ; Move AdditionalMessage next to PriceCount
         priceCountPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hTEXT_PriceCount)
         whisperSeller := ControlGetPos(GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hBTN_WhisperSeller)
@@ -1189,9 +1182,10 @@
 	}
 	
 	VerifyItemPrice(tabInfos) {
-		; TO_DO_V2
-		; Verify an item's price based on the information we have
-		; User acc name, item name, item level & qual for gems, stash tab & stash position
+	/*
+		Verify an item's price based on the information we have
+		User acc name, item name, item level & qual for gems, stash tab & stash position
+	*/
 		global PROGRAM
 
 		accounts := ""
@@ -1208,13 +1202,7 @@
 			return
 		}
 
-		if (tabInfos.ItemCurrency && tabInfos.ItemCount) { ; TO_DO_V2 RegExMatch(tabInfos.Item, "iO)(\d+\.\d+|\d+) (\D+) \(T\d+\)", itemPat) && (tabInfos.ItemLevel) { ; currency.poe.trade map trade
-			; infos := {Want:"chaos",Have:"alt",League:"Standard",Account:"z0rhawk",Ratio:"502.1",Online:"any"}
-			; matchingObj := GGG_API_GetMatchingExchangeData(infos)
-			; Loop % matchingObj.Count() {
-			; 	msgbox % matchingObj[A_Index].listing.price.exchange.amount "`n" matchingObj[A_Index].listing.price.item.amount
-			; }
-			
+		if (tabInfos.ItemCurrency && tabInfos.ItemCount) { ; Currency trade
 			buyerWantsType := tabInfos.ItemCurrency, buyerWantsCount := tabInfos.ItemCount
 			buyerGivesType := tabInfos.PriceCurrency, buyerGivesCount := tabInfos.PriceCount
 			saleRatio := RemoveTrailingZeroes(buyerGivesCount/buyerWantsCount)
@@ -1259,7 +1247,7 @@
 			GoSub GUI_Trades_V2_VerifyItemPrice_SA
 			return
 		}
-		else { ; its a regular trade
+		else { ; Regular trade
 			priceType := tabInfos.PriceCurrency, priceCount := tabInfos.PriceCount
 			itemsDataObj := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComStaticData.json")
 			for sect in itemsDataObj {
@@ -1341,7 +1329,6 @@
 	}
 
 	SetTabVerifyColor(slotNum, colour) {
-		; TO_DO_V2
 		global GuiTrades_Controls
 		slotGuiName := "TradesSell_Slot" slotNum
 
@@ -1358,18 +1345,15 @@
 			GuiControl, %slotGuiName%:Show,% newColHwnd
 			GuiControl, %slotGuiName%:Hide,% curColHwnd
 			GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify"] := newColHwnd
-
-			; GUI_Trades_V2.UpdateSlotContent("Sell", slotNum, "TradeVerify", colour)
 		}
 	}
 
 	Use_WindowMode(checkOnly=False) {
-		; TO_DO_V2
 		global PROGRAM, GuiTrades
 
 		if (checkOnly=False) {
 			PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode := "Window"
-			GuiTrades.Docked_Window_Handle := ""
+			GuiTrades.Sell.Docked_Window_Handle := ""
 
 			GUI_Trades_V2.ResetPosition("Buy")
 			GUI_Trades_V2.ResetPosition("Sell")
@@ -1384,15 +1368,15 @@
 	}
 
 	Use_DockMode(checkOnly=False) {
-		; TO_DO_V2
 		global PROGRAM, GuiTrades
 
 		if (checkOnly=False) {
-			INPROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode := "Dock"
-			GuiTrades.Docked_Window_Handle := ""
+			PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode := "Dock"
+			GuiTrades.Sell.Docked_Window_Handle := ""
 
 			GUI_Trades_V2.ResetPosition("Buy")
 			GUI_Trades_V2.ResetPosition("Sell")
+			Save_LocalSettings()
 		}
 
 		Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
@@ -1406,26 +1390,28 @@
 	}
 
 	DockMode_Cycle(dontSetPos=False) {
-		; TO_DO_V2
 		global GuiTrades
 
 		gameInstances := Get_RunningInstances()
 		Loop % gameInstances.Count {
-			if (gameInstances[A_Index]["Hwnd"] = GuiTrades.Docked_Window_Handle)
+			if (gameInstances[A_Index]["Hwnd"] = GuiTrades.Sell.Docked_Window_Handle)
 				cycleIndex := A_Index=gameInstances.Count ? 1 : A_Index+1
 		}
 		cycleIndex := cycleIndex ? cycleIndex : 1
-		GuiTrades.Docked_Window_Handle := gameInstances[cycleIndex]["Hwnd"]
+		GuiTrades.Sell.Docked_Window_Handle := gameInstances[cycleIndex]["Hwnd"]
 
 		if (dontSetPos=False)
 			GUI_Trades_V2.DockMode_SetPosition()
 	}
 
 	DockMode_SetPosition() {
-		; TO_DO_V2
-		global GuiTrades, GuiTradesMinimized
+		global GuiTrades
+		; TO_DO_V2 maybe just get rid of "dock" mode it sucks
+		TrayNotications.Show("Dock mode disabled.", "Dock mode has been disabled for now. It may actually be completely be scrapped off in the future.")
+		GUI_Trades_V2.Use_WindowMode()
+		return
 
-		if !WinExist("ahk_id " GuiTrades.Docked_Window_Handle " ahk_group POEGameGroup") {
+		if !WinExist("ahk_id " GuiTrades.Sell.Docked_Window_Handle " ahk_group POEGameGroup") {
 			GUI_Trades_V2.DockMode_Cycle(dontSetPos:=True)
 			return
 		}
@@ -1433,15 +1419,14 @@
 		hiddenWin := A_DetectHiddenWindows
 		DetectHiddenWindows, On
 
-		WinGet, isMinMax, MinMax,% "ahk_id " GuiTrades.Docked_Window_Handle
+		WinGet, isMinMax, MinMax,% "ahk_id " GuiTrades.Sell.Docked_Window_Handle
 		isWinMinimized := isMinMax=-1?True:False
 
-		WinGetPos, dockedX, dockedY, dockedW, dockedH,% "ahk_id " GuiTrades.Docked_Window_Handle
-		clientInfos := GetWindowClientInfos("ahk_id " GuiTrades.Docked_Window_Handle)
+		WinGetPos, dockedX, dockedY, dockedW, dockedH,% "ahk_id " GuiTrades.Sell.Docked_Window_Handle
+		clientInfos := GetWindowClientInfos("ahk_id " GuiTrades.Sell.Docked_Window_Handle)
 		dockedX -= clientInfos.X, dockedY += clientInfos.Y
 		
 		gtPos := GUI_Trades_V2.GetPosition()
-		gtmPos := GUI_TradesMinimized.GetPosition()
 		
 		if (GuiTrades.Is_Minimized)
 			moveToX := (dockedX+dockedW)-gtmPos.W, moveToY := dockedY 
@@ -1725,7 +1710,7 @@
 
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 		; GUI_Trades_V2.ToggleTabSpecificAssets("Off")
-		; TO_DO Possibly hide tabs to avoid overlap on border?
+		; TO_DO_V2 Possibly hide tabs to avoid overlap on border? Maybe specific tab name that, when active, hides everything - would also solve maximize after removetab issues where elements are still shown
 	}
 
     Maximize(_buyOrSell) {
@@ -1757,7 +1742,7 @@
 		GuiTrades[_buyOrSell].Is_Maximized := True
 		GuiTrades[_buyOrSell].Is_Minimized := False
 
-		; GUI_Trades_V2.ShowItemGrid(_buyOrSell) ; TO_DO_V2
+		GUI_Trades_V2.ShowItemGrid(_buyOrSell)
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 		; GUI_Trades_V2.ToggleTabSpecificAssets("On")
 	}

@@ -101,7 +101,6 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 		ignoreFollowingActions := True
 	}
 
-	; TO_DO_V2
 	else if (actionType = "COPY_ITEM_INFOS")
 		GoSub, GUI_Trades_V2_Sell_CopyItemInfos_CurrentTab_Timer
 	else if (actionType = "GO_TO_NEXT_TAB")
@@ -134,7 +133,7 @@ Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") 
 	else if (actionType = "CLOSE_SIMILAR_TABS")
 		GUI_Trades_V2.CloseOtherTabsForSameItem(_buyOrSell, tabNum)
 	else if (actionType = "SHOW_GRID")
-		GUI_Trades_V2.ShowItemGrid(tabNum) ; TO_DO_V2
+		GUI_Trades_V2.ShowItemGrid(tabNum)
 
 	prevNum := uniqueNum, prevActionType := actionType, prevActionContent := actionContentWithVariables	
 }

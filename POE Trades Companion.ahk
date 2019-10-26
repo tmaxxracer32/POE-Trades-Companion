@@ -121,8 +121,8 @@ Start_Script() {
 	buyBackupFileName 				:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_Trades_Backup"):("Buy_Trades_Backup")
 	tradesSellHistoryFileName 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Sell_History"):("Sell_History")
 	tradesBuyHistoryFileName 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
-	tradesSellHistoryFileNameOld 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Trades_History"):("Trades_History")
-	tradesBuyHistoryFileNameOld 		:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
+	tradesSellHistoryFileNameOld 	:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Trades_History"):("Trades_History")
+	tradesBuyHistoryFileNameOld 	:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Buy_History"):("Buy_History")
 	PROGRAM.FONTS_SETTINGS_FILE		:= PROGRAM.FONTS_FOLDER "\Settings.ini"
 	PROGRAM.SETTINGS_FILE			:= PROGRAM.MAIN_FOLDER "\" prefsFileName ".json"
 	PROGRAM.SETTINGS_FILE_OLD		:= PROGRAM.MAIN_FOLDER "\" prefsFileName ".ini"

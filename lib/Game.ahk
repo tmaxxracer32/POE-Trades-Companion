@@ -307,7 +307,7 @@ Monitor_GameLogs() {
 	; Retrieve new folders if it has been more than 5 mins
 	minsSinceLast := A_Now
 	minsSinceLast -= lastCheckTime, Minutes
-	if (minsSinceLast >= 5) {
+	if (minsSinceLast >= 5 || !gameFoldersObj.Count()) {
 		GoSub Monitor_GameLogs_GetFolders
 	}
 
@@ -388,7 +388,7 @@ Monitor_GameLogs() {
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode = "Dock" && !foldersObjCount) ; Cycle dock mode if its the first time
 				GUI_Trades_V2.DockMode_Cycle()
 
-			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Msg, "%file%", gameFoldersStr) ; TO_DO change to folder instead of file
+			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Msg, "%file%", gameFoldersStr)
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.MonitoringGameLogsFileSuccess_Title, trayMsg)
 		}
 
@@ -405,7 +405,6 @@ Monitor_GameLogs() {
 		if (timer != prevTimer) || (!prevTimer) {
 			try SetTimer,% A_ThisFunc, Delete
 			SetTimer,% A_ThisFunc,% timer
-			; TO_DO_V2 tray notification
 		}
 		prevTimer := timer
 	return

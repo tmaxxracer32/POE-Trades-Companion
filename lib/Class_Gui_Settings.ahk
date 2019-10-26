@@ -183,7 +183,7 @@ Class GUI_Settings {
 		; * * Accounts
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " Center hwndhTEXT_POEAccountsList", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_POEAccountsList), poeAccTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_POEAccountsList)
 		Gui.Add("Settings", "DropDownList", "xp y+3 w" poeAccTxtPos.W-2-25 " hwndhDDL_PoeAccounts", "")
-		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp hwndhBTN_EditPoeAccountsList", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8) ; TO_DO_V2 special gui, one account per line, some text tips
+		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp hwndhBTN_EditPoeAccountsList", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		poeAccDdlPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_PoeAccounts)
 
 		; * * Buying selling modes
@@ -357,7 +357,7 @@ Class GUI_Settings {
 		
 		Gui.Add("Settings", "Text", "x+15 y" upMost2 " Center hwndhTEXT_HotkeyProfileHotkey", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_HotkeyProfileHotkey)
 		Gui.Add("Settings", "Edit", "xp y+3 w130 hwndhEDIT_HotkeyProfileHotkey ReadOnly", ""), editHkProfHotkeyPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HotkeyProfileHotkey)
-		Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_EditHotkey", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8) ; TO_DO_V2 remove later
+		Gui.Add("Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_EditHotkey", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		Gui.MoveControl("Settings", "hTEXT_HotkeyProfileHotkey", "w" editHkProfHotkeyPos.W)
 
 		availableWidth := rightMost2-leftMost3
@@ -368,7 +368,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_HotkeyActionsList, "0x0b6fcc", "0xFFFFFF")
 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditHotkey", "TabHotkeys_ChangeHotkeyProfileHotkey") ; TO_DO_V2 change it to on edit click
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditHotkey", "TabHotkeys_ChangeHotkeyProfileHotkey")
 
 		GUI_Settings.TabHotkeys_SetUserSettings()
 
@@ -1340,7 +1340,7 @@ Class GUI_Settings {
 		|| (IsBetween(rowNum, 2, 4) && btnsCount=10)
 			return		
 
-		GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]++ ; new var for buy sell TO_DO
+		GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]++
 		newBtnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
 		PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum].Buttons_Count := newBtnsCount
 		Save_LocalSettings()

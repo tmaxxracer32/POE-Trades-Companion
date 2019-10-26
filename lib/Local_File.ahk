@@ -7,7 +7,6 @@
 		Save_LocalSettings(defaultSettings)
 	}
 	else if FileExist(settingsFile) && !Is_JSON(PROGRAM.SETTINGS_FILE) {
-		; TO_DO_V2 maybe warning?
 		settings := Get_LocalSettings_DefaultValues()
 		Save_LocalSettings(settings)
 	}
@@ -1043,10 +1042,11 @@ LocalSettings_VerifyFileIntegrity(ByRef userSettingsObj, defaultSettingsObj, nex
 LocalSettings_Verify() {
 	; Make sure values are valid, and reset them if not 
 	global PROGRAM
+	settingsFile := PROGRAM.SETTINGS_FILE
 
 	; Getting settings
 	defaultSettings := Get_LocalSettings_DefaultValues()
-	if !FileExist(PROGRAM.SETTINGS_FILE) { ; Just saving default and return
+	if !FileExist(settingsFile) { ; Just saving default and return
 		Save_LocalSettings(defaultSettings)
 		return
 	}
@@ -1054,13 +1054,33 @@ LocalSettings_Verify() {
 	finalSettings := ObjFullyClone(defaultSettings)
 	LocalSettings_VerifyValuesValidity(settings, defaultSettings, "", "", validityLogs)
 	LocalSettings_VerifyFileIntegrity(settings, defaultSettings, "", "", integrityLogs)
-	if (validityLogs) {
-		AppendToLogs(validityLogs) ; TO_DO_V2
-		msgbox % validityLogs
-	}
-	if (integrityLogs) {
+
+	allLogs := StrLen(validityLogs) && !StrLen(integrityLogs) ? validityLogs ; only validity
+		: !StrLen(validityLogs) && StrLen(integrityLogs) ? integrityLogs  ; only integrity
+		: StrLen(validityLogs) && StrLen(integrityLogs) ? validityLogs "`n`n" integrityLogs
+		: "" ; nothing
+
+	if (validityLogs)
+		AppendToLogs(validityLogs)
+	if (integrityLogs)
 		AppendToLogs(integrityLogs)
-		; msgbox % integrityLogs
+	
+	if StrLen(allLogs) {
+		global GuiValidityError, GuiValidityErrorBuyPreview, GuiValidityErrorSellPreview, GuiValidityErrorSell
+		errorLog := errorLogNoTrim := allLogs
+		if ( StrLen(errorLog) > 60000 ) {
+			errorLog := StrTrimRight(errorLog, StrLen(errorLog) - 60000)
+			errorLog .= "`n`n`n[ Logs trimmed due to AHK length restriction ]"
+			AppendToLogs(errorLogNoTrim)
+		}
+		
+		SplitPath, settingsFile, settingsFileName
+		Gui.New("ValidityError", "+AlwaysOnTop +ToolWindow +HwndhGui", "GUI Trades Local File Error Logs")
+		Gui.Add("ValidityError", "Text", "x10 y10", "The following keys were invalid in the " settingsFileName " file and have been reset to default.")
+		Gui.Add("ValidityError", "Edit", "xp y+5 w800 R30 ReadOnly", errorLog)
+		Gui.Add("ValidityError", "Link", "xp y+5", "If you need assistance, you can contact me on: "
+		. "<a href=""" PROGRAM.LINK_GITHUB """>GitHub</a> - <a href=""" PROGRAM.LINK_REDDIT """>Reddit</a> - <a href=""" PROGRAM.LINK_GGG """>PoE Forums</a> - <a href=""" PROGRAM.LINK_DISCORD """>Discord</a>")
+		Gui.Show("ValidityError", "xCenter yCenter")
 	}
 
 	Save_LocalSettings(settings)
