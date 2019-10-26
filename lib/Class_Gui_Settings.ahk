@@ -2985,8 +2985,10 @@ Class GUI_Settings {
 		else
 			GUI_Settings.Create()
 		statsWinExists := WinExist("ahk_id " GuiMyStats.Handle)
-		if (statsWinExists)
-			GUI_MyStats.SetTranslation(lang)
+		if (statsWinExists) {
+			GUI_MyStats.Create()
+			GUI_MyStats.Show()
+		}
 
 		prevLang := lang
 	}
@@ -3000,7 +3002,6 @@ Class GUI_Settings {
 		DetectHiddenWindows, %hiddenWin%
 
 		if (foundHwnd) {
-			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
 			if !(GuiTrades.SellPreview.Handle)
 				GUI_Trades_V2.CreatePreview("Sell", PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
 			if !(GuiTrades.BuyPreview.Handle)
@@ -3012,7 +3013,6 @@ Class GUI_Settings {
 		else {
 			AppendToLogs("GUI_Settings.Show(" whichTab "): Non existent. Recreating.")
 			GUI_Settings.Create()
-			GUI_Settings.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
 			GUI_Settings.Show()
 		}
 	}
@@ -3192,97 +3192,6 @@ Class GUI_Settings {
 	Destroy() {
 		GUI_Settings.DestroyBtnImgList()
 		Gui.Destroy("Settings")
-	}
-
-	SetTranslation(_lang="english", _ctrlName="") {
-		global PROGRAM, GuiSettings, GuiSettings_Controls
-		return
-		trans := PROGRAM.TRANSLATIONS.Gui_Settings
-
-		GUI_Settings.DestroyBtnImgList()
-
-		noResizeCtrls := "hBTN_CloseGUI"
-		. ",hBTN_SectionSettings,hBTN_TabSettingsMain,hBTN_SectionCustomization,hBTN_TabCustomizationSkins,hBTN_TabCustomizationButtons,hBTN_SectionHotkeys,hBTN_TabHotkeysBasic,hBTN_TabHotkeysAdvanced,hBTN_SectionMisc,hBTN_TabMiscUpdating,hBTN_TabMiscAbout,hBTN_ResetToDefaultSettings"
-		. ",hLV_ButtonsActions,hLV_HotkeyAdvActionsList"
-		. ",hBTN_SaveChangesToAction,hBTN_AddAsNewAction"
-		. ",hBTN_ChangeHKType,hBTN_HotkeyAdvSaveChangesToAction,hBTN_HotkeyAdvAddAsNewAction"
-		. ",hDDL_CheckForUpdate"
-
-		noSmallerCtrls := "hBTN_BrowseTradingWhisperSFX,hBTN_BrowseRegularWhisperSFX,hBTN_BrowseBuyerJoinedAreaSFX"
-		. ",hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_ShowTabbedTrayNotificationOnWhisper,hTEXT_POEAccountsList"
-		. ",hCB_AllowClicksToPassThroughWhileInactive,hTEXT_NoTabsTransparency,hTEXT_TabsOpenTransparency"
-		. ",hTEXT_Preset,hTEXT_SkinBase,hTEXT_TextFont,hBTN_RecreateTradesGUI"
-		. ",hTEXT_ButtonsTabTopTip,hTEXT_ButtonsTabTopTip2"
-		. ",hTEXT_About,hBTN_CheckForUpdates"
-
-		needsCenterCtrls := "hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_ShowTabbedTrayNotificationOnWhisper,hTEXT_POEAccountsList,hCB_AllowClicksToPassThroughWhileInactive,hTEXT_NoTabsTransparency,hTEXT_TabsOpenTransparency,hTEXT_Preset"
-		. ",hTEXT_SkinBase,hTEXT_TextFont"
-		. ",hTEXT_ButtonsTabTopTip,hTEXT_ButtonsTabTopTip2"
-		. ",hTEXT_About"
-
-		if (_ctrlName) {
-			if (trans != "") ; selected trans
-				GuiControl, Settings:,% GuiSettings_Controls[_ctrlName],% trans
-		}
-		else {
-			for ctrlName, ctrlTranslation in trans {
-				if !( SubStr(ctrlName, -7) = "_ToolTip" ) { ; if not a tooltip
-					ctrlHandle := GuiSettings_Controls[ctrlName]
-
-					ctrlType := IsContaining(ctrlName, "hCB_") ? "CheckBox"
-							: IsContaining(ctrlName, "hTEXT_") ? "Text"
-							: IsContaining(ctrlName, "hBTN_") ? "Button"
-							: IsContaining(ctrlName, "hDDL_") ? "DropDownList"
-							: IsContaining(ctrlName, "hEDIT_") ? "Edit"
-							: IsContaining(ctrlName, "hGB_") ? "GroupBox"
-							: IsContaining(ctrlName, "hLV_") ? "ListView"
-							: "Text"	
-
-					if !IsIn(ctrlName, noResizeCtrls) { ; Readjust size to fit translation
-						txtSize := Get_TextCtrlSize(txt:=ctrlTranslation, fontName:=GuiSettings.Font, fontSize:=GuiSettings.Font_Size, maxWidth:="", params:="", ctrlType)
-						txtPos := Get_ControlCoords("Settings", ctrlHandle)
-
-						if (IsIn(ctrlName, noSmallerCtrls) && (txtSize.W > txtPos.W))
-						|| !IsIn(ctrlName, noSmallerCtrls)
-							GuiControl, Settings:Move,% ctrlHandle,% "w" txtSize.W
-					}
-
-					if (ctrlHandle) { ; set translation
-						if (ctrlType = "DropDownList")
-							ddlValue := GUI_Settings.Submit(ctrlName), ctrlTranslation := "|" ctrlTranslation
-
-						if (ctrlTranslation != "") { ; selected trans
-							if (ctrlType = "ListView") {
-								GUI_Settings.SetDefaultListView(ctrlName)
-								Loop, Parse, ctrlTranslation, |
-									LV_ModifyCol(A_Index, Options, A_LoopField)
-							}
-							GuiControl, Settings:,% ctrlHandle,% ctrlTranslation
-						}
-
-						if (ctrlType = "DropDownList")
-							GuiControl, Settings:Choose,% ctrlHandle,% ddlValue
-					}
-
-					if IsIn(ctrlName, needsCenterCtrls) {
-						GuiControl, Settings:-Center,% ctrlHandle
-						GuiControl, Settings:+Center,% ctrlHandle
-					}
-
-					if IsContaining(ctrlName, "hBTN_Section") ; Imgbtn section
-						ImageButton.Create(ctrlHandle, GuiSettings.Style_Section, PROGRAM.FONTS["Segoe UI"], 8)
-					else if IsContaining(ctrlName, "hBTN_Tab") ; Imgbtn tab
-						ImageButton.Create(ctrlHandle, GuiSettings.Style_Tab, PROGRAM.FONTS["Segoe UI"], 8)
-					else if (ctrlName = "hBTN_ResetToDefaultSettings") ; Imgbtn reset settings
-						ImageButton.Create(ctrlHandle, GuiSettings.Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)	
-				}
-			}
-			
-			GuiControl, Settings:,% GuiSettings_Controls["hBTN_CloseGUI"],% "X"
-			ImageButton.Create(GuiSettings_Controls["hBTN_CloseGUI"], GuiSettings.Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)						
-		}
-
-		GUI_Settings.Redraw()
 	}
 
 	WM_MOUSEMOVE() {

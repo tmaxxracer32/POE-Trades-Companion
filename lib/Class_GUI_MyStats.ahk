@@ -57,27 +57,27 @@
 		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
 
         ; * * Filtering options
-        Gui.Add("MyStats", "GroupBox", "x" leftMost+10 " y+10 w" guiWidth-20 " R12 c000000 hwndhGB_FilteringOptions", "Filtering Options")
-        Gui.Add("MyStats", "Text", "x" leftMost+25 " yp+25 w40 hwndhTEXT_BuyerFilter", "Buyer:")
+        Gui.Add("MyStats", "GroupBox", "x" leftMost+10 " y+10 w" guiWidth-20 " R12 c000000 hwndhGB_FilteringOptions", PROGRAM.TRANSLATIONS.GUI_MyStats.hGB_FilteringOptions)
+        Gui.Add("MyStats", "Text", "x" leftMost+25 " yp+25 w40 hwndhTEXT_BuyerFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_BuyerFilter)
         Gui.Add("MyStats", "DropDownList", "x+0 yp-2 vvDDL_BuyerFilter hwndhDDL_BuyerFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w50 hwndhTEXT_ItemFilter", "Item:")
+        Gui.Add("MyStats", "Text", "x+20 yp+2 w50 hwndhTEXT_ItemFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_ItemFilter)
         Gui.Add("MyStats", "DropDownList", "x+5 yp-2 ToolTip hwndhDDL_ItemFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w40 hwndhTEXT_LeagueFilter", "League:")
+        Gui.Add("MyStats", "Text", "x+20 yp+2 w40 hwndhTEXT_LeagueFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_LeagueFilter)
         Gui.Add("MyStats", "DropDownList", "x+5 yp-2 hwndhDDL_LeagueFilter w160", "All")
 
-        Gui.Add("MyStats", "Text", "x" leftMost+25 " y+20 w40 hwndhTEXT_GuildFilter", "Guild:")
+        Gui.Add("MyStats", "Text", "x" leftMost+25 " y+20 w40 hwndhTEXT_GuildFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_GuildFilter)
         Gui.Add("MyStats", "DropDownList", "x+0 yp-2 hwndhDDL_GuildFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w50 hwndhTEXT_CurrencyFilter", "Currency:")
+        Gui.Add("MyStats", "Text", "x+20 yp+2 w50 hwndhTEXT_CurrencyFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_CurrencyFilter)
         Gui.Add("MyStats", "DropDownList", "x+5 yp-2 hwndhDDL_CurrencyFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w40 hwndhTEXT_TabFilter", "Tab:")
+        Gui.Add("MyStats", "Text", "x+20 yp+2 w40 hwndhTEXT_TabFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_TabFilter)
         Gui.Add("MyStats", "DropDownList", "x+5 yp-2 hwndhDDL_TabFilter w160", "All")
 
 		ctrlPos := Get_ControlCoords("MyStats", GuiMyStats_Controls.hDDL_TabFilter)
-		Gui.Add("MyStats", "Button", "x" leftMost+25 " y+10 w" ctrlPos.X+ctrlPos.W-(leftMost+25) " hwndhBTN_ApplyFilters", "Apply filters")		
-		Gui.Add("MyStats", "Button", "x" ctrlPos.X+ctrlPos.W-115 " y+10 w115 hwndhBTN_ExportAsCSV", "Export stats as .CSV")
+		Gui.Add("MyStats", "Button", "x" leftMost+25 " y+10 w" ctrlPos.X+ctrlPos.W-(leftMost+25) " hwndhBTN_ApplyFilters", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ApplyFilters)		
+		Gui.Add("MyStats", "Button", "x" ctrlPos.X+ctrlPos.W-115 " y+10 w115 hwndhBTN_ExportAsCSV", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ExportAsCSV)
 
         ; * * Stats list
-        Gui.Add("MyStats", "ListView", "x" leftMost+10 " y+30 w" guiWidth-20 " R17 +Grid hwndhLV_Stats", "#|Date|Time|Guild|Buyer|Item|Price|League|Tab|Other")
+        Gui.Add("MyStats", "ListView", "x" leftMost+10 " y+30 w" guiWidth-20 " R17 +Grid hwndhLV_Stats", PROGRAM.TRANSLATIONS.GUI_MyStats.hLV_Stats)
 
 		; * * Stats parse
 		GUI_MyStats.UpdateData()
@@ -478,74 +478,6 @@
 		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.StatsExported_Msg, "%file%", fileName)
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.StatsExported_Title, trayMsg)
 		Run, %fileFolder%
-	}
-
-	SetTranslation(_lang="english", _ctrlName="") {
-		global PROGRAM, GuiMyStats, GuiMyStats_Controls
-		trans := PROGRAM.TRANSLATIONS.GUI_MyStats
-
-		GUI_MyStats.DestroyBtnImgList()
-
-		noResizeCtrls := "hBTN_CloseGUI,hGB_FilteringOptions,hLV_Stats"
-		noSmallerCtrls := "hBTN_ApplyFilters,hBTN_ExportAsCSV"
-
-		if (_ctrlName) {
-			if (trans != "") ; selected trans
-				GuiControl, MyStats:,% GuiMyStats_Controls[_ctrlName],% trans
-		}
-		else {
-			for ctrlName, ctrlTranslation in trans {
-				if !( SubStr(ctrlName, -7) = "_ToolTip" ) { ; if not a tooltip
-					ctrlHandle := GuiMyStats_Controls[ctrlName]
-
-					ctrlType := IsContaining(ctrlName, "hCB_") ? "CheckBox"
-							: IsContaining(ctrlName, "hTEXT_") ? "Text"
-							: IsContaining(ctrlName, "hBTN_") ? "Button"
-							: IsContaining(ctrlName, "hDDL_") ? "DropDownList"
-							: IsContaining(ctrlName, "hEDIT_") ? "Edit"
-							: IsContaining(ctrlName, "hGB_") ? "GroupBox"
-							: IsContaining(ctrlName, "hLV_") ? "ListView"
-							: "Text"
-
-					if !IsIn(ctrlName, noResizeCtrls) { ; Readjust size to fit translation
-						txtSize := Get_TextCtrlSize(txt:=ctrlTranslation, fontName:=GuiMyStats.Font, fontSize:=GuiMyStats.Font_Size, maxWidth:="", params:="", ctrlType)
-						txtPos := Get_ControlCoords("MyStats", ctrlHandle)
-
-						if (IsIn(ctrlName, noSmallerCtrls) && (txtSize.W > txtPos.W))
-						|| !IsIn(ctrlName, noSmallerCtrls)
-							GuiControl, MyStats:Move,% ctrlHandle,% "w" txtSize.W
-					}
-
-					if (ctrlHandle) { ; set translation
-						if (ctrlType = "DropDownList")
-							ddlValue := GUI_MyStats.Submit(ctrlName), ctrlTranslation := "|" ctrlTranslation
-
-						if (ctrlTranslation != "") { ; selected trans
-							if (ctrlType = "ListView") {
-								GUI_MyStats.SetDefaultListView(ctrlName)
-								Loop, Parse, ctrlTranslation, |
-									LV_ModifyCol(A_Index, Options, A_LoopField)
-							}
-							GuiControl, MyStats:,% ctrlHandle,% ctrlTranslation
-						}
-
-						if (ctrlType = "DropDownList")
-							GuiControl, MyStats:Choose,% ctrlHandle,% ddlValue
-					}
-
-					if IsIn(ctrlName, needsCenterCtrls) {
-						GuiControl, MyStats:-Center,% ctrlHandle
-						GuiControl, MyStats:+Center,% ctrlHandle
-					}
-
-				}
-			}
-			
-			GuiControl, MyStats:,% GuiMyStats_Controls["hBTN_CloseGUI"],% "X"
-			ImageButton.Create(GuiMyStats_Controls["hBTN_CloseGUI"], GuiMyStats.Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)						
-		}
-
-		GUI_MyStats.Redraw()
 	}
 
 	DestroyBtnImgList() {
