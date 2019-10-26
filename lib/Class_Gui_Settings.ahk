@@ -37,10 +37,6 @@ Class GUI_Settings {
 			, [0, "0xffb24d"] ; hover
 			, [0, "0xe98707"] ] ; press
 
-		GuiSettings.Style_Button := Style_Button := [ [0, "0x132f44", "", "0xebebeb", , , "0xd6d6d6"] ; normal
-			, [0, "0x163850"] ; hover
-			, [0, "0x102638"] ] ; press
-
 		GuiSettings.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
 			, [0, "0x355e73"] ; hover
 			, [0, "0x122630"] ] ; press
@@ -196,10 +192,10 @@ Class GUI_Settings {
 
 		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_SellingInterfaceMode", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_SellingInterfaceMode), sellIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_SellingInterfaceMode)
 		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode", "Tabs|Stack")
-		topMost3 := poeAccDdlPos.Y+poeAccDdlPos.H+25
+		upMost3 := poeAccDdlPos.Y+poeAccDdlPos.H+25
 		
 		; * * Interface
-		Gui.Add("Settings", "CheckBox", "x" leftMost2 " y" topMost3 " hwndhCB_HideInterfaceWhenOutOfGame", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_HideInterfaceWhenOutOfGame)
+		Gui.Add("Settings", "CheckBox", "x" leftMost2 " y" upMost3 " hwndhCB_HideInterfaceWhenOutOfGame", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_HideInterfaceWhenOutOfGame)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_MinimizeInterfaceToTheBottom", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_MinimizeInterfaceToTheBottom)
 		Gui.Add("Settings", "CheckBox", "xp y+15 hwndhCB_CopyItemInfosOnTabChange", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_CopyItemInfosOnTabChange)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_AutoFocusNewTabs", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoFocusNewTabs)
@@ -223,7 +219,7 @@ Class GUI_Settings {
 
 		; * * Notifications
 		secondColX := 300
-		Gui.Add("Settings", "Text", "x300 y" topMost3 " hwndhTEXT_PlaySoundNotificationWhen", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_PlaySoundNotificationWhen)
+		Gui.Add("Settings", "Text", "x300 y" upMost3 " hwndhTEXT_PlaySoundNotificationWhen", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_PlaySoundNotificationWhen)
 		Gui.Add("Settings", "CheckBox", "x" secondColX+10 " y+10 hwndhCB_TradingWhisperSFXToggle", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_TradingWhisperSFXToggle)
 		Gui.Add("Settings", "Edit", "x+5 yp-4 w100 R1 ReadOnly hwndhEDIT_TradingWhisperSFXPath")
 		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp ReadOnly hwndhBTN_BrowseTradingWhisperSFX", "O", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
@@ -662,30 +658,79 @@ Class GUI_Settings {
 	TabSettingsMain_EditPoeAccountsList() {
 		global PROGRAM
 		global GuiPoeAccounts, GuiPoeAccounts_Controls, GuiPoeAccounts_Submit
-
+		Gui, Settings:+Disabled
+		windowsDPI := Get_DpiFactor()
 		for index, accName in PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts
 			accList := accList?accList "`n" accName : accName
 
-		Gui.Destroy("PoeAccounts")
-		Gui.New("PoeAccounts", "+HwndhGuiPoeAccounts +LabelGuiPoeAccounts_ +AlwaysOnTop")
-		Gui.Add("PoeAccounts", "Edit", "x0 y0 w100 R10 hwndhEDIT_AccountsList", accList)
-		Gui.Show("PoeAccounts", "xCenter yCenter AutoSize")
-		return
+		delay := SetControlDelay(0), batch := SetBatchLines(-1)
+		GUI_Settings.GUI_PoeAccounts_Destroy()
+		Gui.New("PoeAccounts", "-Caption -Border +AlwaysOnTop +LabelGUI_PoeAccounts_ +HwndhGuiPoeAccounts", "POE TC - Accounts")
+		GuiPoeAccounts.Is_Created := False
+		GuiPoeAccounts.Windows_DPI := windowsDPI
 
-		GuiPoeAccounts_Close:
-			Gui.Submit("PoeAccounts")
-			accounts := GuiPoeAccounts_Submit.hEDIT_AccountsList
-			accountsObj := []
-			Loop, Parse, accounts, `n
-			{
-				if (A_LoopField)
-					accountsObj.Push(A_LoopField)
-			}
-			PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts := ObjFullyClone(accountsObj)
-			GUI_Settings.TabsSettingsMain_SetUserSettings()
-			Save_LocalSettings()
-			Gui.Destroy("PoeAccounts")
+		guiCreated := False
+		guiFullHeight := 200, guiFullWidth := 320, borderSize := 1, borderColor := "Black"
+		guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
+		leftMost := borderSize, rightMost := guiFullWidth-borderSize
+		upMost := borderSize, downMost := guiFullHeight-borderSize
+
+		GuiPoeAccounts.Style_CloseBtn := Style_CloseBtn := [ [0, "0xe01f1f", "", "White"] ; normal
+			, [0, "0xb00c0c"] ; hover
+			, [0, "0x8a0a0a"] ] ; press
+
+		GuiPoeAccounts.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
+			, [0, "0x355e73"] ; hover
+			, [0, "0x122630"] ] ; press
+
+		Gui.Margin("PoeAccounts", 0, 0)
+		Gui.Color("PoeAccounts", "0x1c4563", "0x274554")
+		Gui.Font("PoeAccounts", "Segoe UI", "8", "5", "0x80c4ff")
+
+		; *	* Borders
+		bordersPositions := [{X:0, Y:0, W:guiFullWidth, H:borderSize}, {X:0, Y:0, W:borderSize, H:guiFullHeight} ; Top and Left
+			,{X:0, Y:downMost, W:guiFullWidth, H:borderSize}, {X:rightMost, Y:0, W:borderSize, H:guiFullHeight}] ; Bottom and Right
+
+		Loop 4 ; Left/Right/Top/Bot borders
+			Gui.Add("PoeAccounts", "Progress", "x" bordersPositions[A_Index]["X"] " y" bordersPositions[A_Index]["Y"] " w" bordersPositions[A_Index]["W"] " h" bordersPositions[A_Index]["H"] " Background" borderColor)
+
+		; * * Title bar
+		Gui.Add("PoeAccounts", "Text", "x" leftMost " y" upMost " w" guiWidth-30 " h20 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
+		Gui.Add("PoeAccounts", "Progress", "xp yp wp hp Background0b6fcc") ; Title bar background
+		Gui.Add("PoeAccounts", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - " PROGRAM.TRANSLATIONS.TrayMenu.Settings) ; Title bar text
+		imageBtnLog .= Gui.Add("PoeAccounts", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.BindFunctionToControl("GUI_Settings", "PoeAccounts", "hBTN_CloseGUI", "GUI_PoeAccounts_Close")
+
+		; * * TOP TEXT
+		Gui.Add("PoeAccounts", "Link", "x" leftMost+10 " y+5 w" guiWidth-20 " Center hwndhTEXT_TopText", PROGRAM.TRANSLATIONS.GUI_Settings.GuiPoeAccounts_TopText), topTextPos := GUI.GetControlPos("PoeAccounts", "hTEXT_TopText")
+		
+		Gui.Add("PoeAccounts", "Edit", "x" leftMost+5 " y+5 w" rightMost-10 " h" guiHeight-(topTextPos.Y+topTextPos.H+5+5) " hwndhEDIT_AccountsList", accList)
+		Gui.Show("PoeAccounts", "xCenter yCenter w" guiFullWidth " h" guiFullHeight)
+		SetControlDelay(delay), SetBatchLines(batch)
 		return
+	}
+
+	GUI_PoeAccounts_Close() {
+		global PROGRAM, GuiPoeAccounts_Submit, GuiPoeAccounts_Controls
+		Gui.Submit("PoeAccounts")
+		accounts := GuiPoeAccounts_Submit.hEDIT_AccountsList
+		accountsObj := []
+		Loop, Parse, accounts, `n
+		{
+			if (A_LoopField)
+				accountsObj.Push(A_LoopField)
+		}
+		PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts := ObjFullyClone(accountsObj)
+		GUI_Settings.TabsSettingsMain_SetUserSettings()
+		Save_LocalSettings()
+
+		for key, value in GuiPoeAccounts_Controls
+			if IsContaining(key, "hBTN_")
+				try ImageButton.DestroyBtnImgList(value)
+		Gui.Destroy("PoeAccounts")
+
+		Gui, Settings:-Disabled
+		GUI_Settings.Show(GUI_Settings.GetSelectedTab())
 	}
 
 	TabSettingsMain_ToggleClickthroughCheckbox() {
@@ -2052,7 +2097,8 @@ Class GUI_Settings {
 		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(hkStr)
 		Gui, Settings:-Disabled
 
-		WinActivate,% "ahk_id " GuiSettings.Handle
+		
+		GUI_Settings.Show(GUI_Settings.GetSelectedTab())
 
 		profileNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		PROGRAM.SETTINGS.HOTKEYS[profileNum].Hotkey := hkStr
@@ -3161,7 +3207,7 @@ Class GUI_Settings {
 		global GuiSettings_Controls
 
 		for key, value in GuiSettings_Controls
-			IsContaining(key, "hBTN_")
+			if IsContaining(key, "hBTN_")
 				try ImageButton.DestroyBtnImgList(value)
 	}
 

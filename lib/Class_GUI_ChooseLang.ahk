@@ -22,10 +22,6 @@
 			, [0, "0xb00c0c"] ; hover
 			, [0, "0x8a0a0a"] ] ; press
 
-		GuiChooseLang.Style_Button := Style_Button := [ [0, "0x132f44", "", "0xebebeb", , , "0xd6d6d6"] ; normal
-			, [0, "0x163850"] ; hover
-			, [0, "0x102638"] ] ; press
-
 		GuiChooseLang.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
 			, [0, "0x355e73"] ; hover
 			, [0, "0x122630"] ] ; press

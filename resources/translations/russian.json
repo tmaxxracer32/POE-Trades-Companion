@@ -90,6 +90,7 @@
 			"Title_Trades": "Есть трейд",
 			"Trade_Info_1": "Информация о Трейде"
 		},
+		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nIf you are using multiple accounts, put one account per line. Account names are case sensitive.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "Просмотр файла",
 		"hBTN_BrowseRegularWhisperSFX": "Просмотр файла",
 		"hBTN_BrowseTradingWhisperSFX": "Просмотр файла",

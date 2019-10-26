@@ -208,9 +208,16 @@ Class GUI_SetHotkey {
 
     Destroy() {
 		; Generic function
-		global GuiSetHotkey
-		; GUI_SetHotkey.DestroyBtnImgList()
+		GUI_SetHotkey.DestroyBtnImgList()
 		Gui.Destroy("SetHotkey")
+	}
+
+	DestroyBtnImgList() {
+		global GuiSetHotkey_Controls
+
+		for key, value in GuiSetHotkey_Controls
+			if IsContaining(key, "hBTN_")
+				try ImageButton.DestroyBtnImgList(value)
 	}
 
 	IsWinActive() {

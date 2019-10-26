@@ -90,6 +90,7 @@
 			"Title_Trades": "Title (Trades on queue)",
 			"Trade_Info_1": "Trade Infos"
 		},
+		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nIf you are using multiple accounts, put one account per line. Account names are case sensitive.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "Browse file",
 		"hBTN_BrowseRegularWhisperSFX": "Browse file",
 		"hBTN_BrowseTradingWhisperSFX": "Browse file",

@@ -90,6 +90,7 @@
 			"Title_Trades": "Titre (Échanges en attente)",
 			"Trade_Info_1": "Informations de l'échange"
 		},
+		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nSi vous utilisez plusieurs comptes, écrivez un compte par ligne. Les noms de comptes sont sensibles à la case.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "Parcourir",
 		"hBTN_BrowseRegularWhisperSFX": "Parcourir",
 		"hBTN_BrowseTradingWhisperSFX": "Parcourir",

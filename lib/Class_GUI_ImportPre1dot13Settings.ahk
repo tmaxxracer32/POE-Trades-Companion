@@ -199,7 +199,7 @@ Class GUI_ImportPre1dot13Settings {
 		global GuiImportPre1dot13Settings_Controls
 
 		for key, value in GuiImportPre1dot13Settings_Controls
-			IsContaining(key, "hBTN_")
+			if IsContaining(key, "hBTN_")
 				try ImageButton.DestroyBtnImgList(value)
 	}
 
