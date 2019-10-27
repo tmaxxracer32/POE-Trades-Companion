@@ -140,6 +140,8 @@ Handle_CommandLine_Parameters() {
 			PROGRAM.SETTINGS_FILE := found.1, found := ""
 		else if RegExMatch(param, "iO)/DOWNLOAD_LINK=(.*)", found) || RegExMatch(param, "iO)/NewVersion_Link=(.*)", found)
 			PROGRAM.DOWNLOAD_LINK := found.1, found := ""
+		else if RegExMatch(param, "iO)/cURL_Executable=(.*)", found)
+			PROGRAM.CURL_EXECUTABLE := found.1, found := ""
 	}
 }
 

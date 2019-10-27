@@ -259,5 +259,6 @@ Run_Updater(downloadLink) {
 	. " /Local_Folder=""" PROGRAM.MAIN_FOLDER """"
 	. " /Settings_File=""" PROGRAM.SETTINGS_FILE """"
 	. " /Download_Link=""" downloadLink """"
+	. " /cURL_Executable=""" PROGRAM.CURL_EXECUTABLE
 	ExitApp
 }
