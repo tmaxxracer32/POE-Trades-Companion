@@ -90,7 +90,7 @@
 			"Title_Trades": "Есть трейд",
 			"Trade_Info_1": "Информация о Трейде"
 		},
-		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nIf you are using multiple accounts, put one account per line. Account names are case sensitive.",
+		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nAccount names are case senitive.\nYour account name will be used for the Price Verify feature and the /kick %myself% action.\nNote that the %myself% variable will only work if your profile access is set to public.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "Просмотр файла",
 		"hBTN_BrowseRegularWhisperSFX": "Просмотр файла",
 		"hBTN_BrowseTradingWhisperSFX": "Просмотр файла",

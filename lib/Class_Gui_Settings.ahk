@@ -660,8 +660,6 @@ Class GUI_Settings {
 		global GuiPoeAccounts, GuiPoeAccounts_Controls, GuiPoeAccounts_Submit
 		Gui, Settings:+Disabled
 		windowsDPI := Get_DpiFactor()
-		for index, accName in PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts
-			accList := accList?accList "`n" accName : accName
 
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		GUI_Settings.GUI_PoeAccounts_Destroy()
@@ -670,7 +668,7 @@ Class GUI_Settings {
 		GuiPoeAccounts.Windows_DPI := windowsDPI
 
 		guiCreated := False
-		guiFullHeight := 200, guiFullWidth := 320, borderSize := 1, borderColor := "Black"
+		guiFullHeight := 210, guiFullWidth := 320, borderSize := 1, borderColor := "Black"
 		guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
 		leftMost := borderSize, rightMost := guiFullWidth-borderSize
 		upMost := borderSize, downMost := guiFullHeight-borderSize
@@ -703,8 +701,14 @@ Class GUI_Settings {
 
 		; * * TOP TEXT
 		Gui.Add("PoeAccounts", "Link", "x" leftMost+10 " y+5 w" guiWidth-20 " Center hwndhTEXT_TopText", PROGRAM.TRANSLATIONS.GUI_Settings.GuiPoeAccounts_TopText), topTextPos := GUI.GetControlPos("PoeAccounts", "hTEXT_TopText")
-		
-		Gui.Add("PoeAccounts", "Edit", "x" leftMost+5 " y+5 w" rightMost-10 " h" guiHeight-(topTextPos.Y+topTextPos.H+5+5) " hwndhEDIT_AccountsList", accList)
+		firstColX := leftMost+5, firstColY := 130
+		Gui.Add("PoeAccounts", "Edit", "x" firstColX " y" firstColY " w" (rightMost-20)/2 " R1 hwndhEDIT_Account1", PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.1), acc1Pos := GUI.GetControlPos("PoeAccounts", "hEDIT_Account1")
+		Gui.Add("PoeAccounts", "Edit", "xp y+5 wp R1 hwndhEDIT_Account2", PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.2)
+		Gui.Add("PoeAccounts", "Edit", "xp y+5 wp R1 hwndhEDIT_Account3", PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.3)
+		secondColX := firstColX+( (rightMost-20)/2 )+10,
+		Gui.Add("PoeAccounts", "Edit", "x" secondColX " y" acc1Pos.Y " w" (rightMost-20)/2 " R1 hwndhEDIT_Account4", PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.4)
+		Gui.Add("PoeAccounts", "Edit", "xp y+5 wp R1 hwndhEDIT_Account5", PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.5)
+		Gui.Add("PoeAccounts", "Edit", "xp y+5 wp R1 hwndhEDIT_Account6", PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.6)
 		Gui.Show("PoeAccounts", "xCenter yCenter w" guiFullWidth " h" guiFullHeight)
 		SetControlDelay(delay), SetBatchLines(batch)
 		return
@@ -713,13 +717,11 @@ Class GUI_Settings {
 	GUI_PoeAccounts_Close() {
 		global PROGRAM, GuiPoeAccounts_Submit, GuiPoeAccounts_Controls
 		Gui.Submit("PoeAccounts")
-		accounts := GuiPoeAccounts_Submit.hEDIT_AccountsList
 		accountsObj := []
-		Loop, Parse, accounts, `n
-		{
-			if (A_LoopField)
-				accountsObj.Push(A_LoopField)
-		}
+		Loop 6
+			if (GuiPoeAccounts_Submit["hEDIT_Account" A_Index])
+				accountsObj.Push(GuiPoeAccounts_Submit["hEDIT_Account" A_Index])
+		
 		PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts := ObjFullyClone(accountsObj)
 		GUI_Settings.TabsSettingsMain_SetUserSettings()
 		Save_LocalSettings()
