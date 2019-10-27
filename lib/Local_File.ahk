@@ -477,13 +477,13 @@ Update_LocalSettings_IniFile() {
 Convert_IniSettings_To_JsonSettings() {
 	global PROGRAM
 	iniFile := PROGRAM.SETTINGS_FILE_OLD
-	localSettings := Get_LocalSettings(), defaultSettings := Get_LocalSettings_DefaultValues()
-	iniSettings := class_EasyIni(iniFile), newJsonSettings := ObjFullyClone(localSettings)
+	defaultSettings := Get_LocalSettings_DefaultValues(), iniSettings := class_EasyIni(iniFile)
+	newJsonSettings := ObjFullyClone(defaultSettings)
 
 	; * * * * Importing sections
-	newJsonSettings.GENERAL := ObjMerge(iniSettings.GENERAL, defaultSettings.GENERAL)
-	newJsonSettings.SETTINGS_MAIN := ObjMerge(iniSettings.SETTINGS_MAIN, defaultSettings.SETTINGS_MAIN)
-	newJsonSettings.UPDATING := ObjMerge(iniSettings.UPDATING, defaultSettings.UPDATING)
+	newJsonSettings.GENERAL := ObjReplace(newJsonSettings.GENERAL, iniSettings.GENERAL)
+	newJsonSettings.SETTINGS_MAIN := ObjReplace(newJsonSettings.SETTINGS_MAIN, iniSettings.SETTINGS_MAIN)
+	newJsonSettings.UPDATING := ObjReplace(newJsonSettings.UPDATING, iniSettings.UPDATING)
 
 	; * * * * Importing account list
 	accounts := iniSettings.SETTINGS_MAIN.PoeAccounts
