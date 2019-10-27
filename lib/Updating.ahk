@@ -255,9 +255,9 @@ Run_Updater(downloadLink) {
 
 	Run,% PROGRAM.UPDATER_FILENAME 
 	. " /Name=""" PROGRAM.NAME  """"
-	. " /File_Name=""" A_ScriptFullPath """"
+	. " /FileFullPath=""" A_ScriptFullPath """"
 	. " /Local_Folder=""" PROGRAM.MAIN_FOLDER """"
-	. " /Ini_File=""" PROGRAM.SETTINGS_FILE_OLD """" ; TO_DO_V2 change to json stuff?
-	. " /NewVersion_Link=""" downloadLink """"
+	. " /Settings_File=""" PROGRAM.SETTINGS_FILE """"
+	. " /Download_Link=""" downloadLink """"
 	ExitApp
 }

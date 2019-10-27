@@ -52,7 +52,7 @@
 
 	; In case leagues api is down, get from my own list on github
 	if !(apiTradingLeagues) {
-		url := "http://raw.githubusercontent.com/" PROGRAM.GITHUB_USER "/" PROGRAM.GITHUB_REPO "/master/data/TradingLeagues.txt"
+		url := "http://raw.githubusercontent.com/" PROGRAM.GITHUB_USER "/" PROGRAM.GITHUB_REPO "/" PROGRAM.GITHUB_BRANCH "/data/TradingLeagues.txt"
 
 		options := "TimeOut: 25"
 		WinHttpRequest_cURL(url, data:="", headers:="", options), rawFile := data
