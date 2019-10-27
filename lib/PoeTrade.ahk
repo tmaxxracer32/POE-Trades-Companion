@@ -6,7 +6,7 @@
         return
     }
 
-    nice := JSON.Beautify(jsondata)
+    nice := JSON_Dump(jsondata)
     for key, value in jsonData {
         if !(jsonData[value].Abridged = key) {
             dataTxt .= dataTxt ? "`n" key : key
@@ -93,7 +93,7 @@ PoeTrade_GetCurrencyData() {
         }
     }
 
-    if !(currenciesObj["Chaos Orb"]) {
+    if !(currenciesObj["Chaos Orb"] || !IsObject(currenciesObj["Chaos Orb"])) {
         AppendToLogs(A_ThisFunc "(createData=" createData "): Couldn't retrieve currency data from poe.trade, falling back to json.")
         FileRead, JSONFile,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
         currenciesObj := JSON.Load(JSONFile)

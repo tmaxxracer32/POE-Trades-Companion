@@ -103,7 +103,7 @@ PoeNinja_CreateMapDataFile(league) {
         }
     }
 
-    finalData := JSON.Beautify(mapsSorted)
+    finalData := JSON_Dump(mapsSorted)
     finalData := StrReplace(finalData, "\u251c\u00c2", "ö")
 
     if (!mapsSorted.Count() || !mapsSorted["tier_unique"].Count() || StrLen(finalData) < 100) {

@@ -1,4 +1,4 @@
-A Dab of Ink
+﻿A Dab of Ink
 A Mother's Parting Gift
 Abandoned Wealth
 Aberrant Fossil
@@ -10,6 +10,7 @@ Acid Lakes
 Aetheric Fossil
 Alleyways
 Alone in the Darkness
+Amber Oil
 Ambush
 Anarchy
 Anarchy's Price
@@ -32,6 +33,7 @@ Assassin's Favour
 Atoll
 Atziri's Arsenal
 Audacity
+Azure Oil
 Barrows
 Basilica
 Bazaar
@@ -42,6 +44,7 @@ Belfry
 Bestiary Orb
 Beyond
 Birth of the Three
+Black Oil
 Blacksmith's Whetstone
 Blessed Orb
 Blessing of Chayula
@@ -85,6 +88,7 @@ Chateau
 Chayula's Breachstone
 Chromatic Orb
 City Square
+Clear Oil
 Colonnade
 Colosseum
 Conservatory
@@ -97,6 +101,7 @@ Coves
 Coveted Possession
 Crater
 Crematorium
+Crimson Oil
 Crimson Temple
 Crypt
 Crystal Ore
@@ -202,6 +207,7 @@ Glacier
 Glassblower's Bauble
 Glimmer of Hope
 Glyphic Fossil
+Golden Oil
 Gorge
 Grave Knowledge
 Graveyard
@@ -286,6 +292,7 @@ Oasis
 Obscured Incubator
 Offering to the Goddess
 Onslaught
+Opalescent Oil
 Orb of Alchemy
 Orb of Alteration
 Orb of Annulment
@@ -407,6 +414,7 @@ Screaming Essence of Wrath
 Screaming Essence of Zeal
 Scriptorium
 Scroll of Wisdom
+Sepia Oil
 Sepulchre
 Serrated Fossil
 Seven Years Bad Luck
@@ -558,6 +566,7 @@ Shrine
 Shuddering Fossil
 Siege
 Silver Coin
+Silver Oil
 Simple Iron Net
 Simple Rope Net
 Simple Steel Net
@@ -582,6 +591,7 @@ Summit
 Sunken City
 Talisman
 Tangled Fossil
+Teal Oil
 Tempest
 Temple
 Terrace
@@ -787,6 +797,7 @@ Vaal Orb
 Vaal Pyramid
 Vaal Temple
 Vault
+Verdant Oil
 Vial of Awakening
 Vial of Consequence
 Vial of Dominance
@@ -798,6 +809,7 @@ Vial of the Ritual
 Vial of Transcendence
 Villa
 Vinia's Token
+Violet Oil
 Volatile Power
 Volcano
 Volkuur's Key

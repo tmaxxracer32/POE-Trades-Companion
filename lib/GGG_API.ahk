@@ -237,7 +237,7 @@ GGG_API_GetMatchingExchangeData(obj) {
                 Break
 
             ; FileDelete, html.txt
-            ; FileAppend,% JSON.Beautify(resultsJson), html.txt, utf-8
+            ; FileAppend,% JSON_Dump(resultsJson), html.txt, utf-8
             resultsIDList := 0, resultsIDList := ""
         }
     }
@@ -332,7 +332,7 @@ GGG_API_GetMatchingItemsData(obj) {
                 Break
 
             ; FileDelete, html.txt
-            ; FileAppend,% JSON.Beautify(jsonData), html.txt, utf-8
+            ; FileAppend,% JSON_Dump(jsonData), html.txt, utf-8
             resultsIDList := 0, resultsIDList := ""
         }
     }
