@@ -6,7 +6,7 @@
 	Menu,Tray,DeleteAll
 	if ( !A_IsCompiled && FileExist(A_ScriptDir "\resources\icon.ico") )
 		Menu, Tray, Icon, %A_ScriptDir%\resources\icon.ico
-	Menu,Tray,Tip,POE Trades Companion - Discord Alpha 2
+	Menu,Tray,Tip,POE Trades Companion - Discord Alpha 3
 	Menu,Tray,NoStandard
 	if (DEBUG.settings.open_settings_gui) {
 			Menu,Tray,Add,Recreate Settings GUI, Tray_CreateSettings ; Recreate Settings GUI
