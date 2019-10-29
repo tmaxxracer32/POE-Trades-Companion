@@ -144,7 +144,7 @@
 	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
 		global GuiTrades, GuiSettings
 		static prevBtn := {}
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 
 		whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
 		guiName := "Trades" _buyOrSell "_Slot1"
@@ -171,7 +171,7 @@
 		SetTimer, GUI_Settings_Customization_%whichTab%_OnActionContentChange, Delete
 
 		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell)
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	CreatePreview(_buyOrSell, _guiMode) {

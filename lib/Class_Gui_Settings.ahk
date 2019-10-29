@@ -592,11 +592,11 @@ Class GUI_Settings {
 		if (currentMode=mode)
 			return
 
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 		PROGRAM.SETTINGS.BUY_INTERFACE.Mode := mode
 		Save_LocalSettings()
 		GUI_Trades_V2.CreatePreview("Buy", mode)
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 	
 	TabSettingsMain_OnSellingInterfaceModeChange() {
@@ -609,11 +609,11 @@ Class GUI_Settings {
 		if (currentMode=mode)
 			return
 
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 		PROGRAM.SETTINGS.SELL_INTERFACE.Mode := mode
 		Save_LocalSettings()
 		GUI_Trades_V2.CreatePreview("Sell", mode)
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	TabSettingsMain_OnCheckboxToggle(CtrlName) {	
@@ -1083,7 +1083,7 @@ Class GUI_Settings {
 		global GuiSettings, GuiSettings_Controls
 
 		; Prevent user from switching preset while we apply current settings
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 		GuiSettings.Is_Changing_Preset := True
 		GUI_Settings.TabCustomizationSkins_DisableSubroutines()
 		GuiControl, Settings:Disable,% GuiSettings_Controls.hLB_SkinPreset
@@ -1119,7 +1119,7 @@ Class GUI_Settings {
 		; Save newly applied settings
 		GUI_Settings.TabCustomizationSkins_SaveSettings()
 		GuiSettings.Is_Changing_Preset := False
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	TabCustomizationSkins_SetSkin(skinName) {
@@ -1178,7 +1178,7 @@ Class GUI_Settings {
 	TabCustomizationSkins_RecreateTradesGUI() {
 		global PROGRAM
 
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Msg)
 		UpdateHotkeys()
 		Declare_SkinAssetsAndSettings()
@@ -1188,7 +1188,7 @@ Class GUI_Settings {
 		GUI_Trades_V2.CreatePreview("Sell", PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
 		GUI_Trades_V2.CreatePreview("Buy", PROGRAM.SETTINGS.BUY_INTERFACE.Mode)
 		Sleep 500
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	TabCustomizationSkins_OnFontChange() {
@@ -1364,7 +1364,7 @@ Class GUI_Settings {
 			else if (style%styleName%DidntExist && btnName)
 				Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			else if (style%styleName%DidntExist && !btnIcon && !btnName)
-				Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				Gui.ImageButtonChangeCaption(btnHwnd, btnNum, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				
 			GuiControl, %guiName%:Show,% btnHwnd
 		}
@@ -1976,14 +1976,17 @@ Class GUI_Settings {
 
 	TabHotkeys_AddNewHotkeyProfile() {
 		global PROGRAM, GuiSettings_Controls
-		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
-		PROGRAM.SETTINGS.HOTKEYS[hotkeysCount+1] := {Name: "New hotkey " hotkeysCount+1, Hotkey: "", Actions: [{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE",Content:""}]}
+		fadeOutCode := GUI_Settings.ShowFadeout()
+		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count(), newHotkeysCount := hotkeysCount+1
+		PROGRAM.SETTINGS.HOTKEYS[newHotkeysCount] := {"Name":"New hotkey " newHotkeysCount, Hotkey: "", "Actions":[{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE","Content":""},{"Type":"SEND_MSG","Content":"""@%buyer% Write something here"""}]}
 		Save_LocalSettings()
 		UpdateHotkeys()
 		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 		GUI_Settings.TabHotkeys_SetUserSettings()
-		GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% hotkeysCount+1
+		GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% newHotkeysCount
 		GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
+		GUI_Settings.Universal_SelectListViewRow("Hotkeys", LV_GetCount())
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	TabHotkeys_RemoveSelectedHotkeyProfile() {
@@ -1993,6 +1996,7 @@ Class GUI_Settings {
 		. "`n" PROGRAM.TRANSLATIONS.MessageBoxes.Settings_RemoveSelectedHotkeyProfile)
 		IfMsgBox, Yes
 		{
+			fadeOutCode := GUI_Settings.ShowFadeout()
 			hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count()
 			if (selectedHkNum=hotkeysCount) ; Can just delete the last hk 
 				PROGRAM.SETTINGS.HOTKEYS.Delete(selectedHkNum)
@@ -2011,6 +2015,7 @@ Class GUI_Settings {
 			GUI_Settings.TabHotkeys_SetUserSettings()
 			GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% (hotkeysCount > selectedHkNum ? selectedHkNum : hotkeysCount-1)
 			GUI_Settings.TabHotkeys_OnHotkeyProfileChange()
+			GUI_Settings.HideFadeout(fadeOutCode)
 		}
 	}
 
@@ -2020,7 +2025,7 @@ Class GUI_Settings {
 
 	TabHotkeys_OnHotkeyProfileChange() {
 		global PROGRAM, GuiSettings_Controls, GuiSettings_ControlFunctions
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 		SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
 		Sleep 10
 		
@@ -2034,7 +2039,7 @@ Class GUI_Settings {
 
 		Sleep 10
 		SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	TabHotkeys_SetHotkeyProfileName(hkName, dontTriggerSub=True) {
@@ -2087,10 +2092,10 @@ Class GUI_Settings {
 	TabHotkeys_ChangeHotkeyProfileHotkey() {
 		global PROGRAM, GuiSettings
 
-		GUI_Settings.ShowFadeout()
+		fadeOutCode := GUI_Settings.ShowFadeout()
 		hkStr := GUI_SetHotkey.WaitForHotkey()
 		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(hkStr)
-		GUI_Settings.HideFadeout()
+		GUI_Settings.HideFadeout(fadeOutCode)
 
 		GUI_Settings.Show(GUI_Settings.GetSelectedTab())
 
@@ -2890,12 +2895,17 @@ Class GUI_Settings {
 			isLastCloseOrWrite := True
 		; Adding the new action
 		if (isLastCloseOrWrite) { ; Adding new blank action, then modifying list to accomodate and make new action previous to last
-			LV_Add("", LV_GetCount()+1, "", "") ; Adding new line
-			LV_Modify(LV_GetCount()-1, , LV_GetCount()-1, actionType, actionContent) ; Replacing before last line with our action
-			LV_Modify(LV_GetCount(), , LV_GetCount(), lastActionType, lastActionContent) ; Replacing last line with the old last action
+			currentLvCount := LV_GetCount(), actionLvNum := currentLvCount
+			LV_Add("", currentLvCount+1, "", ""), currentLvCount := LV_GetCount() ; Adding new line
+			LV_Modify(actionLvNum, , actionLvNum, actionType, actionContent) ; Replacing before last line with our action
+			LV_Modify(currentLvCount, , currentLvCount, lastActionType, lastActionContent) ; Replacing last line with the old last action
+			GUI_Settings.Universal_SelectListViewRow(whichTab, actionLvNum)
 		}
-		else ; Just adding the new action at end of list
-			LV_Add("", LV_GetCount()+1, actionType, actionContent)
+		else { ; Just adding the new action at end of list
+			currentLvCount := LV_GetCount(), actionLvNum := currentLvCount+1
+			LV_Add("", actionLvNum, actionType, actionContent)
+			GUI_Settings.Universal_SelectListViewRow(whichTab, actionLvNum)
+		}
 
 		GUI_Settings.Universal_AdjustListviewHeaders(whichTab)
 		if (whichTab="Selling")
@@ -2994,24 +3004,38 @@ Class GUI_Settings {
 	}
 
 	ShowFadeout() {
+		/* 	Puts a black transparency on the GUI to indicate that it's disabled
+			Returns a random code that must be given to the HideFadeout() func
+			This is to make sure that, in case multiple functions called ShowFadeout(), only the very first one is able to call HideFadeout()
+		*/
 		global GuiSettingsFadeout
 
-		Gui, Settings:+Disabled
-		if GUI_Settings.IsVisible() {
-			settingsGuiPos := GUI_Settings.GetPosition()
+		if (GUI_Settings.IsVisible() && !GuiSettingsFadeout.Handle) {
+			Gui, Settings:+Disabled
+			settingsGuiPos := GUI_Settings.GetPosition(), fadeOutCode := RandomStr(10)
 			Gui.Destroy("SettingsFadeout")
-			Gui.New("SettingsFadeout", "-Caption -Border +Toolwindow +Lastfound +AlwaysOnTop +HwndhGuiSettingsFadeout")
+			Gui.New("SettingsFadeout", "-Caption -Border +Toolwindow +Lastfound +AlwaysOnTop +HwndhGuiSettingsFadeout ")
 			WinSet, Transparent,% (255/100)*20
+			WinSet, ExStyle, +0x20 ; Clickthrough
 			Gui.Margin("SettingsFadeout", 0, 0)
 			Gui.Color("SettingsFadeout", "0x000000")
 			; Gui.Add("SettingsFadeout", "Picture", "x30 y30", )
-			Gui.Show("SettingsFadeout", "x" settingsGuiPos.X " y" settingsGuiPos.Y " w" settingsGuiPos.W " h" settingsGuiPos.H)
+			Gui.Show("SettingsFadeout", "x" settingsGuiPos.X " y" settingsGuiPos.Y " w" settingsGuiPos.W " h" settingsGuiPos.H " NoActivate")
+
+			GuiSettingsFadeout.FadeoutCode := fadeOutCode
+			return fadeOutCode
 		}
 	}
 
-	HideFadeout() {
+	HideFadeout(fadeOutCode) {
+		global GuiSettings, GuiSettingsFadeout
+
+		if (fadeOutCode != GuiSettingsFadeout.FadeoutCode)
+			return
+
 		Gui, Settings:-Disabled
 		Gui.Destroy("SettingsFadeout")
+		WinActivate,% "ahk_id " GuiSettings.Handle
 	}
 
 	DragGui(GuiHwnd) {
