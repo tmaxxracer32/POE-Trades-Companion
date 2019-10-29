@@ -265,13 +265,12 @@ PlaySound(sndFile) {
 IsWindowInScreenBoundaries(_win, _screen="All", _adv=False) {
 /*	Returns whether at least 1/3 of the window is within the screen or not
 */
-	hiddenWin := A_DetectHiddenWindows
-	DetectHiddenWindows, On
+	hw := DetectHiddenWindows("On")
 
 	WinGetPos, x, y, w, h,% _win
 	win := {x:x,y:y,h:h,w:w}
 
-	DetectHiddenWindows, %hiddenWin%
+	DetectHiddenWindows(hw)
 
 	mons := {}
 	if (_screen="All") { ; get all mons wa into their own sub array
@@ -628,20 +627,19 @@ Detect_HiddenWindows(state="") {
 	return DetectHiddenWindows(state)
 }
 
-DetectHiddenWindows(state="") {
-	static previousState
-	if (state = "" && previousState) {
-		DetectHiddenWindows, %previousState%
+DetectHiddenWindows(hwNewState="") {
+	static hwPrevState
+	if (hwNewState="" && hwPrevState) {
+		DetectHiddenWindows,% hwPrevState
 		Return
 	}
 
-	previousState := A_DetectHiddenWindows
+	hwPrevState := A_DetectHiddenWindows
+	hwNewState := IsIn(hwNewState, True ",On") ? "On" 
+		: IsIn(hwNewState, False ",Off") ? "Off" : "Off"
+	DetectHiddenWindows,% hwNewState
 
-
-	state := (state=True || state="On")?("On"):(state=False || state="Off")?("Off"):("ERROR")
-	if (state = "ERROR")
-		MsgBox(,, "Invalid use of " A_ThisFunc)
-	DetectHiddenWindows, %state%
+	return hwPrevState
 }
 
 Get_Windows_Title(_filter="", _filterType="", _delimiter="`n") {

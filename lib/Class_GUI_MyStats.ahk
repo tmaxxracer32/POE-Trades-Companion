@@ -565,10 +565,9 @@
 		MsgBox(4096, "", "My Stats GUI has been temporarily disabled.") ; TO_DO_V2
 		return
 
-		hiddenWin := A_DetectHiddenWindows
-		DetectHiddenWindows, On
+		hw := DetectHiddenWindows("On")
 		foundHwnd := WinExist("ahk_id " GuiMyStats.Handle)
-		DetectHiddenWindows, %hiddenWin%
+		DetectHiddenWindows(hw)
 
 		if (foundHwnd) {
 			GUI_MyStats.UpdateData()

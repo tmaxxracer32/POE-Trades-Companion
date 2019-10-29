@@ -582,9 +582,9 @@ Get_LocalSettings_DefaultValues() {
 	}
 	defaultSkinSettings := GUI_Settings.TabCustomizationSkins_GetSkinDefaultSettings(currentSkin)
 	; Getting process name + Setting some other vars
-	DetectHiddenWindows("On")
+	hw := DetectHiddenWindows("On")
 	WinGet, filePName, ProcessName,% "ahk_pid " DllCall("GetCurrentProcessId")
-	DetectHiddenWindows("")
+	DetectHiddenWindows(hw)
 	ScriptName := A_ScriptName, ScriptHwnd := A_ScriptHwnd, ProgramVersion := PROGRAM.VERSION, ScriptPid := DllCall("GetCurrentProcessId"), sfxFolder := StrReplace(PROGRAM.SFX_FOLDER, "\", "\\")
 	poeSkin := poeSkinSettings.Skin, poeFontSize := poeSkinSettings.FontSize, poeFontQuality := poeSkinSettings.FontQuality, poeFontName := poeSkinSettings.Font
 	; Creating the default values obj

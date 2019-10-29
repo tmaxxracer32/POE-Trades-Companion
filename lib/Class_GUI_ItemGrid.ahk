@@ -364,8 +364,7 @@ class GUI_ItemGrid {
         guiNames := ["ItemGridNormal","ItemGridQuad","ItemGridItemName","ItemGridTabName","ItemGridMap","ItemGridMapTier","ItemGridMapMap","ItemGridMapArrow"]
         GuiItemGrid := {Names:{}, Controls:{}, Submit:{}}
         for index, guiName in guiNames {
-            hw := A_DetectHiddenWindows
-            DetectHiddenWindows, On
+            hw := DetectHiddenWindows("On")
             if WinExist("ahk_id " Gui%guiName%["Handle"]) {
                 GuiItemGrid.Names[guiName] := Gui%guiName%
                 GuiItemGrid.Controls[guiName] := Gui%guiName%_Controls
@@ -376,7 +375,7 @@ class GUI_ItemGrid {
                     WinSet, Transparent,% (255/100)*65
                 WinSet, ExStyle, +0x20 ; Clickthrough
             }
-            DetectHiddenWindows, %hw%
+            DetectHiddenWindows(hw)
         }
         SetControlDelay(delay), SetBatchLines(batch)
     }
@@ -391,8 +390,7 @@ class GUI_ItemGrid {
     Detect(_hw="Off", guiName="") {
         global GuiItemGrid
 
-        hw := A_DetectHiddenWindows
-        DetectHiddenWindows, %_hw%
+        hw := DetectHiddenWindows(_hw)
 
         exists := False
         if (guiName) {
@@ -406,7 +404,7 @@ class GUI_ItemGrid {
             }
         }
 
-        DetectHiddenWindows, %hw%
+        DetectHiddenWindows(hw)
         return exists
     }
 

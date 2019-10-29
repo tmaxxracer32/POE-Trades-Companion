@@ -144,6 +144,8 @@
 	Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, btnsCount, btnNum) {
 		global GuiTrades, GuiSettings
 		static prevBtn := {}
+		GUI_Settings.ShowFadeout()
+
 		whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
 		guiName := "Trades" _buyOrSell "_Slot1"
 		thisBtn := "hBTN_CustomButtonRow" rowNum "Max" btnsCount "Num" btnNum
@@ -159,7 +161,6 @@
 		GuiSettings.CUSTOM_BUTTON_SELECTED_MAX := btnsCount
 		GuiSettings.CUSTOM_BUTTON_SELECTED_NUM := btnNum
 
-		Gui, Settings:+Disabled
 		SetTimer, GUI_Settings_Customization_%whichTab%_OnActionContentChange, Delete
 		Sleep 10
 
@@ -167,10 +168,10 @@
 		GUI_Settings.Customization_SellingBuying_SelectListviewRow(whichTab, 1)
 
 		Sleep 10
-		Gui, Settings:-Disabled
 		SetTimer, GUI_Settings_Customization_%whichTab%_OnActionContentChange, Delete
 
-		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell) 
+		GUI_Trades_V2.RemoveButtonFocus(_buyOrSell)
+		GUI_Settings.HideFadeout()
 	}
 
 	CreatePreview(_buyOrSell, _guiMode) {
@@ -1416,8 +1417,7 @@
 			return
 		}
 
-		hiddenWin := A_DetectHiddenWindows
-		DetectHiddenWindows, On
+		hw := DetectHiddenWindows("On")
 
 		WinGet, isMinMax, MinMax,% "ahk_id " GuiTrades.Sell.Docked_Window_Handle
 		isWinMinimized := isMinMax=-1?True:False
@@ -1433,7 +1433,7 @@
 		else moveToX := (dockedX+dockedW)-gtPos.W, moveToY := dockedY 
 
 		if IsNum(dockedX) && ( (GuiTrades.Is_Minimized && gtPos.X = moveToX && gtPos.Y = moveToY) || (GuiTrades.Is_Minimized && gtmPos.X = moveToX && gtmPos.Y = moveToY) ) {
-			DetectHiddenWindows, %hiddenWin%
+			DetectHiddenWindows(hw)
 			Return
 		}
 		else if !IsNum(dockedX) || (isWinMinimized) {
@@ -1455,7 +1455,7 @@
 			GUI_Trades_V2.SavePosition("Sell")
 		}
 		
-		DetectHiddenWindows, %hiddenWin%
+		DetectHiddenWindows(hw)
 	}
 
 	SetOrUnsetTabStyle(setOrUnset="", tabStyle="", playerOrTab="", applyToThisTabOnly=False) {
@@ -2573,10 +2573,9 @@
 
     Exists(_buyOrSell) {
 		global GuiTrades
-		hw := A_DetectHiddenWindows
-		DetectHiddenWindows, On
+		hw := DetectHiddenWindows("On")
 		hwnd := WinExist("ahk_id " GuiTrades[_buyOrSell].Handle)
-		DetectHiddenWindows, %hw%
+		DetectHiddenWindows(hw)
 
 		return hwnd
 	}
@@ -2889,9 +2888,9 @@
 
 	GetPosition(_buyOrSell) {
 		global GuiTrades
-		DetectHiddenWindows("On")
+		hw := DetectHiddenWindows("On")
 		WinGetPos, x, y, w, h,% "ahk_id " GuiTrades[_buyOrSell].Handle
-        DetectHiddenWindows()
+        DetectHiddenWindows(hw)
 		
 		return {x:x,y:y,w:w,h:h}
 	}
@@ -2931,9 +2930,9 @@
 		if (PROGRAM.SETTINGS.SETTINGS_MAIN.DisableBuyInterface="True")
 			return
 
-		DetectHiddenWindows("On")
+		hw := DetectHiddenWindows("On")
 		foundHwnd := WinExist("ahk_id " GuiTrades[_buyOrSell].Handle)
-		DetectHiddenWindows()
+		DetectHiddenWindows(hw)
 
 		if (foundHwnd) {
 			Gui, Trades%_buyOrSell%:Show, NoActivate
@@ -2990,10 +2989,10 @@
 		}
 		
 		if (GuiTrades[_buyOrSell].HasClickedSearch && IsContaining(A_Gui, "Search")) {
-			DetectHiddenWindows("On")
+			hw := DetectHiddenWindows("On")
 			GUI_Trades_V2.SetFakeSearch(_buyOrSell, makeEmpty:=True) 
 			WinActivate,% "ahk_id " GuiTrades_Controls[_buyOrSell].GuiSearchHiddenHandle
-			DetectHiddenWindows("")
+			DetectHiddenWindows(hw)
 		}
 		; GUI_Trades_V2.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
 		GuiTrades[_buyOrSell].HasToolTip := False

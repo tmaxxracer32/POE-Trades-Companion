@@ -465,10 +465,9 @@ Class GUI_Settings {
 		Gui.Show("SettingsFooter", "x" guiFooterX " y" guiFooterY " w" guiFooterW " h" guiFooterH " NoActivate")
 
 		; Gui.Show("Settings", "h" guiHeight " w" guiWidth " x-" guiWidth+10 " y" 1010-guiHeight " NoActivate " param)
-		detectHiddenWin := A_DetectHiddenWindows
-		DetectHiddenWindows, On
+		hw := DetectHiddenWindows("On")
 		WinWait,% "ahk_id " GuiSettings.Handle
-		DetectHiddenWindows, %detectHiddenWin%
+		DetectHiddenWindows(hw)
 
 		Gui.OnMessageBind("GUI_Settings", "Settings", 0x200, "WM_MOUSEMOVE")
 		Gui.OnMessageBind("GUI_Settings", "Settings", 0x201, "WM_LBUTTONDOWN")
@@ -593,14 +592,11 @@ Class GUI_Settings {
 		if (currentMode=mode)
 			return
 
-		Gui, Settings:+Disabled
-		
+		GUI_Settings.ShowFadeout()
 		PROGRAM.SETTINGS.BUY_INTERFACE.Mode := mode
 		Save_LocalSettings()
-
 		GUI_Trades_V2.CreatePreview("Buy", mode)
-
-		Gui, Settings:-Disabled
+		GUI_Settings.HideFadeout()
 	}
 	
 	TabSettingsMain_OnSellingInterfaceModeChange() {
@@ -613,14 +609,11 @@ Class GUI_Settings {
 		if (currentMode=mode)
 			return
 
-		Gui, Settings:+Disabled
-
+		GUI_Settings.ShowFadeout()
 		PROGRAM.SETTINGS.SELL_INTERFACE.Mode := mode
 		Save_LocalSettings()
-
 		GUI_Trades_V2.CreatePreview("Sell", mode)
-
-		Gui, Settings:-Disabled
+		GUI_Settings.HideFadeout()
 	}
 
 	TabSettingsMain_OnCheckboxToggle(CtrlName) {	
@@ -837,11 +830,10 @@ Class GUI_Settings {
 		}
 	}
 
-	TabCustomizationSkins_EnableSubroutines() { ; TO_DO_V2 still needed? why not make settings:+disabled so user cant touch window at all
+	TabCustomizationSkins_EnableSubroutines() {
 		controlsList := "hLB_SkinPreset,hLB_SkinBase,hLB_SkinFont,hCB_UseRecommendedFontSettings,hEDIT_SkinFontSize"
 		. ",hUPDOWN_SkinFontSize,hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality,hEDIT_SkinScalingPercentage,hUPDOWN_SkinScalingPercentage"
 
-		Gui, Settings:-Disabled
 		Loop, Parse, controlsList,% ","
 		{
 			GUI.EnableControlFunction("GUI_Settings", "Settings", A_LoopField)
@@ -852,7 +844,6 @@ Class GUI_Settings {
 		controlsList := "hLB_SkinPreset,hLB_SkinBase,hLB_SkinFont,hCB_UseRecommendedFontSettings,hEDIT_SkinFontSize"
 		. ",hUPDOWN_SkinFontSize,hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality,hEDIT_SkinScalingPercentage,hUPDOWN_SkinScalingPercentage"
 
-		Gui, Settings:+Disabled
 		Loop, Parse, controlsList,% ","
 		{
 			GUI.DisableControlFunction("GUI_Settings", "Settings", A_LoopField)
@@ -1092,6 +1083,7 @@ Class GUI_Settings {
 		global GuiSettings, GuiSettings_Controls
 
 		; Prevent user from switching preset while we apply current settings
+		GUI_Settings.ShowFadeout()
 		GuiSettings.Is_Changing_Preset := True
 		GUI_Settings.TabCustomizationSkins_DisableSubroutines()
 		GuiControl, Settings:Disable,% GuiSettings_Controls.hLB_SkinPreset
@@ -1127,6 +1119,7 @@ Class GUI_Settings {
 		; Save newly applied settings
 		GUI_Settings.TabCustomizationSkins_SaveSettings()
 		GuiSettings.Is_Changing_Preset := False
+		GUI_Settings.HideFadeout()
 	}
 
 	TabCustomizationSkins_SetSkin(skinName) {
@@ -1185,7 +1178,7 @@ Class GUI_Settings {
 	TabCustomizationSkins_RecreateTradesGUI() {
 		global PROGRAM
 
-		Gui, Settings:+Disabled
+		GUI_Settings.ShowFadeout()
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Title, PROGRAM.TRANSLATIONS.TrayNotifications.RecreatingTradesWindow_Msg)
 		UpdateHotkeys()
 		Declare_SkinAssetsAndSettings()
@@ -1195,7 +1188,7 @@ Class GUI_Settings {
 		GUI_Trades_V2.CreatePreview("Sell", PROGRAM.SETTINGS.SELL_INTERFACE.Mode)
 		GUI_Trades_V2.CreatePreview("Buy", PROGRAM.SETTINGS.BUY_INTERFACE.Mode)
 		Sleep 500
-		Gui, Settings:-Disabled
+		GUI_Settings.HideFadeout()
 	}
 
 	TabCustomizationSkins_OnFontChange() {
@@ -2027,7 +2020,7 @@ Class GUI_Settings {
 
 	TabHotkeys_OnHotkeyProfileChange() {
 		global PROGRAM, GuiSettings_Controls, GuiSettings_ControlFunctions
-		Gui, Settings:+Disabled
+		GUI_Settings.ShowFadeout()
 		SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
 		Sleep 10
 		
@@ -2041,7 +2034,7 @@ Class GUI_Settings {
 
 		Sleep 10
 		SetTimer, GUI_Settings_Hotkeys_OnActionContentChange, Delete
-		Gui, Settings:-Disabled
+		GUI_Settings.HideFadeout()
 	}
 
 	TabHotkeys_SetHotkeyProfileName(hkName, dontTriggerSub=True) {
@@ -2094,12 +2087,11 @@ Class GUI_Settings {
 	TabHotkeys_ChangeHotkeyProfileHotkey() {
 		global PROGRAM, GuiSettings
 
-		Gui, Settings:+Disabled
+		GUI_Settings.ShowFadeout()
 		hkStr := GUI_SetHotkey.WaitForHotkey()
 		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(hkStr)
-		Gui, Settings:-Disabled
+		GUI_Settings.HideFadeout()
 
-		
 		GUI_Settings.Show(GUI_Settings.GetSelectedTab())
 
 		profileNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
@@ -2984,6 +2976,44 @@ Class GUI_Settings {
 	*	GENERAL FUNCTIONS
 	*/
 
+	GetPosition() {
+		global GuiSettings
+		hw := DetectHiddenWindows("On")
+		WinGetPos, x, y, w, h,% "ahk_id " GuiSettings.Handle
+		DetectHiddenWindows(hw)
+		
+		return {x:x,y:y,w:w,h:h}
+	}
+
+	IsVisible() {
+		global GuiSettings
+		hw := DetectHiddenWindows("Off")
+		winHwnd := WinExist("ahk_id " GuiSettings.Handle)
+		DetectHiddenWindows(hw)
+		return winHwnd
+	}
+
+	ShowFadeout() {
+		global GuiSettingsFadeout
+
+		Gui, Settings:+Disabled
+		if GUI_Settings.IsVisible() {
+			settingsGuiPos := GUI_Settings.GetPosition()
+			Gui.Destroy("SettingsFadeout")
+			Gui.New("SettingsFadeout", "-Caption -Border +Toolwindow +Lastfound +AlwaysOnTop +HwndhGuiSettingsFadeout")
+			WinSet, Transparent,% (255/100)*20
+			Gui.Margin("SettingsFadeout", 0, 0)
+			Gui.Color("SettingsFadeout", "0x000000")
+			; Gui.Add("SettingsFadeout", "Picture", "x30 y30", )
+			Gui.Show("SettingsFadeout", "x" settingsGuiPos.X " y" settingsGuiPos.Y " w" settingsGuiPos.W " h" settingsGuiPos.H)
+		}
+	}
+
+	HideFadeout() {
+		Gui, Settings:-Disabled
+		Gui.Destroy("SettingsFadeout")
+	}
+
 	DragGui(GuiHwnd) {
 		PostMessage, 0xA1, 2,,,% "ahk_id " GuiHwnd
 	}
@@ -3044,10 +3074,9 @@ Class GUI_Settings {
 	Show(whichTab="Settings") {
 		global PROGRAM, GuiSettings, GuiTrades
 
-		hiddenWin := A_DetectHiddenWindows
-		DetectHiddenWindows, On
+		hw := DetectHiddenWindows("On")
 		foundHwnd := WinExist("ahk_id " GuiSettings.Handle)
-		DetectHiddenWindows, %hiddenWin%
+		DetectHiddenWindows(hw)
 
 		if (foundHwnd) {
 			if !(GuiTrades.SellPreview.Handle)
