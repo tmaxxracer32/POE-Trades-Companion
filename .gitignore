@@ -5,7 +5,8 @@
 /__*
 /_CreateReleaseZip.ahk
 /_Archives/*
-!/_Archives/*.zip
+/_Debug/*
+/_Archives/*.zip
 
 # =========================
 # Resources source files
