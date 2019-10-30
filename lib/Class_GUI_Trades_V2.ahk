@@ -1742,7 +1742,8 @@
 		GuiTrades[_buyOrSell].Is_Maximized := True
 		GuiTrades[_buyOrSell].Is_Minimized := False
 
-		GUI_Trades_V2.ShowItemGrid(_buyOrSell)
+		if (_buyOrSell="Sell")
+			GUI_Trades_V2.ShowItemGrid(GuiTrades.Sell.Active_Tab)
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 		; GUI_Trades_V2.ToggleTabSpecificAssets("On")
 	}
