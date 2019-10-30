@@ -69,6 +69,8 @@
 		"RMENU_RemoveThisEntry": "Удалить эту запись"
 	},
 	"GUI_Settings": {
+		"AddANewAction": "Add a new action",
+		"AddANewProfile": "Add a new profile",
 		"COLORS_TYPES": {
 			"Border": "Окантовка",
 			"Button_Hover": "Кнопка (Наведение)",
@@ -91,6 +93,7 @@
 			"Trade_Info_1": "Информация о Трейде"
 		},
 		"CreateHotkeyForThisButton": "Create a hotkey for this button",
+		"DeleteThisProfile": "Delete this profile",
 		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nAccount names are case senitive.\nYour account name will be used for the Price Verify feature and the /kick %myself% action.\nNote that the %myself% variable will only work if your profile access is set to public.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "Просмотр файла",
 		"hBTN_BrowseRegularWhisperSFX": "Просмотр файла",
@@ -187,7 +190,10 @@
 		"hTEXT_TextFont": "Шрифт:",
 		"hTEXT_TextFont_ToolTip": "/!\\ ТОЛЬКО ДЛЯ ОПЫТНЫХ ПОЛЬЗОВАТЕЛЕЙ /!\\\nВыберите шрифт, который вы хотите использовать.",
 		"hTEXT_UnicodeBtnSlot_1_ToolTip": "Пустой слот для кнопок. Щелкните левой кнопкой мыши, чтобы добавить кнопку в этот слот.",
-		"hTEXT_YourVersion": "Текущая версия:"
+		"hTEXT_YourVersion": "Текущая версия:",
+		"MoveThisActionDown": "Move this action down",
+		"MoveThisActionUp": "Move this action up",
+		"RemoveThisAction": "Remove this action"
 	},
 	"GUI_Trades": {
 		"_____ RIGHT CLICK MENUS _____": "",

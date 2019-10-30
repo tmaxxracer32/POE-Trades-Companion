@@ -69,6 +69,8 @@
 		"RMENU_RemoveThisEntry": "Supprimer cette entrée"
 	},
 	"GUI_Settings": {
+		"AddANewAction": "Ajouter une nouvelle action",
+		"AddANewProfile": "Ajouter un nouveau profil",
 		"COLORS_TYPES": {
 			"Border": "Border",
 			"Button_Hover": "Bouton (Survol)",
@@ -91,6 +93,7 @@
 			"Trade_Info_1": "Informations de l'échange"
 		},
 		"CreateHotkeyForThisButton": "Créer une hotkey pour ce bouton",
+		"DeleteThisProfile": "Supprimer ce profil",
 		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nLes noms de comptes sont sensibles à la case.\nVotre nom de compte sera utlisé pour la fonction de Vérification de Prix et l'action /kick %myself%.\nNotez de la variable %myself% ne fonctionne uniquement que si votre accès profil est publique.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "Parcourir",
 		"hBTN_BrowseRegularWhisperSFX": "Parcourir",
@@ -187,7 +190,10 @@
 		"hTEXT_TextFont": "Police de texte:",
 		"hTEXT_TextFont_ToolTip": "/!\\ UTILISATEURS AVANCÉS UNIQUEMENT /!\\\nChoisissez la police que vous désirez utiliser.",
 		"hTEXT_UnicodeBtnSlot_1_ToolTip": "Slot vide. Clic gauche pour ajouter un bouton à ce slot.",
-		"hTEXT_YourVersion": "Votre version:"
+		"hTEXT_YourVersion": "Votre version:",
+		"MoveThisActionDown": "Déplacer cette action vers le bas",
+		"MoveThisActionUp": "Déplacer cette action vers le haut",
+		"RemoveThisAction": "Retirer cette action"
 	},
 	"GUI_Trades": {
 		"_____ RIGHT CLICK MENUS _____": "",

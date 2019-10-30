@@ -840,7 +840,7 @@
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
 		Menu, RClickMenu, Add
-		Menu, RClickMenu, Add,% "Settings", GUI_Trades_V2_ContextMenu_OpenTrayMenu
+		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.Settings, GUI_Trades_V2_ContextMenu_OpenTrayMenu
 		; Check - Disable - etc
 		if (PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Locked = "True")
 			Menu, RClickMenu, Check,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition

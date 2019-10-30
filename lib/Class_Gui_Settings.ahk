@@ -2178,9 +2178,10 @@ Class GUI_Settings {
 	}
 
 	TabHotkeys_OnHotkeysProfilesListBoxRightClick() {
+		global PROGRAM
 		try Menu, RMenu, DeleteAll
-		Menu, RMenu, Add, Add a new profile, GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_AddNewHotkeyProfile
-		Menu, RMenu, Add, Delete this profile, GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_RemoveSelectedHotkeyProfile
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.AddANewProfile, GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_AddNewHotkeyProfile
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.DeleteThisProfile, GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_RemoveSelectedHotkeyProfile
 		Menu, RMenu, Show
 		return
 
@@ -2745,22 +2746,24 @@ Class GUI_Settings {
 	}
 
     Universal_OnListviewRightClick(whichTab) {
-		global ACTIONS_TEXT_NAME, ACTIONS_FORCED_CONTENT
+		global PROGRAM
 		global GuiSettings, GuiSettings_Controls
+		global ACTIONS_TEXT_NAME, ACTIONS_FORCED_CONTENT
+		
 		try Menu, RMenu, DeleteAll
-		Menu, RMenu, Add, Add a new action, Universal_OnListviewRightClick_AddNewAction
-		Menu, RMenu, Add, Remove this action, Universal_OnListviewRightClick_RemoveSelectedAction
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.AddANewAction, Universal_OnListviewRightClick_AddNewAction
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.RemoveThisAction, Universal_OnListviewRightClick_RemoveSelectedAction
 		Menu, RMenu, Add
-		Menu, RMenu, Add, Move this action up, Universal_OnListviewRightClick_MoveSelectedActionUp
-		Menu, RMenu, Add, Move this action down, Universal_OnListviewRightClick_MoveSelectedActionDown
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.MoveThisActionUp, Universal_OnListviewRightClick_MoveSelectedActionUp
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.MoveThisActionDown, Universal_OnListviewRightClick_MoveSelectedActionDown
 
 		selectedRow := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
 		if (selectedRow = 1 || !selectedRow)
-			Menu, RMenu, Disable, Move this action up
+			Menu, RMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Settings.MoveThisActionUp
 		if (selectedRow = LV_GetCount() || !selectedRow)
-			Menu, RMenu, Disable, Move this action down
+			Menu, RMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Settings.MoveThisActionDown
 		if (!selectedRow)
-			Menu, RMenu, Disable, Remove this action
+			Menu, RMenu, Disable,% PROGRAM.TRANSLATIONS.GUI_Settings.RemoveThisAction
 		Menu, RMenu, Show
 		return
 
