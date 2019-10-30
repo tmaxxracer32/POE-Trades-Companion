@@ -2872,10 +2872,13 @@ Class GUI_Settings {
 			; notice we don't do anything if equal, effectively skipping
 		}
 		; Adding new action list
+		selectedLvNum := GUI_Settings.Universal_GetListviewSelectedRow(whichTab)
+		newLvSelectedNum := selectedLvNum = LV_GetCount() ? selectedLvNum-1 : selectedLvNum
 		Loop % LV_GetCount()
 			LV_Delete()
 		Loop % newLvContent.Count()
 			LV_Add("", newLvContent[A_Index].Num, newLvContent[A_Index].ActionType, newLvContent[A_Index].ActionContent)
+		GUI_Settings.Universal_SelectListViewRow(whichTab, newLvSelectedNum)
 
 		GUI_Settings.Universal_AdjustListviewHeaders(whichTab)
 		if (whichTab="Selling")
