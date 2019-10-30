@@ -1115,16 +1115,11 @@ Update_LocalSettings_IniFile() {
 			loopedSetting := iniSettings[iniSection]
 			acType := loopedSetting.Type, acContent := loopedSetting.Content
 
-			if (loopedSetting.Enabled != "True") {
-				Ini.Remove(iniFile, iniSection)
-			}
-			else {
-				GoSub Update_LocalSettings_IniFile_ReplaceOldSendActions
-				GoSub Update_LocalSettings_IniFile_ReplaceOldWriteActions
-				GoSub Update_LocalSettings_IniFile_ReplaceOldWriteGoBackActions
-				GoSub Update_LocalSettings_IniFile_RemoveShowGridAction
-				GoSub Update_LocalSettings_IniFile_ReplaceIgnoreSimilarTradeAction
-			}
+			GoSub Update_LocalSettings_IniFile_ReplaceOldSendActions
+			GoSub Update_LocalSettings_IniFile_ReplaceOldWriteActions
+			GoSub Update_LocalSettings_IniFile_ReplaceOldWriteGoBackActions
+			GoSub Update_LocalSettings_IniFile_RemoveShowGridAction
+			GoSub Update_LocalSettings_IniFile_ReplaceIgnoreSimilarTradeAction
 			isBasicHk := False
 		}
 
@@ -1191,7 +1186,7 @@ Update_LocalSettings_IniFile() {
 	Update_LocalSettings_IniFile_RemoveShowGridAction:
 		if (acType = "SHOW_GRID") {
 			if (isBasicHk) {
-				Ini.Remove(iniFile, iniSection)
+				INI.Remove(iniFile, iniSection)
 			}
 			else {
 				acToReplaceCount := totalAcCount-acIndex, acStartReplaceIndex := acIndex
@@ -1337,6 +1332,17 @@ Convert_IniSettings_To_JsonSettings() {
 			else if RegExMatch(iniKey, "iO)Action_(\d+)_Content", matchObj)
 				newJsonSettings.HOTKEYS[hkCount+1].Actions[matchObj.1].Content := iniValue
 		}
+	}
+	; Now basic hotkeys
+	Loop 15 {
+		iniSect := "SETTINGS_HOTKEY_" A_Index
+		thisHK := iniSettings[iniSect]
+
+		if (!thisHk.Type)
+			Continue
+
+		hkCount := newJsonSettings.HOTKEYS.Count(), thisHkHotkey := thisHk.Enabled = "True" ? thisHK.Hotkey : ""
+		newJsonSettings.HOTKEYS[hkCount+1] := {"Name": "New hotkey " hkCount+1, "Hotkey": thisHkHotkey, "Actions": [{"Type": thisHk.Type, "Content": thisHk.Content}]}
 	}
 
 	; Now converting ini into json
