@@ -1616,7 +1616,7 @@
 				; GUI_ItemGrid.Show()
 		}
 		else
-			GUI_ItemGrid.Hide()
+			GUI_Trades_V2.DestroyItemGrid()
 
 		prev_tabXPos := tabXPos, prev_tabYPos := tabYPos, prev_tabStashTab := tabStashTab
 		prev_winX := winX, prev_winY := winY, prev_clientInfos := clientInfos
@@ -1726,7 +1726,8 @@
 		GuiTrades[_buyOrSell].Is_Maximized := False
 		GuiTrades[_buyOrSell].Is_Minimized := True
 
-        GUI_ItemGrid.Hide()
+		if (_buyOrSell="Sell")
+        	GUI_Trades_V2.DestroyItemGrid()
 
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 		; GUI_Trades_V2.ToggleTabSpecificAssets("Off")
@@ -2095,7 +2096,7 @@
         GuiTrades[_buyOrSell].Active_Tab := tabName
 
         ; Showing item grid as long as interface is maximized
-		if (GuiTrades[_buyOrSell].Is_Maximized = True)
+		if (_buyOrSell="Sell" && GuiTrades.Sell.Is_Maximized = True)
 			GUI_Trades_V2.ShowItemGrid(tabName)
 
 		; Don't do these if only the tab style changed.
