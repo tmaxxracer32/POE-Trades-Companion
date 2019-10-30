@@ -1066,43 +1066,66 @@ Update_LocalSettings_IniFile() {
 	}
 
 	if (iniSettings.GENERAL.HasUpdatedActionsAfter1_15_ActionsRevamp != "True") {
-		Loop {
-			cbIndex := A_Index
-			loopedSetting := iniSettings["SETTINGS_CUSTOM_BUTTON_" cbIndex]
-			if IsObject(loopedSetting) {
-				thisBtnActionsCount := 0
-				Loop {
-					loopActionIndex := A_Index
-					loopedActionType := loopedSetting["Action_" loopActionIndex "_Type"]
+		Loop 2 { ; Once for custom buttons, another for adv hotkeys
+			firstLoopIndex := A_Index
+			Loop {
+				cbIndex := A_Index
+				iniSection := firstLoopIndex=1 ? "SETTINGS_CUSTOM_BUTTON_" cbIndex
+					: firstLoopIndex=2 ? "SETTINGS_HOTKEY_ADV_" cbIndex : ""
+				loopedSetting := iniSettings[iniSection]
+				if IsObject(loopedSetting) {
+					thisBtnActionsCount := 0
+					Loop {
+						loopActionIndex := A_Index
+						loopedActionType := loopedSetting["Action_" loopActionIndex "_Type"]
 
-					if (!loopedActionType) || (loopedActionType = "") || (loopActionIndex > 50)
-						Break
-					
-					thisBtnActionsCount++
+						if (!loopedActionType) || (loopedActionType = "") || (loopActionIndex > 50)
+							Break
+						
+						thisBtnActionsCount++
+					}
+					Loop {
+						loopActionIndex := A_Index
+						loopedActionContent := loopedSetting["Action_" loopActionIndex "_Content"]
+						loopedActionType := loopedSetting["Action_" loopActionIndex "_Type"]
+
+						if (!loopedActionType) || (loopedActionType = "") || (loopActionIndex > 50)
+							Break
+
+						acIndex := loopActionIndex, totalAcCount := thisBtnActionsCount
+						acType := loopedActionType, acContent := loopedActionContent
+
+						GoSub Update_LocalSettings_IniFile_ReplaceOldSendActions
+						GoSub Update_LocalSettings_IniFile_ReplaceOldWriteActions
+						GoSub Update_LocalSettings_IniFile_ReplaceOldWriteGoBackActions
+						GoSub Update_LocalSettings_IniFile_RemoveShowGridAction
+						GoSub Update_LocalSettings_IniFile_ReplaceIgnoreSimilarTradeAction
+					}
 				}
-				Loop {
-					loopActionIndex := A_Index
-					loopedActionContent := loopedSetting["Action_" loopActionIndex "_Content"]
-					loopedActionType := loopedSetting["Action_" loopActionIndex "_Type"]
-
-					if (!loopedActionType) || (loopedActionType = "") || (loopActionIndex > 50)
-						Break
-
-					acIndex := loopActionIndex, totalAcCount := thisBtnActionsCount
-					acType := loopedActionType, acContent := loopedActionContent
-					iniSection := "SETTINGS_CUSTOM_BUTTON_" cbIndex
-
-					GoSub Update_LocalSettings_IniFile_ReplaceOldSendActions
-					GoSub Update_LocalSettings_IniFile_ReplaceOldWriteActions
-					GoSub Update_LocalSettings_IniFile_ReplaceOldWriteGoBackActions
-					GoSub Update_LocalSettings_IniFile_RemoveShowGridAction
-					GoSub Update_LocalSettings_IniFile_ReplaceIgnoreSimilarTradeAction
-				}
+				else if (cbIndex > 50)
+					Break
+				else
+					Break
 			}
-			else if (cbIndex > 20)
-				Break
-			else
-				Break
+		}
+
+		Loop 15 { ; 15 basic hk
+			isBasicHk := True, cbIndex := A_Index
+			iniSection := "SETTINGS_HOTKEY_" cbIndex
+			loopedSetting := iniSettings[iniSection]
+			acType := loopedSetting.Type, acContent := loopedSetting.Content
+
+			if (loopedSetting.Enabled != "True") {
+				Ini.Remove(iniFile, iniSection)
+			}
+			else {
+				GoSub Update_LocalSettings_IniFile_ReplaceOldSendActions
+				GoSub Update_LocalSettings_IniFile_ReplaceOldWriteActions
+				GoSub Update_LocalSettings_IniFile_ReplaceOldWriteGoBackActions
+				GoSub Update_LocalSettings_IniFile_RemoveShowGridAction
+				GoSub Update_LocalSettings_IniFile_ReplaceIgnoreSimilarTradeAction
+			}
+			isBasicHk := False
 		}
 
 		INI.Set(iniFile, "GENERAL", "HasUpdatedActionsAfter1_15_ActionsRevamp", "True")
@@ -1142,7 +1165,7 @@ Update_LocalSettings_IniFile() {
 	Update_LocalSettings_IniFile_ReplaceOldSendActions:
 		if IsIn(acType, "SEND_TO_LAST_WHISPER,SEND_TO_LAST_WHISPER_SENT,SEND_TO_BUYER,INVITE_BUYER,TRADE_BUYER,KICK_BUYER,KICK_MYSELF"
 		. ",CMD_AFK,CMD_AUTOREPLY,CMD_DND,CMD_HIDEOUT,CMD_OOS,CMD_REMAINING,CMD_WHOIS") {
-			INI.Set(iniFile, iniSection, "Action_" acIndex "_TYPE", "SEND_MSG")
+			INI.Set(iniFile, iniSection, isBasicHk ? "Type" : "Action_" acIndex "_TYPE", "SEND_MSG")
 			AppendToLogs(A_ThisFunc "(): Replaced " acType " action with SEND_MSG to button:"
 			. "`n" "Section: """ iniSection """ - Action Index: """ acIndex """")
 		}	
@@ -1150,7 +1173,7 @@ Update_LocalSettings_IniFile() {
 
 	Update_LocalSettings_IniFile_ReplaceOldWriteActions:
 		if IsIn(acType, "WRITE_MSG,WRITE_TO_LAST_WHISPER,WRITE_TO_LAST_WHISPER_SENT,WRITE_TO_BUYER") {
-			INI.Set(iniFile, iniSection, "Action_" acIndex "_TYPE", "WRITE_MSG")
+			INI.Set(iniFile, iniSection, isBasicHk ? "Type" : "Action_" acIndex "_TYPE", "WRITE_MSG")
 			AppendToLogs(A_ThisFunc "(): Replaced " acType " action with WRITE_MSG to button:"
 			. "`n" "Section: """ iniSection """ - Action Index: """ acIndex """")
 		}
@@ -1158,8 +1181,8 @@ Update_LocalSettings_IniFile() {
 
 	Update_LocalSettings_IniFile_ReplaceOldWriteGoBackActions:
 		if (acType = "WRITE_THEN_GO_BACK") {
-			INI.Set(iniFile, iniSection, "Action_" acIndex "_CONTENT", StrReplace(acContent, "{X}", "%goBackHere%") )
-			INI.Set(iniFile, iniSection, "Action_" acIndex "_TYPE", "WRITE_MSG")
+			INI.Set(iniFile, iniSection, isBasicHk ? "Content" : "Action_" acIndex "_CONTENT", StrReplace(acContent, "{X}", "%goBackHere%") )
+			INI.Set(iniFile, iniSection, isBasicHk ? "Type" : "Action_" acIndex "_TYPE", "WRITE_MSG")
 			AppendToLogs(A_ThisFunc "(): Replaced WRITE_THEN_GO_BACK to WRITE_MSG and {X} to %goBackHere%"
 			. "`n" "Section: """ iniSection """ - Action Index: """ acIndex """")
 		}
@@ -1167,8 +1190,13 @@ Update_LocalSettings_IniFile() {
 
 	Update_LocalSettings_IniFile_RemoveShowGridAction:
 		if (acType = "SHOW_GRID") {
-			acToReplaceCount := totalAcCount-acIndex, acStartReplaceIndex := acIndex
-			GoSub Update_LocalSettings_IniFile_MoveActionsUp
+			if (isBasicHk) {
+				Ini.Remove(iniFile, iniSection)
+			}
+			else {
+				acToReplaceCount := totalAcCount-acIndex, acStartReplaceIndex := acIndex
+				GoSub Update_LocalSettings_IniFile_MoveActionsUp
+			}
 		}
 	return
 
