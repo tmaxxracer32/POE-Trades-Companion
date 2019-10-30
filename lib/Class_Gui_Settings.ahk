@@ -105,9 +105,6 @@ Class GUI_Settings {
 		; . "|" ACTIONS_TEXT_NAME.WRITE_THEN_GO_BACK
 		. "| "
 		. "|-> " ACTIONS_SECTIONS.TC_Interfaces
-		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_BUY_INTERFACE
-		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_SELL_INTERFACE
-		. "| "
 		. "|" ACTIONS_TEXT_NAME.GO_TO_NEXT_TAB
 		. "|" ACTIONS_TEXT_NAME.GO_TO_PREVIOUS_TAB
 		. "|" ACTIONS_TEXT_NAME.CLOSE_TAB
@@ -127,9 +124,18 @@ Class GUI_Settings {
 		. "|" ACTIONS_TEXT_NAME.SENDEVENT
 		. "|" ACTIONS_TEXT_NAME.SLEEP
 
+		global ACTIONS_AVAILABLE_HOTKEYS := ACTIONS_AVAILABLE
+		split := StrSplit(ACTIONS_AVAILABLE_HOTKEYS,  "|-> " ACTIONS_SECTIONS.TC_Interfaces)
+		ACTIONS_AVAILABLE_HOTKEYS := split.1
+		. "|-> " ACTIONS_SECTIONS.TC_Interfaces
+		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_BUY_INTERFACE
+		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_SELL_INTERFACE
+		. "| " split.2
+
 		; Used for the OD_Colors class, so we know which number should have different colors
 		odcObj := GUI_Settings.CreateODCObj()
 		odcObjActions := GUI_Settings.CreateODCObjFromActionsList(ACTIONS_AVAILABLE)
+		odcObjActionsHK := GUI_Settings.CreateODCObjFromActionsList(ACTIONS_AVAILABLE_HOTKEYS)
 		
 		/* * * * * * *
 		* 	CREATION
@@ -141,7 +147,7 @@ Class GUI_Settings {
 		OD_Colors.SetItemHeight("S" GuiSettings.Font_Size, GuiSettings.Font)
 		Gui, Settings:Default ; Required for LV_ cmds
 
-		Loop, Parse, ACTIONS_AVAILABLE, |
+		Loop, Parse, ACTIONS_AVAILABLE_HOTKEYS, |
 		{
 			ctrlSize := Get_TextCtrlSize(A_LoopField, GuiSettings.Font, GuiSettings.Font_Size)
 			longestActionName := ctrlSize.W > longestActionName ? ctrlSize.W : longestActionName
@@ -380,7 +386,7 @@ Class GUI_Settings {
 
 		availableWidth := rightMost2-leftMost3
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+25 w" availableWidth " Center hwndhTEXT_Actions", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_Actions)
-		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2 +0x0210", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2 +0x0210", ACTIONS_AVAILABLE_HOTKEYS)
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_HotkeyActionType, odcObjActions) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
 		Gui.Add("Settings", "Link", "x" leftMost3 " y+5 w" availableWidth " R3 hwndhTEXT_HotkeyActionTypeTip")
@@ -2169,7 +2175,7 @@ Class GUI_Settings {
 	}
 
 	TabHotkeys_UpdateActionsListAutomatically() {
-		global PROGRAM, GuiSettings_Controls, ACTIONS_AVAILABLE, ACTIONS_TEXT_NAME
+		global PROGRAM, GuiSettings_Controls, ACTIONS_AVAILABLE_HOTKEYS, ACTIONS_TEXT_NAME
 		miscTranslations := PROGRAM.TRANSLATIONS.MISC
 		GUI_Settings.SetDefaultListViewBasedOnTabName("Hotkeys")
 
@@ -2188,7 +2194,7 @@ Class GUI_Settings {
 			_buyOrSell := A_Index=1 ? "BUY" : "SELL"
 			guiIniSection := _buyOrSell="BUY" ? "BUY_INTERFACE" : "SELL_INTERFACE"
 			
-			hotkeysActionsAvailable := guiIniSection="BUY_INTERFACE" ? ACTIONS_AVAILABLE "| |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_BUY_INTERFACE"]
+			hotkeysActionsAvailable := guiIniSection="BUY_INTERFACE" ? ACTIONS_AVAILABLE_HOTKEYS "| |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_BUY_INTERFACE"]
 				: hotkeysActionsAvailable "| |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_SELL_INTERFACE"]
 
 			Loop 4 { ; 4 rows
@@ -2216,8 +2222,8 @@ Class GUI_Settings {
 		GuiControl, Settings:Choose,% actionTypeHwnd,% chosenItemNum
 		GUI.EnableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
 
-		odcObj := GUI_Settings.CreateODCObjFromActionsList(hotkeysActionsAvailable)
-		OD_Colors.Attach(actionTypeHwnd, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
+		odcObjHK := GUI_Settings.CreateODCObjFromActionsList(hotkeysActionsAvailable)
+		OD_Colors.Attach(actionTypeHwnd, odcObjHK) ; Requires +0x0210 for DDL and +0x0050 for LB
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
