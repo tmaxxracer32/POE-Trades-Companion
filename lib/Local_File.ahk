@@ -784,10 +784,14 @@ Get_LocalSettings_DefaultValues() {
 								"Content": "\"/kick `%myself`%\""
 							},
 							"3": {
+								"Type": "SEND_MSG",
+								"Content": "\"/hideout\""
+							},
+							"4": {
 								"Type": "SAVE_TRADE_STATS",
 								"Content": "\"\""
 							},
-							"4": {
+							"5": {
 								"Type": "CLOSE_TAB",
 								"Content": "\"\""
 							}
