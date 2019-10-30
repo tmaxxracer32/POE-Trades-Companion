@@ -297,10 +297,10 @@ Start_Script() {
 	}
 	StringTrimRight, currencyList, currencyList, 1 ; Remove last comma
 	PROGRAM.DATA.CURRENCY_LIST := currencyList
-	FileRead, JSONFile,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
-    PROGRAM["DATA"]["POETRADE_CURRENCY_DATA"] := JSON.Load(JSONFile)
-	FileRead, gggCurrency,% PROGRAM.DATA_FOLDER "\poeDotComCurrencyData.json"
-	PROGRAM["DATA"]["POEDOTCOM_CURRENCY_DATA"] := JSON.Load(gggCurrency)
+	FileRead, poeTradeCurrencyData,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
+    PROGRAM.DATA.POETRADE_CURRENCY_DATA := JSON.Load(poeTradeCurrencyData), poeTradeCurrencyData := ""
+	FileRead, gggData,% PROGRAM.DATA_FOLDER "\poeDotComStaticData.json"
+	PROGRAM.DATA.POEDOTCOM := JSON.Load(gggData), gggData := ""
 
 	; Loading maps data for item grid
 	FileRead, mapsData,% PROGRAM.DATA_FOLDER "\mapsData.json"

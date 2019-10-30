@@ -21,7 +21,7 @@
 	}
 	clip := Clipboard
 
-	item := Get_CurrencyInfos(tabContent.Item).Name
+	item := Get_CurrencyFullName(tabContent.Item)
 
 	if (item && RegExMatch(clip, "i)(?:" item ")[\s\S]*: (\d+(?:[,.]\d+)*)\/(\d+(?:[,.]\d+)*)", match)) {
 		available := RegexReplace(match1, "[,.]")
