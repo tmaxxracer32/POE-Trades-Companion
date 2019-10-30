@@ -90,6 +90,7 @@
 			"Title_Trades": "标题 (有交易)",
 			"Trade_Info_1": "交易信息"
 		},
+		"CreateHotkeyForThisButton": "Create a hotkey for this button",
 		"GuiPoeAccounts_TopText": "<a href=\"https://www.pathofexile.com/my-account\">https://www.pathofexile.com/my-account</a>\nAccount names are case senitive.\nYour account name will be used for the Price Verify feature and the /kick %myself% action.\nNote that the %myself% variable will only work if your profile access is set to public.",
 		"hBTN_BrowseBuyerJoinedAreaSFX": "浏览文件",
 		"hBTN_BrowseRegularWhisperSFX": "浏览文件",

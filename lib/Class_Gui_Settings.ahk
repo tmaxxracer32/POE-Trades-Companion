@@ -1668,6 +1668,12 @@ Class GUI_Settings {
 			Gui.EnableControlFunction("GUI_Settings", "Settings", "hEDIT_Customization" whichTab "ButtonName")
 	}
 
+	Customization_SellingBuying_CreateHotkeyForThisButton(whichTab, rowNum, btnNum) {
+		applyToBuyOrSell := whichTab="Buying" ? "BUY" : SELL
+		hotkeyObj := {"Name":"Button Row " rowNum " Num " btnNum, Hotkey: "", "Actions":[{"Type":"APPLY_ACTIONS_TO_" applyToBuyOrSell "_INTERFACE","Content":""},{"Type":"CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum,"Content":""""""}]}
+		return GUI_Settings.TabHotkeys_AddNewHotkeyProfile(hotkeyObj)
+	}
+
 	Customization_SellingBuying_OnActionTypeChange(whichTab) {
 		return GUI_Settings.Universal_OnActionTypeChange(whichTab)
 	}
@@ -1728,6 +1734,12 @@ Class GUI_Settings {
 		return GUI_Settings.Universal_SelectListViewRow(whichTab, rowNum)
 	}
 
+	Customization_Buying_CreateHotkeyForThisButton(params*) {
+		return GUI_Settings.Customization_SellingBuying_CreateHotkeyForThisButton("Buying", rowNum, btnNum)
+	}
+	Customization_Selling_CreateHotkeyForThisButton(params*) {
+		return GUI_Settings.Customization_SellingBuying_CreateHotkeyForThisButton("Selling", rowNum, btnNum)
+	}
 	Customization_Buying_SelectListviewRow(params*) {
 		return GUI_Settings.Customization_SellingBuying_SelectListviewRow("Buying", params*)
 	}
@@ -1974,11 +1986,12 @@ Class GUI_Settings {
 			GuiControl, Settings:Choose,% GuiSettings_Controls.hLB_HotkeyProfiles,% selectedHkNum
 	}
 
-	TabHotkeys_AddNewHotkeyProfile() {
+	TabHotkeys_AddNewHotkeyProfile(hotkeyObj="") {
 		global PROGRAM, GuiSettings_Controls
 		fadeOutCode := GUI_Settings.ShowFadeout()
 		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count(), newHotkeysCount := hotkeysCount+1
-		PROGRAM.SETTINGS.HOTKEYS[newHotkeysCount] := {"Name":"New hotkey " newHotkeysCount, Hotkey: "", "Actions":[{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE","Content":""},{"Type":"SEND_MSG","Content":"""@%buyer% Write something here"""}]}
+		hotkeyObj := IsObject(hotkeyObj) ? hotkeyObj : {"Name":"New hotkey " newHotkeysCount, Hotkey: "", "Actions":[{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE","Content":""},{"Type":"SEND_MSG","Content":"""@%buyer% Write something here"""}]}
+		PROGRAM.SETTINGS.HOTKEYS[newHotkeysCount] := ObjFullyClone(hotkeyObj)
 		Save_LocalSettings()
 		UpdateHotkeys()
 		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()

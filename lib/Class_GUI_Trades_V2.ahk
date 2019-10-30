@@ -778,13 +778,13 @@
 		Return
 
 		GUI_Trades_V2_ContextMenu:
-			_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
-			_buyOrSell .= IsContaining(A_Gui, "Preview") ? "Preview" : ""
-
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, %A_Gui%:Name,% ctrlHwnd
+			_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+			_buyOrSell .= IsContaining(A_Gui, "Preview") ? "Preview" : ""
+			
 			if !(GuiTrades[_buyOrSell].Is_Preview)
-				GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
+				GUI_Trades_V2.ContextMenu(_buyOrSell, ctrlName)
 		Return
 
         GUI_Trades_V2_Slot_Size:
@@ -794,17 +794,33 @@
 		Return
 
 		GUI_Trades_V2_Slot_ContextMenu:
-			_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
-			_buyOrSell .= IsContaining(A_Gui, "Preview") ? "Preview" : ""
-
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, %A_Gui%:Name,% ctrlHwnd
+			_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
+			_buyOrSell .= IsContaining(A_Gui, "Preview") ? "Preview" : ""
+			
 			if !(GuiTrades[_buyOrSell].Is_Preview)
-				GUI_Trades_V2.ContextMenu(ctrlName, _buyOrSell)
+				GUI_Trades_V2.ContextMenu(_buyOrSell, ctrlName)
+			else
+				GUI_Trades_V2.Preview_ContextMenu(_buyOrSell, ctrlName)
 		return
     }
 
-    ContextMenu(CtrlName, _buyOrSell) {
+	Preview_ContextMenu(_buyOrSell, CtrlName) {
+		if RegExMatch(CtrlName, "iO)hBTN_CustomButtonRow(\d+)Max\d+Num(\d+)", matchObj) {
+			try Menu, RClickMenu, DeleteAll
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.CreateHotkeyForThisButton, GUI_Trades_V2_CreateHotkeyForThisButton
+			Menu, RClickMenu, Show
+		}
+		return
+
+		GUI_Trades_V2_CreateHotkeyForThisButton:
+			whichTab := IsContaining(_buyOrSell, "Buy") ? "Buying" : "Selling"
+			GUI_Settings.Customization_SellingBuying_CreateHotkeyForThisButton(whichTab, matchObj.1, matchObj.2)
+		return
+	}
+
+    ContextMenu(_buyOrSell, CtrlName) {
 		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings
 		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
