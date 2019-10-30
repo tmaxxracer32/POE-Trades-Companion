@@ -80,11 +80,14 @@ Class GUI_Settings {
 		global ACTIONS_READONLY := "APPLY_ACTIONS_TO_BUY_INTERFACE,APPLY_ACTIONS_TO_SELL_INTERFACE,CLOSE_TAB"
 		. ",CLOSE_SIMILAR_TABS,CLOSE_ALL_TABS,COPY_ITEM_INFOS,GO_TO_NEXT_TAB,GO_TO_PREVIOUS_TAB"
 		. ",SAVE_TRADE_STATS,FORCE_MAX,FORCE_MIN,TOGGLE_MIN_MAX,SHOW_LEAGUE_SHEETS"
-		Loop 4 { ; four rows
-			rowIndex := A_Index
-			Loop 10 { ; then buttons max per row
-				btnIndex := A_Index
-				ACTIONS_READONLY .= ",CUSTOM_BUTTON_ROW_" rowIndex "_NUM_" btnIndex
+		Loop 2 { ; buy and sell
+			whichInterface := A_Index=1 ? "BUY_INTERFACE" : "SELL_INTERFACE"
+			Loop 4 { ; four rows
+				rowIndex := A_Index
+				Loop 10 { ; then buttons max per row
+					btnIndex := A_Index
+					ACTIONS_READONLY .= "," whichInterface "_CUSTOM_BUTTON_ROW_" rowIndex "_NUM_" btnIndex
+				}
 			}
 		}
 		global ACTIONS_EMPTY := ACTIONS_READONLY
@@ -105,25 +108,29 @@ Class GUI_Settings {
 		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_BUY_INTERFACE
 		. "|" ACTIONS_TEXT_NAME.APPLY_ACTIONS_TO_SELL_INTERFACE
 		. "| "
+		. "|" ACTIONS_TEXT_NAME.GO_TO_NEXT_TAB
+		. "|" ACTIONS_TEXT_NAME.GO_TO_PREVIOUS_TAB
 		. "|" ACTIONS_TEXT_NAME.CLOSE_TAB
 		. "|" ACTIONS_TEXT_NAME.CLOSE_SIMILAR_TABS
 		. "|" ACTIONS_TEXT_NAME.CLOSE_ALL_TABS
 		. "|" ACTIONS_TEXT_NAME.COPY_ITEM_INFOS
-		. "|" ACTIONS_TEXT_NAME.GO_TO_NEXT_TAB
-		. "|" ACTIONS_TEXT_NAME.GO_TO_PREVIOUS_TAB
 		. "|" ACTIONS_TEXT_NAME.IGNORE_SIMILAR_TRADE
 		. "|" ACTIONS_TEXT_NAME.SAVE_TRADE_STATS
-		. "|  "
+		. "| "
 		. "|" ACTIONS_TEXT_NAME.FORCE_MAX
 		. "|" ACTIONS_TEXT_NAME.FORCE_MIN
 		. "|" ACTIONS_TEXT_NAME.TOGGLE_MIN_MAX
 		. "|" ACTIONS_TEXT_NAME.SHOW_LEAGUE_SHEETS
-		. "|   "
+		. "| "
 		. "|-> " ACTIONS_SECTIONS.AutoHotKey_Commands
 		. "|" ACTIONS_TEXT_NAME.SENDINPUT
 		. "|" ACTIONS_TEXT_NAME.SENDEVENT
 		. "|" ACTIONS_TEXT_NAME.SLEEP
 
+		; Used for the OD_Colors class, so we know which number should have different colors
+		odcObj := GUI_Settings.CreateODCObj()
+		odcObjActions := GUI_Settings.CreateODCObjFromActionsList(ACTIONS_AVAILABLE)
+		
 		/* * * * * * *
 		* 	CREATION
 		*/
@@ -131,6 +138,7 @@ Class GUI_Settings {
 		Gui.Margin("Settings", 0, 0)
 		Gui.Color("Settings", "0x1c4563", "0x274554")
 		Gui.Font("Settings", "Segoe UI", "8", "5", "0x80c4ff")
+		OD_Colors.SetItemHeight("S" GuiSettings.Font_Size, GuiSettings.Font)
 		Gui, Settings:Default ; Required for LV_ cmds
 
 		Loop, Parse, ACTIONS_AVAILABLE, |
@@ -182,16 +190,19 @@ Class GUI_Settings {
 
 		; * * Accounts
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " Center hwndhTEXT_POEAccountsList", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_POEAccountsList), poeAccTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_POEAccountsList)
-		Gui.Add("Settings", "DropDownList", "xp y+3 w" poeAccTxtPos.W-2-25 " hwndhDDL_PoeAccounts", "")
+		Gui.Add("Settings", "DropDownList", "xp y+3 w" poeAccTxtPos.W-2-25 " hwndhDDL_PoeAccounts +0x0210", "")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_PoeAccounts, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "ImageButton", "x+2 yp w25 hp hwndhBTN_EditPoeAccountsList", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 		poeAccDdlPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_PoeAccounts)
 
 		; * * Buying selling modes
 		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_BuyingInterfaceMode", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_BuyingInterfaceMode), buyIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_BuyingInterfaceMode)
-		Gui.Add("Settings", "DropDownList", "xp y+3 w" buyIntefaceTxtPos.W " AltSubmit hwndhDDL_BuyingInterfaceMode", "Tabs|Stack|Disabled")
+		Gui.Add("Settings", "DropDownList", "xp y+3 w" buyIntefaceTxtPos.W " AltSubmit hwndhDDL_BuyingInterfaceMode +0x0210", "Tabs|Stack|Disabled")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_BuyingInterfaceMode, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 
 		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_SellingInterfaceMode", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_SellingInterfaceMode), sellIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_SellingInterfaceMode)
-		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode", "Tabs|Stack")
+		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode +0x0210", "Tabs|Stack")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_SellingInterfaceMode, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		upMost3 := poeAccDdlPos.Y+poeAccDdlPos.H+25
 		
 		; * * Interface
@@ -277,7 +288,8 @@ Class GUI_Settings {
 
 		; * * Text colors TO_DO_V2 find new way of doing things
 		; Gui.Add("Settings", "Text", "x" leftMost2+15 " y+80 hwndhTEXT_TextColor","Text color:")
-		; Gui.Add("Settings", "DropDownList", "x+5 yp-3 w140 hwndhDDL_ChangeableFontColorTypes")
+		; Gui.Add("Settings", "DropDownList", "x+5 yp-3 w140 hwndhDDL_ChangeableFontColorTypes +0x0210")
+		; OD_Colors.Attach(GuiSettings_Controls.hDDL_ChangeableFontColorTypes, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		; ddlHeight := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_ChangeableFontColorTypes).H
 		; Gui.Add("Settings", "Progress", "x+5 yp w" ddlHeight " h" ddlHeight " BackgroundRed hwndhPROGRESS_ColorSquarePreview")
 		; Gui.Add("Settings", "Button", "x+5 yp-1  hwndhBTN_ShowColorPicker R1", "Show Color Picker")
@@ -306,10 +318,13 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationSellingButtonPlusRow4 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1 Hidden", "Text|Icon")
+		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1 Hidden +0x0210", "Text|Icon")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationSellingButtonType, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName Hidden", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1 Hidden", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2 Hidden", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1 Hidden +0x0210", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2 Hidden +0x0210", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationSellingActionType, odcObjActions) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationSellingActionContent Hidden")
 		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R3 hwndhTEXT_CustomizationSellingActionTypeTip Hidden")
 		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationSellingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10 Hidden", "#|Type|Content")
@@ -332,10 +347,13 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ImageButton", "x+2 yp wp hp wp hp hwndhBTN_CustomizationBuyingButtonPlusRow4 Hidden", "+", Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
 
 		Gui.Add("Settings", "Text", "x" leftMost2 " y" upMost2 " w0 h200", "")
-		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1 Hidden", "Text|Icon")
+		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1 Hidden +0x0210", "Text|Icon")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationBuyingButtonType, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName Hidden", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1 Hidden", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
-		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2 Hidden", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1 Hidden +0x0210", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationBuyingButtonIcon, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
+		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2 Hidden +0x0210", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationBuyingActionType, odcObjActions) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w" rightMost2-acTypeDDLPos.X-acTypeDDLPos.W-3 " hwndhEDIT_CustomizationBuyingActionContent Hidden")
 		Gui.Add("Settings", "Link", "x" leftMost2 " y+5 w" rightMost2-leftMost2 " R3 hwndhTEXT_CustomizationBuyingActionTypeTip Hidden")
 		Gui.Add("Settings", "ListView", "x" leftMost2 " y+10 w" rightMost2-leftMost2 " R8 hwndhLV_CustomizationBuyingActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10 Hidden", "#|Type|Content")
@@ -362,7 +380,8 @@ Class GUI_Settings {
 
 		availableWidth := rightMost2-leftMost3
 		Gui.Add("Settings", "Text", "x" leftMost3 " y+25 w" availableWidth " Center hwndhTEXT_Actions", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_Actions)
-		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2", ACTIONS_AVAILABLE)
+		Gui.Add("Settings", "DropDownList", "x" leftMost3 " y+5 w" availableWidth*0.45 " R100 hwndhDDL_HotkeyActionType Choose2 +0x0210", ACTIONS_AVAILABLE)
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_HotkeyActionType, odcObjActions) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w" availableWidth*0.55-3 " hwndhEDIT_HotkeyActionContent")
 		Gui.Add("Settings", "Link", "x" leftMost3 " y+5 w" availableWidth " R3 hwndhTEXT_HotkeyActionTypeTip")
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
@@ -392,7 +411,8 @@ Class GUI_Settings {
 		; Gui.Add("Settings", "Checkbox", "x400 y" upMost2+20 " hwndhCB_AllowToUpdateAutomaticallyOnStart", "Allow to update automatically on start?")
 		; Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_AllowPeriodicUpdateCheck", "Allow automatic update check every 2hours?")
 		Gui.Add("Settings", "Text", "x350 y" upMost2+10 " hwndhTEXT_CheckForUpdatesWhen", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_CheckForUpdatesWhen)
-		Gui.Add("Settings", "DropDownList", "x+5 yp-2 w155 hwndhDDL_CheckForUpdate AltSubmit", "Only on application start|On start + every 5 hours|On start + every day")
+		Gui.Add("Settings", "DropDownList", "x+5 yp-2 w155 hwndhDDL_CheckForUpdate AltSubmit +0x0210", "Only on application start|On start + every 5 hours|On start + every day")
+		OD_Colors.Attach(GuiSettings_Controls.hDDL_CheckForUpdate, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Checkbox", "x350 y+10 hwndhCB_UseBeta", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_UseBeta)
 		Gui.Add("Settings", "Checkbox", "x+5 yp hwndhCB_DownloadUpdatesAutomatically", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_DownloadUpdatesAutomatically)
 		
@@ -2045,6 +2065,7 @@ Class GUI_Settings {
 		selectedHkNum := GUI_Settings.TabHotkeys_GetSelectedHotkeyProfile()
 		GUI_Settings.TabHotkeys_SetHotkeyProfileName(PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Name)
 		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(PROGRAM.SETTINGS.HOTKEYS[selectedHkNum].Hotkey)
+		GUI_Settings.TabHotkeys_UpdateActionsListAutomatically()
 		GUI_Settings.TabHotkeys_LoadHotkeyActions(selectedHkNum)
 		GUI_Settings.TabHotkeys_SelectListviewRow(1)
 		if !(GuiSettings_ControlFunctions.hLV_HotkeyActionsList)
@@ -2105,10 +2126,10 @@ Class GUI_Settings {
 	TabHotkeys_ChangeHotkeyProfileHotkey() {
 		global PROGRAM, GuiSettings
 
-		fadeOutCode := GUI_Settings.ShowFadeout()
+		Gui, Settings:+Disabled
 		hkStr := GUI_SetHotkey.WaitForHotkey()
 		GUI_Settings.TabHotkeys_SetHotkeyProfileHotkey(hkStr)
-		GUI_Settings.HideFadeout(fadeOutCode)
+		Gui, Settings:-Disabled
 
 		GUI_Settings.Show(GUI_Settings.GetSelectedTab())
 
@@ -2162,31 +2183,29 @@ Class GUI_Settings {
 
 		; Get informations about modifying this action
 		lvContent := GUI_Settings.Universal_GetListViewContent("Hotkeys")
-		applyToBuyOrSell := "SELL"
-		Loop % lvContent.Count() {
-			actionType := lvContent[A_Index].ActionType, actionShortName := GUI_Settings.Get_ActionShortName_From_LongName(actionType)
-			if (actionShortName="APPLY_ACTIONS_TO_BUY_INTERFACE")
-				applyToBuyOrSell := "BUY"
-			else if (actionShortName="APPLY_ACTIONS_TO_SELL_INTERFACE")
-				applyToBuyOrSell := "SELL"
-		}
 
-		guiIniSection := applyToBuyOrSell="BUY"?"BUY_INTERFACE":"SELL_INTERFACE"
+		Loop 2 {
+			_buyOrSell := A_Index=1 ? "BUY" : "SELL"
+			guiIniSection := _buyOrSell="BUY" ? "BUY_INTERFACE" : "SELL_INTERFACE"
+			
+			hotkeysActionsAvailable := guiIniSection="BUY_INTERFACE" ? ACTIONS_AVAILABLE "| |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_BUY_INTERFACE"]
+				: hotkeysActionsAvailable "| |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_SELL_INTERFACE"]
 
-		hotkeysActionsAvailable := ACTIONS_AVAILABLE "|    |-> " PROGRAM.TRANSLATIONS.ACTIONS.SECTIONS["BUTTONS_" guiIniSection]
-		Loop 4 { ; 4 rows
-			rowIndex := A_Index
-			if (rowIndex > 1 && PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex-1].Buttons_Count)
-				hotkeysActionsAvailable .= "|    "
-			Loop % PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex].Buttons_Count {
-				btnIndex := A_Index
-				thisBtnSettings := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex][btnIndex]
-				actionName := thisBtnSettings.Text ? thisBtnSettings.Text " (" miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
-					: thisBtnSettings.Icon ? miscTranslations.ICON " " thisBtnSettings.Icon " (" miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
-					: "(" miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
+			Loop 4 { ; 4 rows
+				rowIndex := A_Index
+				Loop % PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex].Buttons_Count {
+					btnIndex := A_Index
+					thisBtnSettings := PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowIndex][btnIndex]
+					rowInfoTxt := "(" _buyOrSell " " miscTranslations.Row " " rowIndex " " miscTranslations.Number " " btnIndex ")"
+					actionName := thisBtnSettings.Text ? thisBtnSettings.Text " " rowInfoTxt
+						: thisBtnSettings.Icon ? miscTranslations.Icon " " thisBtnSettings.Icon " " rowInfoTxt
+						: rowInfoTxt
 
-				hotkeysActionsAvailable .= "|" actionName
-				ACTIONS_TEXT_NAME["CUSTOM_BUTTON_ROW_" rowIndex "_NUM_" btnIndex] := actionName
+					if (btnIndex=1 && rowIndex>1)
+						hotkeysActionsAvailable .= "| "
+					hotkeysActionsAvailable .= "|" actionName
+					ACTIONS_TEXT_NAME[guiIniSection "_CUSTOM_BUTTON_ROW_" rowIndex "_NUM_" btnIndex] := actionName
+				}
 			}
 		}
 		AutoTrimStr(hotkeysActionsAvailable)
@@ -2196,6 +2215,9 @@ Class GUI_Settings {
 		GuiControl, Settings:,% actionTypeHwnd,% "|" hotkeysActionsAvailable
 		GuiControl, Settings:Choose,% actionTypeHwnd,% chosenItemNum
 		GUI.EnableControlFunction("GUI_Settings", "Settings", actionTypeCtrlName)
+
+		odcObj := GUI_Settings.CreateODCObjFromActionsList(hotkeysActionsAvailable)
+		OD_Colors.Attach(actionTypeHwnd, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
@@ -2998,6 +3020,22 @@ Class GUI_Settings {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 	*	GENERAL FUNCTIONS
 	*/
+
+	CreateODcObj() {
+		return odcObj := {T: 0x80c4ff, B: 0x274554}
+	}
+
+	CreateODCObjFromActionsList(actionsList) {
+		sectionsArr := []
+		Loop, Parse, actionsList,% "|"
+			if ( SubStr(A_LoopField, 1, 2) = "->" )
+				sectionsArr.Push(A_Index)
+		odcObj := GUI_Settings.CreateOdcObj()
+		Loop % sectionsArr.Count()
+			odcObj[sectionsArr[A_Index]] := {T: 0xf5f5f5, B:0x0078D7}
+
+		return odcObj
+	}
 
 	GetPosition() {
 		global GuiSettings

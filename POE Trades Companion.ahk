@@ -459,6 +459,7 @@ Return
 #Include ChooseColor.ahk
 #Include class_EasyIni.ahk
 #Include Class_ImageButton.ahk
+#Include Class_OD_Colors.ahk
 #Include Clip.ahk
 #Include cURL.ahk
 #Include CSV.ahk
