@@ -807,6 +807,7 @@
     }
 
 	Preview_ContextMenu(_buyOrSell, CtrlName) {
+		global PROGRAM
 		if RegExMatch(CtrlName, "iO)hBTN_CustomButtonRow(\d+)Max\d+Num(\d+)", matchObj) {
 			try Menu, RClickMenu, DeleteAll
 			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Settings.CreateHotkeyForThisButton, GUI_Trades_V2_CreateHotkeyForThisButton

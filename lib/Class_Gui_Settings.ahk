@@ -1695,8 +1695,9 @@ Class GUI_Settings {
 	}
 
 	Customization_SellingBuying_CreateHotkeyForThisButton(whichTab, rowNum, btnNum) {
-		applyToBuyOrSell := whichTab="Buying" ? "BUY" : SELL
-		hotkeyObj := {"Name":"Button Row " rowNum " Num " btnNum, Hotkey: "", "Actions":[{"Type":"APPLY_ACTIONS_TO_" applyToBuyOrSell "_INTERFACE","Content":""},{"Type":"CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum,"Content":""""""}]}
+		applyToBuyOrSell := whichTab="Buying" ? "BUY" : "SELL"
+		guiIniSection := applyToBuyOrSell="BUY" ? "BUY_INTERFACE" : "SELL_INTERFACE"
+		hotkeyObj := {"Name":"Button Row " rowNum " Num " btnNum, Hotkey: "", "Actions":[{"Type":guiIniSection "_CUSTOM_BUTTON_ROW_" rowNum "_NUM_" btnNum,"Content":""""}]}
 		return GUI_Settings.TabHotkeys_AddNewHotkeyProfile(hotkeyObj)
 	}
 
