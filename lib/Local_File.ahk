@@ -1313,6 +1313,7 @@ Convert_IniSettings_To_JsonSettings() {
 	}
 
 	; * * * * Importing hotkeys
+	miscTrans := PROGRAM.TRANSLATIONS.MISC
 	newJsonSettings.HOTKEYS := {}
 	; First, adv hotkeys as they have a profile name
 	for iniSect in iniSettings {
@@ -1323,9 +1324,16 @@ Convert_IniSettings_To_JsonSettings() {
 		hkCount := newJsonSettings.HOTKEYS.Count()
 		newJsonSettings.HOTKEYS[hkCount+1] := {"Name": thisHK.Name, "Hotkey": thisHK.Hotkey, "Actions": {}}
 		for iniKey, iniValue in iniSettings[iniSect] {
-			if RegExMatch(iniKey, "iO)Action_(\d+)_Type", matchObj) || RegExMatch(iniKey, "iO)Action_(\d+)_Content", matchObj)
+			if ( RegExMatch(iniKey, "iO)Action_(\d+)_Type", matchObj) || RegExMatch(iniKey, "iO)Action_(\d+)_Content", matchObj) )
 			&& !IsObject(newJsonSettings.HOTKEYS[hkCount+1].Actions[matchObj.1])
 				newJsonSettings.HOTKEYS[hkCount+1].Actions[matchObj.1] := {}
+
+			if RegExMatch(iniValue, "iO)CUSTOM_BUTTON_(\d+)", matchObj) { ; Convert the button hotkey
+				if (matchObj.1 <= 5)
+					iniValue := "SELL_INTERFACE_CUSTOM_BUTTON_ROW_2_NUM_" matchObj.1
+				else
+					iniValue := "SELL_INTERFACE_CUSTOM_BUTTON_ROW_3_NUM_" matchObj.1-5
+			}
 
 			if RegExMatch(iniKey, "iO)Action_(\d+)_Type", matchObj)
 				newJsonSettings.HOTKEYS[hkCount+1].Actions[matchObj.1].Type := iniValue
@@ -1341,8 +1349,17 @@ Convert_IniSettings_To_JsonSettings() {
 		if (!thisHk.Type)
 			Continue
 
-		hkCount := newJsonSettings.HOTKEYS.Count(), thisHkHotkey := thisHk.Enabled = "True" ? thisHK.Hotkey : ""
-		newJsonSettings.HOTKEYS[hkCount+1] := {"Name": "New hotkey " hkCount+1, "Hotkey": thisHkHotkey, "Actions": [{"Type": thisHk.Type, "Content": thisHk.Content}]}
+		hkCount := newJsonSettings.HOTKEYS.Count()
+		thisHkHotkey := thisHk.Enabled = "True" ? thisHK.Hotkey : "", hkType := thisHK.Type
+
+		if RegExMatch(hkType, "iO)CUSTOM_BUTTON_(\d+)", matchObj) { ; Convert the button hotkey
+			if (matchObj.1 <= 5)
+				hkType := "SELL_INTERFACE_CUSTOM_BUTTON_ROW_2_NUM_" matchObj.1
+			else
+				hkType := "SELL_INTERFACE_CUSTOM_BUTTON_ROW_3_NUM_" matchObj.1-5
+		}
+		
+		newJsonSettings.HOTKEYS[hkCount+1] := {"Name": "New hotkey " hkCount+1, "Hotkey": thisHkHotkey, "Actions": [{"Type": hkType, "Content": thisHk.Content}]}
 	}
 
 	; Now converting ini into json
