@@ -527,6 +527,8 @@ Class GUI_Settings {
 				GUI_Settings.Customization_Buying_OnListviewRightClick()
 			else if (ctrlHwnd = GuiSettings_Controls.hLV_HotkeyActionsList)
 				GUI_Settings.TabHotkeys_OnListviewRightClick()
+			else if (ctrlHwnd = GuiSettings_Controls.hLB_HotkeyProfiles)
+				GUI_Settings.TabHotkeys_OnHotkeysProfilesListBoxRightClick()
 			else
 				GUI_Settings.ContextMenu(ctrlHwnd, ctrlName)
 		return
@@ -2017,7 +2019,7 @@ Class GUI_Settings {
 		global PROGRAM, GuiSettings_Controls
 		fadeOutCode := GUI_Settings.ShowFadeout()
 		hotkeysCount := PROGRAM.SETTINGS.HOTKEYS.Count(), newHotkeysCount := hotkeysCount+1
-		hotkeyObj := IsObject(hotkeyObj) ? hotkeyObj : {"Name":"New hotkey " newHotkeysCount, Hotkey: "", "Actions":[{"Type":"APPLY_ACTIONS_TO_SELL_INTERFACE","Content":""},{"Type":"SEND_MSG","Content":"""@%buyer% Write something here"""}]}
+		hotkeyObj := IsObject(hotkeyObj) ? hotkeyObj : {"Name":"New hotkey " newHotkeysCount, Hotkey: "", "Actions":[{"Type":"SEND_MSG","Content":"""Write something here"""}]}
 		PROGRAM.SETTINGS.HOTKEYS[newHotkeysCount] := ObjFullyClone(hotkeyObj)
 		Save_LocalSettings()
 		UpdateHotkeys()
@@ -2173,6 +2175,22 @@ Class GUI_Settings {
 
 	TabHotkeys_OnListviewRightClick() {
 		return GUI_Settings.Universal_OnListviewRightClick("Hotkeys")
+	}
+
+	TabHotkeys_OnHotkeysProfilesListBoxRightClick() {
+		try Menu, RMenu, DeleteAll
+		Menu, RMenu, Add, Add a new profile, GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_AddNewHotkeyProfile
+		Menu, RMenu, Add, Delete this profile, GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_RemoveSelectedHotkeyProfile
+		Menu, RMenu, Show
+		return
+
+		GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_AddNewHotkeyProfile:
+			GUI_Settings.TabHotkeys_AddNewHotkeyProfile()
+		return
+
+		GUI_Settings_TabHotkeys_OnHotkeysProfilesListBoxRightClick_RemoveSelectedHotkeyProfile:
+			GUI_Settings.TabHotkeys_RemoveSelectedHotkeyProfile()
+		return
 	}
 
 	TabHotkeys_UpdateActionsListAutomatically() {
@@ -2753,9 +2771,13 @@ Class GUI_Settings {
 			actionContent := GUI_Settings.Submit("hEDIT_CustomizationSellingActionContent")
 			if (actionType)
 			*/
-				actionText := "@%buyer% Write something here"
+				actionText := "Write something here"
 				if (whichTab="Buying")
-					actionText := StrReplace("%buyer%", "%seller%")
+					actionText := "@%seller% " actionText
+				else if (whichTab="Selling")
+					actionText := "@%buyer% " actionText
+				else if (whichTab="Hotkeys")
+					actionText := actionText
 				GUI_Settings.Universal_AddNewAction(whichTab, ACTIONS_TEXT_NAME.SEND_MSG, actionText)
 		return
 
