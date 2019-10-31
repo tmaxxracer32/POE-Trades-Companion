@@ -560,10 +560,12 @@ Class GUI_Settings {
 				GuiControl, Settings:,% GuiSettings_Controls[ctrlName],% trueFalseVal
 			}
 			else if (ctrlName="hDDL_PoeAccounts") {
-				for index, account in thisTabSettings.PoeAccounts
-					ctrlVal .= "|" account
-				GuiControl, Settings:,% GuiSettings_Controls[ctrlName],% ctrlVal
+				Loop % thisTabSettings.PoeAccounts.Count()
+					poeAccList .= "|" thisTabSettings.PoeAccounts[A_Index]
+				GuiControl, Settings:,% GuiSettings_Controls[ctrlName],% poeAccList
 				GuiControl, Settings:ChooseString,% GuiSettings_Controls[ctrlName],% thisTabSettings.PoeAccounts.1
+				odcObj := GUI_Settings.CreateODCObj()
+				OD_Colors.Attach(GuiSettings_Controls[ctrlName], odcObj)
 			}
 			else if IsIn(ctrlName, "hDDL_BuyingInterfaceMode,hDDL_SellingInterfaceMode") {
 				settingValue := ctrlName="hDDL_BuyingInterfaceMode" ? PROGRAM.SETTINGS.BUY_INTERFACE.Mode : PROGRAM.SETTINGS.SELL_INTERFACE.Mode
@@ -744,8 +746,8 @@ Class GUI_Settings {
 				accountsObj.Push(GuiPoeAccounts_Submit["hEDIT_Account" A_Index])
 		
 		PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts := ObjFullyClone(accountsObj)
-		GUI_Settings.TabsSettingsMain_SetUserSettings()
 		Save_LocalSettings()
+		GUI_Settings.TabsSettingsMain_SetUserSettings()
 
 		for key, value in GuiPoeAccounts_Controls
 			if IsContaining(key, "hBTN_")
