@@ -107,8 +107,6 @@
 		"hCB_AutoFocusNewTabs_ToolTip": "Activates the newest tab when receiving a new trading whisper.\nDefault: OFF",
 		"hCB_AutoMaximizeOnFirstNewTab": "Auto maximize on first new tab?",
 		"hCB_AutoMaximizeOnFirstNewTab_ToolTip": "Creating the first tab will automatically maximize the interface.\nDefault: OFF",
-		"hCB_AutoMinimizeOnAllTabsClosed": "Auto minimize once all tabs are closed?",
-		"hCB_AutoMinimizeOnAllTabsClosed_ToolTip": "Closing the last remaining tab will automatically minimize the interface.\nDefault: ON",
 		"hCB_BuyerJoinedAreaSFXToggle": "Buyer joined your area?",
 		"hCB_BuyerJoinedAreaSFXToggle_Tooltip": "Plays a custom sound notification when one of your buyers joined your hideout.\nNote that you need to be in your hideout already for this to work.\nDefault: OFF",
 		"hCB_CopyItemInfosOnTabChange": "Copy item infos on tab change?",

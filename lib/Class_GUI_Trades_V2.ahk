@@ -2032,8 +2032,10 @@
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AllowClicksToPassThroughWhileInactive = "True")
 				GUI_Trades_V2.Enable_ClickThrough(_buyOrSell)
 			*/
+			/* Disabled - Search ID jsZTTcBTWV in POE Trades Companion.ahk for infos
 			if (PROGRAM.SETTINGS.SETTINGS_MAIN.AutoMinimizeOnAllTabsClosed = "True")
 				GUI_Trades_V2.Minimize(_buyOrSell)
+			*/
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
 			GUI_Trades_V2.Redraw(_buyOrSell)
 			if (_buyOrSell="Sell")

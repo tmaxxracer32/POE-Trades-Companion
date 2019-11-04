@@ -216,7 +216,9 @@ Class GUI_Settings {
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_MinimizeInterfaceToTheBottom", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_MinimizeInterfaceToTheBottom)
 		Gui.Add("Settings", "CheckBox", "xp y+15 hwndhCB_CopyItemInfosOnTabChange", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_CopyItemInfosOnTabChange)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_AutoFocusNewTabs", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoFocusNewTabs)
+		/* Disabled - Search ID jsZTTcBTWV in POE Trades Companion.ahk for infos
 		Gui.Add("Settings", "CheckBox", "xp y+15 hwndhCB_AutoMinimizeOnAllTabsClosed", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoMinimizeOnAllTabsClosed)
+		*/
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_AutoMaximizeOnFirstNewTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoMaximizeOnFirstNewTab)
 		Gui.Add("Settings", "CheckBox", "xp y+12 hwndhCB_SendTradingWhisperUponCopyWhenHoldingCTRL Center", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_SendTradingWhisperUponCopyWhenHoldingCTRL)
 

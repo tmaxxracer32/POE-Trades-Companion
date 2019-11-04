@@ -185,7 +185,6 @@ Get_LocalSettings_DefaultValues() {
 				"HideInterfaceWhenOutOfGame": "False",
 				"CopyItemInfosOnTabChange": "False",
 				"AutoFocusNewTabs": "False",
-				"AutoMinimizeOnAllTabsClosed": "True",
 				"AutoMaximizeOnFirstNewTab": "False",
 				"SendTradingWhisperUponCopyWhenHoldingCTRL": "True",
 				"TradingWhisperSFXToggle": "True",

@@ -107,8 +107,6 @@
 		"hCB_AutoFocusNewTabs_ToolTip": "當有新交易信息時, 自動將該交易信息對應的面板彈出至最前.\n默認: 未勾選",
 		"hCB_AutoMaximizeOnFirstNewTab": "當首個交易面板彈出時, 自動最大化",
 		"hCB_AutoMaximizeOnFirstNewTab_ToolTip": "當插件最小化時, 首條交易密語會自動彈出交易面板.\n默認: 未勾選",
-		"hCB_AutoMinimizeOnAllTabsClosed": "關閉所有交易面板, 自動最小化",
-		"hCB_AutoMinimizeOnAllTabsClosed_ToolTip": "關閉最後一個交易面板後, 插件自動最小化 (到您之前設定的位置).\n默認: 勾選",
 		"hCB_BuyerJoinedAreaSFXToggle": "賣家進入您的當前地圖",
 		"hCB_BuyerJoinedAreaSFXToggle_Tooltip": "自定義當買家進入您的藏身處的音效.\n注意, 只有當您自己在您藏身處時此選項才會生效.\n默認: 未勾選",
 		"hCB_CopyItemInfosOnTabChange": "切換時, 複製物品信息",

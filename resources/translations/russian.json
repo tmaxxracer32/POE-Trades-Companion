@@ -107,8 +107,6 @@
 		"hCB_AutoFocusNewTabs_ToolTip": "Активирует новую вкладку при получении нового торгового шепота.\nПо умолчанию: OFF",
 		"hCB_AutoMaximizeOnFirstNewTab": "Автооткрытие при новой вкладке?",
 		"hCB_AutoMaximizeOnFirstNewTab_ToolTip": "Создание первой вкладки автоматически увеличит интерфейс.\nПо умолчанию: OFF",
-		"hCB_AutoMinimizeOnAllTabsClosed": "Автозакрытие после закрытия всех вкладок?",
-		"hCB_AutoMinimizeOnAllTabsClosed_ToolTip": "Закрытие последней оставшейся вкладки автоматически свернет интерфейс.\nПо умолчанию: ON",
 		"hCB_BuyerJoinedAreaSFXToggle": "Покупатель рядом с тобой?",
 		"hCB_BuyerJoinedAreaSFXToggle_Tooltip": "Воспроизведение пользовательского звукового уведомления, когда покупатель пришел в твое убежище\nОбратите внимание, что вы должны быть уже в укрытии, чтобы это работало.\nПо умолчанию: OFF",
 		"hCB_CopyItemInfosOnTabChange": "Скопировать информацию об предмете?",

@@ -107,8 +107,6 @@
 		"hCB_AutoFocusNewTabs_ToolTip": "Active l'onglet le plus récent en recevant un nouveau message d'échange.\nDéfaut: OFF",
 		"hCB_AutoMaximizeOnFirstNewTab": "Agrandir auto au premier nouvel onglet?",
 		"hCB_AutoMaximizeOnFirstNewTab_ToolTip": "À la création du premier onglet, l'interface s'agrandira automatiquement.\nDéfaut: OFF",
-		"hCB_AutoMinimizeOnAllTabsClosed": "Réduire auto quand tout les onglets sont fermés?",
-		"hCB_AutoMinimizeOnAllTabsClosed_ToolTip": "Fermer le dernier onglet réduira automatiquement l'interface.\nDéfaut: ON",
 		"hCB_BuyerJoinedAreaSFXToggle": "Acheteur rejoint votre zone?",
 		"hCB_BuyerJoinedAreaSFXToggle_Tooltip": "Lit une notification audio personnalisée quand un acheteur rejoints votre repaire.\nNotez que vous devez déjà être dans votre repaire pour que ceci fonctionne.\nDéfaut: OFF",
 		"hCB_CopyItemInfosOnTabChange": "Copier infos d'article en changeant d'onglet?",

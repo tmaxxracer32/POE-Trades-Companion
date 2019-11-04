@@ -485,9 +485,14 @@ if (A_IsCompiled) {
 	Return
 }
 
-/*	H5auEc7KA0
+/*	H5auEc7KA0 (AllowClicksToPassThroughWhileInactive)
 	1.15.BETA_xxx Trades Overhaul: Clickthrough only enabled if the interface is fully transparent.
 	+ The buying interface will always be 100% transparent if there is no trades, effectively hidding it.
 	+ The Toolbar has been moved to the Selling interface.
 	These changes make accessing the toolbar much better.
+*/
+
+/*	jsZTTcBTWV (AutoMinimizeOnAllTabsClosed)
+	1.15.BETA_xxx Trades Overhaul: Interface always minimize itself when the last tab is closed.
+	This change is due to the interface header being a toolbar.
 */
