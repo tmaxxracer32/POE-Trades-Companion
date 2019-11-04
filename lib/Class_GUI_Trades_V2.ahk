@@ -2036,6 +2036,8 @@
 				GUI_Trades_V2.Minimize(_buyOrSell)
 			GUI_Trades_V2.SetTransparency_Inactive(_buyOrSell)
 			GUI_Trades_V2.Redraw(_buyOrSell)
+			if (_buyOrSell="Sell")
+				GUI_Trades_V2.DestroyItemGrid()
 		}
 		; Do stuff if tabs count is not zero
 		else {
