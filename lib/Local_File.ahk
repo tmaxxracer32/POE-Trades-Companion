@@ -474,7 +474,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 				if (k="Mode")
 					isValid := IsIn(v, "Tabs,Stack,Disabled")
 				else if (k="Buttons_Count") && RegExMatch(lastParent, "iO)CUSTOM_BUTTON_ROW_(\d+)", matchPat)
-					isValid := IsBetween(matchPat.1, 1, 3) && IsBetween(userValue, 0, 10) ? True : (matchPat.1=4) && IsBetween(userValue, 0, 5) ? True : False
+					isValid := (matchPat.1=1) && IsBetween(userValue, 0, 5) ? True  :  IsBetween(matchPat.1, 2, 4) && IsBetween(userValue, 0, 10) ? True : False
 				else if (k="Icon") ; && IsContaining(parents[parentsCount-1], "CUSTOM_BUTTON_ROW_")
 					isValid := IsIn(userValue, "Clipboard,Cross,Hideout,Invite,Kick,ThumbsUp,ThumbsDown,Trade,Whisper") ? True : False
 				else if (k="Text") ; && IsContaining(parents[parentsCount-1], "CUSTOM_BUTTON_ROW_")

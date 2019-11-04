@@ -1365,7 +1365,9 @@ Class GUI_Settings {
 
 		if (rowNum=1 && btnsCount=5)
 		|| (IsBetween(rowNum, 2, 4) && btnsCount=10)
-			return		
+			return
+
+		fadeOutCode := GUI_Settings.ShowFadeout()
 
 		GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]++
 		newBtnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
@@ -1395,8 +1397,13 @@ Class GUI_Settings {
 				Gui.ImageButtonUpdate(btnHwnd, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			else if (style%styleName%DidntExist && btnName)
 				Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
-			else if (style%styleName%DidntExist && !btnIcon && !btnName)
+			else if (style%styleName%DidntExist && !btnIcon && !btnName) {
 				Gui.ImageButtonChangeCaption(btnHwnd, btnNum, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
+					PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
+				PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text := btnNum
+				Save_LocalSettings()
+			}
 				
 			GuiControl, %guiName%:Show,% btnHwnd
 		}
@@ -1404,6 +1411,8 @@ Class GUI_Settings {
 		; Make sure new button is chosen
 		if IsNum(rowNum) && IsNum(newBtnsCount) && (dontActivateButton=False)
 			GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, newBtnsCount, GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
+
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 	
 	Customization_SellingBuying_RemoveOneButtonFromRow(whichTab, rowNum, skipCreateStyle=False) {
@@ -1417,6 +1426,8 @@ Class GUI_Settings {
 		
 		if (!btnsCount)
 			return
+
+		fadeOutCode := GUI_Settings.ShowFadeout()
 
 		GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]--
 		newBtnsCount := GuiTrades[_buyOrSell]["PreviewRow" rowNum "_Count"]
@@ -1444,8 +1455,13 @@ Class GUI_Settings {
 					Gui.ImageButtonUpdate(btnHwnd, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				else if (style%styleName%DidntExist && btnName)
 					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
-				else if (style%styleName%DidntExist && !btnIcon && !btnName)
-					Gui.ImageButtonChangeCaption(btnHwnd, "", GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+				else if (style%styleName%DidntExist && !btnIcon && !btnName) {
+				Gui.ImageButtonChangeCaption(btnHwnd, btnNum, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
+						PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
+					PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text := btnNum
+					Save_LocalSettings()
+				}
 
 				GuiControl, %guiName%:Show,% btnHwnd
 			}
@@ -1458,7 +1474,8 @@ Class GUI_Settings {
 		else ; Choose last button, bcs our button doesn't exist anymore
 			if IsNum(rowNum) && IsNum(newBtnsCount) && (newBtnsCount > 0)
 				GUI_Trades_V2.Preview_CustomizeThisCustomButton(_buyOrSell, rowNum, newBtnsCount, newBtnsCount)
-				
+
+		GUI_Settings.HideFadeout(fadeOutCode)
 	}
 
 	Customization_SellingBuying_SetPreviewPreferences(whichTab) {
