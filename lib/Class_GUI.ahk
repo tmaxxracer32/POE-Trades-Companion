@@ -232,19 +232,25 @@ Class GUI {
 		}
 	}
 
-	ImageButtonUpdate(btnHwnd, btnStyle, btnFontHandle="", btnFontSize="") {
-		if !ImageButton.Create(btnHwnd, btnStyle, imageBtnFontHandle, imageBtnFontSize)
-			MsgBox % "Class_GUI.ahk: ImageButtonChangeCaption error."
-			. "`nError: " ImageButton.LastError
+	ImageButtonUpdate(btnHwnd, imageBtnStyle, imageBtnFontHandle="", imageBtnFontSize="") {
+		if !ImageButton.Create(btnHwnd, imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
+			MsgBox % "Class_GUI.ahk: ImageButtonUpdate error."
+			. "`n" "Error: " ImageButton.LastError
+			. "`n"
+			. "`n" "Function parameters:"
+			. "`n" "Button Handle: """ btnHwnd """"
+			. "`n" "ImageButton Style: """ JSON_Dump(imageBtnStyle) """"
+			. "`n" "Font Handle: """ imageBtnFontHandle """"
+			. "`n" "Font Size: """ imageBtnFontSize """"
 	}
 
-	ImageButtonChangeCaption(btnHwnd, btnCaption, btnStyle, btnFontHandle="", btnFontSize="") {
+	ImageButtonChangeCaption(btnHwnd, btnCaption, imageBtnStyle, imageBtnFontHandle="", imageBtnFontSize="") {
 		; Set caption text
 		ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
 		; Make sure that caption is changed before continuing
 		triesBeforeSetAgain := 3
-		while (newCaption != btnCaption) {
-			ControlGetText, newCaption, , ahk_id %btnHwnd%
+		while (curCaption != btnCaption) {
+			ControlGetText, curCaption, , ahk_id %btnHwnd%
 			ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
 			/*
 			triesBeforeSetAgain--
@@ -256,9 +262,15 @@ Class GUI {
 			Sleep 1
 		}
 		; Calling imagebutton to set new caption
-		if !ImageButton.Create(btnHwnd, btnStyle, imageBtnFontHandle, imageBtnFontSize)
+		if !ImageButton.Create(btnHwnd, imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
 			MsgBox % "Class_GUI.ahk: ImageButtonChangeCaption error."
-			. "`nError: " ImageButton.LastError
+			. "`n" "Error: " ImageButton.LastError
+			. "`n"
+			. "`n" "Function parameters:"
+			. "`n" "Button Handle: """ btnHwnd """"
+			. "`n" "ImageButton Style: """ JSON_Dump(imageBtnStyle) """"
+			. "`n" "Font Handle: """ imageBtnFontHandle """"
+			. "`n" "Font Size: """ imageBtnFontSize """"
 	}
 
 	Show(name, opts="", title="") {
