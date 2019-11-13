@@ -1077,18 +1077,16 @@
 			AutoTrimStr(finalValue)
 			newContent[loopedKey] := finalValue
 		}
-		if (newContent.AdditionalMessageFull) { 
-			newAdditionalMsgFull := StrReplace(newContent.AdditionalMessageFull, "`n", "\n"), newAdditionalMsgFull := StrReplace(newAdditionalMsgFull, "`r", "\n")
-			numberOfMsgs := 0
-			additionalMsgSplit := StrSplit(newAdditionalMsgFull, "\n"), numberOfMsgs := additionalMsgSplit.MaxIndex()
-			if (numberOfMsgs = 0 || numberOfMsgs=1 || numberOfMsgs="")
-				RegExMatch( StrSplit(newAdditionalMsgFull, "\n").1 , "O)\[\d+\:\d+\] \@(?:To|From)\: (.*)", outPat), newAdditionalMsg := outPat.1
-			else
-				newAdditionalMsg := numberOfMsgs " total messages. Click here to see."
+		newAdditionalMsgFull := StrReplace(newContent.AdditionalMessageFull, "`n", "\n"), newAdditionalMsgFull := StrReplace(newAdditionalMsgFull, "`r", "\n")
+		numberOfMsgs := 0
+		additionalMsgSplit := StrSplit(newAdditionalMsgFull, "\n"), numberOfMsgs := additionalMsgSplit.MaxIndex()
+		if (numberOfMsgs = 0 || numberOfMsgs=1 || numberOfMsgs="")
+			RegExMatch( StrSplit(newAdditionalMsgFull, "\n").1 , "O)\[\d+\:\d+\] \@(?:To|From)\: (.*)", outPat), newAdditionalMsg := outPat.1
+		else
+			newAdditionalMsg := numberOfMsgs " total messages. Click here to see."
 
-			AutoTrimStr(newAdditionalMsgFull, newAdditionalMsg)
-			newContent.AdditionalMessageFull := newAdditionalMsgFull, newContent.AdditionalMessage := newAdditionalMsg
-		}
+		AutoTrimStr(newAdditionalMsgFull, newAdditionalMsg)
+		newContent.AdditionalMessageFull := newAdditionalMsgFull, newContent.AdditionalMessage := newAdditionalMsg
 
         ; Setting default visible text
 		visibleSeller := newContent.Seller ? newContent.Seller : newContent.Buyer
@@ -1190,16 +1188,18 @@
 			GuiControl, Show,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG
 		}
 
-		; Set tab color style
-		if (cTabCont.TabStyle != newContent.TabStyle) {
-			if (newContent.TabStyle = "IsInArea")
-				GUI_Trades_V2.SetTabStyleJoinedArea(_buyOrSell, slotNum)
-			else if (newContent.TabStyle = "HasNewMessage")
-				GUI_Trades_V2.SetTabStyleWhisperReceived(_buyOrSell, slotNum)
-			else if (newContent.TabStyle = "Default")
-				GUI_Trades_V2.SetTabStyleDefault(_buyOrSell, slotNum)
-
+		hasNewMsgChanged := newContent.HasNewMessage != cTabCont.HasNewMessage ? True : False
+		hasIsInAreaChanged := newContent.IsInArea != cTabCont.IsInArea ? True : False
+		if (hasNewMsgChanged && newContent.HasNewMessage)
+			GUI_Trades_V2.SetTabStyleWhisperReceived(slotNum)
+		else if (hasIsInAreaChanged && newContent.IsInArea)
+			GUI_Trades_V2.SetTabStyleJoinedArea(slotNum)
+		else if (hasNewMsgChanged && hasIsInAreaChanged && !newContent.HasNewMessage && !newContent.IsInArea)
+		|| (hasNewMsgChanged && !newContent.HasNewMessage && !newTabCont.IsInArea)
+		|| (hasIsInAreaChanged && !newContent.IsInArea && !newTabCont.HasNewMessage) {
+			GUI_Trades_V2.SetTabStyleDefault(slotNum)
 		}
+
 	}
 	
 	VerifyItemPrice(tabInfos) {
@@ -1531,6 +1531,10 @@
 				GUI_Trades_V2.UpdateSlotContent("Sell", A_LoopField, "IsInArea", state)
 			else if (tabStyle = "WhisperReceived" && !tabContent.HasNewMessage)
 				GUI_Trades_V2.UpdateSlotContent("Sell", A_LoopField, "HasNewMessage", state)
+			else if (tabStyle = "Default") && (tabContent.HasNewMessage || tabContent.IsInArea) {
+				GUI_Trades_V2.UpdateSlotContent("Sell", A_LoopField, {HasNewMessage:False, IsInArea:False}, False)
+			}
+
 
 			if (styleCurrent != newStyle) {
 				if !(setOrUnset = "Set" && tabStyle = "JoinedArea" && tab%A_LoopField%HasNewMessage = True) { ; Priority: Whisper > Joined > Default. Don't set JoinedArea style if we already have WhisperReceived style
@@ -1985,7 +1989,7 @@
 			}
 			GUI_Trades_V2.SetSlotContent(_buyOrSell, tabIndex-1, "") ; Make last tab empty
 			GuiTrades[_buyOrSell]["Tab" tabIndex-1 "Content"] := {}
-			GUI_Trades_V2.SetTabStyleDefault(_buyOrSell, tabIndex-1)
+			GUI_Trades_V2.SetTabStyleDefault(tabIndex-1)
 		}
 		else if (tabNum = tabsCount) {
 			GUI_Trades_V2.SetSlotContent(_buyOrSell, tabNum, "")
@@ -2674,7 +2678,7 @@
 		return RandomStr(l := 24, i := 48, x := 122)
 	}
 
-    UpdateSlotContent(_buyOrSell, slotNum, slotName, newContent) {
+    UpdateSlotContent(_buyOrSell, slotNum, slotsObj, newContent) {
         ; FINISHED_V2
 		global GuiTrades_Controls
 
@@ -2684,14 +2688,12 @@
 		}
 
 		slotContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
-		if (slotName = "AdditionalMessageFull") {
-			mergedCurrendAndNew := slotContent.AdditionalMessageFull?slotContent.AdditionalMessageFull "\n" newContent : newContent
-			GUI_Trades_V2.SetSlotContent(_buyOrSell, slotNum, {AdditionalMessageFull:mergedCurrendAndNew}, isNewlyPushed:=False, updateOnly:=True)
-		}
-        else {
-            obj := {}, obj[slotName] := newContent
-            GUI_Trades_V2.SetSlotContent(_buyOrSell, slotNum, obj, isNewlyPushed:=False, updateOnly:=True)
-        }
+		if !IsObject(slotsObj)
+			slotName := slotsObj, slotsObj := {}, slotsObj[slotName] := newContent
+		for key, value in slotsObj
+			if (key="AdditionalMessageFull")
+				slotsObj[key] := slotContent.AdditionalMessageFull?slotContent.AdditionalMessageFull "\n" value : value
+		 GUI_Trades_V2.SetSlotContent(_buyOrSell, slotNum, slotsObj, isNewlyPushed:=False, updateOnly:=True)
 	}
 
 	CreateGenericStyleAndUpdateButton(btnHwnd, btnType, ByRef Styles, styleName, iconOrText="") {
