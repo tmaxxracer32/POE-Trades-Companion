@@ -2700,6 +2700,8 @@
 
 	CreateGenericStyleAndUpdateButton(btnHwnd, btnType, ByRef Styles, styleName, iconOrText="") {
 		global GuiTrades, PROGRAM
+		_buyOrSell := GuiTrades.Sell.Handle ? "Sell" : "Buy"
+
 		width := GuiTrades.AllStylesData[styleName].Width, height := GuiTrades.AllStylesData[styleName].Height
 		if (btnType="Icon") {
 			ret := GUI_Trades_V2.CreateGenericIconButtonStyle(Styles, styleName, width, height, iconOrText)

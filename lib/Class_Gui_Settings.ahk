@@ -1456,7 +1456,7 @@ Class GUI_Settings {
 				else if (style%styleName%DidntExist && btnName)
 					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 				else if (style%styleName%DidntExist && !btnIcon && !btnName) {
-				Gui.ImageButtonChangeCaption(btnHwnd, btnNum, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
+					Gui.ImageButtonChangeCaption(btnHwnd, btnNum, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 					if !IsObject(PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum])
 						PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum] := {}
 					PROGRAM.SETTINGS[guiIniSection]["CUSTOM_BUTTON_ROW_" rowNum][btnNum].Text := btnNum
