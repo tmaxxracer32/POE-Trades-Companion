@@ -586,8 +586,8 @@ Parse_GameLogs(strToParse, preview=False) {
 		for index, regexStr in allAreaJoinedRegEx {
 			if RegExMatch(parsedLogsMsg, "SO)" regexStr, joinedPat) {
 				instancePID := joinedPat.1, playerName := joinedPat.2
-				GUI_Trades_V2.SetTabStyleJoinedArea(playerName)
-				if (PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXToggle = "True") && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath) {
+				success := GUI_Trades_V2.SetTabStyleJoinedArea(playerName)
+				if (success && PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXToggle = "True" && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath)) {
 					try
 						SoundPlay,% PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath
 					catch

@@ -1553,26 +1553,28 @@
 ;		if (styleChanged = True) {
 ;			GUI_Trades_V2.SetActiveTab( tabName:=GUI_Trades_V2.GetActiveTab(), autoScroll:=True, skipError:=False, styleChanged:=True )
 ;		}
+
+		return styleChanged
 	}
 
 	SetTabStyleDefault(playerOrTab) {
-		GUI_Trades_V2.SetOrUnsetTabStyle("Set", "Default", playerOrTab)
+		return GUI_Trades_V2.SetOrUnsetTabStyle("Set", "Default", playerOrTab)
 	}
 
 	SetTabStyleJoinedArea(playerOrTab) {
-		GUI_Trades_V2.SetOrUnsetTabStyle("Set", "JoinedArea", playerOrTab)
+		return GUI_Trades_V2.SetOrUnsetTabStyle("Set", "JoinedArea", playerOrTab)
 	}
 
 	UnSetTabStyleJoinedArea(playerOrTab) {
-		GUI_Trades_V2.SetOrUnsetTabStyle("Unset", "JoinedArea", playerOrTab)
+		return GUI_Trades_V2.SetOrUnsetTabStyle("Unset", "JoinedArea", playerOrTab)
 	}
 
 	SetTabStyleWhisperReceived(playerOrTab) {
-		GUI_Trades_V2.SetOrUnsetTabStyle("Set", "WhisperReceived", playerOrTab)
+		return GUI_Trades_V2.SetOrUnsetTabStyle("Set", "WhisperReceived", playerOrTab)
 	}
 
 	UnSetTabStyleWhisperReceived(playerOrTab) {
-		GUI_Trades_V2.SetOrUnsetTabStyle("Unset", "WhisperReceived", playerOrTab, applyToThisTabOnly:=True)
+		return GUI_Trades_V2.SetOrUnsetTabStyle("Unset", "WhisperReceived", playerOrTab, applyToThisTabOnly:=True)
 	}
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
