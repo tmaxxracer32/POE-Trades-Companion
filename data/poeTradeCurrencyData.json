@@ -37,6 +37,9 @@
 		"ID":776
 	},
 	"alteration":"Orb of Alteration",
+	"Amber Oil":{
+		"ID":817
+	},
 	"Ambush":{
 		"ID":495
 	},
@@ -108,6 +111,9 @@
 		"ID":137
 	},
 	"augmentation":"Orb of Augmentation",
+	"Azure Oil":{
+		"ID":820
+	},
 	"Barrows":{
 		"ID":327
 	},
@@ -138,6 +144,9 @@
 	},
 	"Birth of the Three":{
 		"ID":138
+	},
+	"Black Oil":{
+		"ID":823
 	},
 	"Blacksmith's Whetstone":{
 		"Abridged":"whetstone",
@@ -279,6 +288,9 @@
 	"City Square":{
 		"ID":530
 	},
+	"Clear Oil":{
+		"ID":815
+	},
 	"coin":"Perandus Coin",
 	"Colonnade":{
 		"ID":341
@@ -315,6 +327,9 @@
 	},
 	"Crematorium":{
 		"ID":346
+	},
+	"Crimson Oil":{
+		"ID":822
 	},
 	"Crimson Temple":{
 		"ID":534
@@ -649,6 +664,9 @@
 	"Glyphic Fossil":{
 		"ID":704
 	},
+	"Golden Oil":{
+		"ID":826
+	},
 	"Gorge":{
 		"ID":358
 	},
@@ -922,6 +940,9 @@
 	},
 	"Onslaught":{
 		"ID":504
+	},
+	"Opalescent Oil":{
+		"ID":824
 	},
 	"Orb of Alchemy":{
 		"Abridged":"alchemy",
@@ -1307,6 +1328,9 @@
 	"Scroll of Wisdom":{
 		"Abridged":"wisdom",
 		"ID":17
+	},
+	"Sepia Oil":{
+		"ID":816
 	},
 	"Sepulchre":{
 		"ID":558
@@ -1763,6 +1787,9 @@
 		"Abridged":"silver",
 		"ID":35
 	},
+	"Silver Oil":{
+		"ID":825
+	},
 	"Simple Iron Net":{
 		"ID":635
 	},
@@ -1834,6 +1861,9 @@
 	},
 	"Tangled Fossil":{
 		"ID":705
+	},
+	"Teal Oil":{
+		"ID":819
 	},
 	"Tempest":{
 		"ID":509
@@ -2453,6 +2483,9 @@
 	"Vault":{
 		"ID":487
 	},
+	"Verdant Oil":{
+		"ID":818
+	},
 	"Vial of Awakening":{
 		"ID":646
 	},
@@ -2485,6 +2518,9 @@
 	},
 	"Vinia's Token":{
 		"ID":312
+	},
+	"Violet Oil":{
+		"ID":821
 	},
 	"Volatile Power":{
 		"ID":313
