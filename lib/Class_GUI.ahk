@@ -219,7 +219,7 @@ Class GUI {
 	}
 
 	Show(name, opts="", title="") {
-		Gui, %name%:Show, %opts%, %title%
+		try Gui, %name%:Show, %opts%, %title%
 	}
 
 	GetGlobal(guiName, type, key="") {
