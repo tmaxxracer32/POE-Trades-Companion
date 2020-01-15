@@ -1,5 +1,5 @@
 ### The README.md is being reworked and some parts will be missing for now.  
-&nbsp;  
+### [See the FAQ here](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ)  
 
 <a href="https://www.paypal.me/masato/"><img src="https://raw.githubusercontent.com/lemasato/POE-Trades-Companion/master/others/Banners/Donate using PayPal.png" height=40></a> <!-- Paypal Banner -->  
 [paypal.me/masato](https://www.paypal.me/masato) - [Alternative paypal cart button](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BSWU76BLQBMCU)
