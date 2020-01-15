@@ -1,3 +1,13 @@
+1.15.BETA_994 (15 January 2019)
+
+	Changes:
+	- Updated the Betrayal league sheet.
+
+	Fixes:
+	- An error box could show up related to the item location grid due to the new atlas system.
+	
+= = = = = = = = = = = = =
+
 1.15.BETA_993 (17 December 2019)
 
 	Changes:
