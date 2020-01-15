@@ -1,4 +1,4 @@
-1.15.BETA_994 (15 January 2019)
+1.15.BETA_994 (15 January 2020)
 
 	Changes:
 	- Updated the Betrayal league sheet.
