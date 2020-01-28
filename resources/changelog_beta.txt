@@ -1,4 +1,4 @@
-1.15.BETA_995 (28 January 2020)
+1.15.BETA_995/996 (28 January 2020)
 
 	Changes:
 	- Due to new atlas changes in Metamorph, the map type location in the Map Stash Tab has been disabled until a proper solution is worked on.
