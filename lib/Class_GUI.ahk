@@ -211,11 +211,17 @@ Class GUI {
 		}
 
 		if (type = "ImageButton") {
-			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-				return "[GUI_" name "] " vHwnd ": " ImageButton.LastError "`n"
+			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize) {
+				return "GUI: """ name """"
+				. "`n" "Error: """ ImageButton.LastError """"
+				. "`n" "Control: """ vHwnd """ - Control Handle: """ Gui%name%_Controls[vHwnd] """"
+				. "`n" "Options: """ opts """"
+				. "`n" "ImageButton Font Handle: """ imageBtnFontHandle """"
+				. "`n" "ImageButton Font Size: """ imageBtnFontSize """"
+				. "`n" "ImageButton Style: """ JSON.Dump(imageBtnStyle) """"
+				. "`n`n"
+			}
 		}
-
-
 	}
 
 	Show(name, opts="", title="") {
