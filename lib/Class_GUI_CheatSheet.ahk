@@ -25,14 +25,31 @@
         __f := GUI_CheatSheet.CheatSheetRemove.bind(GUI_CheatSheet)
         GuiControl, CheatSheet:+g,% GuiCheatSheet_Controls.hIMG_CheatSheet,% __f
 
+        Hotkey, IfWinActive
+        Hotkey, *Esc, GUI_CheatSheet_Hotkey_CloseOnEsc, On
+
         Gui.Show("CheatSheet", "xCenter yCenter AutoSize NoActivate")
     }
 
     CheatSheetRemove() {
         GUI_CheatSheet.Destroy()
+
+        Hotkey, IfWinActive
+        Hotkey, *Esc, GUI_CheatSheet_Hotkey_CloseOnEsc, Off
     }
 
     Destroy() {
         Gui.Destroy("CheatSheet")
     }
+
+    Hotkey_CloseOnEsc() {
+        GUI_CheatSheet.CheatSheetRemove()
+
+        Hotkey, IfWinActive
+        Hotkey, *Esc, GUI_CheatSheet_Hotkey_CloseOnEsc, Off
+    }
 }
+
+GUI_CheatSheet_Hotkey_CloseOnEsc:
+    GUI_CheatSheet.Hotkey_CloseOnEsc()
+return
