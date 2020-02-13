@@ -1,3 +1,12 @@
+1.15.BETA_997 (12 February 2020)
+
+	Changes:
+	- Pressing ESC while a League Sheet is open will now close it.
+	- Removed the "ImageButtons Errors" window and show a simple tray notification instead.
+	- "ImageButton Errors" are now logged in the logs file, and with more details.
+	
+= = = = = = = = = = = = =
+
 1.15.BETA_995/996 (28 January 2020)
 
 	Changes:
