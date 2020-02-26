@@ -3,6 +3,9 @@
 # =========================
 
 /__*
+/_Archives*
+/_Debug*
+_CreateReleaseZip.ahk
 
 # =========================
 # Resources source files
