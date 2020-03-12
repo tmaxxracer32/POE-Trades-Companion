@@ -1,6 +1,12 @@
-Test
+# Welcome to POE Trades Companion!
+POE Trades Companion is a tool made with AutoHotKey. The project is [open source](https://github.com/lemasato/POE-Trades-Companion) and will always be entirely free to use.
+The main intent of POE Trades Companion is to enhance your trading experience. It offers a lot of customisation options while still being very user-friendly.
 
-[Link to a sub page](https://lemasato.github.io/POE-Trades-Companion/SubPage)
+This page will teach you everything you need to know about it.
+
+## Sub Title 2
+
+### Sub Title 3
 
 <!--
 ## Welcome to GitHub Pages
