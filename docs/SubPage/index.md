@@ -1,6 +1,4 @@
-Test
-
-[Link to a sub page](https://lemasato.github.io/POE-Trades-Companion/SubPage)
+SubPage content
 
 <!--
 ## Welcome to GitHub Pages
