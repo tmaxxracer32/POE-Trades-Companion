@@ -25,7 +25,7 @@ If you do not want to use it anymore, simply delete its folder.
 The option to reset all settings back to default is available in the Settings interface.  
 
 ## How can I share my settings?  
-Sharing settings can be done with the file **C:\Users\XXX\Documents\lemasato\POE Trades Companion\Preferences.json**  
+Sharing settings can be done with the file ***"C:\Users\XXX\Documents\lemasato\POE Trades Companion\Preferences.json"***  
 
 ## Is there any video tutorial for POE Trades Companion?  
 Not as of now.  
@@ -57,13 +57,13 @@ If you are on Windows 7/8.1 and you disabled Windows Update specifically because
 
 ## Holding ALT over an item in-game shows "Su&nbsp;&nbsp;&nbsp;x" instead of "Suffix".  
 This is caused by the Fontin SmallCaps font.  
-Uninstall the font from C:\Windows\Fonts, restart your computer, install the version of the font included with POE Trades Companion in `\POE-Trades-Companion\resources\fonts\Fontin-SmallCaps.ttf` and restart again.  
+Uninstall the font from C:\Windows\Fonts, restart your computer, install the version of the font included with POE Trades Companion in ***\POE-Trades-Companion\resources\fonts\Fontin-SmallCaps.ttf*** and restart again.  
 
 ## Nothing happens when I receive a trading whisper or some whispers are ignored (notably Korean names).  
 Try whispering yourself from poe.trade.  
 
-1. If nothing happens, then close your game and POE Trades Companion. Then, in your Path of Exile folder, delete the `\Path of Exile\logs\Client.txt` file. You can now restart your game and POE Trades Companion.  
+1. If nothing happens, then close your game and POE Trades Companion. Then, in your Path of Exile folder, delete the ***"\Path of Exile\logs\Client.txt"*** file. You can now restart your game and POE Trades Companion.  
 
 2. If whispering yourself works but some players whispers are still being "ignored", then it's highly likely that they are Korean.  
-To quote Chris, `"Any message originating from a Kakao client isn't logged (regardless of whether it's a Korean or non-Korean user seeing the message)."`  
+To quote Chris, ***"Any message originating from a Kakao client isn't logged (regardless of whether it's a Korean or non-Korean user seeing the message)."***  
 This is an issue on GGG side and there is nothing I can do about it. Due to privacy laws in Korea, GGG is not allowed to log any whisper received by a Korean player. Since the whispers are not logged, POE Trades Companion cannot create a new tab for the whisper.  
