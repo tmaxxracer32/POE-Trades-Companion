@@ -9,22 +9,20 @@ This page will teach you the basics to get started.
 - [Adding and editing buttons on the Trades Interfaces](#adding-and-editing-buttons-on-the-trades-interfaces)  
 - [Adding and editing hotkeys](#adding-and-editing-hotkeys)  
 
-# Downloading and installing
-1. Install the latest version of AutoHotKey [**here**](https://www.autohotkey.com/download/ahk-install.exe)
-During the installation, when asked, choose **Unicode 32-bit or Unicode 64-bit.** **Do not go with AINSI 32-bit**.
-2. Download the latest POE Trades Companion release [**here**](https://github.com/lemasato/POE-Trades-Companion/releases) by clicking on the big **"DOWNLOAD LINK HERE"** link.
-3. Extract the archive **in its own folder** and run **"POE Trades Companion.ahk"**.
+# Downloading and installing  
+1. Install the latest version of AutoHotKey [**here**](https://www.autohotkey.com/download/ahk-install.exe)  
+During the installation, when asked, choose **Unicode 32-bit or Unicode 64-bit.** **Do not go with AINSI 32-bit**.  
+2. Download the latest POE Trades Companion release [**here**](https://github.com/lemasato/POE-Trades-Companion/releases) by clicking on the big **"DOWNLOAD LINK HERE"** link.  
+3. Extract the archive **in its own folder** and run **"POE Trades Companion.ahk"**.  
 
-# Understanding the interfaces
-*To be added in the future after 1.15 is completed*
+# Understanding the interfaces  
+*To be added in the future after 1.15 is completed*  
 
-# Adding and editing buttons on the Trades Interfaces
-*To be added in the future after 1.15 is completed*
+# Adding and editing buttons on the Trades Interfaces  
+*To be added in the future after 1.15 is completed*  
 
-# Adding and editing hotkeys
-*To be added in the future after 1.15 is completed*
-
-
+# Adding and editing hotkeys  
+*To be added in the future after 1.15 is completed*  
 
 <!--
 ## Welcome to GitHub Pages
