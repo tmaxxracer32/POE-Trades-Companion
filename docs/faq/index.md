@@ -1,17 +1,15 @@
-- **[How do I install this?](#how-do-i-install-this)**  
-- **[How do I uninstall this?](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#how-do-i-uninstall-this)**  
-- **[How can I do a clean install?](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#how-can-i-do-a-clean-install)**  
-- **[How can I share my settings?](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#how-can-i-share-my-settings)**  
-- **[Is there any video detailing features of POE Trades Companion?](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#is-there-any-video-detailing-features-of-poe-trades-companion)**  
+- [**How do I install this?**](#how-do-i-install-this)  
+- [**How do I uninstall this?**](https://lemasato.github.io/POE-Trades-Companion/faq/#how-do-i-uninstall-this)  
+- [**How can I reset my settings?**](https://lemasato.github.io/POE-Trades-Companion/faq/#how-can-i-reset-my-settings)  
+- [**How can I share my settings?**](https://lemasato.github.io/POE-Trades-Companion/faq/#how-can-i-share-my-settings)  
+- [**Is there any video tutorial for POE Trades Companion?**](https://lemasato.github.io/POE-Trades-Companion/faq/#is-there-any-video-tutorial-for-poe-trades-companion)  
 &nbsp;  
-- **[Is POE Trades Companion allowed by GGG?](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#is-poe-trades-companion-allowed-by-ggg)**  
-- **[Why do I get a virus warning when using the executable?](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#why-do-i-get-a-virus-warning-when-downloading-the-executable)**  
+- [**Is POE Trades Companion allowed by GGG?**](https://lemasato.github.io/POE-Trades-Companion/faq/#is-poe-trades-companion-allowed-by-ggg)  
+- [**Why do I get a virus warning when using the executable?**](https://lemasato.github.io/POE-Trades-Companion/faq/#why-do-i-get-a-virus-warning-when-downloading-the-executable)  
 &nbsp;  
-- **[My Trades Interface disappears completely after pressing any button and never comes back.
-](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#my-trades-interface-disappears-completely-after-pressing-any-button-and-never-comes-back)**  
-- **[Holding ALT over an item in-game shows "Su   x" instead of "Suffix".
-](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#holding-alt-over-an-item-in-game-shows-sux-instead-of-suffix)**  
-- **[Nothing happens when I receive a trading whisper or some whispers are ignored (notably Korean names).](https://github.com/lemasato/POE-Trades-Companion/wiki/FAQ/#nothing-happens-when-i-receive-a-trading-whisper-or-some-whispers-are-ignored-notably-korean-names)**  
+- [**My Trades Interface disappears completely after pressing any button and never comes back**](https://lemasato.github.io/POE-Trades-Companion/faq/#my-trades-interface-disappears-completely-after-pressing-any-button-and-never-comes-back)  
+- [**Holding ALT over an item in-game shows "Su   x" instead of "Suffix"**](https://lemasato.github.io/POE-Trades-Companion/faq/#holding-alt-over-an-item-in-game-shows-sux-instead-of-suffix)  
+- [**Nothing happens when I receive a trading whisper or some whispers are ignored (notably Korean names)**](https://lemasato.github.io/POE-Trades-Companion/faq/#nothing-happens-when-i-receive-a-trading-whisper-or-some-whispers-are-ignored-notably-korean-names)  
 &nbsp;  
 ***
 
@@ -22,7 +20,7 @@
 POE Trades Companion is a portable application.  
 If you do not want to use it anymore, simply delete its folder.  
 
-## How can reset my settings?
+## How can I reset my settings?
 The option to reset all settings back to default is available in the Settings interface.
 
 ## How can I share my settings?

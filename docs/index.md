@@ -3,8 +3,11 @@ POE Trades Companion is a project made with AutoHotKey. It is [open source](http
 
 This page will teach you the basics to get started.  
 
-- [Downloading and installing](#downloading-and-installing)
-- [Frequently asked questions](https://lemasato.github.io/POE-Trades-Companion/faq)
+- [Downloading and installing](#downloading-and-installing)  
+- [Frequently asked questions](https://lemasato.github.io/POE-Trades-Companion/faq)  
+- [Understanding the interfaces](#understanding-the-interfaces)  
+- [Adding and editing buttons on the Trades Interfaces](#adding-and-editing-buttons-on-the-trades-interfaces)  
+- [Adding and editing hotkeys](#adding-and-editing-hotkeys)  
 
 # Downloading and installing
 1. Install the latest version of AutoHotKey [**here**](https://www.autohotkey.com/download/ahk-install.exe)
@@ -13,6 +16,12 @@ During the installation, when asked, choose **Unicode 32-bit or Unicode 64-bit.*
 3. Extract the archive **in its own folder** and run **"POE Trades Companion.ahk"**.
 
 # Understanding the interfaces
+*To be added in the future after 1.15 is completed*
+
+# Adding and editing buttons on the Trades Interfaces
+*To be added in the future after 1.15 is completed*
+
+# Adding and editing hotkeys
 *To be added in the future after 1.15 is completed*
 
 
