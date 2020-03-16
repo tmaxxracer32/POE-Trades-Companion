@@ -167,6 +167,22 @@ Start_Script() {
 		ReloadWithParams(" /MyDocuments=""" MyDocuments """", getCurrentParams:=True, asAdmin:=True)
 	}
 
+	; Create local directories - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	directories := PROGRAM.MAIN_FOLDER "`n" PROGRAM.SFX_FOLDER "`n" PROGRAM.LOGS_FOLDER "`n" PROGRAM.SKINS_FOLDER
+	. "`n" PROGRAM.FONTS_FOLDER "`n" PROGRAM.IMAGES_FOLDER "`n" PROGRAM.DATA_FOLDER "`n" PROGRAM.ICONS_FOLDER
+	. "`n" PROGRAM.TEMP_FOLDER "`n" PROGRAM.TRANSLATIONS_FOLDER "`n" PROGRAM.CURRENCY_IMGS_FOLDER "`n" PROGRAM.CHEATSHEETS_FOLDER
+
+	Loop, Parse, directories, `n, `r
+	{
+		if (!InStr(FileExist(A_LoopField), "D")) {
+			AppendtoLogs("Local directory non-existent. Creating: """ A_LoopField """")
+			FileCreateDir, % A_LoopField
+			if (ErrorLevel && A_LastError) {
+				AppendtoLogs("Failed to create local directory. System Error Code: " A_LastError ". Path: """ A_LoopField """")
+			}
+		}
+	}
+
 	; Creating settings and file
 	LocalSettings_CreateFileIfNotExisting()
 	LocalSettings_VerifyEncoding()
@@ -199,22 +215,6 @@ Start_Script() {
 	global POEGameList := GAME.EXECUTABLES	
 	for nothing, executable in POEGameArr
 		GroupAdd, POEGameGroup, ahk_exe %executable%
-
-	; Create local directories - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	directories := PROGRAM.MAIN_FOLDER "`n" PROGRAM.SFX_FOLDER "`n" PROGRAM.LOGS_FOLDER "`n" PROGRAM.SKINS_FOLDER
-	. "`n" PROGRAM.FONTS_FOLDER "`n" PROGRAM.IMAGES_FOLDER "`n" PROGRAM.DATA_FOLDER "`n" PROGRAM.ICONS_FOLDER
-	. "`n" PROGRAM.TEMP_FOLDER "`n" PROGRAM.TRANSLATIONS_FOLDER "`n" PROGRAM.CURRENCY_IMGS_FOLDER "`n" PROGRAM.CHEATSHEETS_FOLDER
-
-	Loop, Parse, directories, `n, `r
-	{
-		if (!InStr(FileExist(A_LoopField), "D")) {
-			AppendtoLogs("Local directory non-existent. Creating: """ A_LoopField """")
-			FileCreateDir, % A_LoopField
-			if (ErrorLevel && A_LastError) {
-				AppendtoLogs("Failed to create local directory. System Error Code: " A_LastError ". Path: """ A_LoopField """")
-			}
-		}
-	}
 
 	; Extracting assets
 	if !(DEBUG.settings.skip_assets_extracting)
