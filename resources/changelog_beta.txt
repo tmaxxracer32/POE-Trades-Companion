@@ -1,3 +1,11 @@
+1.15.BETA_998 (16 March 2020)
+
+	Changes:
+	- Added Delirium and translated challenge league names.
+	- Updated data files and the Betrayal league sheet.
+
+= = = = = = = = = = = = =
+
 1.15.BETA_997 (12 February 2020)
 
 	Changes:
