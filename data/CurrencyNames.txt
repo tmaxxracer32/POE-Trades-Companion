@@ -3,6 +3,7 @@ A Mother's Parting Gift
 Abandoned Wealth
 Aberrant Fossil
 Abyss
+Abyssal Delirium Orb
 Abyssal Incubator
 Academy
 Acid Caverns
@@ -12,6 +13,7 @@ Alleyways
 Alone in the Darkness
 Amber Oil
 Ambush
+Amorphous Delirium Orb
 Anarchy
 Anarchy's Price
 Ancient City
@@ -25,6 +27,7 @@ Arcade
 Arena
 Arid Lake
 Armourer's Scrap
+Armoursmith's Delirium Orb
 Armoury
 Arrogance of the Vaal
 Arsenal
@@ -45,6 +48,7 @@ Bestiary Orb
 Beyond
 Birth of the Three
 Black Oil
+Blacksmith's Delirium Orb
 Blacksmith's Whetstone
 Blessed Orb
 Blessing of Chayula
@@ -53,6 +57,7 @@ Blessing of God
 Blessing of Tul
 Blessing of Uul-Netol
 Blessing of Xoph
+Blighted Delirium Orb
 Blind Venture
 Bloodlines
 Bloodstained Fossil
@@ -72,6 +77,7 @@ Canyon
 Carcass
 Cartographer's Chisel
 Cartographer's Delight
+Cartographer's Delirium Orb
 Cartographer's Incubator
 Castle Ruins
 Catacombs
@@ -95,6 +101,7 @@ Conservatory
 Coral Ruins
 Core
 Corroded Fossil
+Council of Cats
 Courthouse
 Courtyard
 Coves
@@ -129,8 +136,10 @@ Deafening Essence of Woe
 Deafening Essence of Wrath
 Deafening Essence of Zeal
 Death
+Decadent Delirium Orb
 Decadent Incubator
 Defiled Cathedral
+Delirium Orb
 Dense Fossil
 Desert
 Desert Spring
@@ -139,6 +148,7 @@ Dialla's Subjugation
 Dig
 Divine Orb
 Divine Vessel
+Diviner's Delirium Orb
 Diviner's Incubator
 Doedre's Madness
 Domination
@@ -168,17 +178,21 @@ Excavation
 Faceted Fossil
 Factory
 Fields
+Fine Delirium Orb
 Fine Incubator
 Flooded Mine
 Forbidden Power
+Foreboding Delirium Orb
 Foreboding Incubator
 Forge of the Phoenix
+Fossilised Delirium Orb
 Fossilised Incubator
 Fractured Fossil
 Fragment of the Chimera
 Fragment of the Hydra
 Fragment of the Minotaur
 Fragment of the Phoenix
+Fragmented Delirium Orb
 Fragmented Incubator
 Frigid Fossil
 Fungal Hollow
@@ -198,6 +212,7 @@ Gilded Divination Scarab
 Gilded Elder Scarab
 Gilded Fossil
 Gilded Harbinger Scarab
+Gilded Metamorph Scarab
 Gilded Perandus Scarab
 Gilded Reliquary Scarab
 Gilded Shaper Scarab
@@ -229,6 +244,7 @@ Hunter's Resolve
 Hunter's Reward
 Iceberg
 Immortal Resolve
+Imperial Delirium Orb
 Infested Valley
 Infused Incubator
 Invasion
@@ -236,6 +252,7 @@ Inya's Key
 Ivory Temple
 Jack in the Box
 Jagged Fossil
+Jeweller's Delirium Orb
 Jeweller's Orb
 Journeyman Cartographer's Sextant
 Jungle Valley
@@ -289,6 +306,7 @@ Necropolis
 Nemesis
 No Traces
 Oasis
+Obscured Delirium Orb
 Obscured Incubator
 Offering to the Goddess
 Onslaught
@@ -331,6 +349,7 @@ Polished Cartography Scarab
 Polished Divination Scarab
 Polished Elder Scarab
 Polished Harbinger Scarab
+Polished Metamorph Scarab
 Polished Perandus Scarab
 Polished Reliquary Scarab
 Polished Shaper Scarab
@@ -338,12 +357,14 @@ Polished Sulphite Scarab
 Polished Torment Scarab
 Port
 Portal Scroll
+Portentous Delirium Orb
 Potent Alchemical Resonator
 Potent Chaotic Resonator
 Powerful Alchemical Resonator
 Powerful Chaotic Resonator
 Precinct
 Pride Before the Fall
+Primal Delirium Orb
 Primal Incubator
 Prime Alchemical Resonator
 Prime Chaotic Resonator
@@ -378,6 +399,7 @@ Rusted Cartography Scarab
 Rusted Divination Scarab
 Rusted Elder Scarab
 Rusted Harbinger Scarab
+Rusted Metamorph Scarab
 Rusted Perandus Scarab
 Rusted Reliquary Scarab
 Rusted Shaper Scarab
@@ -570,7 +592,11 @@ Silver Oil
 Simple Iron Net
 Simple Rope Net
 Simple Steel Net
+Simulacrum
+Simulacrum Splinter
+Singular Delirium Orb
 Singular Incubator
+Skittering Delirium Orb
 Skittering Incubator
 Spider Forest
 Spider Lair
@@ -595,6 +621,7 @@ Teal Oil
 Tempest
 Temple
 Terrace
+Thaumaturge's Delirium Orb
 Thaumaturge's Incubator
 Thaumaturgical Net
 The Admirer
@@ -619,6 +646,7 @@ The Catalyst
 The Celestial Justicar
 The Celestial Stone
 The Chains that Bind
+The Cheater
 The Coming Storm
 The Conduit
 The Cursed King
@@ -635,6 +663,8 @@ The Dragon's Heart
 The Dreamer
 The Dreamland
 The Drunken Aristocrat
+The Easy Stroll
+The Eldritch Decay
 The Encroaching Darkness
 The Endless Darkness
 The Endurance
@@ -703,6 +733,7 @@ The Polymath
 The Porcupine
 The Price of Protection
 The Professor
+The Progeny of Lunaris
 The Puzzle
 The Queen
 The Rabid Rhoa
@@ -726,6 +757,7 @@ The Spark and the Flame
 The Spoiled Prince
 The Standoff
 The Stormcaller
+The Strategist
 The Summoner
 The Sun
 The Surgeon
@@ -734,6 +766,7 @@ The Survivalist
 The Sword King's Salute
 The Thaumaturgist
 The Throne
+The Tinkerer's Table
 The Tower
 The Traitor
 The Trial
@@ -768,6 +801,7 @@ Three Voices
 Thunderous Skies
 Time-Lost Incubator
 Time-Lost Relic
+Timeless Delirium Orb
 Timeless Eternal Empire Emblem
 Timeless Eternal Empire Splinter
 Timeless Karui Emblem
@@ -819,6 +853,7 @@ Wasteland
 Waterways
 Wealth and Power
 Wharf
+Whispering Delirium Orb
 Whispering Incubator
 Xoph's Breachstone
 Yriel's Key
