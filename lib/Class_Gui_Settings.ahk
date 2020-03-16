@@ -259,11 +259,7 @@ Class GUI_Settings {
 		; * * Reset
 		resetBtnW := Get_TextCtrlSize(PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_ResetToDefaultSettings, "Segoe UI", 8, "", "", ctrlType:="Button").W
 		Gui.Add("Settings", "ImageButton", "x" rightMost2-resetBtnW " y" downMost2-30 " h30 hwndhBTN_ResetToDefaultSettings", PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_ResetToDefaultSettings, Style_ResetBtn, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_ResetToDefaultSettings", "ResetToDefaultSettings")
 		
-		; User settings
-		GUI_Settings.TabsSettingsMain_SetUserSettings()
-
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB CUSTOMIZATION SKINS
 		*/
@@ -304,11 +300,7 @@ Class GUI_Settings {
 
 		; * * Preview btn
 		Gui.Add("Settings", "ImageButton", "x" rightMost2-215 " y" downMost2-30 " w215 h30 hwndhBTN_RecreateTradesGUI", PROGRAM.TRANSLATIONS.GUI_Settings.hBTN_RecreateTradesGUI, Style_Button, PROGRAM.FONTS["Segoe UI"], 8)
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_RecreateTradesGUI", "TabCustomizationSkins_RecreateTradesGUI")
-
-		; * * Subroutines + User settings
-		GUI_Settings.TabCustomizationSkins_SetUserSettings()
-
+		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB Customization Selling
 		*/
@@ -395,10 +387,6 @@ Class GUI_Settings {
 		Gui.Add("Settings", "ListView", "x" leftMost3 " y+10 w" availableWidth " R8 hwndhLV_HotkeyActionsList -Multi AltSubmit +LV0x10000 NoSortHdr NoSort -LV0x10", "#|Type|Content")
 		LV_SetSelColors(GuiSettings_Controls.hLV_HotkeyActionsList, "0x0b6fcc", "0xFFFFFF")
 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditHotkey", "TabHotkeys_ChangeHotkeyProfileHotkey")
-
-		GUI_Settings.TabHotkeys_SetUserSettings()
-
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB MISC UPDATING
 		*/
@@ -427,8 +415,6 @@ Class GUI_Settings {
 		Gui.Add("Settings", "Edit", "x" leftMost2 " y" upMost2+125 " w" rightMost2-leftMost2 " R10 hwndhEDIT_ChangeLogs ReadOnly", Get_Changelog(removeTrails:=True) ), chgLogEditPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_ChangeLogs)
 		Gui.MoveControl("Settings", "hEDIT_ChangeLogs", "h" downMost2-chgLogEditPos.Y)
 
-		GUI_Settings.TabMiscUpdating_SetUserSettings()
-
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB MISC ABOUT
 		*/
@@ -438,8 +424,6 @@ Class GUI_Settings {
 
 		Gui.Add("Settings", "Edit", "x" leftMost2 " y+15 wp R10 ReadOnly Center hwndhEDIT_HallOfFame", "Hall of Fame`nThank you for your support!`n`n[Hall of Fame loading]"), hofPos := Get_ControlCoords("Settings", GuiSettings_Controls.hEDIT_HallOfFame)
 		Gui.MoveControl("Settings", "hEDIT_HallOfFame", "h" downMost2-hofPos.Y)
-
-		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	TAB - ALL
@@ -481,6 +465,12 @@ Class GUI_Settings {
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
 		*/
+
+		GUI_Settings.TabsSettingsMain_SetUserSettings()
+		GUI_Settings.TabCustomizationSkins_SetUserSettings()
+		GUI_Settings.TabHotkeys_SetUserSettings()
+		GUI_Settings.TabMiscUpdating_SetUserSettings()
+		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
 
 		GUI_Settings.TabSettingsMain_SetSubroutines()
 		GUI_Settings.TabCustomizationSkins_SetSubroutines()
@@ -585,13 +575,12 @@ Class GUI_Settings {
 
 	TabSettingsMain_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hBTN_EditPoeAccountsList,hDDL_BuyingInterfaceMode"
-			. ",hDDL_SellingInterfaceMode,hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
+		controlsList := "hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
 			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
 			. ",hCB_AllowClicksToPassThroughWhileInactive,hSLIDER_NoTabsTransparency,hSLIDER_TabsOpenTransparency"
 			. ",hCB_TradingWhisperSFXToggle,hBTN_BrowseTradingWhisperSFX,hCB_RegularWhisperSFXToggle,hBTN_BrowseRegularWhisperSFX"
 			. ",hCB_BuyerJoinedAreaSFXToggle,hBTN_BrowseBuyerJoinedAreaSFX,hCB_ShowTabbedTrayNotificationOnWhisper"
-			. ",hEDIT_PushBulletToken,hCB_PushBulletOnTradingWhisper,hCB_PushBulletOnlyWhenAfk"
+			. ",hCB_PushBulletOnTradingWhisper,hCB_PushBulletOnlyWhenAfk"
 
 		Loop, Parse, controlsList,% ","
 		{
@@ -599,19 +588,17 @@ Class GUI_Settings {
 
 			if (ctrlType="hCB")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_OnCheckboxToggle", ctrlName)
-			else if (ctrlName="hBTN_EditPoeAccountsList")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_EditPoeAccountsList")
-			else if (ctrlName="hDDL_BuyingInterfaceMode")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_OnBuyingInterfaceModeChange")
-			else if (ctrlName="hDDL_SellingInterfaceMode")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_OnSellingInterfaceModeChange")
 			else if IsIn(ctrlName,"hSLIDER_NoTabsTransparency,hSLIDER_TabsOpenTransparency")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_OnTransparencySliderMove", ctrlName)
 			else if IsIn(ctrlName,"hBTN_BrowseTradingWhisperSFX,hBTN_BrowseRegularWhisperSFX,hBTN_BrowseBuyerJoinedAreaSFX")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_OnSFXBrowse", ctrlName)
-			else if (ctrlName="hEDIT_PushBulletToken")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabSettingsMain_OnPushBulletTokenChange")
 		}
+
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditPoeAccountsList", "TabSettingsMain_EditPoeAccountsList")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_BuyingInterfaceMode", "TabSettingsMain_OnBuyingInterfaceModeChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_SellingInterfaceMode", "TabSettingsMain_OnSellingInterfaceModeChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_PushBulletToken", "TabSettingsMain_OnPushBulletTokenChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_ResetToDefaultSettings", "ResetToDefaultSettings")
 	}
 
 	TabSettingsMain_OnBuyingInterfaceModeChange() {
@@ -834,21 +821,12 @@ Class GUI_Settings {
 
 	TabCustomizationSkins_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hLB_SkinPreset,hLB_SkinBase,hLB_SkinFont,hCB_UseRecommendedFontSettings,hEDIT_SkinFontSize"
-		. ",hUPDOWN_SkinFontSize,hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality,hEDIT_SkinScalingPercentage,hUPDOWN_SkinScalingPercentage"
+		controlsList := "hEDIT_SkinFontSize,hUPDOWN_SkinFontSize,hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality,hEDIT_SkinScalingPercentage,hUPDOWN_SkinScalingPercentage"
 
 		Loop, Parse, controlsList,% ","
 		{
 			ctrlName := A_LoopField, ctrlSplit := StrSplit(ctrlName, "_"), ctrlType := ctrlSplit.1, settingsKey := ctrlSplit.2
 
-			if (ctrlName="hLB_SkinPreset")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabCustomizationSkins_OnPresetChange")
-			if (ctrlName="hLB_SkinBase")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabCustomizationSkins_OnSkinChange")
-			if (ctrlName="hLB_SkinFont")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabCustomizationSkins_OnFontChange")
-			if (ctrlName="hCB_UseRecommendedFontSettings")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabCustomizationSkins_OnRecommendedFontSettingsToggle")
 			if IsIn(ctrlName,"hEDIT_SkinFontSize,hUPDOWN_SkinFontSize")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabCustomizationSkins_OnFontSizeChange")
 			if IsIn(ctrlName,"hEDIT_SkinFontQuality,hUPDOWN_SkinFontQuality")
@@ -860,6 +838,12 @@ Class GUI_Settings {
 			; TabCustomizationSkins_ShowColorPicker
 			; TabCustomizationSkins_RecreateTradesGUI
 		}
+
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLB_SkinPreset", "TabCustomizationSkins_OnPresetChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLB_SkinBase", "TabCustomizationSkins_OnSkinChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLB_SkinFont", "TabCustomizationSkins_OnFontChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hCB_UseRecommendedFontSettings", "TabCustomizationSkins_OnRecommendedFontSettingsToggle")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_RecreateTradesGUI", "TabCustomizationSkins_RecreateTradesGUI")
 	}
 
 	TabCustomizationSkins_EnableSubroutines() {
@@ -1984,32 +1968,17 @@ Class GUI_Settings {
 
 	TabHotkeys_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hLB_HotkeyProfiles,hEDIT_HotkeyProfileName,hEDIT_HotkeyProfileHotkey,hHK_HotkeyProfileHotkey,hDDL_HotkeyActionType"
-		. ",hEDIT_HotkeyActionContent,hLV_HotkeyActionsList,hBTN_HotkeyAddNewProfile,hBTN_HotkeyRemoveSelectedProfile,hTEXT_HotkeyActionTypeTip"
 
-		Loop, Parse, controlsList,% ","
-		{
-			ctrlName := A_LoopField, ctrlSplit := StrSplit(ctrlName, "_"), ctrlType := ctrlSplit.1, settingsKey := ctrlSplit.2
-
-			if (ctrlName="hLB_HotkeyProfiles")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileChange")
-			else if (ctrlName="hEDIT_HotkeyProfileName")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter100ms:=True)
-			else if IsIn(ctrlName,"hEDIT_HotkeyProfileHotkey")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnHotkeyProfileHotkeyChange")
-			else if (ctrlName="hDDL_HotkeyActionType")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnActionTypeChange")
-			else if (ctrlName="hEDIT_HotkeyActionContent")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnActionContentChange")
-			else if (ctrlName="hLV_HotkeyActionsList")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_OnListviewClick")
-			else if (ctrlName="hBTN_HotkeyAddNewProfile")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_AddNewHotkeyProfile")
-			else if (ctrlName="hBTN_HotkeyRemoveSelectedProfile")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabHotkeys_RemoveSelectedHotkeyProfile")
-			else if (ctrlName="hTEXT_HotkeyActionTypeTip")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "Universal_OnActionTypeTipLinkClick")
-		}
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLB_HotkeyProfiles", "TabHotkeys_OnHotkeyProfileChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_HotkeyProfileName", "TabHotkeys_OnHotkeyProfileNameChange", doAgainAfter100ms:=True)
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_HotkeyProfileHotkey", "TabHotkeys_OnHotkeyProfileHotkeyChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_HotkeyActionType", "TabHotkeys_OnActionTypeChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_HotkeyActionContent", "TabHotkeys_OnActionContentChange")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hLV_HotkeyActionsList", "TabHotkeys_OnListviewClick")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_HotkeyAddNewProfile", "TabHotkeys_AddNewHotkeyProfile")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_HotkeyRemoveSelectedProfile", "TabHotkeys_RemoveSelectedHotkeyProfile")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_HotkeyActionTypeTip", "Universal_OnActionTypeTipLinkClick")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_EditHotkey", "TabHotkeys_ChangeHotkeyProfileHotkey")
 	}
 
 	TabHotkeys_SetUserSettings() {
@@ -2276,7 +2245,7 @@ Class GUI_Settings {
 
 	TabUpdating_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hBTN_CheckForUpdates,hDDL_CheckForUpdate,hCB_UseBeta,hCB_DownloadUpdatesAutomatically"
+		controlsList := "hCB_UseBeta,hCB_DownloadUpdatesAutomatically"
 
 		Loop, Parse, controlsList,% ","
 		{
@@ -2284,11 +2253,10 @@ Class GUI_Settings {
 
 			if (ctrlType="hCB")
 				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_OnCheckboxToggle", ctrlName)
-			if (ctrlName="hBTN_CheckForUpdates")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_CheckForUpdates")
-			if (ctrlName="hDDL_CheckForUpdate")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_OnCheckForUpdatesDDLChange", ctrlName)
 		}
+
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CheckForUpdates", "TabMiscUpdating_CheckForUpdates")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CheckForUpdate", "TabMiscUpdating_OnCheckForUpdatesDDLChange", GuiSettings_Controls.hDDL_CheckForUpdate)
 	}
 
 	TabMiscUpdating_SetUserSettings() {
