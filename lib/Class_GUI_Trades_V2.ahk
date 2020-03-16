@@ -152,7 +152,7 @@
 		
 		if (prevBtn[_buyOrSell]) {
 			GuiControl, %guiName%:-Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][prevBtn[_buyOrSell]]
-			GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions(whichTab)
+			; GUI_Settings.Customization_SellingBuying_SaveAllCurrentButtonActions(whichTab) ; Possible cause of the bug: "Clicking a button overwrite its actions with the previously selected button actions"
 		}
 		GuiControl, %guiName%:+Disabled,% GuiTrades[_buyOrSell]["Slot1_Controls"][thisBtn]
 		prevBtn[_buyOrSell] := thisBtn
