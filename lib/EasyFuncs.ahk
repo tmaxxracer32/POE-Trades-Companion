@@ -1,3 +1,8 @@
+Sort(varName, options="") {
+	Sort, varName, %options%
+	return varName
+}
+
 SetBatchLines(value) {
 	current := A_BatchLines
 	SetBatchLines,%value%
