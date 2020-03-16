@@ -1728,7 +1728,11 @@
 		Detect_HiddenWindows("On")
 		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
 			gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
-			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y+gtPos.H-(heightMin*winDPI), ,% heightMin*winDPI
+			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y+gtPos.H-( (heightMin*winDPI) ), ,% (heightMin*winDPI)
+			gtPosNow := GUI_Trades_V2.GetPosition(_buyOrSell)
+
+			if (gtPos.y+gtPos.h != gtPosNow.y+gtPosNow.h)
+				WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPosNow.y + ( (gtPos.y+gtPos.h) - (gtPosNow.y+gtPosNow.h) )
 		}
 		else
 			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% heightMin*winDPI
@@ -1764,7 +1768,11 @@
         Detect_HiddenWindows("On")
 		if (PROGRAM.SETTINGS.SETTINGS_MAIN.MinimizeInterfaceToTheBottom = "True") {
 			gtPos := GUI_Trades_V2.GetPosition(_buyOrSell)
-			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y+gtPos.H-(heightMax*winDPI), ,% heightMax*winDPI
+			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPos.Y+gtPos.H-( (heightMax*winDPI) ), ,% (heightMax*winDPI)
+			gtPosNow := GUI_Trades_V2.GetPosition(_buyOrSell)
+
+			if (gtPos.y+gtPos.h != gtPosNow.y+gtPosNow.h)
+				WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , ,% gtPosNow.y + ( (gtPos.y+gtPos.h) - (gtPosNow.y+gtPosNow.h) )
 		}
 		else {
 			WinMove,% "ahk_id " GuiTrades[_buyOrSell].Handle, , , , ,% heightMax*winDPI
