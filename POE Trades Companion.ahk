@@ -146,9 +146,9 @@ Start_Script() {
 	GAME.INI_FILE 					:= GAME.MAIN_FOLDER "\production_Config.ini"
 	GAME.INI_FILE_COPY 		 		:= PROGRAM.MAIN_FOLDER "\production_Config.ini"
 	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe"
-	GAME.CHALLENGE_LEAGUE 			:= "Blight"
-	GAME.STANDARD_LEAGUE_TRANS		:= {RUS:["Стандарт","Одна жизнь"], KOR:["스탠다드","하드코어"]}
-	GAME.CHALLENGE_LEAGUE_TRANS		:= {RUS:["Скверна"], KOR:["역병","하드코어 역병"]} ; Rest don't have translations. Translated whispers suck and are inconsistent
+	GAME.CHALLENGE_LEAGUE 			:= "Delirium"
+	GAME.STANDARD_LEAGUE_TRANS		:= {RUS:["Стандарт","Одна жизнь"], KOR:["스탠다드","하드코어"]} ; STD, HC
+	GAME.CHALLENGE_LEAGUE_TRANS		:= {RUS:["Делириум","Делириум Одна жизнь"], KOR:["환영","하드코어 환영"]} ; Rest don't have translations. Translated whispers suck and are inconsistent
 
 	PROGRAM.SETTINGS.SUPPORT_MESSAGE 	:= "@%buyerName% " PROGRAM.NAME ": view-thread/1755148"
 
