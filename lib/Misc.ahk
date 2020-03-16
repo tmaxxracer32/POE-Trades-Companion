@@ -1,4 +1,55 @@
-﻿Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") {
+﻿Get_CurrencyInfos(currency, dontWriteLogs=False) {
+/*		Compare the specified currency with poe.trade abridged currency names to retrieve the real currency name.
+		When the string is plural, check if the full list of currencies contains its non-plural counterpart.
+ */
+ 	global PROGRAM
+	isCurrencyListed := False
+
+	if RegExMatch(currency, "See Offer") {
+		Return {Name:currency, Is_Listed:False}
+	}
+	else if (!currency || currency = "" || currency = " ")
+		return {Name:currency, Is_Listed:False}
+
+	currency := RegExReplace(currency, "\d")
+	AutoTrimStr(currency) ; Remove whitespaces
+	lastChar := SubStr(currency, 0) ; Get last char
+	if (lastChar = "s") ; poeapp adds an "s" for >1 currencies
+		StringTrimRight, currencyWithoutS, currency, 1
+
+	if RegExMatch(currency, "O) Map$", pat) ; If ends with map
+        StringTrimRight, currencyWithoutMap, currency,% StrLen(pat.0) ; Remove it from name
+
+	currencyToCheckList := []
+	currencyToCheckList.Push(currency)
+	if (currencyWithoutS)
+		currencyToCheckList.Push(currencyWithoutS)
+	if (currencyWithoutMap)
+		currencyToCheckList.Push(currencyWithoutMap)
+
+	isCurrencyListed := False, currencyFullName := ""
+	Loop % currencyToCheckList.MaxIndex() {
+		thisCurrency := currencyToCheckList[A_Index]
+		if !IsIn(thisCurrency, PROGRAM.DATA.CURRENCY_LIST) {
+			currencyFullName := PROGRAM.DATA.POETRADE_CURRENCY_DATA[thisCurrency] ? PROGRAM.DATA.POETRADE_CURRENCY_DATA[thisCurrency]
+				:	PROGRAM.DATA.POEDOTCOM_CURRENCY_DATA[thisCurrency] ? PROGRAM.DATA.POEDOTCOM_CURRENCY_DATA[thisCurrency]
+				:	""
+			isCurrencyListed := currencyFullName?True:False
+		}
+		else { ; Currency is in list
+			isCurrencyListed := True, currencyFullName := thisCurrency
+		}
+
+		if (isCurrencyListed=True)
+			Break
+	}
+	if (!currencyFullName && dontWriteLogs=False) ; Unknown currency name 
+		AppendToLogs(A_ThisFunc "(currency=" currency "): Unknown currency name.")
+
+	Return {Name:currencyFullName, Is_Listed:isCurrencyListed}
+}
+
+Do_Action(actionType, actionContent="", _buyOrSell="", tabNum="", uniqueNum="") {
 	global PROGRAM, GuiTrades, GuiTrades_Controls
 	static prevNum, ignoreFollowingActions, prevActionType, prevActionContent
 	if !(tabNum) && (_buyOrSell)
