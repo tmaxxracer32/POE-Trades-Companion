@@ -1,83 +1,86 @@
 ﻿Class GUI_MyStats {
-	
-	Create(param="") {
-		global PROGRAM, GAME
+
+	Create(params="") {
+		global PROGRAM, GAME, SKIN
 		global GuiMyStats, GuiMyStats_Controls, GuiMyStats_Submit
 		static guiCreated
-
+		windowsDPI := Get_DpiFactor()
+	
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
+		; Initialize gui arrays
 		GUI_MyStats.Destroy()
-		Gui.New("MyStats", "-Caption +Resize -MaximizeBox +MinSize720x480  +LabelGUI_MyStats_ +HwndhGuiMyStats", "POE TC - " PROGRAM.TRANSLATIONS.TrayMenu.Stats)
-		; Gui.New("MyStats", "-Caption -Border +LabelGUI_MyStats_ +HwndhGuiMyStats", "MyStats")
+		Gui.New("MyStats", "-Caption +Resize -MaximizeBox +MinSize720x480 +LabelGUI_MyStats_ +HwndhGuiMyStats", "POE TC - " PROGRAM.TRANSLATIONS.TrayMenu.Stats)
 		GuiMyStats.Is_Created := False
+		GuiMyStats.Windows_DPI := windowsDPI
 
 		guiCreated := False
-		guiFullHeight := 480, guiFullWidth := 720, borderSize := 1, borderColor := "Red"
+		guiFullHeight := 480, guiFullWidth := 720, borderSize := 1, borderColor := "Black"
 		guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
-		leftMost := borderSize, rightMost := guiWidth-borderSize
-		upMost := borderSize, downMost := guiHeight-borderSize
+		leftMost := borderSize, rightMost := leftMost+guiWidth
+		upMost := borderSize, downMost := upMost+guiHeight
+	
+		GuiMyStats.Style_Tab := Style_Tab := [ [0, "0x132f44", "", "0x0f8fff"] ; normal
+			,  [0, "0x275474"] ; hover
+			,  [0, "0x275474"]  ; press
+			,  [0, "0x1c4563" ] ] ; default
 
-		GuiMyStats.Style_Tab := Style_Tab := [ [0, "0xEEEEEE", "", "Black", 0, , ""] ; normal
-			, [0, "0xdbdbdb", "", "Black", 0] ; hover
-			, [3, "0x44c6f6", "0x098ebe", "Black", 0]  ; press
-			, [3, "0x44c6f6", "0x098ebe", "White", 0 ] ] ; default
+		GuiMyStats.Style_CloseBtn := Style_CloseBtn := [ [0, "0xe01f1f", "", "White"] ; normal
+			, [0, "0xb00c0c"] ; hover
+			, [0, "0x8a0a0a"] ] ; press
 
-		GuiMyStats.Style_RedBtn := Style_RedBtn := [ [0, "0xff5c5c", "", "White", 0, , ""] ; normal
-			, [0, "0xff5c5c", "", "White", 0] ; hover
-			, [3, "0xe60000", "0xff5c5c", "Black", 0]  ; press
-			, [3, "0xff5c5c", "0xe60000", "White", 0 ] ] ; default
+		GuiMyStats.Style_MinimizeBtn := Style_MinimizeBtn := [ [0, "0x0fa1d7", "", "White"] ; normal
+			, [0, "0x0b7aa2"] ; hover
+			, [0, "0x096181"] ]  ; press
+
+		GuiMyStats.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
+			, [0, "0x355e73"] ; hover
+			, [0, "0x122630"] ] ; press
+
+		; Used for coloring DropDownList controls
+		odcObj := GUI_MyStats.CreateODCObj()
 
 		/* * * * * * *
 		* 	CREATION
 		*/
 
 		Gui.Margin("MyStats", 0, 0)
-		Gui.Color("MyStats", "White")
-		Gui.Font("MyStats", "Segoe UI", "8")
+		Gui.Color("MyStats", "0x1c4563", "0x274554")
+		Gui.Font("MyStats", "Segoe UI", "8", "5", "0x80c4ff")
+		OD_Colors.SetItemHeight("S" GuiMyStats.Font_Size, GuiMyStats.Font)
 		Gui, MyStats:Default ; Required for LV_ cmds
 
 		; *	* Borders
 		/*
-		Upon resizing a PROGRESS control, it will have some kind of "border" around it
-		This end up making the border greyish as the actual PROGRESS control color starts 1-2 px away
-		Since this GUI is resizable, we use a workaround that consists of adding a TEXT control with a black border via the 0x7 style
-
-		bordersPositions := [{X:0, Y:0, W:guiFullWidth, H:borderSize}, {X:0, Y:0, W:borderSize, H:guiFullHeight} ; Top and Left
-			,{X:0, Y:downMost, W:guiFullWidth, H:borderSize}, {X:rightMost, Y:0, W:borderSize, H:guiFullHeight}] ; Bottom and Right
-		Loop 4 ; Left/Right/Top/Bot borders
-			Gui.Add("MyStats", "Progress", "x" bordersPositions[A_Index]["X"] " y" bordersPositions[A_Index]["Y"] " w" bordersPositions[A_Index]["W"] " h" bordersPositions[A_Index]["H"] " hwndhPROGRESS_Border" A_Index " cRed -Smooth", 100)
+		Can't use the traditional way of using a PROGRESS control as a border bar because this GUI is resizeable
+		When resizing a PROGRESS control, a gray border appears around it
+		This messes up with our border as the actual PROGRESS control color is a few pixels away
+		Instead, we use a TEXT control with the +0x7 style, which adds a black border around it
 		*/
 		Gui.Add("MyStats", "Text", "x0 y0 w" guiWidth " h" guiHeight " hwndhTEXT_Borders 0x7 BackgroundTrans")
-		
 
 		; * * Title bar
-		Gui.Add("MyStats", "Text", "x" leftMost " y" upMost " w" guiWidth-(borderSize*2)-31 " h25 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
-		Gui.Add("MyStats", "Progress", "xp yp wp hp hwndhPROGRESS_TitleBackground Background359cfc") ; Title bar background
-		Gui.Add("MyStats", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans hwndhTEXT_TitleText", "POE Trades Companion - " PROGRAM.TRANSLATIONS.TrayMenu.Stats) ; Title bar text
-		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("MyStats", "Text", "x" leftMost " y" upMost " w" guiWidth-30-30 " h20 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
+		Gui.Add("MyStats", "Progress", "xp yp wp hp hwndhPROGRESS_TitleBackground Background0b6fcc") ; Title bar background
+		Gui.Add("MyStats", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - " PROGRAM.TRANSLATIONS.TrayMenu.Stats) ; Title bar text
+		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x+0 yp w30 hp 0x200 Center hwndhBTN_MinimizeGUI", "-", Style_MinimizeBtn, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size*1.20)
+		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x+0 yp wp hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
+		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hTEXT_HeaderGhost", "DragGui", GuiMyStats.Handle)
+		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_MinimizeGUI", "Minimize")
+		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_CloseGUI", "Close")		
 
-        ; * * Filtering options
-        Gui.Add("MyStats", "GroupBox", "x" leftMost+10 " y+10 w" guiWidth-20 " R12 c000000 hwndhGB_FilteringOptions", PROGRAM.TRANSLATIONS.GUI_MyStats.hGB_FilteringOptions)
-        Gui.Add("MyStats", "Text", "x" leftMost+25 " yp+25 w40 hwndhTEXT_BuyerFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_BuyerFilter)
-        Gui.Add("MyStats", "DropDownList", "x+0 yp-2 vvDDL_BuyerFilter hwndhDDL_BuyerFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w50 hwndhTEXT_ItemFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_ItemFilter)
-        Gui.Add("MyStats", "DropDownList", "x+5 yp-2 ToolTip hwndhDDL_ItemFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w40 hwndhTEXT_LeagueFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_LeagueFilter)
-        Gui.Add("MyStats", "DropDownList", "x+5 yp-2 hwndhDDL_LeagueFilter w160", "All")
+		; ** Filters
+		Gui.Add("MyStats", "Text", "x" leftMost+5 " y" upMost+25, "Filters:`n   - To be added -")
 
-        Gui.Add("MyStats", "Text", "x" leftMost+25 " y+20 w40 hwndhTEXT_GuildFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_GuildFilter)
-        Gui.Add("MyStats", "DropDownList", "x+0 yp-2 hwndhDDL_GuildFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w50 hwndhTEXT_CurrencyFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_CurrencyFilter)
-        Gui.Add("MyStats", "DropDownList", "x+5 yp-2 hwndhDDL_CurrencyFilter w160", "All")
-        Gui.Add("MyStats", "Text", "x+20 yp+2 w40 hwndhTEXT_TabFilter", PROGRAM.TRANSLATIONS.GUI_MyStats.hTEXT_TabFilter)
-        Gui.Add("MyStats", "DropDownList", "x+5 yp-2 hwndhDDL_TabFilter w160", "All")
-
-		ctrlPos := Get_ControlCoords("MyStats", GuiMyStats_Controls.hDDL_TabFilter)
-		Gui.Add("MyStats", "Button", "x" leftMost+25 " y+10 w" ctrlPos.X+ctrlPos.W-(leftMost+25) " hwndhBTN_ApplyFilters", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ApplyFilters)		
-		Gui.Add("MyStats", "Button", "x" ctrlPos.X+ctrlPos.W-115 " y+10 w115 hwndhBTN_ExportAsCSV", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ExportAsCSV)
+		; * * Buttons
+		; imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x" leftMost+25 " y+10 w" ctrlPos.X+ctrlPos.W-(leftMost+25) " hwndhBTN_ApplyFilters", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ApplyFilters, Style_Button, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
+		; Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_ApplyFilters", "ApplyFilters")
 
         ; * * Stats list
-        Gui.Add("MyStats", "ListView", "x" leftMost+10 " y+30 w" guiWidth-20 " R17 +Grid hwndhLV_Stats", PROGRAM.TRANSLATIONS.GUI_MyStats.hLV_Stats)
+        Gui.Add("MyStats", "ListView", "x" leftMost+150 " y20 w" guiWidth-leftMost-150 " R17 hwndhLV_Stats", PROGRAM.TRANSLATIONS.GUI_MyStats.hLV_Stats), lvPos := GUI.GetControlPos("MyStats", "hLV_Stats"), Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hLV_Stats", "OnLVClick")
+		LV_SetSelColors(GuiMyStats_Controls.hLV_Stats, "0x0b6fcc", "0xFFFFFF")
+
+		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x" leftMost " y" lvPos.y+lvPos.h-25 " h25 w150 hwndhBTN_ExportAsCSV", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ExportAsCSV, Style_Button, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
+		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_ExportAsCSV", "ExportCurrentListAsCSV")
 
 		; * * Stats parse
 		GUI_MyStats.UpdateData()
@@ -85,14 +88,9 @@
 		GUI_MyStats.SetFilter("League", StrSplit(GAME.CHALLENGE_LEAGUE, ",").1)
 		GUI_MyStats.ApplyFilters()
 
-		; Gui, Stats: Show, AutoSize NoActivate
-
-
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
 		*/
-
-		GUI_MyStats.EnableSubroutines()
 
 		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x83, "WM_NCCALCSIZE")
 		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x84, "WM_NCHITTEST")
@@ -107,51 +105,76 @@
         Return
 
         Gui_MyStats_Size:
-            GUI_MyStats.Resize()
+            GUI_MyStats.OnResize()
         Return
 
 		Gui_MyStats_ContextMenu:
 			ctrlHwnd := Get_UnderMouse_CtrlHwnd()
 			GuiControlGet, ctrlName, MyStats:,% ctrlHwnd
 
-			Gui_MyStats.ContextMenu(ctrlHwnd, ctrlName)
+			if (ctrlHwnd = GuiMyStats_Controls.hLV_Stats)
+				Gui_MyStats.OnListviewRightClick()
+			else 
+				Gui_MyStats.ContextMenu(ctrlHwnd, ctrlName)
 		Return
     }
 
-    DisableSubroutines() {
-		GUI_MyStats.ToggleSubroutines("Disable")	
-	}
-	EnableSubroutines() {
-		GUI_MyStats.ToggleSubroutines("Enable")	
-	}
+	OnFilterCheckboxToggle(ctrlName) {
+		global GuiMyStats
+		global GuiMyStatsFilter, GuiMyStatsFilter_Controls, GuiMyStatsFilter_Submit
+		isEnabled := GUI_MyStats.Submit(ctrlName)
+		
+		if (isEnabled) {
+			fadeOutCode := GUI_MyStats.ShowFadeout()
 
-	ToggleSubroutines(enableOrDisable) {
-		global GuiMyStats, GuiMyStats_Controls
+			myStatsGuiPos := GUI_MyStats.GetPosition()
+			Gui.Destroy("MyStatsFilter")
+			Gui.New("MyStatsFilter", "-Caption -Border +Toolwindow +Lastfound +AlwaysOnTop +HwndhGuiMyStatsFilter ")
+			Gui.Margin("MyStatsFilter", 0, 0)
+			Gui.Color("MyStatsFilter", "334a5b", "374a58")
+			Gui.Font("MyStatsFilter", "Segoe UI", "8", "5", "0x80c4ff")
 
-		for ctrlName, ctrlHandle in GuiMyStats_Controls {
-			loopedCtrl := ctrlName
-			RegExMatch(loopedCtrl, "\D+", loopedCtrl_NoNum)
-			RegExMatch(loopedCtrl, "\d+", loopedCtrl_NumOnly)
+			guiFullWidth := 800, guiFullHeight := 600, borderSize := 1, borderColor := "Black"
+			guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
+			leftMost := borderSize, rightMost := leftMost+guiWidth
+			upMost := borderSize, downMost := upMost+guiHeight
 
-			if (enableOrDisable = "Disable")
-				GuiControl, MyStats:-g,% GuiMyStats_Controls[loopedCtrl]
-			else if (enableOrDisable = "Enable") {
-				if (loopedCtrl = "hTEXT_HeaderGhost")
-					__f := GUI_MyStats.DragGui.bind(GUI_MyStats, GuiMyStats.Handle)
-				else if (loopedCtrl = "hBTN_CloseGUI")
-					__f := GUI_MyStats.Close.bind(GUI_MyStats)
-				else if (loopedCtrl = "hLV_Stats")
-					__f := GUI_MyStats.OnLVClick.bind(GUI_MyStats)
-				else if (loopedCtrl = "hBTN_ExportAsCSV")
-					__f := GUI_MYStats.ExportCurrentListAsCSV.bind(GUI_MYStats)
-				else if (loopedCtrl = "hBTN_ApplyFilters")
-					__f := GUI_MyStats.ApplyFilters.bind(GUI_MYStats)
-				else
-					__f := 
-
-				if (__f)
-					GuiControl, MyStats:+g,% GuiMyStats_Controls[loopedCtrl],% __f 
+			buyers := GuiMyStats.FiltersAll.Buyer
+			Loop, Parse, buyers, |
+			{
+				xpos := A_Index=1?leftMost+5 : xpos, ypos := A_Index=1?upMost+5 : "+15"
+				Gui.Add("MyStatsFilter", "Checkbox", "x" xpos " y" ypos, A_LoopField)
 			}
+
+			guiX := myStatsGuiPos.X-( (guiFullWidth-myStatsGuiPos.W)/2 ), guiY := myStatsGuiPos.Y-( (guiFullHeight-myStatsGuiPos.H)/2 )
+			Gui.Show("MyStatsFilter", "x" guiX " y" guiY " w" guiFullWidth " h" guiFullHeight " NoActivate")
+
+			Sleep 2000
+
+			Gui.Destroy("MyStatsFilter")
+			
+			GUI_MyStats.HideFadeout(fadeOutCode)
+		}
+		else {
+
+		}
+	}
+
+	DisableSubroutines() {
+		controlsList := "hTEXT_HeaderGhost,hBTN_CloseGUI,hLV_Stats,hBTN_ExportAsCSV,hBTN_ApplyFilters"
+
+		Loop, Parse, controlsList,% ","
+		{
+			GUI.EnableControlFunction("GUI_MyStats", "MyStats", A_LoopField)
+		}
+	}
+
+	EnableSubroutines() {
+		controlsList := "hTEXT_HeaderGhost,hBTN_CloseGUI,hLV_Stats,hBTN_ExportAsCSV,hBTN_ApplyFilters"
+
+		Loop, Parse, controlsList,% ","
+		{
+			GUI.DisableControlFunction("GUI_Settings", "Settings", A_LoopField)
 		}
 	}
 
@@ -171,39 +194,26 @@
 
 	StatsData_AddRow(num, what) {
 		loopedData := what
-		Loop {
-			; Get all the Other_xx and set it in a single string
-			otherIndex := A_Index
-			loopedDataOther := loopedData["Other_" otherIndex]
-			if (loopedDataOther != "" && loopedDataOther != "ERROR")
-				loopedOther .= (loopedOther)?("     " otherIndex ": " loopedDataOther):(otherIndex ": " loopedDataOther)
-			else
-				Break
 
-			if (otherIndex > 100) {
-				AppendToLogs("GUI_MyStats.StatsData_AddRow(): Broke out of loop after 100")
-				Break
-			}
-			otherIndex--
-			; Add the content into the lv line
-			loopedOther := (otherIndex)?(otherIndex " message ->    " loopedOther):("")
-		}
+		timeStamp := loopedData.TimeStamp
+		FormatTime, timeStamp, %timeStamp%, yyyy-MM-dd HH:mm
 
-		LV_Add("", loopedData.Index, loopedData.Date_YYYYMMDD, loopedData.Time, loopedData.Guild, loopedData.Buyer, loopedData.Item
-			, loopedData.Price, loopedData.Location_League, loopedData.Location_Tab, loopedOther)
+		LV_Add("", loopedData.Index, timeStamp, loopedData.Guild, loopedData.Buyer, loopedData.Item
+			, loopedData.Price, loopedData.League, loopedData.StashTab)
 	}
 
 	RemoveSelectedEntry() {
 		; TO_DO_V2 TRADES_SELL_HISTORY_FILE
 		global PROGRAM
 		global GuiMyStats, GuiMyStats_Controls
-		iniFile := PROGRAM.TRADES_HISTORY_FILE
-		rowID := GuiMyStats.SelectedRow
+		historyFile := PROGRAM.TRADES_SELL_HISTORY_FILE
+		historyDataFromFile := JSON_Load(historyFile)
 
 		GUI_MyStats.SetDefaultListView("hLV_Stats")
+		selectedRow := GUI_MyStats.GetListviewSelectedRow()
 		Loop {
 			LV_GetText(c%A_Index%_title, 0, A_Index)
-			LV_GetText(c%A_Index%_content, rowID, A_Index)
+			LV_GetText(c%A_Index%_content, selectedRow, A_Index)
 			if (c%A_Index%_title && c%A_Index%_title != "" && c%A_Index%_title != "Other") {
 				title := c%A_Index%_title, content := c%A_Index%_content
 				msg := msg ? msg "`n" title ": `t`t" content : title ": `t`t" content
@@ -217,175 +227,89 @@
 		MsgBox(4096+4, , boxTxt)
 		IfMsgBox, Yes
 		{
-			GUI_MyStats.DisableSubroutines()
-			INI.Set(iniFile, c1_content, "Ignore", "True")
-			LV_Delete(rowID)
-			GUI_MyStats.EnableSubroutines()
+			fadeoutCode := GUI_MyStats.ShowFadeout()
+			GUI_MyStats.SetDefaultListView("hLV_Stats")
+			LV_Delete(selectedRow)
+
+			historyDataFromFile[c1_content].Ignore := "True"
+			jsonText := JSON.Dump(historyDataFromFile, "", "`t")
+			hFile := FileOpen(historyFile, "w", "UTF-8")
+			hFile.Write(jsonText)
+			hFile.Close()
+
+			GUI_MyStats.HideFadeout(fadeoutCode)
 		}
 	}
 
 	GetData() {
-		; TO_DO_V2
 		global PROGRAM
-		statsIniFile := PROGRAM.TRADES_HISTORY_FILE
+		historyFile := PROGRAM.TRADES_SELL_HISTORY_FILE
 
-		statsData := class_EasyIni(statsIniFile)
-		EasyIni_Remove(statsData, "GENERAL")
+		historyDataFromFile := JSON_Load(historyFile)
+		historyDataForInterface := {}
+		for key in historyDataFromFile {
+			if !IsNum(key)
+				Continue
 
-		Loop % statsData.MaxIndex() {
-			statsData[A_Index].Index := A_Index
+			historyDataForInterface.Push(ObjFullyClone(historyDataFromFile[key]))
 		}
 
-		return statsData
+		return historyDataForInterface
 	}
 
 	UpdateData() {
 		global GuiMyStats, GuiMyStats_Controls
-		static allBuyers, allGuilds, allItems, allCurrency, allLeagues, allTabs, allItems_parsed, listedCurrencies, unlistedCurrencies
-
-		; Set GUI as default, needed for LV cmds. Set LV as default for gui.
 		GUI_MyStats.SetDefaultListView("hLV_Stats")
-
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 
-		; Get data and parse it
-		dataMaxIndex := GuiMyStats.Stats_Data.MaxIndex()
-		data := GUI_MyStats.GetData(), GuiMyStats.Stats_Data := data
+		currentEntriesCount := GuiMyStats.HistoryData.Count() ? GuiMyStats.HistoryData.Count() : 0
+		sellHistory := GUI_MyStats.GetData()
+		newEntriesCount := sellHistory.Count() ? sellHistory.Count() : 0
+		GuiMyStats.HistoryData := "", GuiMyStats.HistoryData := ObjFullyClone(sellHistory)
 
-		loopNum := dataMaxIndex?data.MaxIndex()-dataMaxIndex : data.MaxIndex()
-		GuiControl,% "MyStats:+Count" loopNum,% GuiMyStats_Controls.hLV_Stats
+		GuiControl,% "MyStats:+Count" newEntriesCount,% GuiMyStats_Controls.hLV_Stats
+		entriesCountToAdd := newEntriesCount-currentEntriesCount
 
-		bak := {allBuyers:allBuyers, allGuilds:allGuilds, allItems:allItems, allCurrency:allCurrency, allLeagues:allLeagues, allTabs:allTabs
-		, allItems_parsed:allItems_parsed, listedCurrencies:listedCurrencies, unlistedCurrencies:unlistedCurrencies}
+		if !(entriesCountToAdd)
+			return
 
-		Loop % loopNum {
-			loopIndex := dataMaxIndex?dataMaxIndex+A_Index:A_Index
-			loopedData := data[loopIndex]
-			if (loopedData.Ignore != "True") {
+		loopIndex := currentEntriesCount?currentEntriesCount:1
+		Loop % entriesCountToAdd {
+			GuiMyStats.HistoryData[loopIndex].Index := loopIndex
+			currentLoopedItem := ObjFullyClone(GuiMyStats.HistoryData[loopIndex])
 
-				; Replace any possible comma to avoid interfer with IsIn()
-				loopedBuyer := StrReplace(loopedData.Buyer, ",", "{COMMA}")
-				loopedGuild := StrReplace(loopedData.Guild, ",", "{COMMA}")
-				loopedItem := StrReplace(loopedData.Item_Name, ",", "{COMMA}")
-				loopedCurrency := StrReplace(loopedData.Price, ",", "{COMMA}")
-				loopedLeague := StrReplace(loopedData.Location_League, ",", "{COMMA}")
-				loopedTab := StrReplace(loopedData.Location_Tab, ",", "{COMMA}")
+			; if (currentLoopedItem.Ignore = "True")
+				; Continue
 
-				; Create the lists
-				if (loopedBuyer)
-					allBuyers .= (!allBuyers)?(loopedBuyer)
-					: !IsIn(loopedBuyer, allBuyers)?("," loopedBuyer) : ("")
-				if (loopedGuild)
-					allGuilds .= (!allGuilds)?(loopedGuild)
-					: !IsIn(loopedGuild, allGuilds)?("," loopedGuild) : ("")
-				if (loopedItem)
-					allItems .= (!allItems)?(loopedItem)
-					: !IsIn(loopedItem, allItems)?("," loopedItem) : ("")
-				if (loopedCurrency)
-					allCurrencies .= (!allCurrencies)?(loopedCurrency)
-					: !IsIn(loopedCurrency, allCurrencies)?("," loopedCurrency) : ("")
-				if (loopedLeague)
-					allLeagues .= (!allLeagues)?(loopedLeague)
-					: !IsIn(loopedLeague, allLeagues)?("," loopedLeague) : ("")
-				if (loopedTab)
-					allTabs .= (!allTabs)?(loopedTab)
-					: !IsIn(loopedTab, allTabs)?("," loopedTab) : ("")
-			}
+			for key, value in currentLoopedItem ; Replacing commas to avoid interfering with the IsIn() function
+				currentLoopedItem[key] := StrReplace(value, ",", "{COMMA}")
+			
+			if (currentLoopedItem.Buyer)
+				buyersList := !buyersList ? currentLoopedItem.Buyer : !IsIn(currentLoopedItem.Buyer, buyersList) ? buyersList "," currentLoopedItem.Buyer : buyersList
+			if (currentLoopedItem.Guild)
+				guidsList := !guidsList ? currentLoopedItem.Guild : !IsIn(currentLoopedItem.Guild, guidsList) ? guidsList "," currentLoopedItem.Guild : guidsList
+			if (currentLoopedItem.Item)
+				itemsList := !itemsList ? currentLoopedItem.Item : !IsIn(currentLoopedItem.Item, itemsList) ? itemsList "," currentLoopedItem.Item : itemsList
+			if (currentLoopedItem.ItemCurrency)
+				itemsList := !itemsList ? currentLoopedItem.ItemCurrency : !IsIn(currentLoopedItem.ItemCurrency, itemsList) ? itemsList "," currentLoopedItem.ItemCurrency : itemsList
+			if (currentLoopedItem.PriceCurrency)
+				priceCurrencyList := !priceCurrencyList ? currentLoopedItem.PriceCurrency : !IsIn(currentLoopedItem.PriceCurrency, priceCurrencyList) ? priceCurrencyList "," currentLoopedItem.PriceCurrency : priceCurrencyList
+			if (currentLoopedItem.League)
+				leaguesList := !leaguesList ? currentLoopedItem.League : !IsIn(currentLoopedItem.League, leaguesList) ? leaguesList "," currentLoopedItem.League : leaguesList
+			if (currentLoopedItem.StashTab)
+				stashTabsList := !stashTabsList ? currentLoopedItem.StashTab : !IsIn(currentLoopedItem.StashTab, stashTabsList) ? stashTabsList "," currentLoopedItem.StashTab : stashTabsList
+
+			if (A_Index <= currentEntriesCount+entriesCountToAdd)
+				loopIndex++
 		}
 
-		; Parse items, in case its currency
-		if (allItems != bak.allItems) {
-			Loop, Parse, allItems,% ","
-			{
-				cInfos := Get_CurrencyInfos(A_LoopField, dontWriteLogs:=True)
-				if (cInfos.Is_Listed) && !IsIn(cInfos.Name, allItems_parsed)
-					allItems_parsed .= (!allItems_parsed)?(cInfos.Name)
-					: ("," cInfos.Name)
-				else
-					allItems_parsed .= (!allItems_parsed)?(A_LoopField)
-					: ("," A_LoopField)
-			}
-		}
-
-		; Parse currencies, separate unlisted and listed
-		if (allCurrencies != bak.allCurrencies) {
-			Loop, Parse, allCurrencies,% ","
-			{
-				cInfos := Get_CurrencyInfos(A_LoopField, dontWriteLogs:=True)
-				if (cInfos.Is_Listed) && !IsIn(cInfos.Name, listedCurrencies)
-					listedCurrencies .= (!listedCurrencies)?(cInfos.Name)
-					: !IsIn(cInfos.Name, listedCurrencies)?("," cInfos.Name) : ("")
-				else if (!cInfos.Is_Listed) && !IsIn(cInfos.Name, unlistedCurrencies)
-					unlistedCurrencies .= (!unlistedCurrencies)?(cInfos.Name)
-					: !IsIn(cInfos.Name, unlistedCurrencies)?("," cInfos.Name) : ("")
-			}
-		}
-
-		; Replace comma separator with vertical bar, put back comma in place of temporary str
-		; -> Sorting lists -> Declare global var -> Set GUI controls
-		filters := GUI_MyStats.GetFilter("All")
-		if (allBuyers != bak.allBuyers) {
-			allBuyers := StrReplace(allBuyers, ",", "|"), StrReplace(allBuyers, "{COMMA}", ",")
-			Sort, allBuyers,% "UD|"
-			GuiMyStats.All_Buyers := allBuyers
-			GuiControl, MyStats:,% GuiMyStats_Controls.hDDL_BuyerFilter,% "|All|" allBuyers
-			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_BuyerFilter,% filters.Buyer
-		}
-		if (allGuilds != bak.allGuilds) {
-			allGuilds := StrReplace(allGuilds, ",", "|"), StrReplace(allGuilds, "{COMMA}", ",")
-			Sort, allGuilds,% "UD|"
-			GuiMyStats.All_Guilds := allGuilds
-			GuiControl, MyStats:,% GuiMyStats_Controls.hDDL_GuildFilter,% "|All|No guild|" allGuilds
-			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_GuildFilter,% filters.Guild
-		}
-		if (allItems != bak.allItems) {
-			allItems := StrReplace(allItems, ",", "|"), StrReplace(allItems, "{COMMA}", ",")
-			Sort, allItems,% "UD|"
-			GuiMyStats.All_Items := allItems	
-		}
-		if (allItems_parsed != bak.allItems_parsed) {
-			allItems_parsed := StrReplace(allItems_parsed, ",", "|"), StrReplace(allItems_parsed, "{COMMA}", ",")
-			Sort, allItems_parsed,% "UD|"
-			GuiMyStats.All_Items_Parsed := allItems_parsed
-			GuiControl, MyStats:,% GuiMyStats_Controls.hDDL_ItemFilter,% "|All|" allItems_parsed
-			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_ItemFilter,% filters.Item
-		}
-		if (allCurrencies != bak.allCurrencies) {
-			allCurrencies := StrReplace(allCurrencies, ",", "|"), StrReplace(allCurrencies, "{COMMA}", ",")
-			Sort, allCurrencies,% "UD|"
-			GuiMyStats.All_Currencies := allCurrencies
-		}
-		if (listedCurrencies != bak.listedCurrencies) {
-			listedCurrencies := StrReplace(listedCurrencies, ",", "|"), StrReplace(listedCurrencies, "{COMMA}", ",")
-			Sort, listedCurrencies,% "UD|"
-			GuiMyStats.All_ListedCurrencies := listedCurrencies
-		}
-		if (unlistedCurrencies != bak.unlistedCurrencies) {
-			unlistedCurrencies := StrReplace(unlistedCurrencies, ",", "|"), StrReplace(unlistedCurrencies, "{COMMA}", ",")
-			Sort, unlistedCurrencies,% "UD|"
-			GuiMyStats.All_UnlistedCurrencies := unlistedCurrencies
-		}
-		if (allCurrencyTypes != bak.allCurrencyTypes) {
-			allCurrencyTypes := unlistedCurrencies?listedCurrencies "| |Unknown: |" unlistedCurrencies : listedCurrencies
-			Sort, allCurrencyTypes,% "UD|"
-			GuiMyStats.All_CurrencyTypes := allCurrencyTypes
-			GuiControl, MyStats:,% GuiMyStats_Controls.hDDL_CurrencyFilter,% "|All|" allCurrencyTypes
-			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_CurrencyFilter,% filters.Currency
-		}
-		if (allLeagues != bak.allLeagues) {
-			allLeagues := StrReplace(allLeagues, ",", "|"), StrReplace(allLeagues, "{COMMA}", ",")
-			Sort, allLeagues,% "UD|"
-			GuiMyStats.All_Leagues := allLeagues
-			GuiControl, MyStats:,% GuiMyStats_Controls.hDDL_LeagueFilter,% "|All|" allLeagues
-			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_LeagueFilter,% filters.League
-		}
-		if (allTabs != bak.allTabs) {
-			allTabs := StrReplace(allTabs, ",", "|"), StrReplace(allTabs, "{COMMA}", ",")
-			Sort, allTabs,% "UD|"
-			GuiMyStats.All_Tabs := allTabs
-			GuiControl, MyStats:,% GuiMyStats_Controls.hDDL_TabFilter,% "|All|" allTabs
-			GuiControl, MyStats:ChooseString,% GuiMyStats_Controls.hDDL_TabFilter,% filters.Tab
-		}	
+		GuiMyStats.FiltersAll := {}
+		buyersList := StrReplace(buyersList, ",", "|"), StrReplace(buyersList, "{COMMA}", ","), Sort(buyersList, "UD|"), GuiMyStats.FiltersAll.Buyer := buyersList
+		guidsList := StrReplace(guidsList, ",", "|"), StrReplace(guidsList, "{COMMA}", ","), Sort(guidsList, "UD|"), GuiMyStats.FiltersAll.Guild := guidsList
+		itemsList := StrReplace(itemsList, ",", "|"), StrReplace(itemsList, "{COMMA}", ","), Sort(itemsList, "UD|"), GuiMyStats.FiltersAll.ItemName := itemsList
+		priceCurrencyList := StrReplace(priceCurrencyList, ",", "|"), StrReplace(priceCurrencyList, "{COMMA}", ","), Sort(priceCurrencyList, "UD|"), GuiMyStats.FiltersAll.PriceCurrency := priceCurrencyList
+		leaguesList := StrReplace(leaguesList, ",", "|"), StrReplace(leaguesList, "{COMMA}", ","), Sort(leaguesList, "UD|"), GuiMyStats.FiltersAll.League := leaguesList
+		stashTabsList := StrReplace(stashTabsList, ",", "|"), StrReplace(stashTabsList, "{COMMA}", ","), Sort(stashTabsList, "UD|"), GuiMyStats.FiltersAll.StashTab := stashTabsList
 
 		SetControlDelay(delay), SetBatchLines(batch)
 	}
@@ -421,64 +345,109 @@
 
 	ApplyFilters() {
 		global GuiMyStats, GuiMyStats_Controls
-
 		GUI_MyStats.SetDefaultListView("hLV_Stats")
-
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
-		GuiControl, -Redraw,% GuiMyStats_Controls.hLV_Stats
 
-		filters := GUI_MyStats.GetFilter("All")
+		filters := GUI_MyStats.GetFilter("All"), LV_Delete(), addIndex := 0
 
-		LV_Delete()
-		addIndex := 1
-		Loop % GuiMyStats.Stats_Data.MaxIndex() {
-			loopIndex := A_Index
-			loopedData := GuiMyStats.Stats_Data[loopIndex]
-			if (loopedData.Ignore != "True") {
+		Loop % GuiMyStats.HistoryData.Count() {
+			currentLoopedItem := ObjFullyClone(GuiMyStats.HistoryData[A_Index])
 
-				cInfos_price := Get_CurrencyInfos(loopedData.Price, dontWriteLogs:=True)
-				cInfos_item := Get_CurrencyInfos(loopedData.Item, dontWriteLogs:=True)
-				
-				if ( (loopedData.Buyer = filters.Buyer) || (filters.Buyer = "All") )
-				&& ( (loopedData.Item = filters.Item) || (cInfos_item.Is_Listed && cInfos_item.Name = filters.Item) || (filters.Item = "All") )
-				&& ( (loopedData.Location_League = filters.League) || (filters.League = "All") )
-				&& ( (loopedData.Guild = filters.Guild) || (filters.Guild = "All") || (filters.Guild = "No guild" && loopedData.Guild = "") )
-				&& ( (cInfos_price.Name = filters.Currency) || (filters.Currency = "All") )
-				&& ( (loopedData.Location_Tab = filters.Tab) || (filters.Tab = "All") ) {
-					GUI_MyStats.StatsData_AddRow(addIndex, loopedData)
-					addindex++
-				}
-			}
+			if (currentLoopedItem.Ignore = "True")
+				Continue
+
+		; 	if ( (currentLoopedItem.Buyer = filters.Buyer) || (filters.Buyer = "All") )
+		; 		&& ( (currentLoopedItem.Item = filters.Item)  || (filters.Item = "All") )
+		; 		&& ( (currentLoopedItem.League = filters.League) || (filters.League = "All") )
+		; 		&& ( (currentLoopedItem.Guild = filters.Guild) || (filters.Guild = "All") || (filters.Guild = "No guild" && currentLoopedItem.Guild = "") )
+		; 		&& ( (currentLoopedItem.PriceCurrency = filters.Currency) || (filters.Currency = "All") )
+		; 		&& ( (currentLoopedItem.StashTab = filters.Tab) || (filters.Tab = "All") ) {
+					addIndex++
+					GUI_MyStats.StatsData_AddRow(addIndex, currentLoopedItem)
+		; 		}
 		}
 
-		; Autoadjust col
-		Loop % LV_GetCount("Col")
-			LV_ModifyCol(A_Index, "AutoHdr NoSort")
-		LV_ModifyCol(10, "NoSort")
-		LV_ModifyCol(10, 100)
-
-		SetControlDelay(delay), SetBatchLines(batch)
-
-		GuiControl, +Redraw,% GuiMyStats_Controls.hLV_Stats
+		GUI_MyStats.AdjustListviewHeaders()
 	}
 
 	ExportCurrentListAsCSV() {
 		global PROGRAM, GuiMyStats_Controls
-		GUI_MyStats.SetDefaultListView("hLV_Stats") ; neccessary to use LV cmds
+		GUI_MyStats.SetDefaultListView("hLV_Stats")
 
 		; Setting file path
-		filePath := PROGRAM.MAIN_FOLDER "\Exported_Stats_" A_Now
-		if FileExist(filePath ".csv")
-			filePath := filePath "_" RandomStr(5)
+		csvFilePath := PROGRAM.MAIN_FOLDER "\Exported_Stats_" A_Now
+		if FileExist(csvFilePath ".csv")
+			csvFilePath := csvFilePath "_" RandomStr(5)
+
 		; Saving file as CSV
-		filePath := filePath ".csv"
-		CSV_LVSave(filePath, GuiMyStats_Controls.hLV_Stats, "`t", OverWrite:=True, "MyStats")
+		csvFilePath := csvFilePath ".csv"
+		CSV_LVSave(csvFilePath, GuiMyStats_Controls.hLV_Stats, "`t", OverWrite:=True, "MyStats")
+
 		; Showing tray notification and opening locaion folder
-		SplitPath, filePath, fileName, fileFolder
-		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.StatsExported_Msg, "%file%", fileName)
+		SplitPath, csvFilePath, csvFileName, csvFileFolder
+		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.StatsExported_Msg, "%file%", csvFileName)
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.StatsExported_Title, trayMsg)
-		Run, %fileFolder%
+		Run, %csvFileFolder%
 	}
+
+	OnListviewRightClick() {
+		global PROGRAM
+
+		try Menu, RMenu, DeleteAll
+		Menu, RMenu, Add,% PROGRAM.TRANSLATIONS.GUI_MyStats.RMENU_RemoveThisEntry, Gui_MyStats_OnListviewRightClick_RemoveSelectedEntry
+		Menu, RMenu, Show
+		return		
+
+		Gui_MyStats_OnListviewRightClick_RemoveSelectedEntry:
+			GUI_MyStats.RemoveSelectedEntry()
+		return
+	}
+
+	ContextMenu(CtrlHwnd, CtrlName) {
+		global PROGRAM, GuiMyStats, GuiMyStats_Controls
+	}
+	
+    OnResize() {
+        global GuiMyStats, GuiMyStats_Controls
+        ; Borders
+		GuiControl, MyStats:Move,% GuiMyStats_Controls.hTEXT_Borders,% "x0 y0 w" A_GuiWidth " h" A_GuiHeight
+        ; Title
+        headerPos := Get_ControlCoords("MyStats", GuiMyStats_Controls.hPROGRESS_TitleBackground)
+        GuiControl, MyStats:Move,% GuiMyStats_Controls.hPROGRESS_TitleBackground,% "w" A_GuiWidth-30-31
+		GuiControl, MyStats:Move,% GuiMyStats_Controls.hTEXT_HeaderGhost,% "w" A_GuiWidth-30
+        GuiControl, MyStats:Move,% GuiMyStats_Controls.hTEXT_TitleText,% "w" A_GuiWidth-30
+		GuiControl, MyStats:Move,% GuiMyStats_Controls.hBTN_MinimizeGUI,% "x" A_GuiWidth-30-31 " "
+        GuiControl, MyStats:Move,% GuiMyStats_Controls.hBTN_CloseGUI,% "x" A_GuiWidth-31 " "
+        ; List
+        GuiControl, MyStats:Move,% GuiMyStats_Controls.hLV_Stats,% "w" A_GuiWidth-150-2 " h" A_GuiHeight-headerPos.H-1
+		GuiControl, MyStats:Move,% GuiMyStats_Controls.hBTN_ExportAsCSV,% "y" A_GuiHeight-25-1
+
+		GUI_MyStats.Redraw()
+		; GuiControl, MyStats:+Redraw,% GuiMyStats_Controls.hTEXT_Borders
+    }
+
+    Show() {
+		global PROGRAM, GuiMyStats
+
+		hw := DetectHiddenWindows("On")
+		foundHwnd := WinExist("ahk_id " GuiMyStats.Handle)
+		DetectHiddenWindows(hw)
+
+		if (foundHwnd) {
+			GUI_MyStats.UpdateData()
+			GUI_MYStats.ApplyFilters()
+			Gui, MyStats:Show, xCenter yCenter
+		}
+		else {
+			AppendToLogs("GUI_MYStats.Show(): Non existent. Recreating.")
+			GUI_MyStats.Create()
+			Gui, MyStats:Show, xCenter yCenter
+		}
+	}
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	*	GENERAL FUNCTIONS
+	*/
 
 	DestroyBtnImgList() {
 		global GuiMyStats_Controls
@@ -493,38 +462,22 @@
 		Gui.Destroy("MyStats")
 	}
 
+	AdjustListviewHeaders() {
+		GUI_MyStats.SetDefaultListView("hLV_Stats")
+		Loop % LV_GetCount("Col")
+			LV_ModifyCol(A_Index, "AutoHdr NoSort")
+	}
+
 	SetDefaultListView(lvName) {
         global GuiMyStats_Controls
         Gui, MyStats:Default
         Gui, MyStats:ListView,% GuiMyStats_Controls[lvName]
     }
 
-	ContextMenu(CtrlHwnd, CtrlName) {
-		global PROGRAM, GuiMyStats, GuiMyStats_Controls
-
-		if (CtrlHwnd = GuiMyStats_Controls.hLV_Stats) {
-			GUI_MyStats.SetDefaultListView("hLV_Stats")
-
-            rowID := LV_GetNext(0, "F")
-            if (rowID = 0) {
-                rowID := LV_GetCount()
-            }
-            LV_GetText(tradeNum, rowID, 1)
-            LV_Modify(rowID, "+Select")
-
-			GuiMyStats.SelectedRow := rowID
-            
-            try Menu,RClickMenu,DeleteAll
-            Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_MyStats.RMENU_RemoveThisEntry, Gui_MyStats_RClickMenu_RemoveSelectedEntry
-            Menu, RClickMenu, Show
-		}
-		return
-		
-		Gui_MyStats_RClickMenu_RemoveSelectedEntry:
-			GUI_MyStats.RemoveSelectedEntry()
-		return
+	GetListviewSelectedRow() {
+		GUI_MyStats.SetDefaultListView("hLV_Stats")
+		return LV_GetNext(0, "F")
 	}
-
 
 	Submit(CtrlName="") {
 		global GuiMyStats_Submit, GuiMyStats_Controls
@@ -534,56 +487,12 @@
 			Return GuiMyStats_Submit[ctrlName]
 		}
 	}
-	
-    Resize() {
-        global GuiMyStats, GuiMyStats_Controls
 
-        ; Borders
-		GuiControl, MyStats:Move,% GuiMyStats_Controls.hTEXT_Borders,% "x0 y0 w" A_GuiWidth " h" A_GuiHeight
-        ; Title
-        coords := Get_ControlCoords("MyStats", GuiMyStats_Controls.hPROGRESS_TitleBackground)
-        GuiControl, MyStats:Move,% GuiMyStats_Controls.hPROGRESS_TitleBackground,% " h26 w" A_GuiWidth-30 " "
-		GuiControl, MyStats:Move,% GuiMyStats_Controls.hTEXT_HeaderGhost,% "w" A_GuiWidth-30
-        GuiControl, MyStats:Move,% GuiMyStats_Controls.hTEXT_TitleText,% "w" A_GuiWidth-30
-        GuiControl, MyStats:Move,% GuiMyStats_Controls.hBTN_CloseGUI,% "x" A_GuiWidth-31 " "
-        ; Filter + List
-        coords := Get_ControlCoords("MyStats", GuiMyStats_Controls.hLV_Stats)
-        GuiControl, MyStats:Move,% GuiMyStats_Controls.hLV_Stats,% "w" A_GuiWidth-20 " h" A_GuiHeight-(coords.Y+10)
-    	GuiControl, MyStats:Move,% GuiMyStats_Controls.hGB_FilteringOptions,% "w" A_GuiWidth-20
-
-		GUI_MyStats.Redraw()
-		; GuiControl, MyStats:+Redraw,% GuiMyStats_Controls.hTEXT_Borders
-    }
-
-    DragGui(GuiHwnd) {
+	DragGui(GuiHwnd) {
 		PostMessage, 0xA1, 2,,,% "ahk_id " GuiHwnd
 	}
 
-    Show() {
-		global PROGRAM, GuiMyStats
-
-		MsgBox(4096, "", "My Stats GUI has been temporarily disabled.") ; TO_DO_V2
-		return
-
-		hw := DetectHiddenWindows("On")
-		foundHwnd := WinExist("ahk_id " GuiMyStats.Handle)
-		DetectHiddenWindows(hw)
-
-		if (foundHwnd) {
-			GUI_MyStats.UpdateData()
-			GUI_MYStats.ApplyFilters()
-			GUI_MyStats.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
-			Gui, MyStats:Show, xCenter yCenter
-		}
-		else {
-			AppendToLogs("GUI_MYStats.Show(): Non existent. Recreating.")
-			GUI_MyStats.Create()
-			GUI_MyStats.SetTranslation(PROGRAM.SETTINGS.GENERAL.Language)
-			Gui, MyStats:Show, xCenter yCenter
-		}
-	}
-
-    Close() {
+	Close() {
 		Gui, MyStats:Hide
 	}
 
@@ -591,6 +500,72 @@
 		Gui, MyStats:+LastFound
 		WinSet, Redraw
 	}
+
+	GetPosition() {
+		global GuiMyStats
+		hw := DetectHiddenWindows("On")
+		WinGetPos, x, y, w, h,% "ahk_id " GuiMyStats.Handle
+		DetectHiddenWindows(hw)
+		
+		return {x:x,y:y,w:w,h:h}
+	}
+
+	IsVisible() {
+		global GuiMyStats
+		hw := DetectHiddenWindows("Off")
+		winHwnd := WinExist("ahk_id " GuiMyStats.Handle)
+		DetectHiddenWindows(hw)
+		return winHwnd
+	}
+
+	ShowFadeout() {
+		/* 	Puts a black transparency on the GUI to indicate that it's disabled
+			Returns a random code that must be given to the HideFadeout() func
+			This is to make sure that, in case multiple functions called ShowFadeout(), only the very first one is able to call HideFadeout()
+		*/
+		global GuiMyStats
+
+		if !IsObject(GuiMyStats.Fadeout)
+			GuiMyStats.Fadeout := {}
+
+		if (GUI_MyStats.IsVisible() && !GuiMyStats.FadeOut.Handle) {
+			Gui, MyStats:+Disabled
+			myStatsGuiPos := GUI_MyStats.GetPosition(), fadeOutCode := RandomStr(10)
+			Gui.Destroy("MyStatsFadeout")
+			Gui.New("MyStatsFadeout", "-Caption -Border +Toolwindow +Lastfound +AlwaysOnTop +HwndhGuiMyStatsFadeout ")
+			WinSet, Transparent,% (255/100)*20
+			WinSet, ExStyle, +0x20 ; Clickthrough
+			Gui.Margin("MyStatsFadeout", 0, 0)
+			Gui.Color("MyStatsFadeout", "0x000000")
+			Gui.Show("MyStatsFadeout", "x" myStatsGuiPos.X " y" myStatsGuiPos.Y " w" myStatsGuiPos.W " h" myStatsGuiPos.H " NoActivate")
+
+			GuiMyStats.Fadeout.FadeoutCode := fadeOutCode
+			return fadeOutCode
+		}
+	}
+
+	HideFadeout(fadeOutCode) {
+		global GuiMyStats
+
+		if (fadeOutCode != GuiMyStats.FadeOut.FadeoutCode)
+			return
+
+		Gui, MyStats:-Disabled
+		Gui.Destroy("MyStatsFadeout")
+		WinActivate,% "ahk_id " GuiMyStats.Handle
+	}
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	*	MISC FUNCTIONS
+	*/
+
+	CreateODcObj() {
+		return odcObj := {T: 0x80c4ff, B: 0x274554}
+	}
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+	*	WM FUNCTIONS
+	*/
 
 	WM_NCCALCSIZE() {
 		; Credits: Lexikos - autohotkey.com/board/topic/23969-resizable-window-border/?p=155480

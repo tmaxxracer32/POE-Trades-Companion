@@ -59,7 +59,7 @@
 		"hBTN_ApplyFilters": "Apply filters",
 		"hBTN_ExportAsCSV": "Export stats as .CSV",
 		"hGB_FilteringOptions": "Filtering Options",
-		"hLV_Stats": "#|Date|Time|Guild|Buyer|Item|Price|League|Tab|Other",
+		"hLV_Stats": "#|Date|Guild|Buyer|Item|Price|League|Tab",
 		"hTEXT_BuyerFilter": "Buyer:",
 		"hTEXT_CurrencyFilter": "Currency:",
 		"hTEXT_GuildFilter": "Guild:",

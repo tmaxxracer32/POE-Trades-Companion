@@ -937,23 +937,34 @@
     SaveStats(_buyOrSell, tabNum) {
 		global PROGRAM, DEBUG
 		
-		tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum)
+		; Load tab content obj
+		tabContent := ObjFullyClone(GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum))
 		if (DEBUG.settings.use_chat_logs || tabContent.Seller = "iSellStuff" || tabContent.Buyer = "iSellStuff") {
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.iSellStuffNotSaved_Title, PROGRAM.TRANSLATIONS.TrayNotifications.iSellStuffNotSaved_Msg)
 			Return
 		}
 
+		; Remove empty lines from tab content obj
+		for key, value in tabContent {
+			if (value = "")
+				keysToRemoveDueToEmpty := keysToRemoveDueToEmpty ? keysToRemoveDueToEmpty "," key : key
+		}
+		Loop, Parse, keysToRemoveDueToEmpty,% ","
+			tabContent.Delete(A_LoopField)
+			
+		; Add to the file obj
 		histFile := _buyOrSell="Buy" ? PROGRAM.TRADES_BUY_HISTORY_FILE : PROGRAM.TRADES_SELL_HISTORY_FILE
 		if !FileExist(histFile)
 			histfileObj := {}
 		else
 			histfileObj := JSON_Load(histFile)
-		histfileObj[histfileObj.Count()+1] := ObjFullyClone(tabContent)
+		histfileObj.Push(ObjFullyClone(tabContent))
 
 		; Making backup of old file
 		SplitPath, histFile, fileName
 		FileMove,% histFile,% PROGRAM.TEMP_FOLDER "\" fileName ".bak", 1
-		; Setting content into the settings file
+
+		; Writting the new content
 		jsonText := JSON.Dump(histfileObj, "", "`t")
 		hFile := FileOpen(histFile, "w", "UTF-8")
 		hFile.Write(jsonText)
