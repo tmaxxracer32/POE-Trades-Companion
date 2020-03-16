@@ -3,6 +3,7 @@
 	Changes:
 	- Added Delirium and translated challenge league names.
 	- Updated data files and the Betrayal league sheet.
+	- Updated the Essence league sheet for a new more detailed version.
 
 = = = = = = = = = = = = =
 
