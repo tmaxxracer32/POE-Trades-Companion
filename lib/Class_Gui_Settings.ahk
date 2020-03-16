@@ -3294,7 +3294,7 @@ Class GUI_Settings {
 				Gui, TradesSellPreview:Show,% "x" guiX " y" guiY
 			}
 			GUI_Settings.Customization_Selling_AdjustPreviewControls()
-			GUI_Trades_V2.Preview_CustomizeThisCustomButton("Sell", GuiSettings.CUSTOM_BUTTON_SELECTED_ROW,	GuiSettings.CUSTOM_BUTTON_SELECTED_MAX,	GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
+			GUI_Trades_V2.Preview_CustomizeThisCustomButton("SellPreview", GuiSettings.CUSTOM_BUTTON_SELECTED_ROW,	GuiSettings.CUSTOM_BUTTON_SELECTED_MAX,	GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 		}
 		else
 			Gui, TradesSellPreview:Hide
@@ -3307,7 +3307,7 @@ Class GUI_Settings {
 				Gui, TradesBuyPreview:Show,% "x" guiX " y" guiY
 			}
 			GUI_Settings.Customization_Buying_AdjustPreviewControls()
-			GUI_Trades_V2.Preview_CustomizeThisCustomButton("Buy", GuiSettings.CUSTOM_BUTTON_SELECTED_ROW,	GuiSettings.CUSTOM_BUTTON_SELECTED_MAX,	GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
+			GUI_Trades_V2.Preview_CustomizeThisCustomButton("BuyPreview", GuiSettings.CUSTOM_BUTTON_SELECTED_ROW,	GuiSettings.CUSTOM_BUTTON_SELECTED_MAX,	GuiSettings.CUSTOM_BUTTON_SELECTED_NUM)
 		}
 		else
 			Gui, TradesBuyPreview:Hide
