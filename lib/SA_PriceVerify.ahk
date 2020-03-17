@@ -98,7 +98,7 @@ VerifyItemPrice(cmdLineParams) {
 
             Loop % matchingListings.Count() {
                 thisListing := matchingListings[A_Index].listing
-                onlineRatio := RemoveTrailingZeroes(thisListing.price.item.amount / thisListing.price.exchange.amount)
+                onlineRatio := RemoveTrailingZeroes(thisListing.price.exchange.amount / thisListing.price.item.amount)
                 ratioTxt := "Online: `t1 " paramsObj.WantCurrency " = " onlineRatio " " paramsObj.GiveCurrency
                     . "\n" "Whisper: `t1 " paramsObj.WantCurrency " = " paramsObj.SaleRatio " " paramsObj.GiveCurrency
 
