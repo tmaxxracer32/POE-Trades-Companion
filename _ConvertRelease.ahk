@@ -80,6 +80,14 @@ if (generateLeagueTxt) {
 if (generateExecutable) {
 	ToolTip, Compiling POE Trades Companion.exe, 0, 0
 	CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe")
+	cmds = 
+	(
+	@echo off
+	cd %A_ScriptDir%
+	"C:\Program Files\UPX\upx.exe" "POE Trades Companion.exe"
+	)
+	if FileExist("C:\Program Files\UPX\upx.exe")
+		RunWaitMany(cmds)
 }
 ; CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe", "POE Trades Companion", ver, "© lemasato.github.io " A_YYYY)
 
