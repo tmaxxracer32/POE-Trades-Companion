@@ -133,6 +133,8 @@
 		"hCB_RegularWhisperSFXToggle_ToolTip": "Plays a custom sound notification upon receiving a regular non-trading whisper.\nDefault: OFF",
 		"hCB_SendTradingWhisperUponCopyWhenHoldingCTRL": "Hold CTRL when copying trading\nwhisper to instantly send in game?",
 		"hCB_SendTradingWhisperUponCopyWhenHoldingCTRL_ToolTip": "Instantly send the whisper in-game if you are holding CTRL\nwhen clicking on poe.trade poapp.com copy whisper button.\nDefault: ON",
+		"hCB_SendWhoisWithTradingWhisperCTRLCopy": "Make a /whois of the seller?",
+		"hCB_SendWhoisWithTradingWhisperCTRLCopy_ToolTip": "Additionally make a /whois of the seller after sending the trading whisper.\nThis can be useful to know if they are currently mapping.\nDefault: ON",
 		"hCB_ShowTabbedTrayNotificationOnWhisper": "Show a notification when receiving\na whisper while tabbed out of game?",
 		"hCB_ShowTabbedTrayNotificationOnWhisper_ToolTip": "Shows a notification with name and whisper\nif you receive a whisper while tabbed out of the game.\nDefault: ON",
 		"hCB_TradingWhisperSFXToggle": "Trading whispers received?",

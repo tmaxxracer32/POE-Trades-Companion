@@ -187,6 +187,7 @@ Get_LocalSettings_DefaultValues() {
 				"AutoFocusNewTabs": "False",
 				"AutoMaximizeOnFirstNewTab": "False",
 				"SendTradingWhisperUponCopyWhenHoldingCTRL": "True",
+				"SendWhoisWithTradingWhisperCTRLCopy": "True",
 				"TradingWhisperSFXToggle": "True",
 				"RegularWhisperSFXToggle": "False",
 				"BuyerJoinedAreaSFXToggle": "False",
@@ -518,7 +519,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 				if IsIn(k, "AllowClicksToPassThroughWhileInactive,AutoFocusNewTabs,AutoMaximizeOnFirstNewTab,AutoMinimizeOnAllTabsClosed,BuyerJoinedAreaSFXToggle"
 				. ",CopyItemInfosOnTabChange,HideInterfaceWhenOutOfGame,ItemGridHideNormalTab,ItemGridHideNormalTabAndQuadTabForMaps,ItemGridHideQuadTab"
 				. ",MinimizeInterfaceToTheBottom,PushBulletOnlyWhenAfk,PushBulletOnPartyMessage,PushBulletOnTradingWhisper,PushBulletOnWhisperMessage,"
-				. ",RegularWhisperSFXToggle,SendTradingWhisperUponCopyWhenHoldingCTRL,ShowTabbedTrayNotificationOnWhisper,TradesGUI_Locked,TradingWhisperSFXToggle")
+				. ",RegularWhisperSFXToggle,SendTradingWhisperUponCopyWhenHoldingCTRL,SendWhoisWithTradingWhisperCTRLCopy,ShowTabbedTrayNotificationOnWhisper,TradesGUI_Locked,TradingWhisperSFXToggle")
 					isValid := IsIn(userValue, "True,False") ? True : False
 				else if IsIn(k, "BuyerJoinedAreaSFXPath,RegularWhisperSFXPath,TradingWhisperSFXPath")
 					isValid := (userValue) && FileExist(userValue) ? True : !userValue ? True : False

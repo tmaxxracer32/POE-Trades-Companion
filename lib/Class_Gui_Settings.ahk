@@ -221,9 +221,10 @@ Class GUI_Settings {
 		*/
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_AutoMaximizeOnFirstNewTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoMaximizeOnFirstNewTab)
 		Gui.Add("Settings", "CheckBox", "xp y+12 hwndhCB_SendTradingWhisperUponCopyWhenHoldingCTRL Center", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_SendTradingWhisperUponCopyWhenHoldingCTRL)
+		Gui.Add("Settings", "CheckBox", "xp+8 y+3 hwndhCB_SendWhoisWithTradingWhisperCTRLCopy Center", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_SendWhoisWithTradingWhisperCTRLCopy)
 
 		; * * Map Tab settings
-		Gui.Add("Settings", "Checkbox", "xp y+10 hwndhCB_ItemGridHideNormalTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTab)
+		Gui.Add("Settings", "Checkbox", "xp-5 y+10 hwndhCB_ItemGridHideNormalTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTab)
 		Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_ItemGridHideQuadTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideQuadTab)
 		Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_ItemGridHideNormalTabAndQuadTabForMaps", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTabAndQuadTabForMaps)
 
@@ -537,7 +538,7 @@ Class GUI_Settings {
 
 		controlsList := "hDDL_PoeAccounts,hDDL_BuyingInterfaceMode"
 			. ",hDDL_SellingInterfaceMode,hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
-			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
+			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_SendWhoisWithTradingWhisperCTRLCopy,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
 			. ",hCB_AllowClicksToPassThroughWhileInactive,hSLIDER_NoTabsTransparency,hSLIDER_TabsOpenTransparency"
 			. ",hCB_TradingWhisperSFXToggle,hEDIT_TradingWhisperSFXPath,hCB_RegularWhisperSFXToggle,hEDIT_RegularWhisperSFXPath"
 			. ",hCB_BuyerJoinedAreaSFXToggle,hEDIT_BuyerJoinedAreaSFXPath,hBTN_BrowseBuyerJoinedAreaSFX,hCB_ShowTabbedTrayNotificationOnWhisper"
@@ -571,12 +572,17 @@ Class GUI_Settings {
 				GuiControl, Settings:,% GuiSettings_Controls[ctrlName],% thisTabSettings[settingsKey]
 			}
 		}
+
+		if (PROGRAM.SETTINGS.SETTINGS_MAIN.SendTradingWhisperUponCopyWhenHoldingCTRL = "True")
+			GuiControl, Settings:Enable,% GuiSettings_Controls.hCB_SendWhoisWithTradingWhisperCTRLCopy
+		else
+			GuiControl, Settings:Disable,% GuiSettings_Controls.hCB_SendWhoisWithTradingWhisperCTRLCopy
 	}
 
 	TabSettingsMain_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
 		controlsList := "hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
-			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
+			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_SendWhoisWithTradingWhisperCTRLCopy,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
 			. ",hCB_AllowClicksToPassThroughWhileInactive,hSLIDER_NoTabsTransparency,hSLIDER_TabsOpenTransparency"
 			. ",hCB_TradingWhisperSFXToggle,hBTN_BrowseTradingWhisperSFX,hCB_RegularWhisperSFXToggle,hBTN_BrowseRegularWhisperSFX"
 			. ",hCB_BuyerJoinedAreaSFXToggle,hBTN_BrowseBuyerJoinedAreaSFX,hCB_ShowTabbedTrayNotificationOnWhisper"
@@ -636,7 +642,7 @@ Class GUI_Settings {
 	}
 
 	TabSettingsMain_OnCheckboxToggle(CtrlName) {	
-		global PROGRAM, GuiTrades
+		global PROGRAM, GuiTrades, GuiSettings_Controls
 
 		settingKey := SubStr(CtrlName, 5)
 		cbState := GUI_Settings.Submit(CtrlName), settingValue := cbState=1?"True":"False"
@@ -658,6 +664,12 @@ Class GUI_Settings {
 					GUI_Trades_V2.Disable_ClickThrough("Sell")
 				Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.Clickthrough
 			}
+		}
+		if (CtrlName = "hCB_SendTradingWhisperUponCopyWhenHoldingCTRL") {
+			if (settingValue = "True")
+				GuiControl, Settings:Enable,% GuiSettings_Controls.hCB_SendWhoisWithTradingWhisperCTRLCopy
+			else
+				GuiControl, Settings:Disable,% GuiSettings_Controls.hCB_SendWhoisWithTradingWhisperCTRLCopy
 		}
 	}
 
