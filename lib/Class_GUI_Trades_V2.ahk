@@ -1244,15 +1244,17 @@
 			buyerWantsType := tabInfos.ItemCurrency, buyerWantsCount := tabInfos.ItemCount
 			buyerGivesType := tabInfos.PriceCurrency, buyerGivesCount := tabInfos.PriceCount
 			saleRatio := RemoveTrailingZeroes(buyerGivesCount/buyerWantsCount)
-			itemsDataObj := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComStaticData.json")
-			for sect in itemsDataObj {
-				for shortName, fullName in itemsDataObj[sect][tabInfos.WhisperLanguage] {
-					if (fullName=buyerWantsType)
-						buyerWantsID := shortName
-					if (fullName=buyerGivesType)
-						buyerGivesID := shortName
+
+			Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage].Count() {
+				loop1Index := A_Index
+				Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries.Count() {
+					thisEntry := PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries[A_Index]
+					if (thisEntry.text = buyerWantsType)
+						buyerWantsID := thisEntry.id
+					if (thisEntry.text = buyerGivesType)
+						buyerGivesID := thisEntry.id
 					if (buyerWantsID && buyerGivesID)
-						Break
+						Break 
 				}
 				if (buyerWantsID && buyerGivesID)
 					Break
@@ -1287,11 +1289,12 @@
 		}
 		else { ; Regular trade
 			priceType := tabInfos.PriceCurrency, priceCount := tabInfos.PriceCount
-			itemsDataObj := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComStaticData.json")
-			for sect in itemsDataObj {
-				for shortName, fullName in itemsDataObj[sect][tabInfos.WhisperLanguage] {
-					if (fullName=priceType)
-						priceID := shortName
+			Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage].Count() {
+				loop1Index := A_Index
+				Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries.Count() {
+					thisEntry := PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries[A_Index]
+					if (thisEntry.text = priceType)
+						priceID := thisEntry.id
 					if (priceID)
 						Break
 				}

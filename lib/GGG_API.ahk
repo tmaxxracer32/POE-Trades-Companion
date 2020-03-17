@@ -38,15 +38,9 @@ GGG_API_CreateDataFiles() {
 		. "`n"  "Charset: UTF-8"
 		WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
-		for sect in jsonData.result {
-			if !IsObject(jsonFinal[sect])
-				jsonFinal[sect] := {}
-			if !IsObject(jsonFinal[sect][thisLang])
-				jsonFinal[sect][thisLang] := {}
-
-			Loop % jsonData.result[sect].Count()
-				jsonFinal[sect][thisLang][jsonData.result[sect][A_Index].id] := jsonData.result[sect][A_Index].text
-		}
+        if !IsObject(jsonFinal[thisLang])
+            jsonFinal[thisLang] := {}
+        jsonFinal[thisLang] := ObjFullyClone(jsonData.result)
 	}
 	fileLocation := A_ScriptDir "/data/poeDotComStaticData.json"
 	jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True)
@@ -64,20 +58,9 @@ GGG_API_CreateDataFiles() {
 		. "`n"  "Charset: UTF-8"
 		WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
 
-		Loop % jsonData.result.Count() {
-			resultIndex := A_Index
-			labelName := thisLang="ENG" ? jsonData.result[resultIndex].label : labels[resultIndex]
-			if !IsObject(jsonFinal[labelName])
-				jsonFinal[labelName] := {}
-			if !IsObject(jsonFinal[labelName][thisLang])
-				jsonFinal[labelName][thisLang] := {}
-			if (thisLang="ENG")
-				labels[resultIndex] := labelName
-
-			Loop % jsonData.result[resultIndex].entries.Count() {
-				jsonFinal[labelName][thisLang][A_Index] := ObjFullyClone(jsonData.result[resultIndex].entries[A_Index])
-			}
-		}
+		if !IsObject(jsonFinal[thisLang])
+            jsonFinal[thisLang] := {}
+        jsonFinal[thisLang] := ObjFullyClone(jsonData.result)
 	}
 	fileLocation := A_ScriptDir "/data/poeDotComItemsData.json"
 	jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True)
@@ -364,9 +347,10 @@ SplitItemNameAndBaseType(itemFull, LANG="ENG") {
 
     itemsJSON := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComItemsData.json")
  
-    for sectName in itemsJSON { ; for every section from json
-        Loop % itemsJSON[sectName][LANG].Count() { ; for every entry of this section
-            entryIndex := A_Index, thisEntry := itemsJSON[sectName][LANG][entryIndex]
+    Loop % itemsJSON[LANG].Count() {
+        loop1Index := A_Index, sectName := itemsJSON[LANG][loop1Index].label
+        Loop % itemsJSON[LANG][loop1Index].entries.Count() {
+            entryIndex := A_Index, thisEntry := itemsJSON[LANG][loop1Index].entries[A_Index]
             isUnique := thisEntry.flags.unique = True ? True : False
             isAccessory := sectName = "Accessories" ? True : False
             isArmour := sectName = "Armour" ? True : False
