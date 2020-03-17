@@ -183,6 +183,10 @@ Start_Script() {
 		}
 	}
 
+	; Extracting assets
+	if !(DEBUG.settings.skip_assets_extracting)
+		AssetsExtract()
+
 	; Creating settings and file
 	LocalSettings_CreateFileIfNotExisting()
 	LocalSettings_VerifyEncoding()
@@ -215,10 +219,6 @@ Start_Script() {
 	global POEGameList := GAME.EXECUTABLES	
 	for nothing, executable in POEGameArr
 		GroupAdd, POEGameGroup, ahk_exe %executable%
-
-	; Extracting assets
-	if !(DEBUG.settings.skip_assets_extracting)
-		AssetsExtract()
 
 	; Warning stuff
 	if !FileExist(PROGRAM.TRANSLATIONS_FOLDER "\english.json") {
