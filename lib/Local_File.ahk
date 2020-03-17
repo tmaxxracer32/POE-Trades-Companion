@@ -183,7 +183,7 @@ Get_LocalSettings_DefaultValues() {
 				"NoTabsTransparency": "100",
 				"TabsOpenTransparency": "100",
 				"HideInterfaceWhenOutOfGame": "True",
-				"ShowTabbedTradesCounterButton": "True"
+				"ShowTabbedTradesCounterButton": "True",
 				"CopyItemInfosOnTabChange": "False",
 				"AutoFocusNewTabs": "False",
 				"AutoMaximizeOnFirstNewTab": "False",
