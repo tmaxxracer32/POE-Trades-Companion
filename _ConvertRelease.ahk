@@ -16,6 +16,8 @@ PROGRAM := {"CURL_EXECUTABLE": A_ScriptDir "\lib\third-party\curl.exe"}
 generateCurrencyData := True
 generateLeagueTxt := True
 generateTranslations := True
+generateExecutable := True
+generateZip := True
 
 ; Basic tray menu
 if ( !A_IsCompiled && FileExist(A_ScriptDir "\resources\icon.ico") )
@@ -62,37 +64,43 @@ if (generateTranslations) {
 	}
 }
 if (generateCurrencyData) {
-	ToolTip, Creating poeTradeCurrencyData.json
+	ToolTip, Creating poeTradeCurrencyData.json, 0, 0
 	PoeTrade_GenerateCurrencyData()
 
-	ToolTip, Creating poeDotComCurrencyData.json
+	ToolTip, Creating poeDotComStaticData.json & poeDotComItemsData.json, 0, 0
 	GGG_API_CreateDataFiles()
 }
 if (generateLeagueTxt) {
 	/*	TO_DO coming later
 	*/
-	; ToolTip, Creating TradingLeagues.txt
+	; ToolTip, Creating TradingLeagues.txt, 0, 0
 }
 
 ; Main executable
-ToolTip, Compiling POE Trades Companion.exe
-CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe")
+if (generateExecutable) {
+	ToolTip, Compiling POE Trades Companion.exe, 0, 0
+	CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe")
+}
 ; CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe", "POE Trades Companion", ver, "© lemasato.github.io " A_YYYY)
 
 ; Updater file 
-; ToolTip, Compiling Updater.exe
+; ToolTip, Compiling Updater.exe, 0, 0
 ; CompileFile(A_ScriptDir "\Updater.ahk", A_ScriptDir "\Updater.exe")
 ; CompileFile(A_ScriptDir "\Updater.ahk", A_ScriptDir "\Updater.exe", "POE Trades Companion: Updater", "1.0", "© lemasato.github.io " A_YYYY)
 
 ; Updater file v2
-; ToolTip, Updater_v2.exe
+; ToolTip, Updater_v2.exe, 0, 0
 ; CompileFile(A_ScriptDir "\Updater_v2.ahk", A_ScriptDir "\Updater_v2.exe")
 ; CompileFile(A_ScriptDir "\Updater_v2.ahk", A_ScriptDir "\Updater_v2.exe", "POE Trades Companion: Updater", "2.1", "© lemasato.github.io " A_YYYY)
 
+if (generateZip) {
+	ToolTip, Creating zip release, 0, 0
+	CreateZipRelease()
+}
 
 ; End
 SoundPlay, *32
-ToolTip, Compile Success
+ToolTip, Compile Success, 0, 0
 Sleep 1500
 ToolTip
 ExitApp
@@ -105,6 +113,39 @@ Esc::ExitApp
 Tray_Close:
 ExitApp
 Return
+
+CreateZipRelease(ver="") {
+	if !(ver) {
+		FileRead, ver,%A_ScriptDir%/resources/version.txt ; Get ver from txt
+		ver := StrReplace(ver, "`n", "") ; Remove any possible linebreak
+		ver = %ver% ; Auto trim
+	}
+
+	ver := StrReplace(ver, ".", "-")
+	zipFullPath := A_ScriptDir "\POE-Trades-Companion-AHK-" ver ".zip"
+
+	if FileExist(zipFullPath)
+		FileDelete,% zipFullPath
+	cmds = 
+	(
+	@echo off
+	cd %A_ScriptDir%
+	git archive -o %zipFullPath% HEAD 
+	)
+	RunWaitMany(cmds)
+
+	7zip := "C:\Program Files\7-Zip\7z.exe"
+	toDelete := [".gitignore",".gitattributes","_ConvertRelease.ahk","VerPatch.exe","Updater_V2.exe","Updater_V2.ahk","Updater.ahk","Updater.exe","README.MD","POE Trades Companion.exe","ISSUE_TEMPLATE.md","Debug.json", "others", "screenshots", "resources/fonts/fontreg.exe","resources/fonts/enumfonts.vbs"]
+	Loop % toDelete.Count()
+		deleteCmds .= "`n" """" 7zip """ d """ zipFullPath """ """ toDelete[A_Index] """"
+	cmds = 
+	(
+	@echo off
+	cd %A_ScriptDir%
+	%deleteCmds%
+	)
+	RunWaitMany(cmds)
+}
 
 CompileFile(source, dest, fileDesc="NONE", fileVer="NONE", fileCopyright="NONE") {
     Run_Ahk2Exe(source, ,A_ScriptDir "\resources\icon.ico")
@@ -131,12 +172,12 @@ CompileFile(source, dest, fileDesc="NONE", fileVer="NONE", fileCopyright="NONE")
 			.   "`nCurrent: " destDesc
 			.   "`n"
 			.   "`nCopyright: " fileCopyright
-			.   "`nCurrent: " destCpyR
+			.   "`nCurrent: " destCpyR, 0, 0
 			Set_FileInfos(dest, fileVer, fileDesc, fileCopyright)
 			Sleep 500
 			destVer := FGP_Value(dest, 167) ; 167 = Ver
 		}
-		ToolTip,
+		ToolTip
 		fileInfos := ""
 	}
 }
@@ -155,6 +196,27 @@ ReloadWithParams(params, getCurrentParams=False, asAdmin=False) {
 	: A_AhkPath),str,(A_IsCompiled ? "": """" . A_ScriptFullPath . """" . A_Space) params,str,A_WorkingDir,int,1)
 	ExitApp
 	Sleep 10000
+}
+
+RunWaitMany(commands) {
+    DetectHiddenWindows, on
+    Run, %comspec% /k ,,Hide UseErrorLevel, cPid
+    WinWait, ahk_pid %cPid%,, 10
+    DllCall("AttachConsole","uint",cPid)
+    hCon:=DllCall("CreateFile","str","CONOUT$","uint",0xC0000000,"uint",7,"uint",0,"uint",3,"uint",0,"uint",0)
+
+    shell := ComObjCreate("WScript.Shell")
+    ; Open cmd.exe with echoing of commands disabled
+    exec := shell.Exec(ComSpec " /Q /K echo off")
+    ; Send the commands to execute, separated by newline
+    exec.StdIn.WriteLine(commands "`nexit")  ; Always exit at the end!
+    ; Read and return the output of all commands
+    stdOutReturn := exec.StdOut.ReadAll()
+
+    DllCall("CloseHandle", "uint", hCon)
+    DllCall("FreeConsole")
+    Process, Close, %cPid%
+    return stdOutReturn
 }
 
 #Include %A_ScriptDir%\lib\
