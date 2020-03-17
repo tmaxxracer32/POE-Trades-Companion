@@ -1057,7 +1057,7 @@
 			GUI_Trades_V2.VerifyItemPrice( GUI_Trades_V2.GetTabContent(_buyOrSell, newTabsCount) )
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 
-		if (_buyOrSell="Sell") && !IsGameWindowActive() {
+		if (_buyOrSell="Sell" && !IsGameWindowActive() && PROGRAM.SETTINGS.SETTINGS_MAIN.ShowTabbedTradesCounterButton = "True") {
 			GUI_TabbedTradesCounter.Show()
 		}
 	}

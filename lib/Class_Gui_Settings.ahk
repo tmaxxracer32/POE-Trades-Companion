@@ -213,6 +213,7 @@ Class GUI_Settings {
 		
 		; * * Interface
 		Gui.Add("Settings", "CheckBox", "x" leftMost2 " y" upMost3 " hwndhCB_HideInterfaceWhenOutOfGame", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_HideInterfaceWhenOutOfGame)
+		Gui.Add("Settings", "CheckBox", "xp y+3 hwndhhCB_ShowTabbedTradesCounterButton", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ShowTabbedTradesCounterButton)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_MinimizeInterfaceToTheBottom", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_MinimizeInterfaceToTheBottom)
 		Gui.Add("Settings", "CheckBox", "xp y+15 hwndhCB_CopyItemInfosOnTabChange", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_CopyItemInfosOnTabChange)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_AutoFocusNewTabs", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoFocusNewTabs)
@@ -224,7 +225,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "CheckBox", "xp+8 y+3 hwndhCB_SendWhoisWithTradingWhisperCTRLCopy Center", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_SendWhoisWithTradingWhisperCTRLCopy)
 
 		; * * Map Tab settings
-		Gui.Add("Settings", "Checkbox", "xp-5 y+10 hwndhCB_ItemGridHideNormalTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTab)
+		Gui.Add("Settings", "Checkbox", "xp-8 y+10 hwndhCB_ItemGridHideNormalTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTab)
 		Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_ItemGridHideQuadTab", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideQuadTab)
 		Gui.Add("Settings", "Checkbox", "xp y+5 hwndhCB_ItemGridHideNormalTabAndQuadTabForMaps", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ItemGridHideNormalTabAndQuadTabForMaps)
 
@@ -537,7 +538,7 @@ Class GUI_Settings {
 		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_MAIN)
 
 		controlsList := "hDDL_PoeAccounts,hDDL_BuyingInterfaceMode"
-			. ",hDDL_SellingInterfaceMode,hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
+			. ",hDDL_SellingInterfaceMode,hCB_HideInterfaceWhenOutOfGame,hCB_ShowTabbedTradesCounterButton,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
 			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_SendWhoisWithTradingWhisperCTRLCopy,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
 			. ",hCB_AllowClicksToPassThroughWhileInactive,hSLIDER_NoTabsTransparency,hSLIDER_TabsOpenTransparency"
 			. ",hCB_TradingWhisperSFXToggle,hEDIT_TradingWhisperSFXPath,hCB_RegularWhisperSFXToggle,hEDIT_RegularWhisperSFXPath"
@@ -581,7 +582,7 @@ Class GUI_Settings {
 
 	TabSettingsMain_SetSubroutines() {
 		global GuiSettings, GuiSettings_Controls
-		controlsList := "hCB_HideInterfaceWhenOutOfGame,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
+		controlsList := "hCB_HideInterfaceWhenOutOfGame,hCB_ShowTabbedTradesCounterButton,hCB_MinimizeInterfaceToTheBottom,hCB_CopyItemInfosOnTabChange,hCB_AutoFocusNewTabs,hCB_AutoMinimizeOnAllTabsClosed"
 			. ",hCB_AutoMaximizeOnFirstNewTab,hCB_SendTradingWhisperUponCopyWhenHoldingCTRL,hCB_SendWhoisWithTradingWhisperCTRLCopy,hCB_ItemGridHideNormalTab,hCB_ItemGridHideQuadTab,hCB_ItemGridHideNormalTabAndQuadTabForMaps"
 			. ",hCB_AllowClicksToPassThroughWhileInactive,hSLIDER_NoTabsTransparency,hSLIDER_TabsOpenTransparency"
 			. ",hCB_TradingWhisperSFXToggle,hBTN_BrowseTradingWhisperSFX,hCB_RegularWhisperSFXToggle,hBTN_BrowseRegularWhisperSFX"

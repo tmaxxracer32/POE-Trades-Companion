@@ -182,7 +182,8 @@ Get_LocalSettings_DefaultValues() {
 				"BuyerJoinedAreaSFXPath": "",
 				"NoTabsTransparency": "100",
 				"TabsOpenTransparency": "100",
-				"HideInterfaceWhenOutOfGame": "False",
+				"HideInterfaceWhenOutOfGame": "True",
+				"ShowTabbedTradesCounterButton": "True"
 				"CopyItemInfosOnTabChange": "False",
 				"AutoFocusNewTabs": "False",
 				"AutoMaximizeOnFirstNewTab": "False",
@@ -517,7 +518,7 @@ LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, ne
 			}
 			else if (parents.1 = "SETTINGS_MAIN") {
 				if IsIn(k, "AllowClicksToPassThroughWhileInactive,AutoFocusNewTabs,AutoMaximizeOnFirstNewTab,AutoMinimizeOnAllTabsClosed,BuyerJoinedAreaSFXToggle"
-				. ",CopyItemInfosOnTabChange,HideInterfaceWhenOutOfGame,ItemGridHideNormalTab,ItemGridHideNormalTabAndQuadTabForMaps,ItemGridHideQuadTab"
+				. ",CopyItemInfosOnTabChange,HideInterfaceWhenOutOfGame,ShowTabbedTradesCounterButton,ItemGridHideNormalTab,ItemGridHideNormalTabAndQuadTabForMaps,ItemGridHideQuadTab"
 				. ",MinimizeInterfaceToTheBottom,PushBulletOnlyWhenAfk,PushBulletOnPartyMessage,PushBulletOnTradingWhisper,PushBulletOnWhisperMessage,"
 				. ",RegularWhisperSFXToggle,SendTradingWhisperUponCopyWhenHoldingCTRL,SendWhoisWithTradingWhisperCTRLCopy,ShowTabbedTrayNotificationOnWhisper,TradesGUI_Locked,TradingWhisperSFXToggle")
 					isValid := IsIn(userValue, "True,False") ? True : False
