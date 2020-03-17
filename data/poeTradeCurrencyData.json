@@ -14,6 +14,9 @@
 	"Abyss": {
 		"ID": "315"
 	},
+	"Abyssal Delirium Orb": {
+		"ID": "841"
+	},
 	"Abyssal Incubator": {
 		"ID": "784"
 	},
@@ -42,6 +45,9 @@
 	},
 	"Ambush": {
 		"ID": "495"
+	},
+	"Amorphous Delirium Orb": {
+		"ID": "856"
 	},
 	"Anarchy": {
 		"ID": "496"
@@ -85,6 +91,9 @@
 	"Armourer's Scrap": {
 		"Abridged": "armourer's",
 		"ID": "19"
+	},
+	"Armoursmith's Delirium Orb": {
+		"ID": "838"
 	},
 	"Armoury": {
 		"ID": "323"
@@ -148,6 +157,9 @@
 	"Black Oil": {
 		"ID": "823"
 	},
+	"Blacksmith's Delirium Orb": {
+		"ID": "837"
+	},
 	"Blacksmith's Whetstone": {
 		"Abridged": "whetstone",
 		"ID": "20"
@@ -174,6 +186,9 @@
 	},
 	"Blessing of Xoph": {
 		"ID": "57"
+	},
+	"Blighted Delirium Orb": {
+		"ID": "855"
 	},
 	"Blind Venture": {
 		"ID": "139"
@@ -232,6 +247,9 @@
 	},
 	"Cartographer's Delight": {
 		"ID": "143"
+	},
+	"Cartographer's Delirium Orb": {
+		"ID": "839"
 	},
 	"Cartographer's Incubator": {
 		"ID": "782"
@@ -309,6 +327,9 @@
 	},
 	"Corroded Fossil": {
 		"ID": "690"
+	},
+	"Council of Cats": {
+		"ID": "833"
 	},
 	"Courthouse": {
 		"ID": "533"
@@ -413,11 +434,17 @@
 	"Death": {
 		"ID": "146"
 	},
+	"Decadent Delirium Orb": {
+		"ID": "842"
+	},
 	"Decadent Incubator": {
 		"ID": "789"
 	},
 	"Defiled Cathedral": {
 		"ID": "536"
+	},
+	"Delirium Orb": {
+		"ID": "851"
 	},
 	"Dense Fossil": {
 		"ID": "689"
@@ -444,6 +471,9 @@
 	},
 	"Divine Vessel": {
 		"ID": "512"
+	},
+	"Diviner's Delirium Orb": {
+		"ID": "850"
 	},
 	"Diviner's Incubator": {
 		"ID": "790"
@@ -539,6 +569,9 @@
 	"Fields": {
 		"ID": "539"
 	},
+	"Fine Delirium Orb": {
+		"ID": "834"
+	},
 	"Fine Incubator": {
 		"ID": "780"
 	},
@@ -548,11 +581,17 @@
 	"Forbidden Power": {
 		"ID": "623"
 	},
+	"Foreboding Delirium Orb": {
+		"ID": "843"
+	},
 	"Foreboding Incubator": {
 		"ID": "801"
 	},
 	"Forge of the Phoenix": {
 		"ID": "356"
+	},
+	"Fossilised Delirium Orb": {
+		"ID": "848"
 	},
 	"Fossilised Incubator": {
 		"ID": "788"
@@ -575,6 +614,9 @@
 	"Fragment of the Phoenix": {
 		"Abridged": "phoenix",
 		"ID": "42"
+	},
+	"Fragmented Delirium Orb": {
+		"ID": "846"
 	},
 	"Fragmented Incubator": {
 		"ID": "785"
@@ -635,6 +677,9 @@
 	},
 	"Gilded Harbinger Scarab": {
 		"ID": "734"
+	},
+	"Gilded Metamorph Scarab": {
+		"ID": "861"
 	},
 	"Gilded Perandus Scarab": {
 		"ID": "735"
@@ -733,6 +778,9 @@
 	"Immortal Resolve": {
 		"ID": "654"
 	},
+	"Imperial Delirium Orb": {
+		"ID": "853"
+	},
 	"Infested Valley": {
 		"ID": "546"
 	},
@@ -757,6 +805,9 @@
 		"ID": "686"
 	},
 	"jeweller's": "Jeweller's Orb",
+	"Jeweller's Delirium Orb": {
+		"ID": "840"
+	},
 	"Jeweller's Orb": {
 		"Abridged": "jeweller's",
 		"ID": "8"
@@ -930,6 +981,9 @@
 	"Oasis": {
 		"ID": "375"
 	},
+	"Obscured Delirium Orb": {
+		"ID": "844"
+	},
 	"Obscured Incubator": {
 		"ID": "800"
 	},
@@ -1068,6 +1122,9 @@
 	"Polished Harbinger Scarab": {
 		"ID": "746"
 	},
+	"Polished Metamorph Scarab": {
+		"ID": "860"
+	},
 	"Polished Perandus Scarab": {
 		"ID": "747"
 	},
@@ -1091,6 +1148,9 @@
 		"Abridged": "portal",
 		"ID": "18"
 	},
+	"Portentous Delirium Orb": {
+		"ID": "849"
+	},
 	"Potent Alchemical Resonator": {
 		"ID": "676"
 	},
@@ -1108,6 +1168,9 @@
 	},
 	"Pride Before the Fall": {
 		"ID": "180"
+	},
+	"Primal Delirium Orb": {
+		"ID": "852"
 	},
 	"Primal Incubator": {
 		"ID": "791"
@@ -1214,6 +1277,9 @@
 	},
 	"Rusted Harbinger Scarab": {
 		"ID": "758"
+	},
+	"Rusted Metamorph Scarab": {
+		"ID": "859"
 	},
 	"Rusted Perandus Scarab": {
 		"ID": "759"
@@ -1799,8 +1865,20 @@
 	"Simple Steel Net": {
 		"ID": "638"
 	},
+	"Simulacrum": {
+		"ID": "858"
+	},
+	"Simulacrum Splinter": {
+		"ID": "857"
+	},
+	"Singular Delirium Orb": {
+		"ID": "835"
+	},
 	"Singular Incubator": {
 		"ID": "781"
+	},
+	"Skittering Delirium Orb": {
+		"ID": "847"
 	},
 	"Skittering Incubator": {
 		"ID": "786"
@@ -1874,6 +1952,9 @@
 	"Terrace": {
 		"ID": "477"
 	},
+	"Thaumaturge's Delirium Orb": {
+		"ID": "836"
+	},
 	"Thaumaturge's Incubator": {
 		"ID": "802"
 	},
@@ -1946,6 +2027,9 @@
 	"The Chains that Bind": {
 		"ID": "202"
 	},
+	"The Cheater": {
+		"ID": "828"
+	},
 	"The Coming Storm": {
 		"ID": "203"
 	},
@@ -1993,6 +2077,12 @@
 	},
 	"The Drunken Aristocrat": {
 		"ID": "214"
+	},
+	"The Easy Stroll": {
+		"ID": "830"
+	},
+	"The Eldritch Decay": {
+		"ID": "832"
 	},
 	"The Encroaching Darkness": {
 		"ID": "215"
@@ -2198,6 +2288,9 @@
 	"The Professor": {
 		"ID": "667"
 	},
+	"The Progeny of Lunaris": {
+		"ID": "831"
+	},
 	"The Puzzle": {
 		"ID": "629"
 	},
@@ -2267,6 +2360,9 @@
 	"The Stormcaller": {
 		"ID": "276"
 	},
+	"The Strategist": {
+		"ID": "827"
+	},
 	"The Summoner": {
 		"ID": "277"
 	},
@@ -2290,6 +2386,9 @@
 	},
 	"The Throne": {
 		"ID": "283"
+	},
+	"The Tinkerer's Table": {
+		"ID": "829"
 	},
 	"The Tower": {
 		"ID": "284"
@@ -2392,6 +2491,9 @@
 	},
 	"Time-Lost Relic": {
 		"ID": "308"
+	},
+	"Timeless Delirium Orb": {
+		"ID": "854"
 	},
 	"Timeless Eternal Empire Emblem": {
 		"ID": "807"
@@ -2552,6 +2654,9 @@
 		"ID": "493"
 	},
 	"whetstone": "Blacksmith's Whetstone",
+	"Whispering Delirium Orb": {
+		"ID": "845"
+	},
 	"Whispering Incubator": {
 		"ID": "779"
 	},
