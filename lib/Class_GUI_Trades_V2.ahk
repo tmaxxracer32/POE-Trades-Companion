@@ -580,7 +580,7 @@
 							; }
 							; else {
 								GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, styleName, rowW, rowH)
-								AllStylesData[styleName] := {Width:rowW, height:rowH}
+								AllStylesData[styleName] := {Width:rowW, Height:rowH}
 							; }
 						; }
 					}					
@@ -1056,6 +1056,10 @@
 		if (_buyOrSell="Sell") 
 			GUI_Trades_V2.VerifyItemPrice( GUI_Trades_V2.GetTabContent(_buyOrSell, newTabsCount) )
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
+
+		if (_buyOrSell="Sell") && !IsGameWindowActive() {
+			GUI_TabbedTradesCounter.Show()
+		}
 	}
 
 	SetSlotContent(params*) {

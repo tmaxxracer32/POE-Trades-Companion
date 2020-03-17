@@ -417,6 +417,7 @@ Return
 #Include Class_Gui_MyStats.ahk
 #Include Class_GUI_SetHotkey.ahk
 #Include Class_Gui_Settings.ahk
+#Include Class_GUI_TabbedTradesCounter.ahk
 #Include Class_Gui_Trades.ahk
 #Include Class_Gui_TradesMinimized.ahk
 #Include Class_GUI_TradesBuyCompact.ahk

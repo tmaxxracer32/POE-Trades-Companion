@@ -23,6 +23,7 @@ ShellMessage(wParam,lParam) {
 	global PROGRAM
 	global GuiTrades, GuiTrades_Controls
 	global GuiSettings, GuiSettings_Controls
+	global GuiTabbedTradesCounter
 	global POEGameList
 
 	if !IsIn(wParam, "4,5,32772") ; 4=HSHELL_WINDOWACTIVATED | 32772=HSHELL_RUDEAPPACTIVATED | 5=HSHELL_GETMINRECT 
@@ -39,8 +40,11 @@ ShellMessage(wParam,lParam) {
 		WinGet, activeWinPID, PID, A
 	}
 
-	if IsIn(activeWinExe, POEGameList)
+	if IsIn(activeWinExe, POEGameList) {
 		LASTACTIVATED_GAMEPID := activeWinPID
+		if (GuiTabbedTradesCounter.Handle)
+			GUI_TabbedTradesCounter.Destroy()
+	}
 
 	/* Useless since the Trades GUI cannot be focused anymore due to the E0x08000000
 	if IsIn(lParam, GuiTrades.Buy.Handle "," GuiTrades.Sell.Handle "," GuiTrades.BuyPreview.Handle "," GuiTrades.SellPreview.Handle) {

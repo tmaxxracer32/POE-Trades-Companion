@@ -1,4 +1,10 @@
-﻿Get_TradingLeagues(forceScriptLeagues=False) {
+﻿IsGameWindowActive() {
+	global POEGameList
+	WinGet, activeWinExe, ProcessName, A
+	return IsIn(activeWinExe, POEGameList)
+}
+
+Get_TradingLeagues(forceScriptLeagues=False) {
 /*		Retrieves leagues from the API
 		Parse them, to keep only non-solo or non-ssf leagues
 		Return the resulting list
