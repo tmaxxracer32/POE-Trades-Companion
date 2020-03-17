@@ -37,14 +37,19 @@ Is_JSON(fileOrObj) {
 }
 
 JSON_Load(fileOrObj) {
+	delay := SetControlDelay(0), batch := SetBatchLines(-1)
+
 	if !IsObject(fileOrObj) && FileExist(fileOrObj)
 		FileRead, fileContent,% fileOrObj
 	else
 		fileContent := fileOrObj
 	
-	try
+	try {
+		SetControlDelay(delay), SetBatchLines(batch)
 		return JSON.Load(fileContent)
+	}
 	catch e {
+		SetControlDelay(delay), SetBatchLines(batch)
 		MsgBox,% 16+4096,, % "Couldn't load JSON file!`n`nwhat: " e.what "`nfile: " e.file
 		. "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
 		. "`n`nfileOrObj: " fileOrObj
@@ -53,7 +58,10 @@ JSON_Load(fileOrObj) {
 
 JSON_Dump(jsonObj, dontReplaceUnicode=False) {
 	global JSON_SKIP_rx_escapable := dontReplaceUnicode ? True : False
-	return JSON.Dump(jsonObj, "", "`t")
+	delay := SetControlDelay(0), batch := SetBatchLines(-1)
+	dump := JSON.Dump(jsonObj, "", "`t")
+	SetControlDelay(delay), SetBatchLines(batch)
+	return dump
 }
 
 /**
