@@ -96,9 +96,9 @@ Start_Script() {
 
 	; Set global - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	PROGRAM.NAME					:= "POE Trades Companion"
-	PROGRAM.VERSION 				:= "1.15.BETA_992"
+	PROGRAM.VERSION 				:= "1.15.BETA_998" ; 992
 	PROGRAM.IS_BETA					:= IsContaining(PROGRAM.VERSION, "beta")?"True":"False"
-	PROGRAM.ALPHA					:= "Discord ALPHA 5"
+	PROGRAM.ALPHA					:= "Discord ALPHA 6"
 
 	PROGRAM.GITHUB_USER 			:= "lemasato"
 	PROGRAM.GITHUB_REPO 			:= "POE-Trades-Companion"
