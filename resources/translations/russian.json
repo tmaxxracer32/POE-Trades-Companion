@@ -24,6 +24,7 @@
 			"SENDEVENT": "SendEvent",
 			"SENDINPUT": "SendInput",
 			"SHOW_LEAGUE_SHEETS": "Показать интерфейс лиги",
+			"SLEEP": "Sleep",
 			"TOGGLE_MIN_MAX": "Переключить мин / макс",
 			"WRITE_MSG": "Написать сообщение без отправки"
 		},
@@ -132,6 +133,10 @@
 		"hCB_RegularWhisperSFXToggle_ToolTip": "Воспроизведение пользовательского звукового уведомления при получении обычного неторгового шепота.\nПо умолчанию: OFF",
 		"hCB_SendTradingWhisperUponCopyWhenHoldingCTRL": "Отправлять торговый шопот в чат \nпри зажатии CTRL?",
 		"hCB_SendTradingWhisperUponCopyWhenHoldingCTRL_ToolTip": "Мгновенно отправьте шепот в игру, \nесли вы удерживаете клавишу CTRL на Stash (poe.trade poapp.com).\nПо умолчанию: ON",
+		"hCB_SendWhoisWithTradingWhisperCTRLCopy": "Make a /whois of the seller?",
+		"hCB_SendWhoisWithTradingWhisperCTRLCopy_ToolTip": "Additionally make a /whois of the seller after sending the trading whisper.\nThis can be useful to know if they are currently mapping.\nDefault: ON",
+		"hCB_ShowTabbedTradesCounterButton": "Show trading whisper count button\non screen corner while tabbed out?",
+		"hCB_ShowTabbedTradesCounterButton_ToolTip": "Show the number of trading whisper received while tabbed out in the corner of the screen.\nDefault: ON",
 		"hCB_ShowTabbedTrayNotificationOnWhisper": "Показывать уведомление в трее?",
 		"hCB_ShowTabbedTrayNotificationOnWhisper_ToolTip": "Показывает уведомление с именем и шепотом\nесли вы слышите шепот, когда вкладка выходит из игры.\nПо умолчанию: ON",
 		"hCB_TradingWhisperSFXToggle": "Торговый шопот.",
