@@ -1406,9 +1406,9 @@
 		newTabBuyerGuild	:= updateOnly && !tabInfos.BuyerGuild ? cTabCont.BuyerGuild : tabInfos.BuyerGuild
 		newTabTimeStamp 	:= updateOnly && !tabInfos.TimeStamp ? cTabCont.TimeStamp : tabInfos.TimeStamp
 		newTabPID 			:= updateOnly && !tabInfos.PID ? cTabCont.PID : tabInfos.PID
-		newTabIsInArea 		:= updateOnly && (tabInfos.IsInArea || tabInfos.IsInArea=0) ? tabInfos.IsInArea : cTabCont.IsInArea
-		newTabHasNewMessage := updateOnly && (tabInfos.HasNewMessage || tabInfos.HasNewMessage=0) ? tabInfos.HasNewMessage : cTabCont.HasNewMessage
-		newTabWithdrawTally := updateOnly && (tabInfos.WithdrawTally || tabInfos.WithdrawTally=0) ? tabInfos.WithdrawTally : cTabCont.WithdrawTally
+		newTabIsInArea 		:= updateOnly && !tabInfos.IsInArea ? cTabCont.IsInArea : tabInfos.IsInArea
+		newTabHasNewMessage := updateOnly && !tabInfos.HasNewMessage ? cTabCont.HasNewMessage : tabInfos.HasNewMessage
+		newTabWithdrawTally := updateOnly && !tabInfos.WithdrawTally ? cTabCont.WithdrawTally : tabInfos.WithdrawTally
 		newTimeReceived 	:= updateOnly && !tabInfos.Time ? cTabCont.Time : tabInfos.Time
 
 		if RegExMatch(newTabStash, "O)(.*)\(Tab:(.*) / Pos:(.*)\)", newTabStashPat)
@@ -1987,45 +1987,34 @@
 
 		Loop, Parse, buyerTabs,% ","
 		{
-			styleCurrentHwnd := GuiTrades["Tab_" A_LoopField]
-			styleCurrentStr := styleCurrentHwnd = GuiTrades_Controls["hBTN_TabDefault" A_LoopField] ? "Default"
-				: styleCurrentHwnd = GuiTrades_Controls["hBTN_TabJoinedArea" A_LoopField] ? "JoinedArea"
-				: styleCurrentHwnd = GuiTrades_Controls["hBTN_TabWhisperReceived" A_LoopField] ? "WhisperReceived"
-				: "Default"
+			styleCurrent := GuiTrades["Tab_" A_LoopField]
 
 			if (whatDo = "Set") {
-				newStyleHwnd := tabStyle="Default"?GuiTrades_Controls["hBTN_TabDefault" A_LoopField]
+				newStyle := tabStyle="Default"?GuiTrades_Controls["hBTN_TabDefault" A_LoopField]
 					: tabStyle = "JoinedArea"?GuiTrades_Controls["hBTN_TabJoinedArea" A_LoopField]
 					: tabStyle = "WhisperReceived"?GuiTrades_Controls["hBTN_TabWhisperReceived" A_LoopField]
 					: GuiTrades_Controls["hBTN_TabDefault" A_LoopField]
 			}
 			else if (whatDo = "UnSet") {
-				newStyleHwnd := tabStyle="JoinedArea" && tab%A_LoopField%HasNewMessage = True ? GuiTrades_Controls["hBTN_TabWhisperReceived" A_LoopField]
+				newStyle := tabStyle="JoinedArea" && tab%A_LoopField%HasNewMessage = True ? GuiTrades_Controls["hBTN_TabWhisperReceived" A_LoopField]
+					: tabStyle="JoinedArea" && tab%A_LoopField%HasNewMessage != True ? GuiTrades_Controls["hBTN_TabDefault" A_LoopField]
 					: tabStyle="WhisperReceived" && tab%A_LoopField%IsInArea = True ? GuiTrades_Controls["hBTN_TabJoinedArea" A_LoopField]
+					: tabStyle="WhisperReceived" && tab%A_LoopField%IsInArea != True ? GuiTrades_Controls["hBTN_TabDefault" A_LoopField]
 					: GuiTrades_Controls["hBTN_TabDefault" A_LoopField]
 			}
 
-			newStyleStr := newStyleHwnd = GuiTrades_Controls["hBTN_TabDefault" A_LoopField] ? "Default"
-				: newStyleHwnd = GuiTrades_Controls["hBTN_TabJoinedArea" A_LoopField] ? "JoinedArea"
-				: newStyleHwnd = GuiTrades_Controls["hBTN_TabWhisperReceived" A_LoopField] ? "WhisperReceived"
-				: "Default"
-
 			state := whatDo="Set"? True : False
 			tabContent := GUI_Trades.GetTabContent(A_LoopField)
-			if (tabStyle = "JoinedArea") {
+			if (tabStyle = "JoinedArea" && !tabContent.IsInArea)
 				Gui_Trades.UpdateSlotContent(A_LoopField, "IsInArea", state)
-			}
-			else if (tabStyle = "WhisperReceived")
+			else if (tabStyle = "WhisperReceived" && !tabContent.HasNewMessage)
 				Gui_Trades.UpdateSlotContent(A_LoopField, "HasNewMessage", state)
 
-			if (styleCurrentHwnd != newStyleHwnd) {
-				if (whatDo="Set" && newStyleStr="WhisperReceived" && styleCurrentStr="JoinedArea") {
-					; don't do anything, JoinedArea has priority over WhisperReceived
-				}
-				else {
-					GuiControl, Trades:Show,% newStyleHwnd
-					GuiControl, Trades:Hide,% styleCurrentHwnd
-					GuiTrades["Tab_" A_LoopField] := newStyleHwnd
+			if (styleCurrent != newStyle) {
+				if !(whatDo = "Set" && tabStyle = "JoinedArea" && tab%A_LoopField%HasNewMessage = True) { ; Priority: Whisper > Joined > Default. Don't set JoinedArea style if we already have WhisperReceived style
+					GuiControl, Trades:Show,% newStyle
+					GuiControl, Trades:Hide,% styleCurrent
+					GuiTrades["Tab_" A_LoopField] := newStyle
 					styleChanged := True
 				}
 			}
