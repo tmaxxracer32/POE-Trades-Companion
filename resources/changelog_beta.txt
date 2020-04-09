@@ -1,3 +1,11 @@
+1.15.BETA_9990 (09 April 2020)
+	
+	Fixes:
+	- Reverted the tab colour change from last update as it was causing issues with the tab staying green constantly.
+	The next major update changes completely how the Buying/Selling Interfaces work (and also fixes this), so I won't mess with this anymore than that for now.
+	
+= = = = = = = = = = = = =
+
 1.15.BETA_999 (09 April 2020)
 
 	Added:
