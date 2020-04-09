@@ -562,7 +562,7 @@ Parse_GameLogs(strToParse) {
     static TWN_gggQualityRegEx      := {String:"等級 (\d+) (\d+)% (.*)"
                                         , Level:1, Quality:2, Item:3}
 	; huge thanks to orzmashi for helping me understand twn patterns
-	static TWN_poedbRegEx			:= {String:"(.*)您好，我想買在 (.*) 的 (.*) 價格" ; poedb twn have some useless quote before the actual whisper
+	static TWN_poedbRegEx			:= {String:"(.*)您好，我想買在 (.*) 的 (.*) 價格 (.*)" ; poedb twn have some useless quote before the actual whisper
 										, UselessQuote:1, League:2, Item:3, Price: 4}
 	static TWN_poeDbUnpricedRegEx	:= {String:"(.*)您好，我想買在 (.*) 的 (.*)"
 										, UselessQuote:1, League:2, Item:3}
