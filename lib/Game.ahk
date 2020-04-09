@@ -566,11 +566,11 @@ Parse_GameLogs(strToParse) {
 										, UselessQuote:1, League:2, Item:3, Price: 4}
 	static TWN_poeDbUnpricedRegEx	:= {String:"(.*)您好，我想買在 (.*) 的 (.*)"
 										, UselessQuote:1, League:2, Item:3}
-	static TWN_poeDbCurrencyRegEx 	:= {"(.*)您好，我想買在 (.*) 的 (.*) 個 (.*) 直購價 (.*)"
+	static TWN_poeDbCurrencyRegEx 	:= {String:"(.*)您好，我想買在 (.*) 的 (.*) 個 (.*) 直購價 (.*)"
 										, UselessQuote:1, League:2, Item:3, Item2:4, Price:5}
-	static TWN_poeDbStashRegEx		:= {"\[倉庫:(.*) 位置: 左(\d+), 上 (\d+)\]"
+	static TWN_poeDbStashRegEx		:= {String:"\[倉庫:(.*) 位置: 左(\d+), 上 (\d+)\]"
 										, Tab:1, Left:2, Top:3}
-	static TWN_poeDbQualityRegEx	:= {"的 (.*) \(等級(\d+)\/(\d+)%)"
+	static TWN_poeDbQualityRegEx	:= {String:"的 (.*) \(等級(\d+)\/(\d+)%)"
 										, Item:1, Level:2, Quality:3}
 
 	static allTradingRegex := {"poeTrade":poeTradeRegex
