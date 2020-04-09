@@ -551,16 +551,27 @@ Parse_GameLogs(strToParse) {
 	static KOR_gggQualityRegEx		:= {String:"(\d+) (\d+)% (.*)"
 										, Level:1, Quality:2, Item:3}
 
-    static TWN_gggRegEx                := {String:"(.*)你好，我想購買 (.*) 標價 (.*) 在 (.*)"
+    static TWN_gggRegEx             := {String:"(.*)你好，我想購買 (.*) 標價 (.*) 在 (.*)"
                                         , Other:1, Item:2, Price:3, League:4}
-    static TWN_gggUnpricedRegEx        := {String:"(.*)你好，我想購買 (.*) 在 (.*)"
+    static TWN_gggUnpricedRegEx     := {String:"(.*)你好，我想購買 (.*) 在 (.*)"
                                         , Other:1, Item:2, League:3}
-    static TWN_gggCurrencyRegEx        := {String:"(.*)你好，我想用 (.*) 購買 (.*) in (.*)"
+    static TWN_gggCurrencyRegEx     := {String:"(.*)你好，我想用 (.*) 購買 (.*) in (.*)"
                                         , Other:1, Item:2, Price:3, League:4} 										
     static TWN_gggStashRegEx        := {String:"\(倉庫頁 ""(.*)""; 位置: 左 (\d+), 上 (\d+)\)"
-                                        , Tab:1, Left:2, Top:3, Other:4}
-    static TWN_gggQualityRegEx        := {String:"等級 (\d+) (\d+)% (.*)"
+                                        , Tab:1, Left:2, Top:3}
+    static TWN_gggQualityRegEx      := {String:"等級 (\d+) (\d+)% (.*)"
                                         , Level:1, Quality:2, Item:3}
+	; huge thanks to orzmashi for helping me understand twn patterns
+	static TWN_poedbRegEx			:= {String:"(.*)您好，我想買在 (.*) 的 (.*) 價格" ; poedb twn have some useless quote before the actual whisper
+										, UselessQuote:1, League:2, Item:3, Price: 4}
+	static TWN_poeDbUnpricedRegEx	:= {String:"(.*)您好，我想買在 (.*) 的 (.*)"
+										, UselessQuote:1, League:2, Item:3}
+	static TWN_poeDbCurrencyRegEx 	:= {"(.*)您好，我想買在 (.*) 的 (.*) 個 (.*) 直購價 (.*)"
+										, UselessQuote:1, League:2, Item:3, Item2:4, Price:5}
+	static TWN_poeDbStashRegEx		:= {"\[倉庫:(.*) 位置: 左(\d+), 上 (\d+)\]"
+										, Tab:1, Left:2, Top:3}
+	static TWN_poeDbQualityRegEx	:= {"的 (.*) \(等級(\d+)\/(\d+)%)"
+										, Item:1, Level:2, Quality:3}
 
 	static allTradingRegex := {"poeTrade":poeTradeRegex
 		,"poeTrade_Unpriced":poeTradeUnpricedRegex
@@ -575,7 +586,10 @@ Parse_GameLogs(strToParse) {
 		allTradingRegex["ggg_" A_LoopField] := %A_LoopField%_gggRegEx
 		allTradingRegex["ggg_" A_LoopField "_unpriced"] := %A_LoopField%_gggUnpricedRegEx
 		allTradingRegex["ggg_" A_LoopField "_currency"] := %A_LoopField%_gggCurrencyRegEx
-	}	
+	}
+	allTradingRegEx["poeDb_TWN"] := TWN_poedbRegEx
+	allTradingRegEx["poeDb_TWN_unpriced"] := TWN_poeDbUnpricedRegEx
+	allTradingRegEx["poeDb_TWN_currency"] := TWN_poeDbCurrencyRegEx
 
 	static ENG_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) has joined the area.*") 
 	static ENG_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) has left the area.*") 
@@ -716,6 +730,7 @@ Parse_GameLogs(strToParse) {
 			isGGGSpa := IsContaining(tradeRegExName, "ggg_spa")
 			isGGGKor := IsContaining(tradeRegExName, "ggg_kor")
 			isGGGTwn := IsContaining(tradeRegExName, "ggg_twn")
+			isPoeDbTwn := IsContaining(tradeRegExName, "poeDb_twn")
 			
 			qualRegEx := isPoeTrade ? poeTradeQualityRegEx
 				: isPoeApp ? poeAppQualityRegEx
@@ -727,6 +742,7 @@ Parse_GameLogs(strToParse) {
 				: isGGGSpa ? SPA_gggQualityRegEx
 				: isGGGKor ? KOR_gggQualityRegEx
 				: isGGGTwn ? TWN_gggQualityRegEx
+				: isPoeDbTwn ? TWN_poeDbQualityRegEx
 				: ""
 			stashRegEx := isPoeTrade ? poeTradeStashRegex
 				: isPoeApp ? poeAppStashRegex
@@ -738,6 +754,7 @@ Parse_GameLogs(strToParse) {
 				: isGGGSpa ? SPA_gggStashRegEx
 				: isGGGKor ? KOR_gggStashRegEx
 				: isGGGTwn ? TWN_gggStashRegEx
+				: isPoeDbTwn ? TWN_poeDbStashRegEx
 				: ""
 
 			whisperLang := isPoeTrade ? "ENG"
@@ -750,11 +767,12 @@ Parse_GameLogs(strToParse) {
 				: isGGGSpa ? "SPA"
 				: isGGGKor ? "KOR"
 				: isGGGTwn ? "TWN"
+				: isPoeDbTwn ? "TWN"
 				: ""
 
 			tradeBuyerName := whispName, tradeBuyerGuild := whispGuild
 			tradeOtherStart := tradePat[matchingRegEx["Other"]]
-			tradeItem := tradePat[matchingRegEx["Item"]]
+			tradeItem := tradePat[matchingRegEx["Item"]], tradeItem .= tradePat[matchingRegEx["Item2"]] ? " " tradePat[matchingRegEx["Item2"]] : "", AutoTrimStr(tradeItem)
 			tradePrice := tradePat[matchingRegEx["Price"]]
 			tradeLeagueAndMore := tradePat[matchingRegEx["League"]]
 			tradeLeagueAndMore .= tradePat[matchingRegEx["Other2"]]
@@ -1063,6 +1081,10 @@ IsTradingWhisper(str) {
     TWN_gggUnpricedRegEx    := "@.* 你好，我想購買 .* 在 .*"
     TWN_gggCurrencyRegEx    := "@.* 你好，我想用 .* 購買 .* in .*"
 
+	TWN_poedbRegEx			:= "@.* .*您好，我想買在 .* 的 .* 價格"
+	TWN_poeDbUnpricedRegEx	:= "@.* .*您好，我想買在 .* 的 .*"
+	TWN_poeDbCurrencyRegEx 	:= "@.* .*您好，我想買在 .* 的 .* 個 .* 直購價 .*"
+
 	allRegexes := []
 	allRegexes.Push(poeTradeRegex, poeTradeUnpricedRegex, currencyPoeTradeRegex
 		, poeAppRegex, poeAppUnpricedRegex, poeAppCurrencyRegex
@@ -1073,7 +1095,8 @@ IsTradingWhisper(str) {
 		, FRE_gggRegEx, FRE_gggUnpricedRegEx, FRE_gggCurrencyRegEx
 		, SPA_gggRegEx, SPA_gggUnpricedRegEx, SPA_gggCurrencyRegEx
 		, KOR_gggRegEx, KOR_gggUnpricedRegEx, KOR_gggCurrencyRegEx
-		, TWN_gggRegEx, TWN_gggUnpricedRegEx, TWN_gggCurrencyRegEx)
+		, TWN_gggRegEx, TWN_gggUnpricedRegEx, TWN_gggCurrencyRegEx
+		, TWN_poedbRegEx, TWN_poeDbUnpricedRegEx, TWN_poeDbCurrencyRegEx)
 
 	; Make sure it starts with @ and doesnt contain line break
 	if InStr(str, "`n") || (firstChar != "@")  {
