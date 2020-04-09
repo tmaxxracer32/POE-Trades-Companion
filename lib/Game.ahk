@@ -677,14 +677,14 @@ Parse_GameLogs(strToParse) {
 
 		; Check if whisper sent
 		isWhisperSent := isWhisper := isWhisperReceived := False
-		if RegExMatch(parsedLogsMsg, "SO)^(?:[^ ]+ ){6}(\d+)\] (?=[^#$&%]).*@(?:To|À|An|Para|Кому|ถึง|발신) (.*?): (.*)", whisperPat) {
+		if RegExMatch(parsedLogsMsg, "SO)^(?:[^ ]+ ){6}(\d+)\] (?=[^#$&%]).*@(?:To|À|An|Para|Кому|ถึง|발신|向) (.*?): (.*)", whisperPat) {
 			isWhisperSent := True, isWhisper := True
 			instancePID := whisperPat.1, whispNameFull := whisperPat.2, whispMsg := whisperPat.3
 			nameAndGuild := SplitNameAndGuild(whispNameFull), whispName := nameAndGuild.Name, whispGuild := nameAndGuild.Guild
 			GuiTrades.Last_Whisper_Sent_Name := whispName
 		}
 		; Check if whisper received
-		else if RegExMatch(parsedLogsMsg, "SO)^(?:[^ ]+ ){6}(\d+)\] (?=[^#$&%]).*@(?:From|De|От кого|จาก|Von|Desde|수신) (.*?): (.*)", whisperPat ) {
+		else if RegExMatch(parsedLogsMsg, "SO)^(?:[^ ]+ ){6}(\d+)\] (?=[^#$&%]).*@(?:From|De|От кого|จาก|Von|Desde|수신|來自) (.*?): (.*)", whisperPat ) {
 			isWhisperReceived := True, isWhisper := True
 			instancePID := whisperPat.1, whispNameFull := whisperPat.2, whispMsg := whisperPat.3
 			nameAndGuild := SplitNameAndGuild(whispNameFull), whispName := nameAndGuild.Name, whispGuild := nameAndGuild.Guild
