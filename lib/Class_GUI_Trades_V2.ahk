@@ -981,7 +981,8 @@
 		isFirstTab      := tabsCount=0 ? True : False
 
 		if (_buyOrSell="Buy" && PROGRAM.SETTINGS.BUY_INTERFACE.Mode="Disabled")
-			return
+		|| (_buyOrSell="Sell" && PROGRAM.SETTINGS.SELL_INTERFACE.Mode="Disabled")
+			return "InterfaceDisabled"
 		
         ; Comparing if we already have a tab with same exact infos
 		existingTabID := GUI_Trades_V2.IsTabAlreadyExisting(_buyOrSell, infos)

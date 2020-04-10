@@ -207,7 +207,7 @@ Class GUI_Settings {
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_BuyingInterfaceMode, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 
 		Gui.Add("Settings", "Text", "x+20 y" upMost2 " Center hwndhTEXT_SellingInterfaceMode", PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_SellingInterfaceMode), sellIntefaceTxtPos := Get_ControlCoords("Settings", GuiSettings_Controls.hTEXT_SellingInterfaceMode)
-		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode +0x0210", "Tabs|Stack")
+		Gui.Add("Settings", "DropDownList", "xp y+3 w" sellIntefaceTxtPos.W " AltSubmit hwndhDDL_SellingInterfaceMode +0x0210", "Tabs|Stack|Disabled")
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_SellingInterfaceMode, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		upMost3 := poeAccDdlPos.Y+poeAccDdlPos.H+25
 		
