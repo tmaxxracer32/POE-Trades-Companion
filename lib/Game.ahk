@@ -644,7 +644,7 @@ Parse_GameLogs(strToParse, preview=False) {
 		for index, regexStr in allAfkOnRegEx {
 			if RegExMatch(parsedLogsMsg, "iSO)" regexStr, afkOnPat) {
 				instancePID := afkOnPat.1
-				GuiTrades[instancePID "_AfkState"] := True
+				GuiTrades.Sell[instancePID "_AfkState"] := True
 				AppendToLogs("AFK mode for instance PID """ instancePID """ set to ON.")
 				break
 			}
@@ -652,7 +652,7 @@ Parse_GameLogs(strToParse, preview=False) {
 		for index, regexStr in allAfkOffRegEx {
 			if RegExMatch(parsedLogsMsg, "iSO)" regexStr, afkOffPat) {
 				instancePID := afkOffPat.1
-				GuiTrades[instancePID "_AfkState"] := False
+				GuiTrades.Sell[instancePID "_AfkState"] := False
 				AppendToLogs("AFK mode for instance PID """ instancePID """ set to OFF.")
 				break
 			}
@@ -877,7 +877,7 @@ Parse_GameLogs(strToParse, preview=False) {
 
 					pbNoteOnTradingWhisper := PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnTradingWhisper
 					if (pbNoteOnTradingWhisper = "True") {
-						if (PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnlyWhenAFK = "True" && GuiTrades[instancePID "_AfkState"] = True)
+						if (PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnlyWhenAFK = "True" && GuiTrades.Sell[instancePID "_AfkState"] = True)
 							doPBNote := True
 						else if (PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnlyWhenAFK = "False")
 							doPBNote := True
@@ -921,14 +921,14 @@ Parse_GameLogs(strToParse, preview=False) {
 		else if (parsedLogsMsg && !matchingRegEx && isWhisper=True) { ; No trading whisper match
 			; Add whisper to buyer's tab if existing
 			if (isWhisperReceived) {
-				Loop % GuiTrades.Tabs_Count {
+				Loop % GuiTrades.Sell.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
 						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
 						GUI_Trades_V2.SetTabStyleWhisperReceived(whispName)
 					}
 				}
-				Loop % GuiTradesBuyCompact.Tabs_Count {
+				Loop % GuiTrades.Buy.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetSlotContent("Buy", A_Index)
 					if (tabInfos.Seller = whispName) {
 						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @From: " whispMsg)
@@ -950,7 +950,7 @@ Parse_GameLogs(strToParse, preview=False) {
 
 				pbNoteOnRegularWhisper := PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnWhisperMessage
 				if (pbNoteOnRegularWhisper = "True") {
-					if (PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnlyWhenAFK = "True" && GuiTrades[instancePID "_AfkState"] = True)
+					if (PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnlyWhenAFK = "True" && GuiTrades.Sell[instancePID "_AfkState"] = True)
 						doPBNote := True
 					else if (PROGRAM.SETTINGS.SETTINGS_MAIN.PushBulletOnlyWhenAFK = "False")
 						doPBNote := True
@@ -969,13 +969,13 @@ Parse_GameLogs(strToParse, preview=False) {
 				}
 			}
 			else if (isWhisperSent) {
-				Loop % GuiTradesBuyCompact.Tabs_Count {
+				Loop % GuiTrades.Buy.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetSlotContent("Buy", A_Index)
 					if (tabInfos.Seller = whispName) {
 						GUI_Trades_V2.UpdateSlotContent("Buy", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
 					}
 				}
-				Loop % GuiTrades.Tabs_Count {
+				Loop % GuiTrades.Sell.Tabs_Count {
 					tabInfos := GUI_Trades_V2.GetTabContent("Sell", A_Index)
 					if (tabInfos.Buyer = whispName) {
 						GUI_Trades_V2.UpdateSlotContent("Sell", A_Index, "AdditionalMessageFull", "[" A_Hour ":" A_Min "] @To: " whispMsg)
