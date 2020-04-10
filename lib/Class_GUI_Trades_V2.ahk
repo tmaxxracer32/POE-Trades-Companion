@@ -994,8 +994,11 @@
 			return "TabIgnored"
 		}
         ; If tabs limit is close, allocate more slots
-		if (tabsCount+1 >= tabsLimit) && !IsContaining(_buyOrSell, "Preview")
+		if (tabsCount+1 >= tabsLimit) && !IsContaining(_buyOrSell, "Preview") {
 			GUI_Trades_V2.IncreaseTabsLimit(_buyOrSell)
+			GUI_Trades_V2.PushNewTab(_buyOrSell, infos)
+			return
+		}
 
         ; Putting infos to slot
         newTabsCount := (tabsCount <= 0) ? 1 : tabsCount+1
