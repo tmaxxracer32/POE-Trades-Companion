@@ -2627,18 +2627,19 @@
 		tabsLimit := GuiTrades[_buyOrSell].Tabs_Limit
 
 		limits := [50,100,251]
-		nextLimit := IsBetween(tabsLimit, 0, limits.1) ? limits.2
+		nextLimit := !tabsLimit || tabsLimit="" ? limits.1
+			: IsBetween(tabsLimit, 0, limits.1) ? limits.2
 			: IsBetween(tabsLimit, limits.1, limits.1) ? limits.3
 			: limits.3
 
 		prevLimit := nextLimit
            
 		if (nextLimit = limits.3) && (prevLimit != limits.3) {
-			MsgBox(4096, "", "You have reached the maximal tabs limit: " limits.3
-			. "`nNew tabs will not be able to be created.")
+			TrayNotifications.Show("Maximal tabs limit reached", "You have reached the maximal tabs limit: " limits.3
+			. "`nNew tabs cannot be created.")
 		}
 
-		TrayNotifications.Show("Increasing tabs limit to " limits.3, "")
+		TrayNotifications.Show("Increasing tabs limit to " nextLimit, "")
 		
 		GUI_Trades_V2.RecreateGUI(_buyOrSell, nextLimit)
 	}
