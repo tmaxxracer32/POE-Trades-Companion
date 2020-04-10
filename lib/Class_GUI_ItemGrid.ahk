@@ -79,7 +79,7 @@ class GUI_ItemGrid {
 
     ; map tab grid position and size of squares
     static map_xRoot := 45/1080
-    static map_yRoot := 488/1080
+    static map_yRoot := 501/1080
     static map_squareWRoot := 48/1080
     static map_squareHRoot := 48/1080
     static map_casesCountX := 12
@@ -91,8 +91,8 @@ class GUI_ItemGrid {
     static mapTier_squareHRoot := 45/1080
     ; map map button positions and size
     static mapMap_xpos := [83,156,229,302,375,447,520 , 83,156,229,302,375,447,520]
-    static mapMap_ypos := [328,328,328,328,328,328,328 , 398,398,398,398,398,398,398]
-    static mapMap_ypos_2 := [329,329,329,329,329,329,329 , 400,400,400,400,400,400,400] ; after clicking down arrow, it's offset for some reasons
+    static mapMap_ypos := [328,328,328,328,328,328,328 , 405,405,405,405,405,405,405]
+    static mapMap_ypos_2 := [329,329,329,329,329,329,329 , 407,407,407,407,407,407,407] ; after clicking down arrow, it's offset for some reasons
     static mapMap_squareWRoot := 58/1080
     static mapMap_squareHRoot := 59/1080
     ; map arrow up down positions and size
@@ -273,10 +273,11 @@ class GUI_ItemGrid {
             Gui.Add("ItemGridMapTier", "Progress", "x" mapTier_pointW - this.gridThicc " y0 w" this.gridThicc " h" mapTier_pointH " Background" squareColor) ; > 
             Gui.Add("ItemGridMapTier", "Progress", "x0 y" mapTier_pointH - this.gridThicc " w" mapTier_pointW " h" this.gridThicc " Background" squareColor) ; v 
             Gui.Add("ItemGridMapTier", "Progress", "x0 y0 w" this.gridThicc " h" mapTier_pointH " Background" squareColor) ; <
-
+            /* #280 - Disabled until proper solution using stash api is worked on
             ; Map map case
             RegExMatch(gridItemName, "O)(.*) \(T(\d+)\)$", itemPat)
                 mapNameOnly := itemPat.1
+
             for mapName, nothing in PROGRAM.DATA.MAPS_DATA["tier_" mapTier] {
                 if (mapTier="unique") {
                     uniqueMapMatch := IsContaining_Parse(mapNameOnly, PROGRAM.DATA.UNIQUE_MAPS_LIST, "`n", "`r", getMatch:=True).2
@@ -300,6 +301,7 @@ class GUI_ItemGrid {
                         Break
                 }
             }
+            */
 
             if (mapNum) {
                 mapMap_ypos := arrowClicks?this.mapMap_ypos_2:this.mapMap_ypos
@@ -319,7 +321,7 @@ class GUI_ItemGrid {
                 Gui.Add("ItemGridMapMap", "Progress", "x0 y" mapMap_pointH - this.gridThicc " w" mapMap_pointW " h" this.gridThicc " Background" squareColor) ; v 
                 Gui.Add("ItemGridMapMap", "Progress", "x0 y0 w" this.gridThicc " h" mapMap_pointH " Background" squareColor) ; <
 
-                showMapMapGrid = True
+                showMapMapGrid := True
             }
 
             if (arrowClicks) {

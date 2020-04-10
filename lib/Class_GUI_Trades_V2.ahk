@@ -708,19 +708,12 @@
 
         if (Gui%guiName%.ImageButton_Errors) {
 			global GuiErrorLogBuy, GuiErrorLogBuyPreview, GuiErrorLogSellPreview, GuiErrorLogSell
-			errorLog := errorLogNoTrim := Gui%guiName%.ImageButton_Errors
-			if ( StrLen(errorLog) > 60000 ) {
-				errorLog := StrTrimRight(errorLog, StrLen(errorLog) - 60000)
-				errorLog .= "`n`n`n[ Logs trimmed due to AHK length restriction ]"
-				AppendToLogs(errorLogNoTrim)
-			}
-			Gui.New("ErrorLog" guiName, "+AlwaysOnTop +ToolWindow +HwndhGui", "GUI Trades " _buyOrSell " Error Logs")
-			Gui.Add("ErrorLog" guiName, "Text", "x10 y10", "One or multiple error(s) occured while creating the Trades GUI imagebuttons."
-			. "`nIn case you are getting ""Couldn't get button's font"" errors, restarting your computer should fix it.")
-			Gui.Add("ErrorLog" guiName, "Edit", "xp y+5 w800 R30 ReadOnly", errorLog)
-			Gui.Add("ErrorLog" guiName, "Link", "xp y+5", "If you need assistance, you can contact me on: "
-			. "<a href=""" PROGRAM.LINK_GITHUB """>GitHub</a> - <a href=""" PROGRAM.LINK_REDDIT """>Reddit</a> - <a href=""" PROGRAM.LINK_GGG """>PoE Forums</a> - <a href=""" PROGRAM.LINK_DISCORD """>Discord</a>")
-			Gui.Show("ErrorLog" guiName, "xCenter yCenter")
+
+			AppendToLogs(Gui%guiName%.ImageButton_Errors)
+			TrayNotifications.Show(guiName " Interface - ImageButton Errors", "Some buttons failed to be created successfully."
+			. "`n" "The interface will work normally, but its appearance will be altered."
+			. "`n" "Further informations have been added to the logs file."
+			. "`n" "If this keep occuring, please join the official Discord channel.")
 		}
 
         if !IsObject(GuiTrades)
@@ -2384,7 +2377,8 @@
 		if RegExMatch(item, "O)(.*?) \(Lvl:(.*?) \/ Qual:(.*?)%\)", itemPat) {
 			gemName := itemPat.1, gemLevel := itemPat.2, gemQual := itemPat.3
 		}
-		else if RegExMatch(item, "O)(.*?) \(T(.*?)\)", itemPat) {
+		else if RegExMatch(item, "O)(.*?) \(T(.*?)\)", itemPat)
+		|| RegExMatch(item, "O)(.*?) \(階級(.*?)\)", itemPat) {
 			mapName := itemPat.1, mapTier := itemPat.2
 		}
 
@@ -2398,6 +2392,7 @@
 				: whisLang = "GER" ? "e" ; Stufe
 				: whisLang = "SPA" ? "l" ; Nivel
 				: whisLang = "KOR" ? "벨" ; 레벨
+				: whisLang = "TWN" ? "級" ; 等級
 				: "l"
 			searchQualPrefix := whisLang = "ENG" ? "y" ; quality
 				: whisLang = "RUS" ? "о" ; Качество
@@ -2407,6 +2402,7 @@
 				: whisLang = "GER" ? "t" ; Qualität
 				: whisLang = "SPA" ? "d" ; Calidad
 				: whisLang = "KOR" ? "티" ; 퀄리티
+				: whisLang = "TWN" ? "質" ; 品質
 				: "y"
 
 			searchGemStr := """" gemName """"

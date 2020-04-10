@@ -468,6 +468,16 @@ Class GUI_Settings {
 		*	SHOW
 		*/
 
+		if (GuiSettings.ImageButton_Errors) {
+			global GuiErrorLogBuy, GuiErrorLogBuyPreview, GuiErrorLogSellPreview, GuiErrorLogSell
+
+			AppendToLogs(GuiSettings.ImageButton_Errors)
+			TrayNotifications.Show("Settings Interface - ImageButton Errors", "Some buttons failed to be created successfully."
+			. "`n" "The interface will work normally, but its appearance will be altered."
+			. "`n" "Further informations have been added to the logs file."
+			. "`n" "If this keep occuring, please join the official Discord channel.")
+		}
+
 		GUI_Settings.TabsSettingsMain_SetUserSettings()
 		GUI_Settings.TabCustomizationSkins_SetUserSettings()
 		GUI_Settings.TabHotkeys_SetUserSettings()

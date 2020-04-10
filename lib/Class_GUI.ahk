@@ -228,7 +228,14 @@ Class GUI {
 
 		if (type = "ImageButton") {
 			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-				Gui%name%["ImageButton_Errors"] .= "GUI: """ name """" " - Control: """ vHwnd """ - Error: """ ImageButton.LastError """`n"
+				Gui%name%["ImageButton_Errors"] .= "GUI: """ name """"
+				. "`n" "Error: """ ImageButton.LastError """"
+				. "`n" "Control: """ vHwnd """ - Control Handle: """ Gui%name%_Controls[vHwnd] """"
+				. "`n" "Options: """ opts """"
+				. "`n" "ImageButton Font Handle: """ imageBtnFontHandle """"
+				. "`n" "ImageButton Font Size: """ imageBtnFontSize """"
+				. "`n" "ImageButton Style: """ JSON.Dump(imageBtnStyle) """"
+				. "`n`n"
 		}
 	}
 
@@ -274,7 +281,13 @@ Class GUI {
 	}
 
 	Show(name, opts="", title="") {
-		Gui, %name%:Show, %opts%, %title%
+		try
+			Gui, %name%:Show, %opts%, %title%
+		catch e
+			AppendToLogs(A_ThisFunc " failed with params:"
+			. "`nname: """ name """`nopts: """ opts """`ntitle: """ title """"
+			. "`nAdditional informations: what: """ e.what """`nfile: """ e.file """"
+			. "`nline: """ e.line """`nmessage: """ e.message """`nextra: """ e.extra """")
 	}
 
 	GetGlobal(guiName, type="", key="") {
