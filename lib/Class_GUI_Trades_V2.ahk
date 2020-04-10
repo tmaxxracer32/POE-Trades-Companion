@@ -177,6 +177,8 @@
 	CreatePreview(_buyOrSell, _guiMode) {
 
 		GUI_Trades_V2.Create(1, buyOrSell:=_buyOrSell, stackOrTabs:=_guiMode, preview:=True)
+		if (_guiMode="Disabled")
+			return
 
 		if (_buyOrSell="Buy")
 			Parse_GameLogs("2017/06/04 17:31:02 105384166 355 [INFO Client 6416] @To SensualApples: Hi, I would like to buy your Shaped Beach Map (T6) listed for 1 chaos in Standard offer 3 alch?", preview:=True)
