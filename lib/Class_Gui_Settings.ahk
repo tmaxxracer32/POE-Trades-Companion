@@ -323,7 +323,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationSellingButtonType Choose1 Hidden +0x0210", "Text|Icon")
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationSellingButtonType, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationSellingButtonName Hidden", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1 Hidden +0x0210", "Clipboard|Invite|Kick|ThumbsUp|ThumbsDown|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationSellingButtonIcon Choose1 Hidden +0x0210", "Clipboard|Invite|Kick|Hideout|ThumbsDown|ThumbsUp|Trade|Whisper")
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationSellingButtonIcon, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationSellingActionType Choose2 Hidden +0x0210", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationSellingActionType)
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationSellingActionType, odcObjActions) ; Requires +0x0210 for DDL and +0x0050 for LB
@@ -352,7 +352,7 @@ Class GUI_Settings {
 		Gui.Add("Settings", "DropDownList", "x" ( (rightMost2-leftMost2) /2)-(80/2)-(150/2) " y+10 w80 hwndhDDL_CustomizationBuyingButtonType Choose1 Hidden +0x0210", "Text|Icon")
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationBuyingButtonType, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "Edit", "x+3 yp w150 R1 hwndhEDIT_CustomizationBuyingButtonName Hidden", "Button Name")
-		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1 Hidden +0x0210", "Clipboard|Invite|Kick|ThumbsDown|ThumbsUp|Trade|Whisper")
+		Gui.Add("Settings", "DropDownList", "xp yp wp hwndhDDL_CustomizationBuyingButtonIcon Choose1 Hidden +0x0210", "Clipboard|Invite|Kick|Hideout|ThumbsDown|ThumbsUp|Trade|Whisper")
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationBuyingButtonIcon, odcObj) ; Requires +0x0210 for DDL and +0x0050 for LB
 		Gui.Add("Settings", "DropDownList", "x" leftMost2 " y+5 w250 R100 hwndhDDL_CustomizationBuyingActionType Choose2 Hidden +0x0210", ACTIONS_AVAILABLE), acTypeDDLPos := Get_ControlCoords("Settings", GuiSettings_Controls.hDDL_CustomizationBuyingActionType)
 		OD_Colors.Attach(GuiSettings_Controls.hDDL_CustomizationBuyingActionType, odcObjActions) ; Requires +0x0210 for DDL and +0x0050 for LB
