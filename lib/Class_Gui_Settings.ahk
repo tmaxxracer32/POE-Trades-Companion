@@ -1586,13 +1586,21 @@ Class GUI_Settings {
 	}
 
 	Customization_SellingBuying_ShowButtonNameControl(whichTab) {
-		global GuiSettings_Controls
+		global PROGRAM, GuiSettings_Controls
+		_buyOrSell := whichTab="Selling"?"SELL":"BUY"
+
+		if (PROGRAM.SETTINGS[_buyOrSell "_INTERFACE"].Mode = "Disabled")
+			return
 		GuiControl, Settings:Show,% GuiSettings_Controls["hEDIT_Customization" whichTab "ButtonName"]
 		GuiControl, Settings:Hide,% GuiSettings_Controls["hDDL_Customization" whichTab "ButtonIcon"]
 	}
 
 	Customization_SellingBuying_ShowButtonIconControl(whichTab) {
-		global GuiSettings_Controls
+		global PROGRAM, GuiSettings_Controls
+		_buyOrSell := whichTab="Selling"?"SELL":"BUY"
+
+		if (PROGRAM.SETTINGS[_buyOrSell "_INTERFACE"].Mode = "Disabled")
+			return
 		GuiControl, Settings:Show,% GuiSettings_Controls["hDDL_Customization" whichTab "ButtonIcon"]
 		GuiControl, Settings:Hide,% GuiSettings_Controls["hEDIT_Customization" whichTab "ButtonName"]
 	}
