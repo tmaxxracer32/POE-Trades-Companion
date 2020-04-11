@@ -1,4 +1,4 @@
-﻿/*	Slightly modified library for personal use
+﻿/*	Slightly modified library for personal use (lemasato)
 	Added Is_JSON(), JSON_Load() and JSON_Dump() functions
 */
 
@@ -50,9 +50,15 @@ JSON_Load(fileOrObj) {
 	}
 	catch e {
 		SetControlDelay(delay), SetBatchLines(batch)
-		MsgBox,% 16+4096,, % "Couldn't load JSON file!`n`nwhat: " e.what "`nfile: " e.file
+		TrayNotifications.Show("Couldn't load JSON file!`n`nwhat: " e.what "`nfile: " e.file
 		. "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
-		. "`n`nfileOrObj: " fileOrObj
+		. "`n`nfileOrObj: " fileOrObj)
+
+		logsTxt := A_ThisFunc " failed. Additional informations:
+		. "`nwhat: """ e.what """`nfile: """ e.file """"
+		. "`nline: """ e.line """`nmessage: """ e.message """`nextra: """ e.extra """"
+		logsTxt .= IsObject(fileOrObj) ? "`nObj dump: " JSON_Dump(fileOrObj) : "`nfileOrObj parameter dump: " fileOrObj
+		AppendToLogs(logsTxt)
 	}
 }
 
