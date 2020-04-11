@@ -96,7 +96,7 @@ Start_Script() {
 
 	; Set global - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	PROGRAM.NAME					:= "POE Trades Companion"
-	PROGRAM.VERSION 				:= "1.15.BETA_998" ; 992
+	PROGRAM.VERSION 				:= "1.15.BETA_9990" ; code on par with 1.15.BETA_9990
 	PROGRAM.IS_BETA					:= IsContaining(PROGRAM.VERSION, "beta")?"True":"False"
 	PROGRAM.ALPHA					:= "Discord ALPHA 6"
 
