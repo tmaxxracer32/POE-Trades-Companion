@@ -28,6 +28,40 @@ Gdip_Shutdown(pToken="")
 	return 0
 }
 
+Gdip_PrivateFontFamilyCreate(ByRef hCollection, fontFile, fontTitle="") {
+	/*
+		DllCall("gdi32\AddFontResourceEx", Str, fontFile, UInt, (FR_PRIVATE:=0x10), Int, 0)
+		DllCall("gdiplus\GdipPrivateAddFontFile", "uint", hCollection, "uint", &fontFile)
+		DllCall("gdiplus\GdipCreateFontFamilyFromName", "uint", &fontTitle, "uint", hCollection, "uint*", hFamily)
+	*/
+	if (!hCollection)
+		DllCall("gdiplus\GdipNewPrivateFontCollection", "uint*", hCollection)
+	if (!fontTitle)
+		fontTitle := FGP_Value(fontFile, 21) ; 21 = Title
+
+	DllCall("gdi32\AddFontResourceEx", "Str", fontFile, "UInt", FR_PRIVATE:=0x10, "UInt", 0)
+
+	if (!A_IsUnicode) {
+		nSize := DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontFile, "int", -1, "Uint", 0, "int", 0)
+		VarSetCapacity(wFontfile, nSize * 2 + 1)
+		DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontFile, "int", -1, "Uint", &wFontfile, "int", nSize + 1)
+
+		nSize := DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontTitle, "int", -1, "Uint", 0, "int", 0)
+		VarSetCapacity(wFontTitle, nSize * 2 + 1)
+		DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontTitle, "int", -1, "Uint", &wFontTitle, "int", nSize + 1)
+
+		DllCall("gdiplus\GdipNewPrivateFontCollection", "uint*", hCollection)
+		DllCall("gdiplus\GdipPrivateAddFontFile", "uint", hCollection, "uint", &wFontfile)
+		DllCall("gdiplus\GdipCreateFontFamilyFromName", "uint", &wFontTitle, "uint", hCollection, "uint*", hFamily)
+	}
+	else {
+		DllCall("gdiplus\GdipPrivateAddFontFile", "uint", hCollection, "uint", &fontFile)
+		DllCall("gdiplus\GdipCreateFontFamilyFromName", "uint", &fontTitle, "uint", hCollection, "uint*", hFamily)
+	}
+
+	return hFamily
+}
+
 Gdip_CreateResizedHBITMAP_FromFile(file, NewWidth="", NewHeight="", PreserveAspectRatio=true) {
 	return Gdip_CreateResizedBITMAP_FromFile("hBitMap", file, NewWidth, NewHeight, PreserveAspectRatio)
 }
