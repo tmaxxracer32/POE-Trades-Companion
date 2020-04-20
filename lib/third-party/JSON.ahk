@@ -54,7 +54,7 @@ JSON_Load(fileOrObj) {
 		. "`nline: " e.line "`nmessage: " e.message "`nextra: " e.extra
 		. "`n`nfileOrObj: " fileOrObj)
 
-		logsTxt := A_ThisFunc " failed. Additional informations:
+		logsTxt := A_ThisFunc " failed. Additional informations:"
 		. "`nwhat: """ e.what """`nfile: """ e.file """"
 		. "`nline: """ e.line """`nmessage: """ e.message """`nextra: """ e.extra """"
 		logsTxt .= IsObject(fileOrObj) ? "`nObj dump: " JSON_Dump(fileOrObj) : "`nfileOrObj parameter dump: " fileOrObj
