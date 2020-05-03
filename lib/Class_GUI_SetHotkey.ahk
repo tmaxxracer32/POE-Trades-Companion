@@ -191,7 +191,7 @@ Class GUI_SetHotkey {
 	AcceptHotkey() {
 		; Set the global return var, allowing the end the funcs
 		global GuiSetHotkey, GuiSetHotkey_HOTKEY
-		GuiSetHotkey_HOTKEY := GuiSetHotkey.Hotkey
+		GuiSetHotkey_HOTKEY := AutomaticallyTransformKeyStr_ToVirtualKeyOrScanCodeStr(GuiSetHotkey.Hotkey)
 		GUI_SetHotkey.Destroy()
 	}
 
