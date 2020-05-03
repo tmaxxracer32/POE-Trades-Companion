@@ -1,3 +1,14 @@
+AutomaticallyTransformKeyStr_ToVirtualKeyOrScanCodeStr(hk) {
+	if IsContaining( SubStr(hk, 1, 2), "SC,VK" )
+		return hk
+		
+	hkSC := TransformKeyStr_ToScanCodeStr(hk)
+	if !(hkSC)
+		hkSC := TransformKeyStr_ToVirtualKeyStr(hk)
+	
+	return hkSC
+}
+
 TransformKeyStr_ToVirtualKeyStr(hk) {
 	hkStr := hk, hkLen := StrLen(hk)
 	Loop 9 {

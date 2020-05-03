@@ -93,9 +93,7 @@ EnableHotkeys() {
 		hkIndex := A_Index
 		loopedHKSection := PROGRAM.SETTINGS.HOTKEYS[hkIndex]
 		loopedHKHotkey := loopedHKSection.Hotkey
-		hkSC := TransformKeyStr_ToScanCodeStr(loopedHKHotkey)
-		if !(hkSC)
-			hkSC := TransformKeyStr_ToVirtualKeyStr(loopedHKHotkey)
+		hkSC := AutomaticallyTransformKeyStr_ToVirtualKeyOrScanCodeStr(loopedHKHotkey)
 
 		if !(hkSC) {
 			logsStr := "Failed to enable hotkey doe to key or sc/vk being empty: key """ hk """ (sc/vk: """ hkSC """)"
