@@ -508,12 +508,12 @@ Parse_GameLogs(strToParse, preview=False) {
 										, Tab:1, Left:2, Top:3, Other:4}
 	static SPA_gggQualityRegEx		:= {String:"(.*) nivel (\d+) (\d+)%"
 										, Item:1, Level:2, Quality:3}
-
-	static KOR_gggRegEx				:= {String:"(.*)안녕하세요, (.*)에 (.*)\(으\)로 올려놓은 (.*)을\(를\) 구매하고 싶습니다(.*)"
+										
+	static KOR_gggRegEx				:= {String:"(.*)안녕하세요, 환영(.*)에 (.*)\(으\)로 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
 										, Other:1, League:2, Price:3, Item:4, Other2:5}
-	static KOR_gggUnpricedRegEx 	:= {String:"(.*)안녕하세요, (.*)에 올려놓은 (.*)을\(를\) 구매하고 싶습니다(.*)"
+	static KOR_gggUnpricedRegEx 	:= {String:"(.*)안녕하세요, 스탠다드(.*)에 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
 										, Other:1, League:2, Item:3, Other2:4}
-	static KOR_gggCurrencyRegEx		:= {String:"(.*)안녕하세요, (.*)에 올려놓은(.*)을\(를\) 제 (.*)\(으\)로 구매하고 싶습니다(.*)"
+	static KOR_gggCurrencyRegEx		:= {String:"(.*)안녕하세요, (.*)에 올려놓은(.*)\(을\)를 제 (.*)\(으\)로 구매하고 싶습니다(.*)"
 										, Other:1, League:2, Item:3, Price:4, Other2:5}
 	static KOR_gggStashRegEx		:= {String:"\(보관함 탭 ""(.*)"", 위치: 왼쪽 (\d+), 상단 (\d+)\)"
 										, Tab:1, Left:2, Top:3}
@@ -1064,9 +1064,9 @@ IsTradingWhisper(str) {
 	SPA_gggUnpricedRegEx 	:= "@.* Hola, quisiera comprar tu .* en.*"
 	SPA_gggCurrencyRegEx	:= "@.* Hola, me gustaría comprar tu\(s\) .* por mi .* en.*"
 
-	KOR_gggRexEx			:= "@.* 안녕하세요, .*에 .*\(으\)로 올려놓은 .*을\(를\) 구매하고 싶습니다.*"
-	KOR_gggUnpricedRegEx 	:= "@.* 안녕하세요, .*에 올려놓은 .*을\(를\) 구매하고 싶습니다.*"
-	KOR_gggCurrencyRegEx	:= "@.* 안녕하세요, .*에 올려놓은.* 을\(를\) 제 .*\(으\)로 구매하고 싶습니다.*"
+	KOR_gggRexEx			:= "@.* 안녕하세요, 환영.*에 .*\(으\)로 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
+	KOR_gggUnpricedRegEx 	:= "@.* 스탠다드.*에 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
+	KOR_gggCurrencyRegEx	:= "@.* 안녕하세요, .*에 올려놓은.*\(을\)를 제 .*\(으\)로 구매하고 싶습니다.*"
 
 	TWN_gggRegEx            := "@.* 你好，我想購買 .* 標價 .* 在.*"
     TWN_gggUnpricedRegEx    := "@.* 你好，我想購買 .* 在.*"
