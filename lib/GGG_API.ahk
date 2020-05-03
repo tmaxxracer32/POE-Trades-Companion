@@ -28,60 +28,23 @@ GGG_API_GetLastActiveCharacter(accName) {
 GGG_API_CreateDataFiles() {
     langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR"]
 	
-	jsonFinal := {}
 	Loop % langs.Count() {
 		thisLang := langs[A_Index]
 		poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
-		url := poeURL "/api/trade/data/static"
-		headers := "Content-Type:application/json;charset=UTF-8"
+		url := poeURL "/api/trade/data/static", url2 := poeURL "/api/trade/data/items"
+		headers := "Content-Type:application/json;charset=UTF-8", headers2 := headers
 		options := "TimeOut: 25"
-		. "`n"  "Charset: UTF-8"
+		. "`n"  "Charset: UTF-8", options2 := options
 		WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
+        WinHttpRequest_cURL(url2, data:="", headers2, options2), html2 := data, jsonData2 := JSON_Load(html2)
 
-        if !IsObject(jsonFinal[thisLang])
-            jsonFinal[thisLang] := {}
-        jsonFinal[thisLang] := ObjFullyClone(jsonData.result)
+        jsonFinal := ObjFullyClone(jsonData.result), jsonFinal2 := ObjFullyClone(jsonData2.result)
+        fileLocation := A_ScriptDir "/data/" thisLang "_poeDotComStaticData.json", fileLocation2 := A_ScriptDir "/data/" thisLang "_poeDotComItemsData.json"
+        jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True), jsonText2 := JSON_Dump(jsonFinal2, dontReplaceUnicode:=True)
+        hFile := FileOpen(fileLocation, "w", "UTF-8"), hFile2 := FileOpen(fileLocation2, "w", "UTF-8")
+        hFile.Write(jsonText), hFile2.Write(jsonText2)
+        hFile.Close(), hFile2.Close()
 	}
-	fileLocation := A_ScriptDir "/data/poeDotComStaticData.json"
-	jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True)
-	hFile := FileOpen(fileLocation, "w", "UTF-8")
-	hFile.Write(jsonText)
-	hFile.Close()
-
-	jsonFinal := {}, labels := {}
-	Loop % langs.Count() {
-		thisLang := langs[A_Index]
-		poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
-		url := poeURL "/api/trade/data/items"
-		headers := "Content-Type:application/json;charset=UTF-8"
-		options := "TimeOut: 25"
-		. "`n"  "Charset: UTF-8"
-		WinHttpRequest_cURL(url, data:="", headers, options), html := data, jsonData := JSON_Load(html)
-
-		if !IsObject(jsonFinal[thisLang])
-            jsonFinal[thisLang] := {}
-        jsonFinal[thisLang] := ObjFullyClone(jsonData.result)
-	}
-	fileLocation := A_ScriptDir "/data/poeDotComItemsData.json"
-	jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True)
-	hFile := FileOpen(fileLocation, "w", "UTF-8")
-	hFile.Write(jsonText)
-	hFile.Close()
-
-		/*
-        for sect in jsonFinal {
-            sectFileName := StrReplace(sect, "_", " ")
-            StringUpper, sectFileName, sectFileName, T
-            sectFileName := StrReplace(sectFileName, " ", "")
-            StringUpper, thisCat, thisCat, T
-            fileLocation := A_ScriptDir "/data/poeDotCom" thisCat . sectFileName "Data.json"
-            jsonText := JSON_Dump(jsonFinal[sect], dontReplaceUnicode:=True)
-            
-            hFile := FileOpen(fileLocation, "w", "UTF-8")
-            hFile.Write(jsonText)
-            hFile.Close()
-        }
-		*/
 }
 
 GGG_API_BuildItemSearchObj(obj) {

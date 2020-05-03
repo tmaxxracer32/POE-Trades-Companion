@@ -129,6 +129,206 @@ if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
 	FileCreateDir,% PROGRAM.DATA_FOLDER ""
 
 if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\ENG_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\ENG_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\ENG_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\ENG_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\ENG_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\ENG_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\ENG_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\ENG_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\ENG_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\ENG_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\ENG_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\ENG_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\ENG_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\ENG_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\ENG_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\ENG_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\ENG_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\ENG_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\ENG_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\ENG_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\FRE_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\FRE_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\FRE_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\FRE_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\FRE_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\FRE_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\FRE_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\FRE_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\FRE_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\FRE_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\FRE_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\FRE_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\FRE_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\FRE_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\FRE_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\FRE_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\FRE_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\FRE_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\FRE_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\FRE_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\GER_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\GER_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\GER_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\GER_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\GER_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\GER_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\GER_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\GER_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\GER_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\GER_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\GER_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\GER_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\GER_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\GER_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\GER_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\GER_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\GER_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\GER_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\GER_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\GER_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\KOR_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\KOR_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\KOR_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\KOR_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\KOR_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\KOR_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\KOR_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\KOR_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\KOR_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\KOR_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\KOR_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\KOR_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\KOR_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\KOR_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\KOR_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\KOR_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\KOR_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\KOR_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\KOR_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\KOR_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
 	sourceFileSize := Get_ResourceSize("data\mapsData.json")
 	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\mapsData.json"
 }
@@ -221,6 +421,206 @@ if (ErrorLevel) {
 	errorLog .= "`n`n""Failed to extract file!"
 	.	"`nSource: data\poeTradeCurrencyData.json"
 	.	"`nDest: " PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\POR_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\POR_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\POR_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\POR_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\POR_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\POR_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\POR_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\POR_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\POR_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\POR_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\POR_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\POR_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\POR_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\POR_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\POR_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\POR_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\POR_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\POR_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\POR_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\POR_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\RUS_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\RUS_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\RUS_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\RUS_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\RUS_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\RUS_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\RUS_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\RUS_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\RUS_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\RUS_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\RUS_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\RUS_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\RUS_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\RUS_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\RUS_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\RUS_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\RUS_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\RUS_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\RUS_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\RUS_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\SPA_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\SPA_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\SPA_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\SPA_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\SPA_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\SPA_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\SPA_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\SPA_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\SPA_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\SPA_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\SPA_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\SPA_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\SPA_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\SPA_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\SPA_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\SPA_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\SPA_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\SPA_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\SPA_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\SPA_poeDotComStaticData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\THA_poeDotComItemsData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\THA_poeDotComItemsData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\THA_poeDotComItemsData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\THA_poeDotComItemsData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\THA_poeDotComItemsData.json, % PROGRAM.DATA_FOLDER "\THA_poeDotComItemsData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\THA_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\THA_poeDotComItemsData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\THA_poeDotComItemsData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\THA_poeDotComItemsData.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\THA_poeDotComStaticData.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\THA_poeDotComStaticData.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\THA_poeDotComStaticData.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\THA_poeDotComStaticData.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\THA_poeDotComStaticData.json, % PROGRAM.DATA_FOLDER "\THA_poeDotComStaticData.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\THA_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\THA_poeDotComStaticData.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\THA_poeDotComStaticData.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\THA_poeDotComStaticData.json"
 	.	"`nFlag: " 2
 }
 
