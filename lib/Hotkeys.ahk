@@ -94,9 +94,10 @@ EnableHotkeys() {
 		loopedHKSection := PROGRAM.SETTINGS.HOTKEYS[hkIndex]
 		loopedHKHotkey := loopedHKSection.Hotkey
 		hkSC := AutomaticallyTransformKeyStr_ToVirtualKeyOrScanCodeStr(loopedHKHotkey)
+		hkReadable := Transform_AHKHotkeyString_Into_ReadableHotkeyString(loopedHKHotkey)
 
 		if !(hkSC) {
-			logsStr := "Failed to enable hotkey doe to key or sc/vk being empty: key """ hk """ (sc/vk: """ hkSC """)"
+			logsStr := "Failed to enable hotkey doe to key or sc/vk being empty: key """ hkReadable """ (sc/vk: """ hkSC """)"
 			logsAppend .= logsAppend ? "`n" logsStr : logsStr
 			Continue
 		}
@@ -106,11 +107,11 @@ EnableHotkeys() {
 		Hotkey, IfWinActive, [a-zA-Z0-9_] ahk_group POEGameGroup
 		try {
 			Hotkey,% hkSC, OnHotkeyPress, On
-			logsStr := "Enabled hotkey with key """ hk """ (sc/vk: """ hkSC """)"
+			logsStr := "Enabled hotkey with key """ hkReadable """ (sc/vk: """ hkSC """)"
 			logsAppend .= logsAppend ? "`n" logsStr : logsStr
 		}
 		catch {
-			logsStr := "Failed to enable hotkey doe to key or sc/vk being empty: key """ hk """ (sc/vk: """ hkSC """)"
+			logsStr := "Failed to enable hotkey doe to key or sc/vk being empty: key """ hkReadable """ (sc/vk: """ hkSC """)"
 			logsAppend .= logsAppend ? "`n" logsStr : logsStr
 		}
 	}
