@@ -632,7 +632,7 @@ Transform_AHKHotkeyString_Into_ReadableHotkeyString(_hotkey, _delimiter="+") {
             modStr .= modStr ? "+" mod : mod
         }
         else {
-            hkNoMods := SubStr(_hotkey, parseIndex)
+            hkNoMods := SubStr(_hotkey, parseIndex), hkNoMods := IsContaining(hkNoMods, "SC,VK") ? GetKeyName(hkNoMods) : hkNoMods
             StringUpper, hkNoMods, hkNoMods, T
             Break
         }
