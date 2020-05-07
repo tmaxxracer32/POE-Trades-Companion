@@ -378,7 +378,7 @@ GGG_API_Get_ActiveTradingLeagues() {
 	global PROGRAM, GAME
 	static timeOut
 
-	apiLink 			:= "http://api.pathofexile.com/leagues?type=main&compact=1"
+	apiLink 			:= "http://api.pathofexile.com/leagues?type=main&compact=1&realm=pc"
 	excludedWords 		:= "SSF,Solo"
 	activeLeaguesList	:= "Standard,Hardcore,Beta Standard,Beta Hardcore,Harbinger,Hardcore Harbinger"
 	tradingLeagues := []
