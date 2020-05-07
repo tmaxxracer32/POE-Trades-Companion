@@ -26,7 +26,7 @@ GGG_API_GetLastActiveCharacter(accName) {
 }
 
 GGG_API_CreateDataFiles() {
-    langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR"]
+    langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR","TWN"]
 	
 	Loop % langs.Count() {
 		thisLang := langs[A_Index]
@@ -459,9 +459,11 @@ GetPoeDotComUrlBasedOnLanguage(lang) {
         : lang = "GER" ? "de"
         : lang = "SPA" ? "es"
         : lang = "KOR" ? "" ; not needed, they use different url
+        : lang = "TWN" ? "" ; same
         : "www"
 
     poeUrl := lang="KOR" ? "https://poe.game.daum.net"
+        : lang="TWN" ? "https://web.poe.garena.tw"
         : "https://" poeUrlPrefix ".pathofexile.com"
 
     return poeUrl
