@@ -107,13 +107,19 @@ VerifyItemPrice(cmdLineParams) {
     }
     else { ; Regular trade
         priceType := tabInfos.PriceCurrency, priceCount := tabInfos.PriceCount
-        poeStaticData := JSON_Load(PROGRAM.DATA_FOLDER "\" tabInfos.WhisperLanguage "_poeDotComStaticData.json")
-        Loop % poeStaticData.Count() {
-            loop1Index := A_Index
-            Loop % poeStaticData[loop1Index].entries.Count() {
-                thisEntry := poeStaticData[loop1Index].entries[A_Index]
-                if (thisEntry.text = priceType)
-                    priceID := thisEntry.id
+        langs := tabInfos.WhisperLanguage="ENG" ? ["ENG"] : ["ENG",tabInfos.WhisperLanguage]
+        Loop % langs.Count() {
+            lang := langs[A_Index]
+            poeStaticData := JSON_Load(PROGRAM.DATA_FOLDER "\" lang "_poeDotComStaticData.json")
+            Loop % poeStaticData.Count() {
+                loop1Index := A_Index
+                Loop % poeStaticData[loop1Index].entries.Count() {
+                    thisEntry := poeStaticData[loop1Index].entries[A_Index]
+                    if (thisEntry.text = priceType)
+                        priceID := thisEntry.id
+                    if (priceID)
+                        Break
+                }
                 if (priceID)
                     Break
             }
