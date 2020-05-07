@@ -1223,149 +1223,51 @@
 		Verify an item's price based on the information we have
 		User acc name, item name, item level & qual for gems, stash tab & stash position
 	*/
-		global PROGRAM
+		global PROGRAM, GuiIntercom, GuiIntercom_Controls
 
-		accounts := ""
-		for index, accName in PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts
-			accounts .= accName ","
-		accounts := StrTrimRight(accounts, 1)
-
-		if (!accounts) {
-			tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
-			vColor := "Orange", vInfos := "Couldn't verify item price" "\nNo account name detected" "\nPlease set your account name in the Settings"
-
-			GUI_Trades_V2.SetTabVerifyColor(tabNum, vColor)
-		    GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", vInfos)
+		tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
+		if (A_IsCompiled) {
+			GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
+			GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Automated price verifying has been"
+			. "\n disabled for the executable version due to issues"
+			. "\n\nPlease use the AHK version if you wish to use this feature")
 			return
 		}
+		GUI_Trades_V2.SetTabVerifyColor(tabNum, "Grey")
+		GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Verifying price...")
 
-		if (tabInfos.ItemCurrency && tabInfos.ItemCount) { ; Currency trade
-			buyerWantsType := tabInfos.ItemCurrency, buyerWantsCount := tabInfos.ItemCount
-			buyerGivesType := tabInfos.PriceCurrency, buyerGivesCount := tabInfos.PriceCount
-			saleRatio := RemoveTrailingZeroes(buyerGivesCount/buyerWantsCount)
+		cmdLineParamsObj := {}, cmdLineParamsObj.TradeData := ObjFullyClone(tabInfos)
+		cmdLineParamsObj.Accounts := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts)
 
-			Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage].Count() {
-				loop1Index := A_Index
-				Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries.Count() {
-					thisEntry := PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries[A_Index]
-					if (thisEntry.text = buyerWantsType)
-						buyerWantsID := thisEntry.id
-					if (thisEntry.text = buyerGivesType)
-						buyerGivesID := thisEntry.id
-					if (buyerWantsID && buyerGivesID)
-						Break 
-				}
-				if (buyerWantsID && buyerGivesID)
-					Break
+		intercomSlotNum := GUI_Intercom.GetNextAvailableSlot()
+		intercomSlotHandle := GUI_Intercom.GetSlotHandle(intercomSlotNum)
+		GUI_Intercom.ReserveSlot(intercomSlot)
+		cmdLineParamsObj.Intercom := {"GuiHandle": GuiIntercom.Handle, "SlotHandle": intercomSlotHandle}
+		cmdLineParamsObj.PROGRAM := {"CURL_EXECUTABLE": PROGRAM.CURL_EXECUTABLE, "LOGS_FILE": PROGRAM.LOGS_FILE, "DATA_FOLDER": PROGRAM.DATA_FOLDER}
+
+		; Adding params to temp json file
+		cmdLineParamsJSON := PROGRAM.TEMP_FOLDER "\CmdLine_" RandomStr(10)
+		Loop 10 {
+			ranStr := RandomStr(10)
+			if !FileExist(PROGRAM.TEMP_FOLDER "\CmdLine_" ranStr ".json") {
+				cmdLineParamsJSON := PROGRAM.TEMP_FOLDER "\CmdLine_" RandomStr(10) ".json"
+				Break
 			}
-
-			if (!buyerWantsType || !buyerWantsCount || !buyerWantsID || !buyerGivesType || !buyerGivesCount || !buyerGivesID) {
-				tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
-				GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
-				GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "/!\ Failed to retrieve informations for this trade"
-                    . "\nPlease contact me with the following:"
-                    . "\nWantCurrency: " buyerWantsType
-                    . "\nWantCurrencyCount: " buyerWantsCount
-                    . "\nWantCurrencyID: " buyerWantsID
-                    . "\nGiveCurrency: " buyerGivesType
-                    . "\nGiveCurrencyCount: " buyerGivesCount
-                    . "\nGiveCurrencyID: " buyerGivesID)
-				return
-            }
-
-			cmdLineParamsObj := {}
-			cmdLineParamsObj.TradeType := "Currency"
-			cmdLineParamsObj.WhisperLanguage := tabInfos.WhisperLanguage, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
-
-			cmdLineParamsObj.Accounts := accounts
-			cmdLineParamsObj.League := tabInfos.League
-			cmdLineParamsObj.WantCurrency := buyerWantsType, cmdLineParamsObj.WantCurrencyID := buyerWantsID, cmdLineParamsObj.WantCurrencyCount := buyerWantsCount
-			cmdLineParamsObj.GiveCurrency := buyerGivesType, cmdLineParamsObj.GiveCurrencyID := buyerGivesID, cmdLineParamsObj.GiveCurrencyCount := buyerGivesCount
-			cmdLineParamsObj.SaleRatio := saleRatio
-
-			GoSub GUI_Trades_V2_VerifyItemPrice_SA
-			return
+			Sleep 10
 		}
-		else { ; Regular trade
-			priceType := tabInfos.PriceCurrency, priceCount := tabInfos.PriceCount
-			Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage].Count() {
-				loop1Index := A_Index
-				Loop % PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries.Count() {
-					thisEntry := PROGRAM.DATA.POEDOTCOM_STATIC[tabInfos.WhisperLanguage][loop1Index].entries[A_Index]
-					if (thisEntry.text = priceType)
-						priceID := thisEntry.id
-					if (priceID)
-						Break
-				}
-				if (priceID)
-					Break
-			}
+		hFile := FileOpen(cmdLineParamsJSON, "w", "UTF-8")
+        hFile.Write(JSON_Dump(cmdLineParamsObj))
+        hFile.Close()
 
-			if (!priceType || !priceCount || !priceID) {
-				tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
-				GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
-				GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "/!\ Failed to retrieve informations for this trade"
-                    . "\nPlease contact me with the following:"
-                    . "\nPriceCurrency: " priceType
-                    . "\nPriceCount: " priceCount
-                    . "\nPriceID: " priceID)
-				return
-            }
+		; Running StandAlone file
+		cl := DllCall( "GetCommandLine", "str" )
+		StringMid, path_AHk, cl, 2, InStr( cl, """", true, 2 )-2
 
-			cmdLineParamsObj := {}
-			cmdLineParamsObj.TradeType := "Regular"
-			cmdLineParamsObj.WhisperLanguage := tabInfos.WhisperLanguage, cmdLineParamsObj.TabUniqueID := tabInfos.UniqueID
-
-			cmdLineParamsObj.Accounts := accounts
-			cmdLineParamsObj.Item := tabInfos.Item
-			cmdLineParamsObj.GemLevel := tabInfos.GemLevel, cmdLineParamsObj.GemQuality := tabInfos.GemQuality
-			cmdLineParamsObj.PriceCurrency := priceType, cmdLineParamsObj.PriceCount := priceCount, cmdLineParamsObj.PriceID := priceID
-			cmdLineParamsObj.League := tabInfos.League
-			cmdLineParamsObj.StashX := tabInfos.StashX, cmdLineParamsObj.StashY := tabInfos.StashY, cmdLineParamsObj.StashTab := tabInfos.StashTab
-
-			GoSub GUI_Trades_V2_VerifyItemPrice_SA
-			return
-		}
-		return
-
-		GUI_Trades_V2_VerifyItemPrice_SA:
-			global PROGRAM, GuiIntercom, GuiIntercom_Controls
-
-			tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
-			if (A_IsCompiled) {
-				GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
-				GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Automated price verifying has been temporarily"
-				. "\n disabled for the executable version due to issues"
-				. "\n\nPlease use the AHK version if you wish to use this feature")
-				return
-			}
-			GUI_Trades_V2.SetTabVerifyColor(tabNum, "Grey")
-		    GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Comparing price on poe.trade...")
-
-			intercomSlotNum := GUI_Intercom.GetNextAvailableSlot()
-			intercomSlotHandle := GUI_Intercom.GetSlotHandle(intercomSlotNum)
-			GUI_Intercom.ReserveSlot(intercomSlot)
-
-			cmdLineParams := ""
-			for key, value in cmdLineParamsObj
-				cmdLineParams .= " /" key "=" """" value """"
-
-			; msgbox % cmdLineParams
-
-			cl := DllCall( "GetCommandLine", "str" )
-			StringMid, path_AHk, cl, 2, InStr( cl, """", true, 2 )-2
-
-			saFile := A_ScriptDir "\lib\SA_PriceVerify.ahk"
-			saFile_run_cmd := % """" path_AHk """" A_Space """" saFile """"
-			.		" " cmdLineParams
-			.		" /IntercomHandle=" """" GuiIntercom.Handle """"
-			.		" /IntercomSlotHandle=" """" intercomSlotHandle """"
-			.		" /cURL=" """" PROGRAM.CURL_EXECUTABLE """"
-			.		" /ProgramLogsFile=" """" PROGRAM.LOGS_FILE """"
-			.		" /ProgramDataFolder=" """" PROGRAM.DATA_FOLDER """"
-			
-			Run,% saFile_run_cmd,% A_ScriptDir
-		return
+		saFile := A_ScriptDir "\lib\SA_PriceVerify.ahk"
+		saFile_run_cmd := % """" path_AHk """" A_Space """" saFile """"
+		.		" /CmdLineParamsJSON=""" cmdLineParamsJSON """"
+		
+		Run,% saFile_run_cmd,% A_ScriptDir
 	}
 
 	SetTabVerifyColor(slotNum, colour) {
