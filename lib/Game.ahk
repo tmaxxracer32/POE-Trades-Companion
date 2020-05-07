@@ -834,9 +834,9 @@ Parse_GameLogs(strToParse, preview=False) {
 
 			if (isWhisperReceived=True || isWhisperSent=True) {
 				RegExMatch(tradePrice, "O)(\d+.\d+|\d+) (.*)", tradePricePat), priceCurrencyCount := tradePricePat.1, priceCurrencyName := tradePricePat.2
-				priceCurrencyFullName := Get_CurrencyFullName(priceCurrencyName), priceCurrencyName := priceCurrencyFullName ? priceCurrencyFullName : priceCurrencyName
+				priceCurrencyFullName := Get_CurrencyFullName(priceCurrencyName, whisperLang), priceCurrencyName := priceCurrencyFullName ? priceCurrencyFullName : priceCurrencyName
 				RegExMatch(tradeItem, "O)(\d+.\d+|\d+) (.*)", tradeItemPat), itemCurrencyCount := tradeItemPat.1, itemCurrencyName := tradeItemPat.2
-				itemCurrencyFullName := Get_CurrencyFullName(itemCurrencyName), itemCurrencyName := itemCurrencyFullName ? itemCurrencyFullName : itemCurrencyName
+				itemCurrencyFullName := Get_CurrencyFullName(itemCurrencyName, whisperLang), itemCurrencyName := itemCurrencyFullName ? itemCurrencyFullName : itemCurrencyName
 			}
 
 			if (isWhisperReceived=True)	{	
@@ -1126,7 +1126,6 @@ Is_Game_Elevated(gamePID) {
 	return isProcessElevated
 }
 
-Get_CurrencyFullName(currencyName) {
 Get_CurrencyEnglishName(currencyName, lang) {
 	global PROGRAM
 	if (lang="ENG")
@@ -1152,13 +1151,27 @@ Get_CurrencyEnglishName(currencyName, lang) {
 	}
 }
 
+Get_CurrencyFullName(currencyName, lang="ENG") {
 	global PROGRAM
 	; Checking if currency isn't already full name
 	if IsIn(currencyName, PROGRAM.DATA.CURRENCY_LIST)
 		return currencyName
 	; Checking in poedotcom currency data
-	if (PROGRAM.DATA.POEDOTCOM.Currency.ENG[currencyName])
-		return PROGRAM.DATA.POEDOTCOM.Currency.ENG[currencyName]
+	langs := lang ? [lang,"ENG"] : ["ENG"]
+	Loop % langs.Count() {
+		lang := langs[A_Index]
+		poeStaticData := JSON_Load(PROGRAM.DATA_FOLDER "\" lang "_poeDotComStaticData.json")
+		Loop % poeStaticData.Count() {
+			loop1Index := A_Index
+			Loop % poeStaticData[loop1Index].entries.Count() {
+				thisEntry := poeStaticData[loop1Index].entries[A_Index]				
+				if (thisEntry.id = currencyName)
+					return thisEntry.text
+				else if (thisEntry.text = currencyName)
+					return thisEntry.text
+			}
+		}
+	}
 	; Checking in poetrade currency data
 	if (PROGRAM.DATA.POETRADE_CURRENCY_DATA[currencyName])	
 		return PROGRAM.DATA.POETRADE_CURRENCY_DATA[currencyName]
@@ -1166,12 +1179,12 @@ Get_CurrencyEnglishName(currencyName, lang) {
 	lastChar := SubStr(currencyName, 0, 1)
 	if (lastChar = "s") {
 		currencyNameTemp := StrTrimRight(currencyName, 1)
-		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp) )
+		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
 			return currencyNameTemp
 	}
 	else if RegExMatch(currencyName, "iO) Map$", matchObj) {
 		currencyNameTemp := StrTrimRight(currencyName, StrLen(matchObj.0))
-		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp) )
+		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
 			return currencyNameTemp
 	}
 	return ""
