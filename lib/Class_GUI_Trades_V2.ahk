@@ -1193,6 +1193,10 @@
 			else {
 				if FileExist(PROGRAM.CURRENCY_IMGS_FOLDER "\" newContent.PriceCurrency ".png")
 					currencyPngFile := PROGRAM.CURRENCY_IMGS_FOLDER "\" newContent.PriceCurrency ".png"
+				else if (tabInfos.WhisperLanguage != "ENG") {
+					currencyEngName := Get_CurrencyEnglishName(newContent.PriceCurrency, tabInfos.WhisperLanguage)
+					currencyPngFile := PROGRAM.CURRENCY_IMGS_FOLDER "\" currencyEngName ".png"
+				}
 				else 
 					currencyPngFile := PROGRAM.CURRENCY_IMGS_FOLDER "\Unknown.png"
 

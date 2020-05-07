@@ -1127,6 +1127,31 @@ Is_Game_Elevated(gamePID) {
 }
 
 Get_CurrencyFullName(currencyName) {
+Get_CurrencyEnglishName(currencyName, lang) {
+	global PROGRAM
+	if (lang="ENG")
+		return currencyName
+
+	Loop 2 {
+		loopLang := A_Index=1 ? lang : "ENG"
+		poeStaticData := JSON_Load(PROGRAM.DATA_FOLDER "\" loopLang "_poeDotComStaticData.json")
+		Loop % poeStaticData.Count() {
+			loop1Index := A_Index
+			Loop % poeStaticData[loop1Index].entries.Count() {
+				thisEntry := poeStaticData[loop1Index].entries[A_Index]				
+				if (loopLang=lang && thisEntry.text = currencyName) {
+					matchID := thisEntry.id
+					break
+				}
+				else if (loopLang="ENG" && thisEntry.id = matchID)
+					return thisEntry.text
+			}
+			if (matchID)
+				break
+		}
+	}
+}
+
 	global PROGRAM
 	; Checking if currency isn't already full name
 	if IsIn(currencyName, PROGRAM.DATA.CURRENCY_LIST)
