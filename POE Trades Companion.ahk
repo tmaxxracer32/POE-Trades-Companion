@@ -44,9 +44,6 @@ OnMessage(0x404, "AHK_NOTIFYICON")
 Hotkey, IfWinActive, ahk_group POEGameGroup
 Hotkey, ^RButton, StackClick
 
-Hotkey, IfWinActive
-Hotkey, ~*Space, SpaceRoutine
-
 Hotkey, IfWinActive,% "ahk_pid " DllCall("GetCurrentProcessId")
 
 ; try {
@@ -59,18 +56,14 @@ Hotkey, IfWinActive,% "ahk_pid " DllCall("GetCurrentProcessId")
 Return
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  
-SpaceRoutine() {
-	global PROGRAM, AUTOWHISPER_CANCEL, AUTOWHISPER_WAITKEYUP, SPACEBAR_WAIT
 
-	if (SPACEBAR_WAIT) {
-		SplashTextOff()
-	}
-	else if (AUTOWHISPER_WAITKEYUP) {
+Cancel_AutoWhisper() {
+	global PROGRAM, AUTOWHISPER_CANCEL, AUTOWHISPER_WAITKEYUP
+	if (AUTOWHISPER_WAITKEYUP) {
 		AUTOWHISPER_CANCEL := True
 		ShowToolTip(PROGRAM.NAME "`nEasy whisper canceled.")
 	}
-}
+}  
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
