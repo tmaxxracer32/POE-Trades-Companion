@@ -1075,7 +1075,15 @@
 
         ; Get current tab content + merge current and new content keys
 		cTabCont := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
-		merged := ObjMerge(cTabCont, tabInfos), allSlots := ""
+		if IsObject(tabInfos)
+			merged := ObjMerge(cTabCont, tabInfos)
+		else {
+			merged := ObjFullyClone(cTabCont), tabInfos := {}
+			for key, value in merged
+				tabInfos[key] := ""
+		}
+
+		allSlots := ""
 		for key, value in merged
 			allSlots .= "," key
 		if ( SubStr(allSlots, 1, 1) = "," )
