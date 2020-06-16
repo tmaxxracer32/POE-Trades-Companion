@@ -62,8 +62,9 @@ DisableHotkeys() {
 	; Disable hotkeys
 	for hk, nothing in PROGRAM.HOTKEYS {
 		if (hk != "") {
-			Hotkey, IfWinActive, ahk_group POEGameGroup
+			Hotkey, IfWinActive, [a-zA-Z0-9_] ahk_group POEGameGroup
 			try {
+				Hotkey,% hk, OnHotkeyPress, Off
 				Hotkey,% hk, Off
 				logsStr := "Disabled hotkey with key """ hk """"
 			}
