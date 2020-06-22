@@ -2409,7 +2409,7 @@ Class GUI_Settings {
     	WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
 		hallOfFame := ""
-		if RegExMatch(html,"\<table\>(.*)\<\/table\>", match) {
+		if RegExMatch(html,"\<table.*\>(.*)\<\/table\>", match) {
 			Loop, Parse, match,% "`n",% "`r"
 			{
 				if RegExMatch(A_LoopField,"\<td\>(.*?)\<\/td\>", name) {
