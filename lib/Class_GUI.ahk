@@ -317,7 +317,8 @@ Class GUI {
 	GetControlPos(guiName, ctrlName) {
 		global
 		local X, Y, W, H
-		ControlGetPos, X, Y, W, H,, % "ahk_id " Gui%guiName%_Controls[ctrlName]
+		GuiControlGet, ctrlPos , %guiName%:Pos,% Gui%guiname%_Controls[ctrlName]
+		X := ctrlPosX, Y := ctrlPosY, W := ctrlPosW, H := ctrlPosH
 		return {X:X,Y:Y,W:W,H:H}
 	}
 
