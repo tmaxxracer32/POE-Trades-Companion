@@ -316,10 +316,9 @@ Class GUI {
 
 	GetControlPos(guiName, ctrlName) {
 		global
-		local X, Y, W, H
+		local ctrlPos, ctrlPosX, ctrlPosY, ctrlPosW, ctrlPosH
 		GuiControlGet, ctrlPos , %guiName%:Pos,% Gui%guiname%_Controls[ctrlName]
-		X := ctrlPosX, Y := ctrlPosY, W := ctrlPosW, H := ctrlPosH
-		return {X:X,Y:Y,W:W,H:H}
+		return {X:ctrlPosX,Y:ctrlPosY,W:ctrlPosW,H:ctrlPosH}
 	}
 
 	MoveControl(guiName, ctrlName, opts="") { 
