@@ -1114,7 +1114,7 @@
 
         ; Setting default visible text
 		visibleSeller := newContent.Seller ? newContent.Seller : newContent.Buyer
-		visibleItem := newContent.GemLevel && newContent.GemQuality ? newContent.Item " Lvl " newContent.GemLevle " " newContent.GemQuality "%)"
+		visibleItem := newContent.GemLevel && newContent.GemQuality ? newContent.Item " (Lvl " newContent.GemLevel " " newContent.GemQuality "%)"
 			: newContent.GemLevel && !newContent.GemQuality ? newContent.Item " (Lvl " newContent.GemLevel ")"
 			: !newContent.GemLevel && newContent.GemQuality ? newContent.Item " (" newContent.GemQuality "%)"
 			: newContent.Item
