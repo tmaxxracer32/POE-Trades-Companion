@@ -109,15 +109,17 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 	if (gamePID) {
 		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
 		WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
+		waitActiveErrLvl := ErrorLevel
 		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
 	}
 	else {
+		WinGet, gamePID, PID, [a-zA-Z0-9_] ahk_group POEGameGroup
 		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup
 		WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup, ,2
-		WinGet, gamePID, PID, A
+		waitActiveErrLvl := ErrorLevel
 		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
 	}
-	if (ErrorLevel) {
+	if (waitActiveErrLvl) {
 		AppendToLogs(A_ThisFunc "(actionType=" actionType ", msgString=" msgString ", gamePID=" gamePID "): WinWaitActive timed out.")
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.GameWindowFocusTimedOut_Title, PROGRAM.TRANSLATIONS.TrayNotifications.GameWindowFocusTimedOut_Msg)
 		return "WINWAITACTIVE_TIMEOUT"
