@@ -259,7 +259,10 @@ GGG_API_GetMatchingItemsData(obj) {
     poeURL := GetPoeDotComUrlBasedOnLanguage(obj.Language), poeSearchObj := GGG_API_BuildItemSearchObj(obj)
     url := poeURL "/api/trade/search/" obj.League
     data := JSON_Dump(poeSearchObj)
-    headers := "Content-Type:application/json;charset=UTF-8"
+
+    headers := "Accept: application/json"
+    . "`n" "Content-Type: application/json"
+    . "`n" "Cache-Control: max-age=0"
     options := "TimeOut: 25"
     . "`n"  "Charset: UTF-8"
     WinHttpRequest_cURL(url, data, headers, options), html := data, jsonData := JSON_Load(html)
@@ -313,8 +316,6 @@ GGG_API_IsItemDataMatching(obj, obj2) {
 
 SplitItemNameAndBaseType(itemFull, LANG="ENG") {
     global PROGRAM
-	if !(LANG)
-		LANG:="ENG"
 
     ; Labels := {"Accessories":1,"Armour":2,"Cards":3,"Currency":4,"Flasks":5,"Gems":6,"Jewels":7,"Maps":8,"Weapons":9,"Leaguestones":10,"Prophecies":11,"Captured Beasts":12}
     ; ENG_Labels := ["Accessories","Armour","Cards","Currency","Flasks","Gems","Jewels","Maps","Weapons","Leaguestones","Prophecies","Captured Beasts"]
@@ -326,12 +327,12 @@ SplitItemNameAndBaseType(itemFull, LANG="ENG") {
     ; SPA_Labels := ["Accesorios","Armaduras","Cartas","Moneda","Frascos","Gemas","Joyas","Mapas","Armas","Piedras de Liga","Profecías","Bestias capturadas"]
     ; THA_Labels := ["เครื่องประดับ","เกราะ","การ์ด","เคอเรนซี่","ขวดยา","Gems","Jewels","แผนที่","อาวุธ","Leaguestones","Prophecies","สัตว์ที่ถูกจับ"]
 
-    itemsJSON := JSON_Load(PROGRAM.DATA_FOLDER "\poeDotComItemsData.json")
+    itemsJSON := JSON_Load(PROGRAM.DATA_FOLDER "\" LANG "_poeDotComItemsData.json")
  
-    Loop % itemsJSON[LANG].Count() {
-        loop1Index := A_Index, sectName := itemsJSON[LANG][loop1Index].label
-        Loop % itemsJSON[LANG][loop1Index].entries.Count() {
-            entryIndex := A_Index, thisEntry := itemsJSON[LANG][loop1Index].entries[A_Index]
+    Loop % itemsJSON.Count() {
+        loop1Index := A_Index, sectName := itemsJSON[loop1Index].label
+        Loop % itemsJSON[loop1Index].entries.Count() {
+            entryIndex := A_Index, thisEntry := itemsJSON[loop1Index].entries[A_Index]
             isUnique := thisEntry.flags.unique = True ? True : False
             isAccessory := sectName = "Accessories" ? True : False
             isArmour := sectName = "Armour" ? True : False
