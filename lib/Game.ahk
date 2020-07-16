@@ -4,93 +4,6 @@
 	return IsIn(activeWinExe, POEGameList)
 }
 
-Get_TradingLeagues(forceScriptLeagues=False) {
-/*		Retrieves leagues from the API
-		Parse them, to keep only non-solo or non-ssf leagues
-		Return the resulting list
-*/
-	global PROGRAM, GAME, LEAGUES
-
-	challengeLeagues := GAME.CHALLENGE_LEAGUE
-	Loop, Parse, challengeLeagues,% ","
-		scriptLeagues := scriptLeagues ? scriptLeagues "," A_LoopField ",Hardcore " A_LoopField : A_LoopField ",Hardcore " A_LoopField
-	scriptLeagues := scriptLeagues ? scriptLeagues ",Standard,Hardcore" : "Standard,Hardcore"
-
-	if (forceScriptLeagues = True) {
-		LEAGUES := scriptLeagues
-		return scriptLeagues
-	}
-
-	; HTTP Request
-	url := "http://api.pathofexile.com/leagues?type=main"	
-	headers :=	"Host: api.pathofexile.com"
-	. "`n" 		"Connection: keep-alive"
-	. "`n" 		"Cache-Control: max-age=0"
-	. "`n" 		"Content-type: application/x-www-form-urlencoded; charset=UTF-8"
-	. "`n" 		"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
-	. "`n" 		"User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"
-	options := "TimeOut: 25"
-	
-	WinHttpRequest_cURL(url, data:="", headers, options), leaguesJSON := data
-
-	; Parse league names
-	apiLeagues		:= ""
-	try parsedLeaguesJSON := JSON.Load(leaguesJSON)
-	Loop % parsedLeaguesJSON.MaxIndex() {
-		arrID 		:= parsedLeaguesJSON[A_Index]
-		leagueName 	:= arrID.ID
-		if !IsIn(leagueName, apiLeagues) {
- 			apiLeagues .= leagueName ","
-		}
-	}
-	StringTrimRight, apiLeagues, apiLeagues, 1
-	apiLeagues := IsContaining(apiLeagues, "Standard")?apiLeagues:""
-
-	; Parse trading leagues only
-	excludedWords 		:= "SSF,Solo"
-	apiTradingLeagues 		:= ""
-	Loop, Parse, apiLeagues,% ","
-	{
-		if !IsContaining(A_LoopField, excludedWords)
-			apiTradingLeagues .= A_LoopField ","
-	}
-	StringTrimRight, apiTradingLeagues, apiTradingLeagues, 1
-
-	; In case leagues api is down, get from my own list on github
-	if !(apiTradingLeagues) {
-		url := "http://raw.githubusercontent.com/" PROGRAM.GITHUB_USER "/" PROGRAM.GITHUB_REPO "/" PROGRAM.GITHUB_BRANCH "/data/TradingLeagues.txt"
-
-		options := "TimeOut: 25"
-		WinHttpRequest_cURL(url, data:="", headers:="", options), rawFile := data
-
-		if IsContaining(rawFile, "Error,404") {
-			AppendToLogs(A_ThisFunc "(forceScriptLeagues=" forceScriptLeagues "): Failed to get leagues from GitHub file."
-			. "`nrawFile: """ rawFile """")
-			rawFile := ""
-		}
-		gitLeagues := ""		
-		Loop, Parse, rawFile,% "`n",% "`r"
-			if (A_LoopField)
-				gitLeagues .= A_LoopField ","
-		StringTrimRight, gitLeagues, gitLeagues, 1
-		AppendToLogs("Leagues API: Couldn't retrieve leagues from Leagues API. Retrieving list from GitHub repo: " gitLeagues)
-	}
-
-	; Set LEAGUES var content
-	tradingLeagues := apiTradingLeagues?apiTradingLeagues : gitLeagues?gitLeagues : scriptLeagues
-	Loop, Parse, scriptLeagues,% ","
-	{
-		loopedLeague := A_LoopField
-		if !IsIn(loopedLeague, tradingLeagues)
-			tradingLeagues := tradingLeagues ? tradingLeagues "," loopedLeague : loopedLeague
-	}
-	LEAGUES := tradingLeagues
-
-	AppendToLogs("Leagues API: Retrieved leagues: " tradingLeagues)
-
-	return tradingLeagues
-}
-
 Send_GameMessage(actionType, msgString, gamePID="") {
 	global PROGRAM, GAME
 	global MyDocuments
@@ -419,7 +332,7 @@ Monitor_GameLogs() {
 }
 
 Parse_GameLogs(strToParse, preview=False) {
-	global PROGRAM, GuiTrades, LEAGUES, GAME
+	global PROGRAM, GuiTrades, GAME
 
 	; poe.trade
 	static poeTradeRegex 			:= {String:"(.*)Hi, I would like to buy your (.*) listed for (.*) in (.*)"
@@ -756,17 +669,8 @@ Parse_GameLogs(strToParse, preview=False) {
 			}
 
 			AutoTrimStr(tradeBuyerName, tradeItem, tradePrice, tradeOtherStart)
-
-			leagueMatches := [], leagueMatchesIndex := 0
-			leaguesList := LEAGUES
-			if (GAME.CHALLENGE_LEAGUE_TRANS[whisperLang])
-				for index in GAME.CHALLENGE_LEAGUE_TRANS[whisperLang]
-					leaguesList .= "," GAME.CHALLENGE_LEAGUE_TRANS[whisperLang][index]
-			if (GAME.STANDARD_LEAGUE_TRANS[whisperLang])
-				for index in GAME.STANDARD_LEAGUE_TRANS[whisperLang]
-					leaguesList .= "," GAME.STANDARD_LEAGUE_TRANS[whisperLang][index]
 			
-			Loop, Parse, leaguesList,% ","
+			Loop, Parse,% GAME.LEAGUES,% ","
 			{
 				parsedLeague := A_LoopField
 				parsedLeague := StrReplace(parsedLeague, "(", "\(")

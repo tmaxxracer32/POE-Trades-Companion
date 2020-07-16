@@ -7,22 +7,38 @@
 GGG_API_GetLastActiveCharacter(accName) {  
     if !(accName)
         return
-
-    url := "https://www.pathofexile.com/character-window/get-characters?accountName=" UriEncode(accName)
-    headers := "Content-Type: application/json"
-    . "`n"     "Cache-Control: no-store, no-cache, must-revalidate"
+	
+	poeURL := GetPoeDotComUrlBasedOnLanguage("ENG")
+	url := poeURL "/character-window/get-characters?accountName=" UriEncode(accName)
+    headers := "Host: " poeURL
+    . "`n" "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+    . "`n" "Accept-Language: en-US,en;q=0.5"
+    ; . "`n" "Accept-Encoding: gzip, deflate, br"
+    . "`n" "Upgrade-Insecure-Requests: 1"
+    . "`n" "Cache-Control: max-age=0"
+    . "`n" "TE: Trailers"
     options := "TimeOut: 7"
     . "`n"     "Charset: UTF-8"
+    WinHttpRequest_cURL(url, data:="", headers, options), charsJSON := JSON.Load(data)
 
-    WinHttpRequest_cURL(url, data:="", headers, options), charsJSON := data
-    charsJSON := JSON.Load(charsJSON)
-
+    if !IsObject(charsJSON) {
+        static accNameCopy
+        accNameCopy := accName
+        SetTimer, GGG_API_GetLastActiveCharacter_TryAgain, -60000
+        return
+    }
+    
     Loop % charsJSON.Count() {
         if (charsJSON[A_Index].lastActive = True) {
-            lastChar := charsJSON[A_Index].name  
+            lastChar := charsJSON[A_Index].name
             return lastChar  
         }
     }
+    return
+
+    GGG_API_GetLastActiveCharacter_TryAgain:
+        GGG_API_GetLastActiveCharacter(accNameCopy)
+    return
 }
 
 GGG_API_CreateDataFiles() {
@@ -373,80 +389,82 @@ SplitItemNameAndBaseType(itemFull, LANG="ENG") {
 
 GGG_API_Get_ActiveTradingLeagues() {
 /*		Retrieves leagues from the API
-		Parse them, to keep only non-solo or non-ssf leagues
 */
 	global PROGRAM, GAME
-	static timeOut
+	static langIndex
 
-	apiLink 			:= "http://api.pathofexile.com/leagues?type=main&compact=1&realm=pc"
-	excludedWords 		:= "SSF,Solo"
-	activeLeaguesList	:= "Standard,Hardcore,Beta Standard,Beta Hardcore,Harbinger,Hardcore Harbinger"
-	tradingLeagues := []
-	Loop, Parse, activeLeaguesList,% ","
-		tradingLeagues.Push(A_LoopField) ; In case api cannot be reached
+    langs := ["ENG","RUS","KOR","TWN"]
+    excludedWords := "SSF,Solo" ; ENG,FRE,POR,THA,GER,SPA,KOR - all using english league names
+        . ",Соло" ; RUS
+        . ",自力" ; TWN
+        . "" ; KOR - Korean API sucks. League name is ENG on both the API and Forums thread - But on the trading whisper it's translated. Once again "translated whispers suck and are inconsistent"
+    tradingLeagues := [], tradingLeaguesList := ""
+	
+	Loop % langs.Count() {
+        if IsNum(langIndex) && (langIndex > A_Index) { ; This means we are running the function again after failing a request. We are starting again at the last index we stopped at
+            AppendtoLogs(A_ThisFunc "() - Now running again and skipping index " A_Index " of langs array.")
+            isRunningAgain := True
+            Continue
+        }
+        if (isRunningAgain)
+            AppendtoLogs(A_ThisFunc "() - Now running again and going with index " A_Index " of langs array.")
 
+        langIndex := A_Index
+		thisLang := langs[langIndex]
+		poeURL := GetPoeDotComUrlBasedOnLanguage(thisLang)
+		url := poeURL "/api/trade/data/leagues"
+        headers := "Host: " StrSplit(poeURL, "https://").2
+        . "`n" "Accept: application/json"
+        . "`n" "Accept-Language: en-US,en;q=0.5"
+        ; . "`n" "Accept-Encoding: gzip, deflate, br"
+        . "`n" "Upgrade-Insecure-Requests: 1"
+        . "`n" "Cache-Control: max-age=0"
+        options := "TimeOut: 25"
+		    . "`n"  "Charset: UTF-8"
+        WinHttpRequest_cURL(url, data:="", headers, options), html := data, resultsJson := JSON_Load(html)   
+        if (resultsJson.error || !IsObject(resultsJson)) {
+            AppendtoLogs("Error when reaching league API: "
+            . "`n" "URL: " url
+            . "`n`n" JSON_Dump("HTML: " resultsJson)
+            . "`n`n" "Headers: " headers)
 
-	attempts++
-	timeOut := (attempts = 1)?(10000) ; 10s
-			   :(attempts = 2)?(30000) ; 30s
-			   :(60000) ; 60s
-	nextAttempt := (IsBetween(attempts, 1, 2))?(300000) ; 5mins
-				  :(IsBetween(attempts, 3, 4))?(600000) ; 10mins
-				  :(1800000)
-	if (attempts > 1) {
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPIRetry_Title, "")
-	}
-	Try {
-;		Retrieve from online API
-		WinHttpReq := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-		WinHttpReq.SetTimeouts(timeOut, timeOut, timeOut, timeOut)
-		WinHttpReq.Open("GET", apiLink, true) ; Using true above and WaitForResponse allows the script to r'emain responsive.
-		WinHttpReq.Send()
-		WinHttpReq.WaitForResponse(10) ; 10 seconds
-		leaguesJSON := WinHttpReq.ResponseText
-	}
-	Catch e { ; Cannot reach. Use internal leagues instead.
-		Set_Format("Float", "0")
+            Loop, Parse, headers, `n, `r
+            {
+                if RegExMatch(A_LoopField, "iO)Retry-After: (/d+)", retryAfter) {
+                    retryAfter := retryAfter.1
+                }
+            }
+            if IsNum(retryAfter) {
+                AppendtoLogs(A_ThisFunc "() - Retry-After header detected (" retryAfter "). Will retry again shortly after timeout.")
+                if (!hasWarned_rate)
+                    TrayNotifications.Show("League API - Rate Limited", "Waiting " retryAfter " seconds before trying to reach API again.")
+                hasWarned_rate := True
+            }
+            else {
+                retryAfter := 300
+                AppendtoLogs(A_ThisFunc "() - Unable to detect the Retry-After header. Skipping league names for this lang.")
+                if (!hasWarned_fail)
+                    TrayNotifications.Show("Failed to reach League API", "Retrying in " Round(retryAfter/60) " minutes.")
+                hasWarned_fail := True
+            }
 
-		AppendtoLogs("Failed to reach Leagues API. Obj.Message: """ WinHttpReq.Message """")
-		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPIFail_Msg, "%time%", (nextAttempt/1000)/60)
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPIFail_Title, trayMsg, {Fade_Timer:10000})
-		SetTimer,% A_ThisFunc, -%nextAttempt%
+            SetTimer,% A_ThisFunc,% "-" (retryAfter+1)*1000
+            retryAfter := 
+        }        
+        else if (data && resultsJson) {
+            Loop % resultsJson.result.Count() {
+                leagueName := resultsJson.result[A_Index].text
 
-		Set_Format()
+                if (leagueName) && !IsIn(leagueName, tradingLeaguesList) && !IsContaining(leagueName, excludedWords) {
+                    tradingLeagues.Push(leagueName)
+                    tradingLeaguesList := tradingLeaguesList ? tradingLeaguesList "," leagueName : leagueName
+                }
+            }
+        }
+        Sleep 500 ; No need to hurry, this only happens once at script start - avoid api spam
+    }
 
-		Trading_Leagues := tradingLeagues
-		Return
-	}
-
-	if (attempts > 1) {
-		AppendtoLogs("Successfully reached Leagues API on attempt " attempts)
-		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPISuccess_Msg, "%number%", attempts)
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ReachLeaguesAPISuccess_Title, trayMsg, {Fade_Timer:5000})
-		attempts := 0
-	}
-
-;	Parse the leagues (JSON)
-	parsedLeagues := JSON.Load(leaguesJSON)
-	Loop % parsedLeagues.MaxIndex() {
-		arrID 		:= parsedLeagues[A_Index]
-		leagueName 	:= arrID.ID
-		if leagueName not in %activeLeagues%
-		{
- 			activeLeagues .= "," leagueName
-		}
-	}
-
-;	Remove SSF & Solo leagues
-	tradingLeagues := []
-	Loop, Parse, activeLeagues,% "D," 
-	{
-		if A_LoopField not contains %excludedWords%
-		{
-			tradingLeagues.Push(A_LoopField)
-		}
-	}
-
+    ObjMerge(GAME.LEAGUES, tradingLeagues)
 	Return tradingLeagues
 }
 

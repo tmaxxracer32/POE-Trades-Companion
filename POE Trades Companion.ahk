@@ -84,7 +84,6 @@ Start_Script() {
 	global Stats_TradeCurrencyNames 		:= {} ; Abridged currency names from poe.trade
 	global Stats_RealCurrencyNames 			:= {} ; All currency full names
 
-	global LEAGUES 							:= [] ; Trading leagues
 	global MyDocuments
 	scriptStartTime := A_TickCount
 
@@ -154,9 +153,7 @@ Start_Script() {
 	GAME.INI_FILE 					:= GAME.MAIN_FOLDER "\production_Config.ini"
 	GAME.INI_FILE_COPY 		 		:= PROGRAM.MAIN_FOLDER "\production_Config.ini"
 	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe"
-	GAME.CHALLENGE_LEAGUE 			:= "Blight"
-	GAME.STANDARD_LEAGUE_TRANS		:= {RUS:["Стандарт","Одна жизнь"], KOR:["스탠다드","하드코어"], TWN:["標準模式","專家模式"]} ; STD, HC
-	GAME.CHALLENGE_LEAGUE_TRANS		:= {RUS:["Делириум","Делириум Одна жизнь"], KOR:["환영","하드코어 환영"], TWN:["譫妄聯盟","譫妄聯盟（專家）"]} ; Rest don't have translations. Translated whispers suck and are inconsistent
+	GAME.LEAGUES		 			:= []
 
 	PROGRAM.PID 					:= DllCall("GetCurrentProcessId")
 
@@ -313,7 +310,7 @@ Start_Script() {
 
 	; Game settings
 	Declare_GameSettings(gameSettings)
-	Get_TradingLeagues()
+	GGG_API_Get_ActiveTradingLeagues()
 
 	if RegExMatch(GetKeyboardLayout(), "i)^(0xF002|0xF01B|0xF01A|0xF01C0809|0xF01C0409).*")
 		TrayNotifications.Show(PROGRAM.NAME, "Dvorak keyboard layout detected, scancode fix applied.")
