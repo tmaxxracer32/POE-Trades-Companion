@@ -669,19 +669,17 @@ Parse_GameLogs(strToParse, preview=False) {
 			}
 
 			AutoTrimStr(tradeBuyerName, tradeItem, tradePrice, tradeOtherStart)
-			
-			Loop, Parse,% GAME.LEAGUES,% ","
-			{
-				parsedLeague := A_LoopField
-				parsedLeague := StrReplace(parsedLeague, "(", "\(")
-				parsedLeague := StrReplace(parsedLeague, ")", "\)")
-				if RegExMatch(tradeLeagueAndMore, "iSO)" parsedLeague "(.*)", leagueAndMorePat) {
+
+			for index, league in GAME.LEAGUES {			
+				league := StrReplace(league, "(", "\(")
+				league := StrReplace(league, ")", "\)")
+				if RegExMatch(tradeLeagueAndMore, "iSO)" league "(.*)", leagueAndMorePat) {
 					leagueMatchesIndex++
-					tradeLeague := A_LoopField
+					tradeLeague := league
 					restOfWhisper := leagueAndMorePat.1
 					AutoTrimStr(tradeLeague, restOfWhisper)
 
-					leagueMatches[leagueMatchesIndex] := {Len:StrLen(A_LoopField), Str:A_LoopField}
+					leagueMatches[leagueMatchesIndex] := {Len:StrLen(league), Str:league}
 				}
 			}
 			Loop % leagueMatches.MaxIndex() {

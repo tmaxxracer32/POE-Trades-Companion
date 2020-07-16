@@ -464,7 +464,7 @@ GGG_API_Get_ActiveTradingLeagues() {
         Sleep 500 ; No need to hurry, this only happens once at script start - avoid api spam
     }
 
-    ObjMerge(GAME.LEAGUES, tradingLeagues)
+    GAME.LEAGUES := ObjMerge(GAME.LEAGUES, tradingLeagues)
 	Return tradingLeagues
 }
 
