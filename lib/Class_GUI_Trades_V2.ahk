@@ -2955,8 +2955,7 @@
 			}
 		}
 		else if IsContaining(underMouseName, "hIMG_TradeVerify") {
-			tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
-			GUI_Trades_V2.VerifyItemPrice(tabContent)
+			GuiTrades[_buyOrSell].HasClickedTradeVerify := True
 		}
 		else if IsContaining(A_Gui, "Search")
 			GuiTrades[_buyOrSell].HasClickedSearch := True
@@ -2975,6 +2974,11 @@
 		if (GuiTrades[_buyOrSell].HasToolTip) {
 			RemoveToolTip()
 		}
+
+		if (GuiTrades[_buyOrSell].HasClickedTradeVerify) {
+			tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
+			GUI_Trades_V2.VerifyItemPrice(tabContent)
+		}
 		
 		if (GuiTrades[_buyOrSell].HasClickedSearch && IsContaining(A_Gui, "Search")) {
 			hw := DetectHiddenWindows("On")
@@ -2985,6 +2989,7 @@
 		; GUI_Trades_V2.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
 		GuiTrades[_buyOrSell].HasToolTip := False
 		GuiTrades[_buyOrSell].HasClickedSearch := False
+		GuiTrades[_buyOrSell].HasClickedTradeVerify := False
 	}
 
 	WM_MOUSEMOVE() {
