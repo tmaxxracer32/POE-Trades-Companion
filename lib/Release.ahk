@@ -1,5 +1,11 @@
 ﻿CreateRelease() {
 	global PROGRAM
+
+	if (A_IsCompiled) {
+		MsgBox(4096+16, PROGRAM.NAME, "Cannot create release while using the executable. This parameter can only be used with the .ahk script.")
+		ExitApp
+	}
+
 	doTranslations := True
 	doDataFiles := True
 	doLeagueFile := True
@@ -90,11 +96,11 @@ CreateZipRelease() {
 	7zip := _ProgramFiles "\7-Zip\7z.exe"
 
 	if !FileExist(7zip) {
-		MsgBox(4096+16, "7zip is missing in " 7zip ". Zip release will not be created.")
+		MsgBox(4096+16, PROGRAM.NAME, "7zip is missing in " 7zip ". Zip release will not be created.")
 		return
 	}
 	if !RunWaitMany("git --version") {
-		MsgBox(4096+16, "Failed to retrieve installed git version. Zip release will not be created.")
+		MsgBox(4096+16, PROGRAM.NAME, "Failed to retrieve installed git version. Zip release will not be created.")
 		return
 	}
 
