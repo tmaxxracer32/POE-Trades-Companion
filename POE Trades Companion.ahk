@@ -440,7 +440,6 @@ Return
 #Include ManageFonts.ahk
 #Include Misc.ahk
 #Include OnClipboardChange.ahk
-#Include PoeDotCom.ahk
 #Include PoeTrade.ahk
 #Include PushBullet.ahk
 #Include Reload.ahk

@@ -4,9 +4,14 @@
     Like MapTier slot or something?
 */
 
-GGG_API_GetLastActiveCharacter(accName) {  
-    if !(accName)
+GGG_API_GetLastActiveCharacter(accName) {
+    global PROGRAM
+    
+    if !(accName) {
+        trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToRetrieveAccountCharacters_Msg, "%account%", accName)
+        TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToRetrieveAccountCharacters_Title, trayMsg)
         return
+    }
 	
 	poeURL := GetPoeDotComUrlBasedOnLanguage("ENG")
 	url := poeURL "/character-window/get-characters?accountName=" UriEncode(accName)

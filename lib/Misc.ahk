@@ -220,7 +220,7 @@ Replace_TradeVariables(_buyOrSell, tabNum="", string="") {
 	if IsContaining(string, "%myself%") {
 		firstAcc := PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts.1
 		if (!lastCharacterLogged)
-			poeLoggedChar := PoeDotCom_GetCurrentlyLoggedCharacter(firstAcc)
+			poeLoggedChar := GGG_API_GetLastActiveCharacter(firstAcc)
 		lastCharacterLogged := poeLoggedChar?poeLoggedChar:lastCharacterLogged
 
 		string := StrReplace(string, "%myself%", lastCharacterLogged)
