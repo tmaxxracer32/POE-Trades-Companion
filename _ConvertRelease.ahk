@@ -12,9 +12,10 @@ if (!A_IsAdmin) {
 	ReloadWithParams("", getCurrentParams:=True, asAdmin:=True)
 }
 
-PROGRAM := {"CURL_EXECUTABLE": A_ScriptDir "\lib\third-party\curl.exe"}
+PROGRAM := {"CURL_EXECUTABLE": A_ScriptDir "\lib\third-party\curl.exe"
+	, TRADING_LEAGUES_JSON: A_ScriptDir "\data\tradingLeagues.json"}
 generateCurrencyData := True
-generateLeagueTxt := True
+generateLeagueJson := True
 generateTranslations := True
 generateExecutable := True
 generateZip := True
@@ -70,10 +71,9 @@ if (generateCurrencyData) {
 	ToolTip, Creating poeDotComStaticData.json & poeDotComItemsData.json, 0, 0
 	GGG_API_CreateDataFiles()
 }
-if (generateLeagueTxt) {
-	/*	TO_DO coming later
-	*/
-	; ToolTip, Creating TradingLeagues.txt, 0, 0
+if (generateLeagueJson) {
+	ToolTip, Creating tradingLeagues.json, 0, 0
+	GGG_API_Generate_TradingLeaguesJson()
 }
 
 ; Main executable

@@ -393,6 +393,18 @@ SplitItemNameAndBaseType(itemFull, LANG="ENG") {
     Return {Name:itemName, BaseType:itemType, Category:category}
 }
 
+GGG_API_Generate_TradingLeaguesJson() {
+    global PROGRAM
+
+    FileDelete(PROGRAM.TRADING_LEAGUES_JSON)
+    leaguesObj := GGG_API_Get_ActiveTradingLeagues()
+    fileLocation := PROGRAM.TRADING_LEAGUES_JSON
+    jsonText := JSON_Dump(leaguesObj, dontReplaceUnicode:=True)
+    hFile := FileOpen(fileLocation, "w", "UTF-8")
+    hFile.Write(jsonText)
+    hFile.Close()
+}
+
 GGG_API_Get_ActiveTradingLeagues() {
 /*		Retrieves leagues from the API
 */
