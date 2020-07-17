@@ -35,7 +35,7 @@
 				MsgBox(4096+16, PROGRAM.NAME, A_ThisFunc "(): Building translation files. This file is not JSON format. It will be ignored." A_LoopFileFullPath)
 				Continue
 			}
-			ToolTip, Updating translation files\n%A_LoopFileName%, 0 ,0
+			ToolTip, Updating translation files`n%A_LoopFileName%, 0 ,0
 
 			thisLangJSON := JSON_Load(A_LoopFileFullPath)
 			thisLangJSON := ObjReplace(engJSON, thisLangJSON)
@@ -50,10 +50,10 @@
 	; Data files
 	if (doDataFiles) {
 		ToolTip, Updating data files, 0, 0
-		ToolTip, Updating data files\nPoeTrade, 0, 0
+		ToolTip, Updating data files`nPoeTrade, 0, 0
 		PoeTrade_GenerateCurrencyData()
 
-		ToolTip, Updating data files\nPoeDotCom, 0, 0
+		ToolTip, Updating data files`nPoeDotCom, 0, 0
 		GGG_API_CreateDataFiles()
 	}
 
