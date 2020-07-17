@@ -303,10 +303,6 @@ Start_Script() {
 	PROGRAM.DATA.CURRENCY_LIST := currencyList
 	FileRead, poeTradeCurrencyData,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
     PROGRAM.DATA.POETRADE_CURRENCY_DATA := JSON.Load(poeTradeCurrencyData), poeTradeCurrencyData := ""
-	FileRead, gggData,% PROGRAM.DATA_FOLDER "\poeDotComStaticData.json"
-	PROGRAM.DATA.POEDOTCOM_STATIC := JSON.Load(gggData), gggData := ""
-	FileRead, gggData,% PROGRAM.DATA_FOLDER "\poeDotComItemsData.json"
-	PROGRAM.DATA.POEDOTCOM_ITEMS := JSON.Load(gggData), gggData := ""
 
 	; Loading maps data for item grid
 	FileRead, mapsData,% PROGRAM.DATA_FOLDER "\mapsData.json"
