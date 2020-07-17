@@ -51,5 +51,7 @@ Handle_CmdLineParameters() {
 			. "`n`nParam: " param)
 			found := ""
 		}
+		else if (param="/CreateRelease")
+			RUNTIME_PARAMETERS["CreateRelease"] := True
 	}
 }

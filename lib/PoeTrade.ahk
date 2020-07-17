@@ -1,6 +1,7 @@
 ﻿PoeTrade_GenerateCurrencyData() {
-    jsonData := PoeTrade_GetCurrencyData()
+    global PROGRAM
 
+    jsonData := PoeTrade_GetCurrencyData()
     if !(jsonData) {
         MsgBox(4096, "", "Function: " A_ThisFunc "`nCurrency JSON data is invalid, cancelling.")
         return
@@ -18,11 +19,11 @@
         return
     }
 
-    fileLocation := A_ScriptDir "/data/poeTradeCurrencyData.json"
+    fileLocation := PROGRAM.DATA_FOLDER "/poeTradeCurrencyData.json"
     FileDelete,% fileLocation
     FileAppend,% nice,% fileLocation
 
-    fileLocation := A_ScriptDir "/data/CurrencyNames.txt"
+    fileLocation := PROGRAM.DATA_FOLDER "/CurrencyNames.txt"
     FileDelete,% fileLocation
     FileAppend,% dataTxt,% fileLocation
 }

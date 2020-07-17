@@ -181,6 +181,11 @@ Start_Script() {
 		}
 	}
 
+	if (RUNTIME_PARAMETERS.CreateRelease) {
+		CreateRelease()
+		ExitApp
+	}
+
 	; Extracting assets
 	if !(DEBUG.settings.skip_assets_extracting)
 		AssetsExtract()
@@ -427,6 +432,7 @@ Return
 #Include AssetsExtract.ahk
 #Include Class_INI.ahk
 #Include CmdLineParameters.ahk
+#Include CompileAhk2Exe.ahk
 #Include Debug.ahk
 #Include EasyFuncs.ahk
 #Include Exit.ahk
@@ -443,7 +449,9 @@ Return
 #Include OnClipboardChange.ahk
 #Include PoeTrade.ahk
 #Include PushBullet.ahk
+#Include Release.ahk
 #Include Reload.ahk
+#Include SetFileInfos.ahk
 #Include ShellMessage.ahk
 #Include ShowToolTip.ahk
 #Include SplashText.ahk

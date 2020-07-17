@@ -47,6 +47,7 @@ GGG_API_GetLastActiveCharacter(accName) {
 }
 
 GGG_API_CreateDataFiles() {
+    global PROGRAM
     langs := ["ENG","RUS","FRE","POR","THA","GER","SPA","KOR","TWN"]
 	
 	Loop % langs.Count() {
@@ -60,7 +61,7 @@ GGG_API_CreateDataFiles() {
         WinHttpRequest_cURL(url2, data:="", headers2, options2), html2 := data, jsonData2 := JSON_Load(html2)
 
         jsonFinal := ObjFullyClone(jsonData.result), jsonFinal2 := ObjFullyClone(jsonData2.result)
-        fileLocation := A_ScriptDir "/data/" thisLang "_poeDotComStaticData.json", fileLocation2 := A_ScriptDir "/data/" thisLang "_poeDotComItemsData.json"
+        fileLocation := PROGRAM.DATA_FOLDER "/" thisLang "_poeDotComStaticData.json", fileLocation2 := PROGRAM.DATA_FOLDER "/" thisLang "_poeDotComItemsData.json"
         jsonText := JSON_Dump(jsonFinal, dontReplaceUnicode:=True), jsonText2 := JSON_Dump(jsonFinal2, dontReplaceUnicode:=True)
         hFile := FileOpen(fileLocation, "w", "UTF-8"), hFile2 := FileOpen(fileLocation2, "w", "UTF-8")
         hFile.Write(jsonText), hFile2.Write(jsonText2)
