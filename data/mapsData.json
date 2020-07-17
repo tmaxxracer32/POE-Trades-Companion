@@ -11,9 +11,81 @@
 		},
 		"Wharf Map":{
 			"pos":4
+		},
+		"Bazaar Map":{
+			"pos":5
+		},
+		"Belfry Map":{
+			"pos":6
+		},
+		"Bog Map":{
+			"pos":7
+		},
+		"Cage Map":{
+			"pos":8
+		},
+		"Cemetery Map":{
+			"pos":9
+		},
+		"Coves Map":{
+			"pos":10
+		},
+		"Dunes Map":{
+			"pos":11
+		},
+		"Leyline Map":{
+			"pos":12
+		},
+		"Mesa Map":{
+			"pos":13
+		},
+		"Moon Temple Map":{
+			"pos":14
+		},
+		"Mud Geyser Map":{
+			"pos":15
+		},
+		"Museum Map":{
+			"pos":16
+		},
+		"Overgrown Ruin Map":{
+			"pos":17
+		},
+		"Pen Map":{
+			"pos":18
+		},
+		"Primordial Pool Map":{
+			"pos":19
+		},
+		"Racecourse Map":{
+			"pos":20
+		},
+		"Relic Chambers Map":{
+			"pos":21
+		},
+		"Temple Map":{
+			"pos":22
+		},
+		"Toxic Sewer Map":{
+			"pos":23
+		},
+		"Vaal Pyramid Map":{
+			"pos":24
+		},
+		"Vault Map":{
+			"pos":25
+		},
+		"Volcano Map":{
+			"pos":26
+		},
+		"Wasteland Map":{
+			"pos":27
+		},
+		"Waterways Map":{
+			"pos":28
 		}
 	},
-	"tier_10":{
+	"tier_4":{
 		"Academy Map":{
 			"pos":1
 		},
@@ -179,25 +251,20 @@
 		"Forge of the Phoenix Map":{
 			"pos":1
 		},
-		"Lair of the Hydra Map":{
-			"pos":2
+		"Graveyard Map":{
+			"pos":12
 		},
-		"Maze of the Minotaur Map":{
-			"pos":3
+		"Laboratory Map":{
+			"pos":13
 		},
-		"Pit of the Chimera Map":{
-			"pos":4
+		"Leyline Map":{
+			"pos":14
 		},
-		"Vaal Temple Map":{
-			"pos":5
-		}
-	},
-	"tier_2":{
-		"Alleyways Map":{
-			"pos":1
+		"Lookout Map":{
+			"pos":15
 		},
-		"Armoury Map":{
-			"pos":2
+		"Mesa Map":{
+			"pos":16
 		},
 		"Cage Map":{
 			"pos":3
@@ -266,7 +333,7 @@
 		"Cursed Crypt Map":{
 			"pos":7
 		},
-		"Fields Map":{
+		"Conservatory Map":{
 			"pos":8
 		},
 		"Flooded Mine Map":{
@@ -341,6 +408,24 @@
 		},
 		"Vault Map":{
 			"pos":11
+		},
+		"Pier Map":{
+			"pos":12
+		},
+		"Plaza Map":{
+			"pos":13
+		},
+		"Reef Map":{
+			"pos":14
+		},
+		"Siege Map":{
+			"pos":15
+		},
+		"Waste Pool Map":{
+			"pos":16
+		},
+		"Wharf Map":{
+			"pos":17
 		}
 	},
 	"tier_7":{
@@ -450,22 +535,31 @@
 	},
 	"tier_unique":{
 		"Acton's Nightmare Overgrown Shrine Map":{
-			"pos":1
-		},
-		"Caer Blaidd, Wolfpack's Den Underground River Map":{
 			"pos":2
 		},
-		"Death and Taxes Necropolis Map":{
+		"Altered Distant Memory Siege Map":{
 			"pos":3
 		},
-		"Doryani's Machinarium Maze Map":{
+		"Augmented Distant Memory Courthouse Map":{
 			"pos":4
 		},
+		"Caer Blaidd, Wolfpack's Den Underground River Map":{
+			"pos":6
+		},
+		"Cortex Relic Chambers Map":{
+			"pos":7
+		},
+		"Death and Taxes Necropolis Map":{
+			"pos":8
+		},
+		"Doryani's Machinarium Maze Map":{
+			"pos":9
+		},
 		"Hall of Grandmasters Promenade Map":{
-			"pos":5
+			"pos":10
 		},
 		"Hallowed Ground Cemetery Map":{
-			"pos":6
+			"pos":15
 		},
 		"Maelstr\u00C3\u00B6m of Chaos Atoll Map":{
 			"pos":7
@@ -477,34 +571,40 @@
 			"pos":9
 		},
 		"Olmec's Sanctum Bone Crypt Map":{
-			"pos":10
+			"pos":34
 		},
 		"Pillars of Arun Dunes Map":{
-			"pos":11
+			"pos":39
 		},
 		"Poorjoy's Asylum Temple Map":{
-			"pos":12
+			"pos":44
+		},
+		"Rewritten Distant Memory Basilica Map":{
+			"pos":45
 		},
 		"The Coward's Trial Cursed Crypt Map":{
-			"pos":13
+			"pos":50
 		},
 		"The Perandus Manor Chateau Map":{
-			"pos":14
+			"pos":51
 		},
 		"The Putrid Cloister Museum Map":{
-			"pos":15
+			"pos":56
 		},
 		"The Twilight Temple Moon Temple Map":{
-			"pos":16
+			"pos":61
 		},
 		"The Vinktar Square Courtyard Map":{
-			"pos":17
+			"pos":62
+		},
+		"Twisted Distant Memory Park Map":{
+			"pos":63
 		},
 		"Vaults of Atziri Vaal Pyramid Map":{
-			"pos":18
+			"pos":68
 		},
 		"Whakawairua Tuahu Strand Map":{
-			"pos":19
+			"pos":73
 		}
 	}
 }

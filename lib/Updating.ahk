@@ -12,7 +12,7 @@
 		AppendToLogs(A_ThisFunc "(): Recent releases is empty!")
 		SplashTextOn(PROGRAM.NAME " - Updating Error", "Unable to retrieve recent releases from API."
 		.											"`nIf this keeps on happening, please try updating manually."
-		.											"`nYou can find the GitHub repository link in the Settings menu.", 1, 1)
+		.											"`nYou can find the GitHub repository link in the Settings menu.", 1)
 		return "ERROR"
 	}
 	latestRel := recentRels.1
@@ -87,14 +87,14 @@
 		.											"`nPlease try again in a few minutes."
 		.											"`n"
 		.											"`nIf this keeps on happening, please try updating manually."
-		.											"`nYou can find the GitHub repository link in the Settings menu.", 1, 1)
+		.											"`nYou can find the GitHub repository link in the Settings menu.", 1)
 		return "ERROR"
 	}
 	else {
 		AppendToLogs(A_ThisFunc "(): Update check: Failed to retrieve releases from GitHub API.")
 		SplashTextOn(PROGRAM.NAME " - Updating Error", "There was an issue when retrieving the latest release from GitHub API"
 		.											"`nIf this keeps on happening, please try updating manually."
-		.											"`nYou can find the GitHub repository link in the Settings menu.", 1, 1)
+		.											"`nYou can find the GitHub repository link in the Settings menu.", 1)
 		return "ERROR"
 	}
 }

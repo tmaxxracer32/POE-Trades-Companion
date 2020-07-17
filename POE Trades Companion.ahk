@@ -44,9 +44,6 @@ OnMessage(0x404, "AHK_NOTIFYICON")
 Hotkey, IfWinActive, ahk_group POEGameGroup
 Hotkey, ^RButton, StackClick
 
-Hotkey, IfWinActive
-Hotkey, ~*Space, SpaceRoutine
-
 Hotkey, IfWinActive,% "ahk_pid " DllCall("GetCurrentProcessId")
 
 ; try {
@@ -59,18 +56,14 @@ Hotkey, IfWinActive,% "ahk_pid " DllCall("GetCurrentProcessId")
 Return
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  
-SpaceRoutine() {
-	global PROGRAM, AUTOWHISPER_CANCEL, AUTOWHISPER_WAITKEYUP, SPACEBAR_WAIT
 
-	if (SPACEBAR_WAIT) {
-		SplashTextOff()
-	}
-	else if (AUTOWHISPER_WAITKEYUP) {
+Cancel_AutoWhisper() {
+	global PROGRAM, AUTOWHISPER_CANCEL, AUTOWHISPER_WAITKEYUP
+	if (AUTOWHISPER_WAITKEYUP) {
 		AUTOWHISPER_CANCEL := True
 		ShowToolTip(PROGRAM.NAME "`nEasy whisper canceled.")
 	}
-}
+}  
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -95,7 +88,7 @@ Start_Script() {
 
 	; Set global - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	PROGRAM.NAME					:= "POE Trades Companion"
-	PROGRAM.VERSION 				:= "1.15.BETA_9990" ; code on par with 1.15.BETA_9990
+	PROGRAM.VERSION 				:= "1.15.BETA_9991" ; code on par with 1.15.BETA_9991
 	PROGRAM.IS_BETA					:= IsContaining(PROGRAM.VERSION, "beta")?"True":"False"
 	PROGRAM.ALPHA					:= "Discord ALPHA 6"
 
@@ -313,6 +306,10 @@ Start_Script() {
 	; Game settings
 	Declare_GameSettings(gameSettings)
 	GGG_API_Get_ActiveTradingLeagues()
+
+	if RegExMatch(GetKeyboardLayout(), "i)^(0xF002|0xF01B|0xF01A|0xF01C0809|0xF01C0409).*")
+		TrayNotifications.Show(PROGRAM.NAME, "Dvorak keyboard layout detected, scancode fix applied.")
+	PROGRAM.SCANCODES := GetScanCodes()
 
 	if RegExMatch(GetKeyboardLayout(), "i)^(0xF002|0xF01B|0xF01A|0xF01C0809|0xF01C0409).*")
 		TrayNotifications.Show(PROGRAM.NAME, "Dvorak keyboard layout detected, scancode fix applied.")

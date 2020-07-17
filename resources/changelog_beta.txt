@@ -1,3 +1,76 @@
+1.15.BETA_9991 (11 May 2020)
+
+	Fixes:
+	- Updated the Korean whisper pattern due to changes from GGG translated whisper pattern.
+	- Having the Space button as your InGame item pickup key could cause Trades Companion to show an annoying window saying "xx hotkeys have been received in the last xxx ms"
+
+= = = = = = = = = = = = =
+
+1.15.BETA_9990 (09 April 2020)
+	
+	Fixes:
+	- Reverted the tab colour change from last update as it was causing issues with the tab staying green constantly.
+	The next major update changes completely how the Buying/Selling Interfaces work (and also fixes this), so I won't mess with this anymore than that for now.
+	
+= = = = = = = = = = = = =
+
+1.15.BETA_999 (09 April 2020)
+
+	Added:
+	- Support for whispers from Garena chinese translated whispers.
+	- Support for poedb chinese whispers.	
+	
+	Changes:
+	- Tab colour "green" (buyer joined area) now takes priority over "purple" (new whisper received).
+	This means receiving a whisper while the buyer is in your hideout will no longer set its tab to purple, allowing to give more priority to buyers already in your hideout.
+	
+= = = = = = = = = = = = =
+
+1.15.BETA_998 (16 March 2020)
+
+	Changes:
+	- Added Delirium and translated challenge league names.
+	- Updated data files and the Betrayal league sheet.
+	- Updated the Essence league sheet for a new more detailed version.
+
+= = = = = = = = = = = = =
+
+1.15.BETA_997 (12 February 2020)
+
+	Changes:
+	- Pressing ESC while a League Sheet is open will now close it.
+	- Removed the "ImageButtons Errors" window and show a simple tray notification instead.
+	- "ImageButton Errors" are now logged in the logs file, and with more details.
+	
+= = = = = = = = = = = = =
+
+1.15.BETA_995/996 (28 January 2020)
+
+	Changes:
+	- Due to new atlas changes in Metamorph, the map type location in the Map Stash Tab has been disabled until a proper solution is worked on.
+	
+	Fixes:
+	- The map type location would be slightly off on the y-axis due to some changes during Metamorph league.
+	Though, this fix doesn't really mattter now as the map type location is being temporarily disabled.
+	
+= = = = = = = = = = = = =
+
+1.15.BETA_994 (15 January 2020)
+
+	Changes:
+	- Updated the Betrayal league sheet.
+
+	Fixes:
+	- An error box could show up related to the item location grid due to the new atlas system.
+	
+= = = = = = = = = = = = =
+
+1.15.BETA_993 (17 December 2019)
+
+	Changes:
+	- Updated data to Metamorph League.
+
+= = = = = = = = = = = = =
 1.15.BETA_992 (26 Sept 2019)
 
 	Fixes:

@@ -339,15 +339,10 @@
 		winYPos := IsNum(savedYPos) && isModeWindowed ? savedYPos : 0
 
 		if (imageBtnLog) {
-			Gui, ErrorLog:New, +AlwaysOnTop +ToolWindow +hwndhGuiErrorLog
-			Gui, ErrorLog:Add, Text, x10 y10,% "One or multiple error(s) occured while creating the Trades GUI imagebuttons."
-			. "`nIn case you are getting ""Couldn't get button's font"" errors, restarting your computer should fix it."
-			Gui, ErrorLog:Add, Edit, xp y+5 w500 R15 ReadOnly,% imageBtnLog
-			Gui, ErrorLog:Add, Link, xp y+5,% "If you need assistance, you can contact me on: "
-			. "<a href=""" PROGRAM.LINK_GITHUB """>GitHub</a> - <a href=""" PROGRAM.LINK_REDDIT """>Reddit</a> - <a href=""" PROGRAM.LINK_GGG """>PoE Forums</a> - <a href=""" PROGRAM.LINK_DISCORD """>Discord</a>"
-			Gui, ErrorLog:Show,xCenter yCenter,% PROGRAM.NAME " - Trades GUI Error log"
-			WinWait, ahk_id %hGuiErrorLog%
-			WinWaitClose, ahk_id %hGuiErrorLog%
+			AppendToLogs(imageBtnLog)
+			TrayNotifications.Show("Trades - Image button errors", "Some ImageButtons failed to be created successfully."
+			. "`n" "The look of the interface may be altered, but it won't impact its behaviour."
+			. "`n" "Further informations have been added to the logs file.")
 		}
 
 		Gui.Show("Trades", "x" winXPos " y" winYPos " h" guiFullHeight " w" guiFullWidth " Hide")
@@ -675,7 +670,8 @@
 		if RegExMatch(item, "O)(.*?) \(Lvl:(.*?) \/ Qual:(.*?)%\)", itemPat) {
 			gemName := itemPat.1, gemLevel := itemPat.2, gemQual := itemPat.3
 		}
-		else if RegExMatch(item, "O)(.*?) \(T(.*?)\)", itemPat) {
+		else if RegExMatch(item, "O)(.*?) \(T(.*?)\)", itemPat)
+		|| RegExMatch(item, "O)(.*?) \(階級(.*?)\)", itemPat) {
 			mapName := itemPat.1, mapTier := itemPat.2
 		}
 
@@ -689,6 +685,7 @@
 				: whisLang = "GER" ? "e" ; Stufe
 				: whisLang = "SPA" ? "l" ; Nivel
 				: whisLang = "KOR" ? "벨" ; 레벨
+				: whisLang = "TWN" ? "級" ; 等級
 				: "l"
 			searchQualPrefix := whisLang = "ENG" ? "y" ; quality
 				: whisLang = "RUS" ? "о" ; Качество
@@ -698,6 +695,7 @@
 				: whisLang = "GER" ? "t" ; Qualität
 				: whisLang = "SPA" ? "d" ; Calidad
 				: whisLang = "KOR" ? "티" ; 퀄리티
+				: whisLang = "TWN" ? "質" ; 品質
 				: "y"
 
 			searchGemStr := """" gemName """"

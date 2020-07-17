@@ -40,11 +40,14 @@
 		GoSub OnClipboardChange_Func_Finished
 		Return
 	}
+	Hotkey, IfWinActive
+	Hotkey, *Space, Cancel_AutoWhisper, On
 	ShowToolTip(PROGRAM.NAME "`nThis whisper will be sent upon releasing CTRL.`nPress [ SPACE ] to cancel.")
 	AUTOWHISPER_WAITKEYUP := True
 	KeyWait, VK%modKeyVK%, L
 	RemoveToolTip()
 	AUTOWHISPER_WAITKEYUP := False
+	Hotkey, *Space, Cancel_AutoWhisper, Off
 
 	if (AUTOWHISPER_CANCEL) {
 		AUTOWHISPER_CANCEL := False
