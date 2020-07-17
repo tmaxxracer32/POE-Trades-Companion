@@ -125,6 +125,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Bear's Girdle",
+				"text": "Bear's Girdle Leather Belt",
+				"type": "Leather Belt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Belt of the Deceiver",
 				"text": "Belt of the Deceiver Heavy Belt",
 				"type": "Heavy Belt"
@@ -909,6 +917,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Retaliation Charm",
+				"text": "Retaliation Charm Citrine Amulet",
+				"type": "Citrine Amulet"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Rigwald's Crest",
 				"text": "Rigwald's Crest Two-Stone Ring",
 				"type": "Two-Stone Ring"
@@ -1045,6 +1061,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Storm Secret",
+				"text": "Storm Secret Topaz Ring",
+				"type": "Topaz Ring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "String of Servitude",
 				"text": "String of Servitude Heavy Belt",
 				"type": "Heavy Belt"
@@ -1120,6 +1144,14 @@
 				"name": "The Effigon",
 				"text": "The Effigon Gold Amulet",
 				"type": "Gold Amulet"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "The Felbog Fang",
+				"text": "The Felbog Fang Citrine Amulet",
+				"type": "Citrine Amulet"
 			},
 			{
 				"flags": {
@@ -1224,6 +1256,14 @@
 				"name": "The Taming",
 				"text": "The Taming Prismatic Ring",
 				"type": "Prismatic Ring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "The Torrent's Reclamation",
+				"text": "The Torrent's Reclamation Cloth Belt",
+				"type": "Cloth Belt"
 			},
 			{
 				"flags": {
@@ -1753,6 +1793,14 @@
 				"name": "Abberath's Hooves",
 				"text": "Abberath's Hooves Goathide Boots",
 				"type": "Goathide Boots"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Abhorrent Interrogation",
+				"text": "Abhorrent Interrogation Ambush Mitts",
+				"type": "Ambush Mitts"
 			},
 			{
 				"flags": {
@@ -2550,6 +2598,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Doryani's Prototype",
+				"text": "Doryani's Prototype Saint's Hauberk",
+				"type": "Saint's Hauberk"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Drillneck",
 				"text": "Drillneck Penetrating Arrow Quiver",
 				"type": "Penetrating Arrow Quiver"
@@ -2593,6 +2649,14 @@
 				"name": "Eber's Unification",
 				"text": "Eber's Unification Hubris Circlet",
 				"type": "Hubris Circlet"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Emperor's Vigilance",
+				"text": "Emperor's Vigilance Steel Kite Shield",
+				"type": "Steel Kite Shield"
 			},
 			{
 				"flags": {
@@ -2742,6 +2806,22 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Fleshcrafter",
+				"text": "Fleshcrafter Necromancer Silks",
+				"type": "Necromancer Silks"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Forbidden Shako",
+				"text": "Forbidden Shako Great Crown",
+				"type": "Great Crown"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Fox's Fortune",
 				"text": "Fox's Fortune Wild Leather",
 				"type": "Wild Leather"
@@ -2865,6 +2945,14 @@
 				"name": "Gorgon's Gaze",
 				"text": "Gorgon's Gaze Regicide Mask",
 				"type": "Regicide Mask"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Great Old One's Tentacles",
+				"text": "Great Old One's Tentacles Eelskin Gloves",
+				"type": "Eelskin Gloves"
 			},
 			{
 				"flags": {
@@ -3566,6 +3654,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Plume of Pursuit",
+				"text": "Plume of Pursuit Bone Circlet",
+				"type": "Bone Circlet"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Prism Guardian",
 				"text": "Prism Guardian Archon Kite Shield",
 				"type": "Archon Kite Shield"
@@ -3745,6 +3841,14 @@
 				"name": "Scold's Bridle",
 				"text": "Scold's Bridle Mind Cage",
 				"type": "Mind Cage"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Scorpion's Call",
+				"text": "Scorpion's Call Broadhead Arrow Quiver",
+				"type": "Broadhead Arrow Quiver"
 			},
 			{
 				"flags": {
@@ -4174,6 +4278,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "The Immortal Will",
+				"text": "The Immortal Will Archon Kite Shield",
+				"type": "Archon Kite Shield"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "The Infinite Pursuit",
 				"text": "The Infinite Pursuit Goliath Greaves",
 				"type": "Goliath Greaves"
@@ -4254,6 +4366,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "The Shattered Divinity",
+				"text": "The Shattered Divinity Blunt Arrow Quiver",
+				"type": "Blunt Arrow Quiver"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "The Signal Fire",
 				"text": "The Signal Fire Cured Quiver",
 				"type": "Cured Quiver"
@@ -4296,6 +4416,14 @@
 				},
 				"name": "The Tempest's Binding",
 				"text": "The Tempest's Binding Callous Mask",
+				"type": "Callous Mask"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "The Tempest's Liberation",
+				"text": "The Tempest's Liberation Callous Mask",
 				"type": "Callous Mask"
 			},
 			{
@@ -6248,6 +6376,10 @@
 				"type": "A Dab of Ink"
 			},
 			{
+				"text": "A Familiar Call",
+				"type": "A Familiar Call"
+			},
+			{
 				"text": "Akil's Prophecy",
 				"type": "Akil's Prophecy"
 			},
@@ -6266,6 +6398,10 @@
 			{
 				"text": "Anarchy's Price",
 				"type": "Anarchy's Price"
+			},
+			{
+				"text": "A Note in the Wind",
+				"type": "A Note in the Wind"
 			},
 			{
 				"text": "Arrogance of the Vaal",
@@ -6428,6 +6564,10 @@
 				"type": "Gemcutter's Promise"
 			},
 			{
+				"text": "Gift of Asenath",
+				"type": "Gift of Asenath"
+			},
+			{
 				"text": "Gift of the Gemling Queen",
 				"type": "Gift of the Gemling Queen"
 			},
@@ -6560,6 +6700,10 @@
 				"type": "No Traces"
 			},
 			{
+				"text": "Peaceful Moments",
+				"type": "Peaceful Moments"
+			},
+			{
 				"text": "Perfection",
 				"type": "Perfection"
 			},
@@ -6570,6 +6714,10 @@
 			{
 				"text": "Pride of the First Ones",
 				"type": "Pride of the First Ones"
+			},
+			{
+				"text": "Prometheus' Armoury",
+				"type": "Prometheus' Armoury"
 			},
 			{
 				"text": "Prosperity",
@@ -6650,6 +6798,10 @@
 			{
 				"text": "The Avenger",
 				"type": "The Avenger"
+			},
+			{
+				"text": "The Awakened",
+				"type": "The Awakened"
 			},
 			{
 				"text": "The Bargain",
@@ -6920,6 +7072,10 @@
 				"type": "The Golden Era"
 			},
 			{
+				"text": "The Greatest Intentions",
+				"type": "The Greatest Intentions"
+			},
+			{
 				"text": "The Hale Heart",
 				"type": "The Hale Heart"
 			},
@@ -6934,6 +7090,10 @@
 			{
 				"text": "The Heroic Shot",
 				"type": "The Heroic Shot"
+			},
+			{
+				"text": "The Hive of Knowledge",
+				"type": "The Hive of Knowledge"
 			},
 			{
 				"text": "The Hoarder",
@@ -7010,6 +7170,10 @@
 			{
 				"text": "The Lion",
 				"type": "The Lion"
+			},
+			{
+				"text": "The Long Con",
+				"type": "The Long Con"
 			},
 			{
 				"text": "The Lord in Black",
@@ -7256,6 +7420,10 @@
 				"type": "The Survivalist"
 			},
 			{
+				"text": "The Sustenance",
+				"type": "The Sustenance"
+			},
+			{
 				"text": "The Sword King's Salute",
 				"type": "The Sword King's Salute"
 			},
@@ -7282,6 +7450,10 @@
 			{
 				"text": "The Trial",
 				"type": "The Trial"
+			},
+			{
+				"text": "The Tumbleweed",
+				"type": "The Tumbleweed"
 			},
 			{
 				"text": "The Twilight Moon",
@@ -7342,6 +7514,10 @@
 			{
 				"text": "The Web",
 				"type": "The Web"
+			},
+			{
+				"text": "The White Knight",
+				"type": "The White Knight"
 			},
 			{
 				"text": "The Wilted Rose",
@@ -7671,6 +7847,10 @@
 			{
 				"text": "Prime Sextant",
 				"type": "Prime Sextant"
+			},
+			{
+				"text": "Facetor's Lens",
+				"type": "Facetor's Lens"
 			},
 			{
 				"text": "Orb of Augmentation",
@@ -8365,6 +8545,30 @@
 				"type": "Gemcutter's Prism"
 			},
 			{
+				"text": "Time-light Scroll",
+				"type": "Time-light Scroll"
+			},
+			{
+				"text": "Deregulation Scroll",
+				"type": "Deregulation Scroll"
+			},
+			{
+				"text": "Fragmentation Scroll",
+				"type": "Fragmentation Scroll"
+			},
+			{
+				"text": "Specularity Scroll",
+				"type": "Specularity Scroll"
+			},
+			{
+				"text": "Haemocombustion Scroll",
+				"type": "Haemocombustion Scroll"
+			},
+			{
+				"text": "Electroshock Scroll",
+				"type": "Electroshock Scroll"
+			},
+			{
 				"text": "Scroll of Wisdom",
 				"type": "Scroll of Wisdom"
 			},
@@ -8681,6 +8885,10 @@
 				"type": "Engineer's Orb"
 			},
 			{
+				"text": "Infused Engineer's Orb",
+				"type": "Infused Engineer's Orb"
+			},
+			{
 				"text": "Engineer's Shard",
 				"type": "Engineer's Shard"
 			},
@@ -8769,6 +8977,10 @@
 				"type": "Azure Oil"
 			},
 			{
+				"text": "Indigo Oil",
+				"type": "Indigo Oil"
+			},
+			{
 				"text": "Violet Oil",
 				"type": "Violet Oil"
 			},
@@ -8817,6 +9029,234 @@
 				"type": "Stacked Deck"
 			},
 			{
+				"text": "Horticrafting Bud",
+				"type": "Horticrafting Bud"
+			},
+			{
+				"text": "Horticrafting Flower",
+				"type": "Horticrafting Flower"
+			},
+			{
+				"text": "Horticrafting Blossom",
+				"type": "Horticrafting Blossom"
+			},
+			{
+				"text": "Lifeforce Bud",
+				"type": "Lifeforce Bud"
+			},
+			{
+				"text": "Lifeforce Flower",
+				"type": "Lifeforce Flower"
+			},
+			{
+				"text": "Lifeforce Blossom",
+				"type": "Lifeforce Blossom"
+			},
+			{
+				"text": "Fortune Bud",
+				"type": "Fortune Bud"
+			},
+			{
+				"text": "Fortune Flower",
+				"type": "Fortune Flower"
+			},
+			{
+				"text": "Fortune Blossom",
+				"type": "Fortune Blossom"
+			},
+			{
+				"text": "เมล็ด Cleaveling อันเก่าแก่",
+				"type": "เมล็ด Cleaveling อันเก่าแก่"
+			},
+			{
+				"text": "Thornfruit อันเกรี้ยวกราด",
+				"type": "Thornfruit อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Bristlebeast อันเกรี้ยวกราด",
+				"type": "เมล็ดพันธุ์ Bristlebeast อันเกรี้ยวกราด"
+			},
+			{
+				"text": "หัวพันธุ์ Bristle Matron อันเกรี้ยวกราด",
+				"type": "หัวพันธุ์ Bristle Matron อันเกรี้ยวกราด"
+			},
+			{
+				"text": "Blisterfruit อันเก่าแก่",
+				"type": "Blisterfruit อันเก่าแก่"
+			},
+			{
+				"text": "หัวพันธุ์ Thornmaw อันเกรี้ยวกราด",
+				"type": "หัวพันธุ์ Thornmaw อันเกรี้ยวกราด"
+			},
+			{
+				"text": "หัวพันธุ์ Whipleg อันสดใส",
+				"type": "หัวพันธุ์ Whipleg อันสดใส"
+			},
+			{
+				"text": "หัวพันธุ์ Brambleback อันเกรี้ยวกราด",
+				"type": "หัวพันธุ์ Brambleback อันเกรี้ยวกราด"
+			},
+			{
+				"text": "Scalefruit อันสดใส",
+				"type": "Scalefruit อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Chieftain อันเกรี้ยวกราด",
+				"type": "เมล็ดพันธุ์ Chieftain อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Viper อันเก่าแก่",
+				"type": "เมล็ดพันธุ์ Viper อันเก่าแก่"
+			},
+			{
+				"text": "หัวพันธุ์ Devourer อันสดใส",
+				"type": "หัวพันธุ์ Devourer อันสดใส"
+			},
+			{
+				"text": "เมล็ด Ursaling อันเกรี้ยวกราด",
+				"type": "เมล็ด Ursaling อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ด Maw อันเก่าแก่",
+				"type": "เมล็ด Maw อันเก่าแก่"
+			},
+			{
+				"text": "หัวพันธุ์ Cystcaller อันเก่าแก่",
+				"type": "หัวพันธุ์ Cystcaller อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ด Hellion อันเกรี้ยวกราด",
+				"type": "เมล็ด Hellion อันเกรี้ยวกราด"
+			},
+			{
+				"text": "หัวพันธุ์ Hellion Alpha อันเกรี้ยวกราด",
+				"type": "หัวพันธุ์ Hellion Alpha อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Snap Hound อันเกรี้ยวกราด",
+				"type": "เมล็ดพันธุ์ Snap Hound อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Sapsucker อันสดใส",
+				"type": "เมล็ดพันธุ์ Sapsucker อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Chimeral อันเก่าแก่",
+				"type": "เมล็ดพันธุ์ Chimeral อันเก่าแก่"
+			},
+			{
+				"text": "หัวพันธุ์ Infestation Queen อันเกรี้ยวกราด",
+				"type": "หัวพันธุ์ Infestation Queen อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ด Hatchling อันเกรี้ยวกราด",
+				"type": "เมล็ด Hatchling อันเกรี้ยวกราด"
+			},
+			{
+				"text": "หัวพันธุ์ Blisterlord อันเก่าแก่",
+				"type": "หัวพันธุ์ Blisterlord อันเก่าแก่"
+			},
+			{
+				"text": "หัวพันธุ์ Reborn อันเก่าแก่",
+				"type": "หัวพันธุ์ Reborn อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ด Arachnid อันสดใส",
+				"type": "เมล็ด Arachnid อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Homunculus อันเกรี้ยวกราด",
+				"type": "เมล็ดพันธุ์ Homunculus อันเกรี้ยวกราด"
+			},
+			{
+				"text": "เมล็ด Ape อันเกรี้ยวกราด",
+				"type": "เมล็ด Ape อันเกรี้ยวกราด"
+			},
+			{
+				"text": "หัวพันธุ์ Crushclaw อันเก่าแก่",
+				"type": "หัวพันธุ์ Crushclaw อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ด Leech อันสดใส",
+				"type": "เมล็ด Leech อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Parasite อันสดใส",
+				"type": "เมล็ดพันธุ์ Parasite อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Nestback อันสดใส",
+				"type": "เมล็ดพันธุ์ Nestback อันสดใส"
+			},
+			{
+				"text": "หัวพันธุ์ Abberarach อันสดใส",
+				"type": "หัวพันธุ์ Abberarach อันสดใส"
+			},
+			{
+				"text": "เมล็ด Feasting Horror อันเก่าแก่",
+				"type": "เมล็ด Feasting Horror อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Rhex อันเก่าแก่",
+				"type": "เมล็ดพันธุ์ Rhex อันเก่าแก่"
+			},
+			{
+				"text": "หัวพันธุ์ Rhex Matriarch อันเก่าแก่",
+				"type": "หัวพันธุ์ Rhex Matriarch อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ด Rhoa อันเก่าแก่",
+				"type": "เมล็ด Rhoa อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Razorleg อันสดใส",
+				"type": "เมล็ดพันธุ์ Razorleg อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Scrabbler อันเก่าแก่",
+				"type": "เมล็ดพันธุ์ Scrabbler อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ด Dustspitter อันเก่าแก่",
+				"type": "เมล็ด Dustspitter อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ด Scorpion อันสดใส",
+				"type": "เมล็ด Scorpion อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Striketail อันสดใส",
+				"type": "เมล็ดพันธุ์ Striketail อันสดใส"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Dustcrab อันเก่าแก่",
+				"type": "เมล็ดพันธุ์ Dustcrab อันเก่าแก่"
+			},
+			{
+				"text": "เมล็ดพันธุ์ Spikeback อันเกรี้ยวกราด",
+				"type": "เมล็ดพันธุ์ Spikeback อันเกรี้ยวกราด"
+			},
+			{
+				"text": "หัวพันธุ์ Watcher อันสดใส",
+				"type": "หัวพันธุ์ Watcher อันสดใส"
+			},
+			{
+				"text": "เมล็ด Thornweaver อันสดใส",
+				"type": "เมล็ด Thornweaver อันสดใส"
+			},
+			{
+				"text": "หัวพันธุ์ Vulture อันสดใส",
+				"type": "หัวพันธุ์ Vulture อันสดใส"
+			},
+			{
+				"text": "เมล็ด Weta อันสดใส",
+				"type": "เมล็ด Weta อันสดใส"
+			},
+			{
+				"text": "เมล็ด Thornwolf อันเกรี้ยวกราด",
+				"type": "เมล็ด Thornwolf อันเกรี้ยวกราด"
+			},
+			{
 				"text": "Captured Soul of Thraxia",
 				"type": "Captured Soul of Thraxia"
 			},
@@ -8825,16 +9265,16 @@
 				"type": "Captured Soul of Glace"
 			},
 			{
-				"text": "Captured Soul of Ambrius, Legion Slayer",
-				"type": "Captured Soul of Ambrius, Legion Slayer"
+				"text": "Captured Soul of Shadow of the Vaal",
+				"type": "Captured Soul of Shadow of the Vaal"
 			},
 			{
 				"text": "Captured Soul of Stalker of the Endless Dunes",
 				"type": "Captured Soul of Stalker of the Endless Dunes"
 			},
 			{
-				"text": "Captured Soul of Excellis Aurafix",
-				"type": "Captured Soul of Excellis Aurafix"
+				"text": "Captured Soul of Shock and Horror",
+				"type": "Captured Soul of Shock and Horror"
 			},
 			{
 				"text": "Cloth Belt Piece",
@@ -9259,8 +9699,12 @@
 	{
 		"entries": [
 			{
-				"text": "Abyssal Cry",
-				"type": "Abyssal Cry"
+				"text": "Infernal Cry",
+				"type": "Infernal Cry"
+			},
+			{
+				"text": "Ancestral Cry",
+				"type": "Ancestral Cry"
 			},
 			{
 				"text": "Ancestral Warchief",
@@ -9287,12 +9731,16 @@
 				"type": "Arcane Cloak"
 			},
 			{
+				"text": "Arcanist Brand",
+				"type": "Arcanist Brand"
+			},
+			{
 				"text": "Arctic Armour",
 				"type": "Arctic Armour"
 			},
 			{
-				"text": "Arctic Breath",
-				"type": "Arctic Breath"
+				"text": "Creeping Frost",
+				"type": "Creeping Frost"
 			},
 			{
 				"text": "Armageddon Brand",
@@ -9507,6 +9955,10 @@
 				"type": "Earthquake"
 			},
 			{
+				"text": "Earthshatter",
+				"type": "Earthshatter"
+			},
+			{
 				"text": "Elemental Hit",
 				"type": "Elemental Hit"
 			},
@@ -9639,6 +10091,10 @@
 				"type": "Frost Wall"
 			},
 			{
+				"text": "General's Cry",
+				"type": "General's Cry"
+			},
+			{
 				"text": "Glacial Cascade",
 				"type": "Glacial Cascade"
 			},
@@ -9723,6 +10179,10 @@
 				"type": "Infernal Blow"
 			},
 			{
+				"text": "Intimidating Cry",
+				"type": "Intimidating Cry"
+			},
+			{
 				"text": "Kinetic Blast",
 				"type": "Kinetic Blast"
 			},
@@ -9797,6 +10257,10 @@
 			{
 				"text": "Orb of Storms",
 				"type": "Orb of Storms"
+			},
+			{
+				"text": "Penance Brand",
+				"type": "Penance Brand"
 			},
 			{
 				"text": "Perforate",
@@ -9913,6 +10377,10 @@
 			{
 				"text": "Searing Bond",
 				"type": "Searing Bond"
+			},
+			{
+				"text": "Seismic Cry",
+				"type": "Seismic Cry"
 			},
 			{
 				"text": "Shattering Steel",
@@ -10275,6 +10743,10 @@
 				"type": "Winter Orb"
 			},
 			{
+				"text": "Wintertide Brand",
+				"type": "Wintertide Brand"
+			},
+			{
 				"text": "Wither",
 				"type": "Wither"
 			},
@@ -10569,6 +11041,10 @@
 			{
 				"text": "Awakened Fire Penetration Support",
 				"type": "Awakened Fire Penetration Support"
+			},
+			{
+				"text": "Fist of War Support",
+				"type": "Fist of War Support"
 			},
 			{
 				"text": "Fork Support",
@@ -10911,6 +11387,10 @@
 				"type": "Swift Assembly Support"
 			},
 			{
+				"text": "Swiftbrand Support",
+				"type": "Swiftbrand Support"
+			},
+			{
 				"text": "Trap Support",
 				"type": "Trap Support"
 			},
@@ -10933,6 +11413,10 @@
 			{
 				"text": "Awakened Unleash Support",
 				"type": "Awakened Unleash Support"
+			},
+			{
+				"text": "Urgent Orders Support",
+				"type": "Urgent Orders Support"
 			},
 			{
 				"text": "Awakened Vicious Projectiles Support",
@@ -11439,8 +11923,8 @@
 				"flags": {
 					"unique": 1
 				},
-				"name": "Hotfooted",
-				"text": "Hotfooted Viridian Jewel",
+				"name": "Hotheaded",
+				"text": "Hotheaded Viridian Jewel",
 				"type": "Viridian Jewel"
 			},
 			{
@@ -12264,6 +12748,15 @@
 				"name": "Hallowed Ground",
 				"text": "Hallowed Ground Cemetery Map",
 				"type": "Cemetery Map"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Infused Beachhead",
+				"text": "Infused Beachhead Harbinger Map",
+				"type": "Harbinger Map"
 			},
 			{
 				"disc": "warfortheatlas",
@@ -15248,6 +15741,18 @@
 				"type": "Timeless Vaal Emblem"
 			},
 			{
+				"text": "Dedication to the Goddess",
+				"type": "Dedication to the Goddess"
+			},
+			{
+				"text": "Gift to the Goddess",
+				"type": "Gift to the Goddess"
+			},
+			{
+				"text": "Tribute to the Goddess",
+				"type": "Tribute to the Goddess"
+			},
+			{
 				"text": "Eber's Key",
 				"type": "Eber's Key"
 			},
@@ -15340,6 +15845,26 @@
 				"type": "Gilded Bestiary Scarab"
 			},
 			{
+				"text": "Winged Bestiary Scarab",
+				"type": "Winged Bestiary Scarab"
+			},
+			{
+				"text": "Farric Lure",
+				"type": "Farric Lure"
+			},
+			{
+				"text": "Saqawine Lure",
+				"type": "Saqawine Lure"
+			},
+			{
+				"text": "Fenumal Lure",
+				"type": "Fenumal Lure"
+			},
+			{
+				"text": "Craicic Lure",
+				"type": "Craicic Lure"
+			},
+			{
 				"text": "Rusted Breach Scarab",
 				"type": "Rusted Breach Scarab"
 			},
@@ -15350,6 +15875,10 @@
 			{
 				"text": "Gilded Breach Scarab",
 				"type": "Gilded Breach Scarab"
+			},
+			{
+				"text": "Winged Breach Scarab",
+				"type": "Winged Breach Scarab"
 			},
 			{
 				"text": "Rusted Divination Scarab",
@@ -15364,6 +15893,10 @@
 				"type": "Gilded Divination Scarab"
 			},
 			{
+				"text": "Winged Divination Scarab",
+				"type": "Winged Divination Scarab"
+			},
+			{
 				"text": "Rusted Elder Scarab",
 				"type": "Rusted Elder Scarab"
 			},
@@ -15374,6 +15907,10 @@
 			{
 				"text": "Gilded Elder Scarab",
 				"type": "Gilded Elder Scarab"
+			},
+			{
+				"text": "Winged Elder Scarab",
+				"type": "Winged Elder Scarab"
 			},
 			{
 				"text": "Rusted Harbinger Scarab",
@@ -15388,6 +15925,10 @@
 				"type": "Gilded Harbinger Scarab"
 			},
 			{
+				"text": "Winged Harbinger Scarab",
+				"type": "Winged Harbinger Scarab"
+			},
+			{
 				"text": "Rusted Legion Scarab",
 				"type": "Rusted Legion Scarab"
 			},
@@ -15398,6 +15939,10 @@
 			{
 				"text": "Gilded Legion Scarab",
 				"type": "Gilded Legion Scarab"
+			},
+			{
+				"text": "Winged Legion Scarab",
+				"type": "Winged Legion Scarab"
 			},
 			{
 				"text": "Rusted Cartography Scarab",
@@ -15412,6 +15957,10 @@
 				"type": "Gilded Cartography Scarab"
 			},
 			{
+				"text": "Winged Cartography Scarab",
+				"type": "Winged Cartography Scarab"
+			},
+			{
 				"text": "Rusted Metamorph Scarab",
 				"type": "Rusted Metamorph Scarab"
 			},
@@ -15422,6 +15971,10 @@
 			{
 				"text": "Gilded Metamorph Scarab",
 				"type": "Gilded Metamorph Scarab"
+			},
+			{
+				"text": "Winged Metamorph Scarab",
+				"type": "Winged Metamorph Scarab"
 			},
 			{
 				"text": "Rusted Perandus Scarab",
@@ -15436,6 +15989,10 @@
 				"type": "Gilded Perandus Scarab"
 			},
 			{
+				"text": "Winged Perandus Scarab",
+				"type": "Winged Perandus Scarab"
+			},
+			{
 				"text": "Rusted Shaper Scarab",
 				"type": "Rusted Shaper Scarab"
 			},
@@ -15446,6 +16003,10 @@
 			{
 				"text": "Gilded Shaper Scarab",
 				"type": "Gilded Shaper Scarab"
+			},
+			{
+				"text": "Winged Shaper Scarab",
+				"type": "Winged Shaper Scarab"
 			},
 			{
 				"text": "Rusted Ambush Scarab",
@@ -15460,6 +16021,10 @@
 				"type": "Gilded Ambush Scarab"
 			},
 			{
+				"text": "Winged Ambush Scarab",
+				"type": "Winged Ambush Scarab"
+			},
+			{
 				"text": "Rusted Sulphite Scarab",
 				"type": "Rusted Sulphite Scarab"
 			},
@@ -15470,6 +16035,10 @@
 			{
 				"text": "Gilded Sulphite Scarab",
 				"type": "Gilded Sulphite Scarab"
+			},
+			{
+				"text": "Winged Sulphite Scarab",
+				"type": "Winged Sulphite Scarab"
 			},
 			{
 				"text": "Rusted Torment Scarab",
@@ -15484,6 +16053,10 @@
 				"type": "Gilded Torment Scarab"
 			},
 			{
+				"text": "Winged Torment Scarab",
+				"type": "Winged Torment Scarab"
+			},
+			{
 				"text": "Rusted Reliquary Scarab",
 				"type": "Rusted Reliquary Scarab"
 			},
@@ -15494,6 +16067,10 @@
 			{
 				"text": "Gilded Reliquary Scarab",
 				"type": "Gilded Reliquary Scarab"
+			},
+			{
+				"text": "Winged Reliquary Scarab",
+				"type": "Winged Reliquary Scarab"
 			}
 		],
 		"label": "แผนที่"
@@ -16360,6 +16937,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Law of the Wilds",
+				"text": "Law of the Wilds Hellion's Paw",
+				"type": "Hellion's Paw"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Lifesprig",
 				"text": "Lifesprig Driftwood Wand",
 				"type": "Driftwood Wand"
@@ -17168,6 +17753,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "The Surging Thoughts",
+				"text": "The Surging Thoughts Legion Sword",
+				"type": "Legion Sword"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "The Tempest",
 				"text": "The Tempest Long Bow",
 				"type": "Long Bow"
@@ -17195,6 +17788,14 @@
 				"name": "The Whispering Ice",
 				"text": "The Whispering Ice Vile Staff",
 				"type": "Vile Staff"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "The Yielding Mortality",
+				"text": "The Yielding Mortality Imperial Staff",
+				"type": "Imperial Staff"
 			},
 			{
 				"flags": {
@@ -17387,6 +17988,22 @@
 				"name": "Wings of Entropy",
 				"text": "Wings of Entropy Sundering Axe",
 				"type": "Sundering Axe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Wings of Entropy",
+				"text": "Wings of Entropy Ezomyte Axe",
+				"type": "Ezomyte Axe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Witchhunter's Judgment",
+				"text": "Witchhunter's Judgment Highborn Staff",
+				"type": "Highborn Staff"
 			},
 			{
 				"flags": {
@@ -22964,6 +23581,22 @@
 				"name": "War Among the Stars",
 				"text": "War Among the Stars อัญมณีผู้พิทักษ์งาช้าง",
 				"type": "อัญมณีผู้พิทักษ์งาช้าง"
+			},
+			{
+				"text": "อัญมณีผู้พิทักษ์เลือดนก",
+				"type": "อัญมณีผู้พิทักษ์เลือดนก"
+			},
+			{
+				"text": "อัญมณีผู้พิทักษ์โคบอลต์",
+				"type": "อัญมณีผู้พิทักษ์โคบอลต์"
+			},
+			{
+				"text": "อัญมณีผู้พิทักษ์มรกต",
+				"type": "อัญมณีผู้พิทักษ์มรกต"
+			},
+			{
+				"text": "อัญมณีผู้พิทักษ์ทองคำ",
+				"type": "อัญมณีผู้พิทักษ์ทองคำ"
 			},
 			{
 				"text": "อัญมณีผู้พิทักษ์งาช้าง",

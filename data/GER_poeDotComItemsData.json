@@ -125,6 +125,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Gürtel des Bären",
+				"text": "Gürtel des Bären Ledergürtel",
+				"type": "Ledergürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Gürtel des Schwindlers",
 				"text": "Gürtel des Schwindlers Robuster Gürtel",
 				"type": "Robuster Gürtel"
@@ -909,6 +917,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Amulett der Vergeltung",
+				"text": "Amulett der Vergeltung Zitrinamulett",
+				"type": "Zitrinamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Rigwalds Wappen",
 				"text": "Rigwalds Wappen Zweisteinring",
 				"type": "Zweisteinring"
@@ -1045,6 +1061,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Sturmgeheimnis",
+				"text": "Sturmgeheimnis Topasring",
+				"type": "Topasring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Kette der Knechtschaft",
 				"text": "Kette der Knechtschaft Robuster Gürtel",
 				"type": "Robuster Gürtel"
@@ -1120,6 +1144,14 @@
 				"name": "Das Effigon",
 				"text": "Das Effigon Goldamulett",
 				"type": "Goldamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Der Reißzahn des Felbog",
+				"text": "Der Reißzahn des Felbog Zitrinamulett",
+				"type": "Zitrinamulett"
 			},
 			{
 				"flags": {
@@ -1224,6 +1256,14 @@
 				"name": "Die Bändigung",
 				"text": "Die Bändigung Spektralring",
 				"type": "Spektralring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Die Zähmung des Sturzbachs",
+				"text": "Die Zähmung des Sturzbachs Stoffgürtel",
+				"type": "Stoffgürtel"
 			},
 			{
 				"flags": {
@@ -1381,8 +1421,8 @@
 				"flags": {
 					"unique": 1
 				},
-				"name": "Gekrümmte Uhr",
-				"text": "Gekrümmte Uhr Türkisamulett",
+				"name": "Verbogene Sanduhr",
+				"text": "Verbogene Sanduhr Türkisamulett",
 				"type": "Türkisamulett"
 			},
 			{
@@ -1753,6 +1793,14 @@
 				"name": "Abberaths Hufen",
 				"text": "Abberaths Hufen Ziegenlederstiefel",
 				"type": "Ziegenlederstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Abscheuliches Verhör",
+				"text": "Abscheuliches Verhör Überfall-Stulpenhandschuhe",
+				"type": "Überfall-Stulpenhandschuhe"
 			},
 			{
 				"flags": {
@@ -2550,6 +2598,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Doryanis Prototyp",
+				"text": "Doryanis Prototyp Heiligen-Kettenrüstung",
+				"type": "Heiligen-Kettenrüstung"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Genickbohrer",
 				"text": "Genickbohrer Spießpfeilköcher",
 				"type": "Spießpfeilköcher"
@@ -2593,6 +2649,14 @@
 				"name": "Ebers Einigung",
 				"text": "Ebers Einigung Hybris-Diadem",
 				"type": "Hybris-Diadem"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Wachsamkeit des Kaisers",
+				"text": "Wachsamkeit des Kaisers Stählerner Drachenschild",
+				"type": "Stählerner Drachenschild"
 			},
 			{
 				"flags": {
@@ -2742,6 +2806,22 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Fleischformer",
+				"text": "Fleischformer Nekromantenseide",
+				"type": "Nekromantenseide"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Verbotener Tschako",
+				"text": "Verbotener Tschako Große Krone",
+				"type": "Große Krone"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Fuchsglück",
 				"text": "Fuchsglück Wildledergewand",
 				"type": "Wildledergewand"
@@ -2865,6 +2945,14 @@
 				"name": "Blick der Gorgone",
 				"text": "Blick der Gorgone Königsmörder-Maske",
 				"type": "Königsmörder-Maske"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Tentakel des Großen Alten",
+				"text": "Tentakel des Großen Alten Aalhauthandschuhe",
+				"type": "Aalhauthandschuhe"
 			},
 			{
 				"flags": {
@@ -3566,6 +3654,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Staubwolke der wilden Jagd",
+				"text": "Staubwolke der wilden Jagd Knochendiadem",
+				"type": "Knochendiadem"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Spektralwächter",
 				"text": "Spektralwächter Archon-Drachenschild",
 				"type": "Archon-Drachenschild"
@@ -3745,6 +3841,14 @@
 				"name": "Schandmaske",
 				"text": "Schandmaske Gedankenkäfig",
 				"type": "Gedankenkäfig"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Ruf des Skorpions",
+				"text": "Ruf des Skorpions Breitkopfpfeilköcher",
+				"type": "Breitkopfpfeilköcher"
 			},
 			{
 				"flags": {
@@ -4174,6 +4278,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Der unsterbliche Wille",
+				"text": "Der unsterbliche Wille Archon-Drachenschild",
+				"type": "Archon-Drachenschild"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Das endlose Streben",
 				"text": "Das endlose Streben Goliath-Beinschienen",
 				"type": "Goliath-Beinschienen"
@@ -4254,6 +4366,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Die geborstene Göttlichkeit",
+				"text": "Die geborstene Göttlichkeit Stumpfpfeilköcher",
+				"type": "Stumpfpfeilköcher"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Das Signalfeuer",
 				"text": "Das Signalfeuer Ausgehärteter Köcher",
 				"type": "Ausgehärteter Köcher"
@@ -4296,6 +4416,14 @@
 				},
 				"name": "Sturmbindung",
 				"text": "Sturmbindung Starre Maske",
+				"type": "Starre Maske"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Die Befreiung des Sturms",
+				"text": "Die Befreiung des Sturms Starre Maske",
 				"type": "Starre Maske"
 			},
 			{
@@ -6240,6 +6368,10 @@
 				"type": "Die rote Tinte"
 			},
 			{
+				"text": "Ein bekannter Ruf",
+				"type": "Ein bekannter Ruf"
+			},
+			{
 				"text": "Akils Prophezeiung",
 				"type": "Akils Prophezeiung"
 			},
@@ -6258,6 +6390,10 @@
 			{
 				"text": "Der Preis der Anarchie",
 				"type": "Der Preis der Anarchie"
+			},
+			{
+				"text": "Der Ton im Wind",
+				"type": "Der Ton im Wind"
 			},
 			{
 				"text": "Die Arroganz der Vaal",
@@ -6340,8 +6476,8 @@
 				"type": "Das chaotische Gemüt"
 			},
 			{
-				"text": "Rat der Katzen",
-				"type": "Rat der Katzen"
+				"text": "Der Rat der Katzen",
+				"type": "Der Rat der Katzen"
 			},
 			{
 				"text": "Der begehrte Besitz",
@@ -6418,6 +6554,10 @@
 			{
 				"text": "Das Versprechen",
 				"type": "Das Versprechen"
+			},
+			{
+				"text": "Das Geschenk von Asenath",
+				"type": "Das Geschenk von Asenath"
 			},
 			{
 				"text": "Geschenk der Gemmlingkönigin",
@@ -6552,6 +6692,10 @@
 				"type": "Spurlos"
 			},
 			{
+				"text": "Friedvolle Momente",
+				"type": "Friedvolle Momente"
+			},
+			{
 				"text": "Perfektion",
 				"type": "Perfektion"
 			},
@@ -6562,6 +6706,10 @@
 			{
 				"text": "Der Stolz der Ersten",
 				"type": "Der Stolz der Ersten"
+			},
+			{
+				"text": "Prometheus' Schmiede",
+				"type": "Prometheus' Schmiede"
 			},
 			{
 				"text": "Der Wohlstand",
@@ -6642,6 +6790,10 @@
 			{
 				"text": "Der Rächer",
 				"type": "Der Rächer"
+			},
+			{
+				"text": "Der Erweckte",
+				"type": "Der Erweckte"
 			},
 			{
 				"text": "Die Übereinkunft",
@@ -6912,6 +7064,10 @@
 				"type": "Die goldene Ära"
 			},
 			{
+				"text": "Die besten Absichten",
+				"type": "Die besten Absichten"
+			},
+			{
 				"text": "Das rüstige Herz",
 				"type": "Das rüstige Herz"
 			},
@@ -6926,6 +7082,10 @@
 			{
 				"text": "Der Volltreffer",
 				"type": "Der Volltreffer"
+			},
+			{
+				"text": "Das geballte Wissen",
+				"type": "Das geballte Wissen"
 			},
 			{
 				"text": "Der Hamsterer",
@@ -6998,6 +7158,10 @@
 			{
 				"text": "Der Löwe",
 				"type": "Der Löwe"
+			},
+			{
+				"text": "Der große Schwindel",
+				"type": "Der große Schwindel"
 			},
 			{
 				"text": "Der Fürst in Schwarz",
@@ -7244,6 +7408,10 @@
 				"type": "Der Überlebenskünstler"
 			},
 			{
+				"text": "Die Nahrung",
+				"type": "Die Nahrung"
+			},
+			{
 				"text": "Der Salut des Schwertkönigs",
 				"type": "Der Salut des Schwertkönigs"
 			},
@@ -7270,6 +7438,10 @@
 			{
 				"text": "Die Prüfung",
 				"type": "Die Prüfung"
+			},
+			{
+				"text": "Der Steppenläufer",
+				"type": "Der Steppenläufer"
 			},
 			{
 				"text": "Der Dämmermond",
@@ -7330,6 +7502,10 @@
 			{
 				"text": "Das Netz",
 				"type": "Das Netz"
+			},
+			{
+				"text": "Der weiße Ritter",
+				"type": "Der weiße Ritter"
 			},
 			{
 				"text": "Die verwelkte Rose",
@@ -7452,8 +7628,8 @@
 				"flags": {
 					"unique": 1
 				},
-				"name": "Erstes Bruchstück derBrutalität",
-				"text": "Erstes Bruchstück derBrutalität Kaiserlicher Stab (Bruchstück)",
+				"name": "Erstes Bruchstück der Brutalität",
+				"text": "Erstes Bruchstück der Brutalität Kaiserlicher Stab (Bruchstück)",
 				"type": "Kaiserlicher Stab (Bruchstück)"
 			},
 			{
@@ -7503,14 +7679,6 @@
 				"name": "Zweites Bruchstück des Arkanen",
 				"text": "Zweites Bruchstück des Arkanen Legionärsschwert (Bruchstück)",
 				"type": "Legionärsschwert (Bruchstück)"
-			},
-			{
-				"flags": {
-					"unique": 1
-				},
-				"name": "Erstes Bruchstück der Brutalität",
-				"text": "Erstes Bruchstück der Brutalität Kaiserlicher Stab (Bruchstück)",
-				"type": "Kaiserlicher Stab (Bruchstück)"
 			},
 			{
 				"flags": {
@@ -7659,6 +7827,10 @@
 			{
 				"text": "Außergewöhnlicher Sextant",
 				"type": "Außergewöhnlicher Sextant"
+			},
+			{
+				"text": "Linse des Facettenschleifers",
+				"type": "Linse des Facettenschleifers"
 			},
 			{
 				"text": "Aufwertungssphäre",
@@ -8353,6 +8525,30 @@
 				"type": "Prisma des Gemmenschneiders"
 			},
 			{
+				"text": "Zeitlose Rolle",
+				"type": "Zeitlose Rolle"
+			},
+			{
+				"text": "Deregulierungsrolle",
+				"type": "Deregulierungsrolle"
+			},
+			{
+				"text": "Fragmentierungsrolle",
+				"type": "Fragmentierungsrolle"
+			},
+			{
+				"text": "Spiegelungsrolle",
+				"type": "Spiegelungsrolle"
+			},
+			{
+				"text": "Blutfeuer-Rolle",
+				"type": "Blutfeuer-Rolle"
+			},
+			{
+				"text": "Elektroschock-Rolle",
+				"type": "Elektroschock-Rolle"
+			},
+			{
 				"text": "Identifikationsrolle",
 				"type": "Identifikationsrolle"
 			},
@@ -8669,6 +8865,10 @@
 				"type": "Sphäre des Ingenieurs"
 			},
 			{
+				"text": "Verstärkte Sphäre des Ingenieurs",
+				"type": "Verstärkte Sphäre des Ingenieurs"
+			},
+			{
 				"text": "Scherbe des Ingenieurs",
 				"type": "Scherbe des Ingenieurs"
 			},
@@ -8757,6 +8957,10 @@
 				"type": "Azurblaues Öl"
 			},
 			{
+				"text": "Indigofarbenes Öl",
+				"type": "Indigofarbenes Öl"
+			},
+			{
 				"text": "Violettes Öl",
 				"type": "Violettes Öl"
 			},
@@ -8805,6 +9009,234 @@
 				"type": "Kartenstapel"
 			},
 			{
+				"text": "Knospe der Anfertigung",
+				"type": "Knospe der Anfertigung"
+			},
+			{
+				"text": "Blume der Anfertigung",
+				"type": "Blume der Anfertigung"
+			},
+			{
+				"text": "Blüte der Anfertigung",
+				"type": "Blüte der Anfertigung"
+			},
+			{
+				"text": "Knospe der Lebenskraft",
+				"type": "Knospe der Lebenskraft"
+			},
+			{
+				"text": "Blume der Lebenskraft",
+				"type": "Blume der Lebenskraft"
+			},
+			{
+				"text": "Blüte der Lebenskraft",
+				"type": "Blüte der Lebenskraft"
+			},
+			{
+				"text": "Knospe des Glücks",
+				"type": "Knospe des Glücks"
+			},
+			{
+				"text": "Blume des Glücks",
+				"type": "Blume des Glücks"
+			},
+			{
+				"text": "Blüte des Glücks",
+				"type": "Blüte des Glücks"
+			},
+			{
+				"text": "Samen des urzeitlichen Spalters",
+				"type": "Samen des urzeitlichen Spalters"
+			},
+			{
+				"text": "Wilde Dornenfrucht",
+				"type": "Wilde Dornenfrucht"
+			},
+			{
+				"text": "Korn der wilden Borstenbestie",
+				"type": "Korn der wilden Borstenbestie"
+			},
+			{
+				"text": "Knolle der lebhaften Borstenmutter",
+				"type": "Knolle der lebhaften Borstenmutter"
+			},
+			{
+				"text": "Urzeitliche Blasenfrucht",
+				"type": "Urzeitliche Blasenfrucht"
+			},
+			{
+				"text": "Knolle des wilden Dornenschlunds",
+				"type": "Knolle des wilden Dornenschlunds"
+			},
+			{
+				"text": "Knolle des lebhaften Peitschenbeins",
+				"type": "Knolle des lebhaften Peitschenbeins"
+			},
+			{
+				"text": "Knolle des wilden Dornenrückens",
+				"type": "Knolle des wilden Dornenrückens"
+			},
+			{
+				"text": "Lebhafte Schuppenfrucht",
+				"type": "Lebhafte Schuppenfrucht"
+			},
+			{
+				"text": "Korn des wilden Stammesführers",
+				"type": "Korn des wilden Stammesführers"
+			},
+			{
+				"text": "Korn der urzeitlichen Viper",
+				"type": "Korn der urzeitlichen Viper"
+			},
+			{
+				"text": "Knolle des lebhaften Verschlingers",
+				"type": "Knolle des lebhaften Verschlingers"
+			},
+			{
+				"text": "Samen des wilden Ursalings",
+				"type": "Samen des wilden Ursalings"
+			},
+			{
+				"text": "Samen des urzeitlichen Schlunds",
+				"type": "Samen des urzeitlichen Schlunds"
+			},
+			{
+				"text": "Knolle des urzeitlichen Zystenrufers",
+				"type": "Knolle des urzeitlichen Zystenrufers"
+			},
+			{
+				"text": "Samen des wilden Biests",
+				"type": "Samen des wilden Biests"
+			},
+			{
+				"text": "Knolle des wilden Alpha-Biests",
+				"type": "Knolle des wilden Alpha-Biests"
+			},
+			{
+				"text": "Korn des wilden Schnapphunds",
+				"type": "Korn des wilden Schnapphunds"
+			},
+			{
+				"text": "Korn des lebhaften Marksaugers",
+				"type": "Korn des lebhaften Marksaugers"
+			},
+			{
+				"text": "Korn der urzeitlichen Chimäre",
+				"type": "Korn der urzeitlichen Chimäre"
+			},
+			{
+				"text": "Knolle der wilden Plagenkönigin",
+				"type": "Knolle der wilden Plagenkönigin"
+			},
+			{
+				"text": "Samen des wilden Schlüpflings",
+				"type": "Samen des wilden Schlüpflings"
+			},
+			{
+				"text": "Knolle des urzeitlichen Blasenfürsten",
+				"type": "Knolle des urzeitlichen Blasenfürsten"
+			},
+			{
+				"text": "Knolle der urzeitlichen Wiedergeburt",
+				"type": "Knolle der urzeitlichen Wiedergeburt"
+			},
+			{
+				"text": "Samen der lebhaften Arachnide",
+				"type": "Samen der lebhaften Arachnide"
+			},
+			{
+				"text": "Korn des wilden Homunkulus",
+				"type": "Korn des wilden Homunkulus"
+			},
+			{
+				"text": "Samen des wilden Affens",
+				"type": "Samen des wilden Affens"
+			},
+			{
+				"text": "Knolle des urzeitlichen Scherenquetschers",
+				"type": "Knolle des urzeitlichen Scherenquetschers"
+			},
+			{
+				"text": "Samen des lebhaften Blutegels",
+				"type": "Samen des lebhaften Blutegels"
+			},
+			{
+				"text": "Korn des lebhaften Parasiten",
+				"type": "Korn des lebhaften Parasiten"
+			},
+			{
+				"text": "Korn der lebhaften Spinnenmutter",
+				"type": "Korn der lebhaften Spinnenmutter"
+			},
+			{
+				"text": "Knolle des lebhaften Panzerskorpions",
+				"type": "Knolle des lebhaften Panzerskorpions"
+			},
+			{
+				"text": "Samen des urzeitlichen Schreckens",
+				"type": "Samen des urzeitlichen Schreckens"
+			},
+			{
+				"text": "Korn des urzeitlichen Rhex",
+				"type": "Korn des urzeitlichen Rhex"
+			},
+			{
+				"text": "Knolle der urzeitlichen Rhex-Matriarchin",
+				"type": "Knolle der urzeitlichen Rhex-Matriarchin"
+			},
+			{
+				"text": "Samen des urzeitlichen Rhoas",
+				"type": "Samen des urzeitlichen Rhoas"
+			},
+			{
+				"text": "Korn des lebhaften Schlitzbeins",
+				"type": "Korn des lebhaften Schlitzbeins"
+			},
+			{
+				"text": "Korn des urzeitlichen Sandscharrers",
+				"type": "Korn des urzeitlichen Sandscharrers"
+			},
+			{
+				"text": "Samen des urzeitlichen Staubspuckers",
+				"type": "Samen des urzeitlichen Staubspuckers"
+			},
+			{
+				"text": "Samen des lebhaften Skorpions",
+				"type": "Samen des lebhaften Skorpions"
+			},
+			{
+				"text": "Korn des lebhaften Peitschenskorpions",
+				"type": "Korn des lebhaften Peitschenskorpions"
+			},
+			{
+				"text": "Korn der urzeitlichen Staubkrabbe",
+				"type": "Korn der urzeitlichen Staubkrabbe"
+			},
+			{
+				"text": "Korn des wilden Stachelrückens",
+				"type": "Korn des wilden Stachelrückens"
+			},
+			{
+				"text": "Knolle des lebhaften Wächters",
+				"type": "Knolle des lebhaften Wächters"
+			},
+			{
+				"text": "Samen des lebhaften Dornenwebers",
+				"type": "Samen des lebhaften Dornenwebers"
+			},
+			{
+				"text": "Knolle des lebhaften Geiers",
+				"type": "Knolle des lebhaften Geiers"
+			},
+			{
+				"text": "Samen des lebhaften Wetas",
+				"type": "Samen des lebhaften Wetas"
+			},
+			{
+				"text": "Samen des wilden Dornenwolfs",
+				"type": "Samen des wilden Dornenwolfs"
+			},
+			{
 				"text": "Eingefangene Seele von Thraxia",
 				"type": "Eingefangene Seele von Thraxia"
 			},
@@ -8813,16 +9245,16 @@
 				"type": "Eingefangene Seele von Glace"
 			},
 			{
-				"text": "Eingefangene Seele von Ambrius, Legionsschlächter",
-				"type": "Eingefangene Seele von Ambrius, Legionsschlächter"
+				"text": "Eingefangene Seele des Schattens der Vaal",
+				"type": "Eingefangene Seele des Schattens der Vaal"
 			},
 			{
 				"text": "Eingefangene Seele der Pirscherin der endlosen Wüste",
 				"type": "Eingefangene Seele der Pirscherin der endlosen Wüste"
 			},
 			{
-				"text": "Eingefangene Seele von Excellis Aurafix",
-				"type": "Eingefangene Seele von Excellis Aurafix"
+				"text": "Eingefangene Seele von Schock und Schrecken",
+				"type": "Eingefangene Seele von Schock und Schrecken"
 			},
 			{
 				"text": "Stoffgürtel (Bruchstück)",
@@ -9247,8 +9679,12 @@
 	{
 		"entries": [
 			{
-				"text": "Abyssischer Schrei",
-				"type": "Abyssischer Schrei"
+				"text": "Höllischer Schrei",
+				"type": "Höllischer Schrei"
+			},
+			{
+				"text": "Schrei der Ahnen",
+				"type": "Schrei der Ahnen"
 			},
 			{
 				"text": "Ahnen-Kriegshäuptling",
@@ -9275,12 +9711,16 @@
 				"type": "Arkaner Schutz"
 			},
 			{
+				"text": "Zeichen des Arkanisten",
+				"type": "Zeichen des Arkanisten"
+			},
+			{
 				"text": "Arktische Rüstung",
 				"type": "Arktische Rüstung"
 			},
 			{
-				"text": "Arktischer Odem",
-				"type": "Arktischer Odem"
+				"text": "Schleichender Frost",
+				"type": "Schleichender Frost"
 			},
 			{
 				"text": "Zeichen des Untergangs",
@@ -9495,6 +9935,10 @@
 				"type": "Erdbeben"
 			},
 			{
+				"text": "Erdspalter",
+				"type": "Erdspalter"
+			},
+			{
 				"text": "Elementartreffer",
 				"type": "Elementartreffer"
 			},
@@ -9627,6 +10071,10 @@
 				"type": "Frostmauer"
 			},
 			{
+				"text": "Schrei des Generals",
+				"type": "Schrei des Generals"
+			},
+			{
 				"text": "Frostwelle",
 				"type": "Frostwelle"
 			},
@@ -9639,8 +10087,8 @@
 				"type": "Anmut"
 			},
 			{
-				"text": "Schmetterschlag",
-				"type": "Schmetterschlag"
+				"text": "Schmetterhieb",
+				"type": "Schmetterhieb"
 			},
 			{
 				"text": "Hast",
@@ -9675,8 +10123,8 @@
 				"type": "Herold des Donners"
 			},
 			{
-				"text": "Eisschlag",
-				"type": "Eisschlag"
+				"text": "Eishieb",
+				"type": "Eishieb"
 			},
 			{
 				"text": "Eisnova",
@@ -9709,6 +10157,10 @@
 			{
 				"text": "Höllenschlag",
 				"type": "Höllenschlag"
+			},
+			{
+				"text": "Einschüchternder Schrei",
+				"type": "Einschüchternder Schrei"
 			},
 			{
 				"text": "Kinetische Explosion",
@@ -9785,6 +10237,10 @@
 			{
 				"text": "Gewittersphäre",
 				"type": "Gewittersphäre"
+			},
+			{
+				"text": "Zeichen der Buße",
+				"type": "Zeichen der Buße"
 			},
 			{
 				"text": "Perforieren",
@@ -9901,6 +10357,10 @@
 			{
 				"text": "Sengendes Band",
 				"type": "Sengendes Band"
+			},
+			{
+				"text": "Seismischer Schrei",
+				"type": "Seismischer Schrei"
 			},
 			{
 				"text": "Zerschmetternder Stahl",
@@ -10035,16 +10495,16 @@
 				"type": "Arachnobots beschwören"
 			},
 			{
-				"text": "Zerschlagen",
-				"type": "Zerschlagen"
+				"text": "Verwüsten",
+				"type": "Verwüsten"
 			},
 			{
 				"text": "Rundumschlag",
 				"type": "Rundumschlag"
 			},
 			{
-				"text": "Tektonischer Schlag",
-				"type": "Tektonischer Schlag"
+				"text": "Tektonischer Hieb",
+				"type": "Tektonischer Hieb"
 			},
 			{
 				"text": "Geladener Schild",
@@ -10143,8 +10603,8 @@
 				"type": "Vaal-Anmut"
 			},
 			{
-				"text": "Vaal-Schmetterschlag",
-				"type": "Vaal-Schmetterschlag"
+				"text": "Vaal-Schmetterhieb",
+				"type": "Vaal-Schmetterhieb"
 			},
 			{
 				"text": "Vaal-Hast",
@@ -10261,6 +10721,10 @@
 			{
 				"text": "Wintersphäre",
 				"type": "Wintersphäre"
+			},
+			{
+				"text": "Zeichen des Winters",
+				"type": "Zeichen des Winters"
 			},
 			{
 				"text": "Verkümmern",
@@ -10557,6 +11021,10 @@
 			{
 				"text": "Erweckte Unterstützung: Durchdringendes Feuer",
 				"type": "Erweckte Unterstützung: Durchdringendes Feuer"
+			},
+			{
+				"text": "Unterstützung: Faust des Krieges",
+				"type": "Unterstützung: Faust des Krieges"
 			},
 			{
 				"text": "Unterstützung: Gabelung",
@@ -10899,6 +11367,10 @@
 				"type": "Unterstützung: Schneller Aufbau"
 			},
 			{
+				"text": "Unterstützung: Rasante Zeichen",
+				"type": "Unterstützung: Rasante Zeichen"
+			},
+			{
 				"text": "Unterstützung: Falle",
 				"type": "Unterstützung: Falle"
 			},
@@ -10921,6 +11393,10 @@
 			{
 				"text": "Erweckte Unterstützung: Entfesseln",
 				"type": "Erweckte Unterstützung: Entfesseln"
+			},
+			{
+				"text": "Unterstützung: Dringliche Befehle",
+				"type": "Unterstützung: Dringliche Befehle"
 			},
 			{
 				"text": "Erweckte Unterstützung: Bösartige Projektile",
@@ -11323,8 +11799,8 @@
 				"flags": {
 					"unique": 1
 				},
-				"name": "Zerbrechliche Blüte",
-				"text": "Zerbrechliche Blüte Blutrotes Juwel",
+				"name": "Zarte Blüte",
+				"text": "Zarte Blüte Blutrotes Juwel",
 				"type": "Blutrotes Juwel"
 			},
 			{
@@ -11427,8 +11903,8 @@
 				"flags": {
 					"unique": 1
 				},
-				"name": "Brandes Eile",
-				"text": "Brandes Eile Viridiangrünes Juwel",
+				"name": "Hitzkopf",
+				"text": "Hitzkopf Viridiangrünes Juwel",
 				"type": "Viridiangrünes Juwel"
 			},
 			{
@@ -12252,6 +12728,15 @@
 				"name": "Nacht des Grauens",
 				"text": "Nacht des Grauens 'Totenacker'-Karte",
 				"type": "'Totenacker'-Karte"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Verstärkter Brückenkopf",
+				"text": "Verstärkter Brückenkopf 'Vorboten'-Karte",
+				"type": "'Vorboten'-Karte"
 			},
 			{
 				"disc": "warfortheatlas",
@@ -15236,6 +15721,18 @@
 				"type": "Immerwährendes Emblem der Vaal"
 			},
 			{
+				"text": "Hingabe an die Göttin",
+				"type": "Hingabe an die Göttin"
+			},
+			{
+				"text": "Geschenk an die Göttin",
+				"type": "Geschenk an die Göttin"
+			},
+			{
+				"text": "Tribut an die Göttin",
+				"type": "Tribut an die Göttin"
+			},
+			{
 				"text": "Ebers Schlüssel",
 				"type": "Ebers Schlüssel"
 			},
@@ -15328,6 +15825,26 @@
 				"type": "Vergoldeter Skarabäus des Bestiariums"
 			},
 			{
+				"text": "Geflügelter Skarabäus des Bestiariums",
+				"type": "Geflügelter Skarabäus des Bestiariums"
+			},
+			{
+				"text": "Farrischer Köder",
+				"type": "Farrischer Köder"
+			},
+			{
+				"text": "Saqawaler Köder",
+				"type": "Saqawaler Köder"
+			},
+			{
+				"text": "Fenumaler Köder",
+				"type": "Fenumaler Köder"
+			},
+			{
+				"text": "Craicischer Köder",
+				"type": "Craicischer Köder"
+			},
+			{
 				"text": "Verrosteter Skarabäus der Risse",
 				"type": "Verrosteter Skarabäus der Risse"
 			},
@@ -15338,6 +15855,10 @@
 			{
 				"text": "Vergoldeter Skarabäus der Risse",
 				"type": "Vergoldeter Skarabäus der Risse"
+			},
+			{
+				"text": "Geflügelter Skarabäus der Risse",
+				"type": "Geflügelter Skarabäus der Risse"
 			},
 			{
 				"text": "Verrosteter Skarabäus der Weissagung",
@@ -15352,6 +15873,10 @@
 				"type": "Vergoldeter Skarabäus der Weissagung"
 			},
 			{
+				"text": "Geflügelter Skarabäus der Weissagung",
+				"type": "Geflügelter Skarabäus der Weissagung"
+			},
+			{
 				"text": "Verrosteter Skarabäus des Ältesten",
 				"type": "Verrosteter Skarabäus des Ältesten"
 			},
@@ -15362,6 +15887,10 @@
 			{
 				"text": "Vergoldeter Skarabäus des Ältesten",
 				"type": "Vergoldeter Skarabäus des Ältesten"
+			},
+			{
+				"text": "Geflügelter Skarabäus des Ältesten",
+				"type": "Geflügelter Skarabäus des Ältesten"
 			},
 			{
 				"text": "Verrosteter Skarabäus des Vorboten",
@@ -15376,6 +15905,10 @@
 				"type": "Vergoldeter Skarabäus des Vorboten"
 			},
 			{
+				"text": "Geflügelter Skarabäus des Vorboten",
+				"type": "Geflügelter Skarabäus des Vorboten"
+			},
+			{
 				"text": "Verrosteter Skarabäus der Legion",
 				"type": "Verrosteter Skarabäus der Legion"
 			},
@@ -15386,6 +15919,10 @@
 			{
 				"text": "Vergoldeter Skarabäus der Legion",
 				"type": "Vergoldeter Skarabäus der Legion"
+			},
+			{
+				"text": "Geflügelter Skarabäus der Legion",
+				"type": "Geflügelter Skarabäus der Legion"
 			},
 			{
 				"text": "Verrosteter Skarabäus der Kartographie",
@@ -15400,6 +15937,10 @@
 				"type": "Vergoldeter Skarabäus der Kartographie"
 			},
 			{
+				"text": "Geflügelter Skarabäus der Kartographie",
+				"type": "Geflügelter Skarabäus der Kartographie"
+			},
+			{
 				"text": "Verrosteter Skarabäus der Metamorphe",
 				"type": "Verrosteter Skarabäus der Metamorphe"
 			},
@@ -15410,6 +15951,10 @@
 			{
 				"text": "Vergoldeter Skarabäus der Metamorphe",
 				"type": "Vergoldeter Skarabäus der Metamorphe"
+			},
+			{
+				"text": "Geflügelter Skarabäus der Metamorphe",
+				"type": "Geflügelter Skarabäus der Metamorphe"
 			},
 			{
 				"text": "Verrosteter Skarabäus der Perandus-Familie",
@@ -15424,6 +15969,10 @@
 				"type": "Vergoldeter Skarabäus der Perandus-Familie"
 			},
 			{
+				"text": "Geflügelter Skarabäus der Perandus-Familie",
+				"type": "Geflügelter Skarabäus der Perandus-Familie"
+			},
+			{
 				"text": "Verrosteter Skarabäus des Schöpfers",
 				"type": "Verrosteter Skarabäus des Schöpfers"
 			},
@@ -15434,6 +15983,10 @@
 			{
 				"text": "Vergoldeter Skarabäus des Schöpfers",
 				"type": "Vergoldeter Skarabäus des Schöpfers"
+			},
+			{
+				"text": "Geflügelter Skarabäus des Schöpfers",
+				"type": "Geflügelter Skarabäus des Schöpfers"
 			},
 			{
 				"text": "Verrosteter Skarabäus des Hinterhalts",
@@ -15448,6 +16001,10 @@
 				"type": "Vergoldeter Skarabäus des Hinterhalts"
 			},
 			{
+				"text": "Geflügelter Skarabäus des Hinterhalts",
+				"type": "Geflügelter Skarabäus des Hinterhalts"
+			},
+			{
 				"text": "Verrosteter Skarabäus des Sulfits",
 				"type": "Verrosteter Skarabäus des Sulfits"
 			},
@@ -15458,6 +16015,10 @@
 			{
 				"text": "Vergoldeter Skarabäus des Sulfits",
 				"type": "Vergoldeter Skarabäus des Sulfits"
+			},
+			{
+				"text": "Geflügelter Skarabäus des Sulfits",
+				"type": "Geflügelter Skarabäus des Sulfits"
 			},
 			{
 				"text": "Verrosteter Skarabäus der Folter",
@@ -15472,6 +16033,10 @@
 				"type": "Vergoldeter Skarabäus der Folter"
 			},
 			{
+				"text": "Geflügelter Skarabäus der Folter",
+				"type": "Geflügelter Skarabäus der Folter"
+			},
+			{
 				"text": "Verrosteter Skarabäus der Reliquien",
 				"type": "Verrosteter Skarabäus der Reliquien"
 			},
@@ -15482,6 +16047,10 @@
 			{
 				"text": "Vergoldeter Skarabäus der Reliquien",
 				"type": "Vergoldeter Skarabäus der Reliquien"
+			},
+			{
+				"text": "Geflügelter Skarabäus der Reliquien",
+				"type": "Geflügelter Skarabäus der Reliquien"
 			}
 		],
 		"label": "Karten"
@@ -16348,6 +16917,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Gesetz der Wildnis",
+				"text": "Gesetz der Wildnis Bestienkralle",
+				"type": "Bestienkralle"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Lebenszweiglein",
 				"text": "Lebenszweiglein Treibholz-Zauberstab",
 				"type": "Treibholz-Zauberstab"
@@ -16964,8 +17541,8 @@
 				"flags": {
 					"unique": 1
 				},
-				"name": "Der Verätzer",
-				"text": "Der Verätzer Holzspalter",
+				"name": "Der Kauterisierer",
+				"text": "Der Kauterisierer Holzspalter",
 				"type": "Holzspalter"
 			},
 			{
@@ -17156,6 +17733,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Die Gedankenflut",
+				"text": "Die Gedankenflut Legionärsschwert",
+				"type": "Legionärsschwert"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Der Sturm",
 				"text": "Der Sturm Langbogen",
 				"type": "Langbogen"
@@ -17183,6 +17768,14 @@
 				"name": "Das flüsternde Eis",
 				"text": "Das flüsternde Eis Schnöder Stab",
 				"type": "Schnöder Stab"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Die nachgiebige Sterblichkeit",
+				"text": "Die nachgiebige Sterblichkeit Kaiserlicher Stab",
+				"type": "Kaiserlicher Stab"
 			},
 			{
 				"flags": {
@@ -17375,6 +17968,22 @@
 				"name": "Schwingen der Entropie",
 				"text": "Schwingen der Entropie Spaltaxt",
 				"type": "Spaltaxt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Schwingen der Entropie",
+				"text": "Schwingen der Entropie Ezomytenaxt",
+				"type": "Ezomytenaxt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Urteil des Hexenjägers",
+				"text": "Urteil des Hexenjägers Adelsstab",
+				"type": "Adelsstab"
 			},
 			{
 				"flags": {
@@ -21073,7 +21682,7 @@
 				"type": "Erythrophagia"
 			},
 			{
-				"text": "Portentia, die Verdorbene",
+				"text": "Portentia die Verdorbene",
 				"type": "Portentia, the Foul"
 			},
 			{
@@ -22940,6 +23549,22 @@
 				"name": "Krieg unter Sternen",
 				"text": "Krieg unter Sternen Elfenbeinfarbener Wächterstein",
 				"type": "Elfenbeinfarbener Wächterstein"
+			},
+			{
+				"text": "Blutroter Wächterstein",
+				"type": "Blutroter Wächterstein"
+			},
+			{
+				"text": "Kobaltblauer Wächterstein",
+				"type": "Kobaltblauer Wächterstein"
+			},
+			{
+				"text": "Viridiangrüner Wächterstein",
+				"type": "Viridiangrüner Wächterstein"
+			},
+			{
+				"text": "Goldener Wächterstein",
+				"type": "Goldener Wächterstein"
 			},
 			{
 				"text": "Elfenbeinfarbener Wächterstein",
