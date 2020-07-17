@@ -92,6 +92,7 @@
 CreateZipRelease() {
 	global PROGRAM
 
+	EnvGet, ProgramW6432, ProgramW6432
 	_ProgramFiles := (ProgramW6432)?(ProgramW6432):(A_ProgramFiles)
 	7zip := _ProgramFiles "\7-Zip\7z.exe"
 
