@@ -10,7 +10,7 @@
 
 ;	File location
 	installFile := A_ScriptDir "\FileInstall_Cmds.ahk"
-	FileDelete,% installFile
+	FileDelete(installFile)
 
 ;	Pass PROGRAM to file
 	appendToFile .= ""

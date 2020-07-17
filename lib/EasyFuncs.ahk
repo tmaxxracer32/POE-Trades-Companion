@@ -1,7 +1,7 @@
 FileDelete(filePath) {
 	while FileExist(filePath) {
 		FileDelete,% filePath
-		Sleep 10
+		Sleep 100
 	}
 }
 
