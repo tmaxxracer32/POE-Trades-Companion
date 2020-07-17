@@ -6,7 +6,7 @@
 
 GGG_API_GetLastActiveCharacter(accName) {
     global PROGRAM
-    
+
     if !(accName) {
         trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToRetrieveAccountCharacters_Msg, "%account%", accName)
         TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToRetrieveAccountCharacters_Title, trayMsg)
@@ -400,10 +400,12 @@ GGG_API_Get_ActiveTradingLeagues() {
 	static langIndex
 
     langs := ["ENG","RUS","KOR","TWN"]
+    /* Not required with new API link
     excludedWords := "SSF,Solo" ; ENG,FRE,POR,THA,GER,SPA,KOR - all using english league names
         . ",Соло" ; RUS
         . ",自力" ; TWN
         . "" ; KOR - Korean API sucks. League name is ENG on both the API and Forums thread - But on the trading whisper it's translated. Once again "translated whispers suck and are inconsistent"
+        */
     tradingLeagues := [], tradingLeaguesList := ""
 	
 	Loop % langs.Count() {
@@ -461,7 +463,7 @@ GGG_API_Get_ActiveTradingLeagues() {
             Loop % resultsJson.result.Count() {
                 leagueName := resultsJson.result[A_Index].text
 
-                if (leagueName) && !IsIn(leagueName, tradingLeaguesList) && !IsContaining(leagueName, excludedWords) {
+                if (leagueName) && !IsIn(leagueName, tradingLeaguesList) { ; && !IsContaining(leagueName, excludedWords) {
                     tradingLeagues.Push(leagueName)
                     tradingLeaguesList := tradingLeaguesList ? tradingLeaguesList "," leagueName : leagueName
                 }
@@ -470,6 +472,8 @@ GGG_API_Get_ActiveTradingLeagues() {
         Sleep 500 ; No need to hurry, this only happens once at script start - avoid api spam
     }
 
+    localLeaguesJSON := JSON_Load(PROGRAM.TRADING_LEAGUES_JSON)
+    tradingLeagues := ObjMerge(localLeaguesJSON, tradingLeagues)
     GAME.LEAGUES := ObjMerge(GAME.LEAGUES, tradingLeagues)
 	Return tradingLeagues
 }
