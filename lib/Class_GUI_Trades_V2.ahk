@@ -372,6 +372,7 @@
 		Gui%guiName%.Is_Tabs := _guiMode="Tabs"?True:False
 		Gui%guiName%.Is_Stack := _guiMode="Stack"?True:False
 		Gui%guiName%.Skin := SKIN.Skin
+		Gui%guiName%.SkinAssets := ObjFullyClone(SKIN.Assets)
 
 		; = = Creating styles obj
 		if !IsObject(AllStyles)
@@ -556,11 +557,7 @@
 			Gui.Add(slotGuiName, "Text", "x" AdditionalMsg_X " y" AdditionalMsg_Y " w" AdditionalMsg_W " R1 BackgroundTrans  hwndhTEXT_AdditionalMessage c" SKIN.Settings.COLORS.Trade_Info_2)
 			Gui.Add(slotGuiName, "Text", "x" Time_X " y" Time_Y " w" Time_W " R1 BackgroundTrans hwndhTEXT_TimeSent c" SKIN.Settings.COLORS.Trade_Info_2)
 			if (_buyOrSell="Sell") {
-				Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerify BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
-				Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGrey Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
-				Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyOrange Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Orange)
-				Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyGreen Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Green)
-				Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyRed Hidden BackgroundTrans", SKIN.Assets.Trade_Verify.Red)
+				Gui.Add(slotGuiName, "Picture", "x" TradeVerify_X " y" TradeVerify_Y " w" TradeVerify_W " h" TradeVerify_H " hwndhIMG_TradeVerifyColor BackgroundTrans", SKIN.Assets.Trade_Verify.Grey)
 			}
             if (_guiMode="Stack") {
 			    Gui.Add(slotGuiName, "ImageButton", "x" CloseTabVertical_X " y" CloseTabVertical_Y " w" CloseTabVertical_W " h" CloseTabVertical_H " hwndhBTN_CloseTab", "", Styles.Close_Tab_Vertical, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
@@ -1216,6 +1213,23 @@
 			GuiControl, Show,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_CurrencyIMG
 		}
 
+		; Set color dot IMG
+		if (_buyOrSell="Sell") {
+			if (newContent.TradeVerifyColor != cTabCont.TradeVerifyColor) {
+				if (newContent.TradeVerifyColor = "") {
+					GuiControl, ,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_TradeVerifyColor,% newContent.TradeVerifyColor
+				}
+				else {
+					priceVerifyColorPng := GuiTrades[_buyOrSell].SkinAssets.Trade_Verify[newContent.TradeVerifyColor]
+					imgSlotPos := ControlGetPos(GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_TradeVerifyColor)				
+					hBitMap := Gdip_CreateResizedHBITMAP_FromFile(priceVerifyColorPng, imgSlotPos.W, imgSlotPos.H, PreserveAspectRatio:=False)
+					SetImage(GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_TradeVerifyColor, hBitmap)
+				}
+				GuiControl, Hide,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_TradeVerifyColor ; basically "redraw", fixes old pic still there behind
+				GuiControl, Show,% GuiTrades[_buyOrSell]["Slot" slotNum "_Controls"].hIMG_TradeVerifyColor
+			}
+		}
+
 		hasNewMsgChanged := newContent.HasNewMessage != cTabCont.HasNewMessage ? True : False
 		hasIsInAreaChanged := newContent.IsInArea != cTabCont.IsInArea ? True : False
 		if (hasNewMsgChanged && newContent.HasNewMessage)
@@ -1239,14 +1253,14 @@
 
 		tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
 		if (A_IsCompiled) {
-			GUI_Trades_V2.SetTabVerifyColor(tabNum, "Orange")
-			GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Automated price verifying has been"
+			GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerifyColor", "Orange")
+			GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerifyText", "Automated price verifying has been"
 			. "\n disabled for the executable version due to issues"
 			. "\n\nPlease use the AHK version if you wish to use this feature")
 			return
 		}
-		GUI_Trades_V2.SetTabVerifyColor(tabNum, "Grey")
-		GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerify", "Verifying price...")
+		GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerifyColor", "Grey")
+		GUI_Trades_V2.UpdateSlotContent("Sell", tabNum, "TradeVerifyText", "Verifying price...")
 
 		cmdLineParamsObj := {}, cmdLineParamsObj.TradeData := ObjFullyClone(tabInfos)
 		cmdLineParamsObj.Accounts := ObjFullyClone(PROGRAM.SETTINGS.SETTINGS_MAIN.PoeAccounts)
@@ -1280,26 +1294,6 @@
 		.		" /CmdLineParamsJSON=""" cmdLineParamsJSON """"
 		
 		Run,% saFile_run_cmd,% A_ScriptDir
-	}
-
-	SetTabVerifyColor(slotNum, colour) {
-		global GuiTrades_Controls
-		slotGuiName := "TradesSell_Slot" slotNum
-
-		if !IsIn(colour, "Grey,Orange,Green,Red") || !IsNum(slotNum) {
-			AppendToLogs(A_ThisFunc "(slotNum=" slotNum ", colour=" colour "): Invalid colour or tabID is not a number.")
-			; MsgBox("", "", "Invalid use of " A_ThisFunc "`n`ntabID: """ tabID """`ncolour: """ colour """")
-			return
-		}
-
-		newColHwnd := GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify" colour]
-		curColHwnd := GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify"]
-
-		if (newColHwnd != curColHwnd) {
-			GuiControl, %slotGuiName%:Show,% newColHwnd
-			GuiControl, %slotGuiName%:Hide,% curColHwnd
-			GuiTrades.Sell["Slot" slotNum "_Controls"]["hIMG_TradeVerify"] := newColHwnd
-		}
 	}
 
 	Use_WindowMode(checkOnly=False) {
@@ -2954,8 +2948,8 @@
 				ShowToolTip( StrReplace(tabContent.AdditionalMessageFull,"\n","`n") , , , 20, 20)
 			}
 		}
-		else if IsContaining(underMouseName, "hIMG_TradeVerify") {
-			GuiTrades[_buyOrSell].HasClickedTradeVerify := True
+		else if (underMouseName = "hIMG_TradeVerifyColor") {
+			GuiTrades[_buyOrSell].HasClickedTradeVerifyDot := True
 		}
 		else if IsContaining(A_Gui, "Search")
 			GuiTrades[_buyOrSell].HasClickedSearch := True
@@ -2975,7 +2969,7 @@
 			RemoveToolTip()
 		}
 
-		if (GuiTrades[_buyOrSell].HasClickedTradeVerify) {
+		if (GuiTrades[_buyOrSell].HasClickedTradeVerifyDot) {
 			tabContent := GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum)
 			GUI_Trades_V2.VerifyItemPrice(tabContent)
 		}
@@ -2989,7 +2983,7 @@
 		; GUI_Trades_V2.RemoveButtonFocus() ; Don't do this. It will prevent buttons from working.
 		GuiTrades[_buyOrSell].HasToolTip := False
 		GuiTrades[_buyOrSell].HasClickedSearch := False
-		GuiTrades[_buyOrSell].HasClickedTradeVerify := False
+		GuiTrades[_buyOrSell].HasClickedTradeVerifyDot := False
 	}
 
 	WM_MOUSEMOVE() {
@@ -3022,8 +3016,8 @@
 			: (underMouseName = "hTEXT_AdditionalMessage" && ( GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).AdditionalMessage != GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).AdditionalMessageFull ) ) ? StrReplace(GUI_Trades_V2.GetTabContent(_buyOrSell, slotNum).AdditionalMessageFull, "\n", "`n")
 			: IsContaining(A_Gui, "Search") ? "Search by name or item"
 			: ""
-		if IsContaining(underMouseName, "hIMG_TradeVerify") {
-			ctrlToolTip := GUI_Trades_V2.GetTabContent("Sell", slotNum).TradeVerify
+		if (underMouseName = "hIMG_TradeVerifyColor") {
+			ctrlToolTip := GUI_Trades_V2.GetTabContent("Sell", slotNum).TradeVerifyText
 			ctrlToolTip := StrReplace(ctrlToolTip, "\n", "`n")
 		}
 		; Tooltip % A_Gui "`n" underMouseName "`n" underMouseHwnd "`n" ctrlToolTip	
@@ -3031,8 +3025,7 @@
 		If (underMouseHwnd != prevUnderMouseHwnd) {
 			if (ctrlToolTip) {
 				timer := DEBUG.SETTINGS.instant_settings_tooltips ? -10
-					: IsContaining(underMouseName, "hIMG_TradeVerify") ? -10
-					: IsIn(underMouseName, "hIMG_CurrencyIMG,hTEXT_BuyerName,hTEXT_SellerName,hTEXT_ItemName,hTEXT_AdditionalMessage") ? -10
+					: IsIn(underMouseName, "hIMG_TradeVerifyColor,hIMG_CurrencyIMG,hTEXT_BuyerName,hTEXT_SellerName,hTEXT_ItemName,hTEXT_AdditionalMessage") ? -10
 					: -1000
 				SetTimer, GUI_Trades_V2_WM_MOUSEMOVE_DisplayToolTip,% timer
 				if (underMouseName="hTEXT_AdditionalMessage" && _buyOrSell="Sell")

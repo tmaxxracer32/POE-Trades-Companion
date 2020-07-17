@@ -23,8 +23,8 @@ SendDataBack(obj) {
 
     ; Construct data string that'll be transmited to intercom
     data := "tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID(Sell," cmdLineParamsObj.TradeData.UniqueID ")"
-    . "`n"  "GUI_Trades_V2.SetTabVerifyColor(%tabNum%," obj.VerifyColor ")"
-    . "`n"  "GUI_Trades_V2.UpdateSlotContent(Sell,%tabNum%,TradeVerify," obj.VerifyTxt ")"
+    . "`n"  "GUI_Trades_V2.UpdateSlotContent(Sell,%tabNum%,TradeVerifyColor," obj.VerifyColor ")"
+    . "`n"  "GUI_Trades_V2.UpdateSlotContent(Sell,%tabNum%,TradeVerifyText," obj.VerifyTxt ")"
 
     ControlSetText, ,% data,% "ahk_id " cmdLineParamsObj.Intercom.SlotHandle
 }
