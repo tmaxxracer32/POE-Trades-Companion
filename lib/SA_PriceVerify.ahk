@@ -199,7 +199,7 @@ VerifyItemPrice(cmdLineParams) {
                 thisListing := matchingListings[A_Index].listing
                 listingPriceCurrency := thisListing.price.currency, listingPriceCount := thisListing.price.amount
 
-                priceTxt := IsObject(thisListing) ? "Online: `t No listed price" : "Online: `t " listingPriceCount " " listingPriceCurrency
+                priceTxt := !IsObject(thisListing.price) ? "Online: `t No listed price" : "Online: `t " listingPriceCount " " listingPriceCurrency
                 priceTxt .= isUnpriced ? "\nWhisper: `t No listed price" : "\nWhisper: `t " tabInfos.PriceCount " " priceID
                     
                 if (isUnpriced) {
