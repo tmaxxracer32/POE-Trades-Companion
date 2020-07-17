@@ -275,7 +275,6 @@ class GUI_ItemGrid {
             Gui.Add("ItemGridMapTier", "Progress", "x0 y0 w" this.gridThicc " h" mapTier_pointH " Background" squareColor) ; <
             /* #280 - Disabled until proper solution using stash api is worked on
             ; Map map case
-            /* #280 - Disabled until proper solution using stash api is worked on
             RegExMatch(gridItemName, "O)(.*) \(T(\d+)\)$", itemPat)
                 mapNameOnly := itemPat.1
             for mapName, nothing in PROGRAM.DATA.MAPS_DATA["tier_" mapTier] {
