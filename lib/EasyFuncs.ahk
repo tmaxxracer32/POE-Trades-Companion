@@ -1,3 +1,10 @@
+FileDelete(filePath) {
+	while FileExist(filePath) {
+		FileDelete,% filePath
+		Sleep 10
+	}
+}
+
 AutomaticallyTransformKeyStr_ToVirtualKeyOrScanCodeStr(hk) {
 	if IsContaining( SubStr(hk, 1, 2), "SC,VK" )
 		return hk
