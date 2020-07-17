@@ -579,23 +579,23 @@ if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
 	FileCreateDir,% PROGRAM.DATA_FOLDER ""
 
 if (A_IsCompiled) {
-	sourceFileSize := Get_ResourceSize("data\TradingLeagues.txt")
-	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+	sourceFileSize := Get_ResourceSize("data\tradingLeagues.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\tradingLeagues.json"
 }
 else {
-	FileGetSize, sourceFileSize, data\TradingLeagues.txt
-	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+	FileGetSize, sourceFileSize, data\tradingLeagues.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\tradingLeagues.json"
 }
 if (sourceFileSize != destFileSize)
-	FileInstall, data\TradingLeagues.txt, % PROGRAM.DATA_FOLDER "\TradingLeagues.txt", 1
+	FileInstall, data\tradingLeagues.json, % PROGRAM.DATA_FOLDER "\tradingLeagues.json", 1
 if (ErrorLevel) {
 	AppendToLogs("Failed to extract file!"
-	.	"`nSource: data\TradingLeagues.txt"
-	.	"`nDest: " PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+	.	"`nSource: data\tradingLeagues.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\tradingLeagues.json"
 	.	"`nFlag: " 2)
 	errorLog .= "`n`n""Failed to extract file!"
-	.	"`nSource: data\TradingLeagues.txt"
-	.	"`nDest: " PROGRAM.DATA_FOLDER "\TradingLeagues.txt"
+	.	"`nSource: data\tradingLeagues.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\tradingLeagues.json"
 	.	"`nFlag: " 2
 }
 
