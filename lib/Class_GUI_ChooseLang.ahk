@@ -50,7 +50,7 @@
 		Gui.Add("ChooseLang", "Text", "x" leftMost " y" upMost " w" guiWidth-(borderSize*2)-30 " h25 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
 		Gui.Add("ChooseLang", "Progress", "xp yp wp hp Background359cfc") ; Title bar background
 		Gui.Add("ChooseLang", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - Language") ; Title bar text
-		imageBtnLog .= Gui.Add("ChooseLang", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("ChooseLang", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		__f := GUI_ChooseLang.DragGui.bind(GUI_ChooseLang, GuiChooseLang.Handle)
 		GuiControl, ChooseLang:+g,% GuiChooseLang_Controls.hTEXT_HeaderGhost,% __f
 		__f := GUI_ChooseLang.Close.bind(GUI_ChooseLang)
@@ -91,6 +91,14 @@
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
 		*/
+
+		if (GuiChooseLang.ImageButton_Errors) {
+			AppendToLogs(GuiChooseLang.ImageButton_Errors)
+			TrayNotifications.Show("Choose Language Interface - ImageButton Errors", "Some buttons failed to be created successfully."
+			. "`n" "The interface will work normally, but its appearance will be altered."
+			. "`n" "Further informations have been added to the logs file."
+			. "`n" "If this keep occuring, please join the official Discord channel.")
+		}
 
 		GuiChooseLang.Flags := {english:"UK",french:"France",chinese_simplified:"China",chinese_traditional:"Taiwan",russian:"Russia",portuguese:"Portugal"}
 		global GuiChooseLang_LANG_Temp := PROGRAM.SETTINGS.GENERAL.Language

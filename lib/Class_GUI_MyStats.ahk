@@ -62,8 +62,8 @@
 		Gui.Add("MyStats", "Text", "x" leftMost " y" upMost " w" guiWidth-30-30 " h20 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
 		Gui.Add("MyStats", "Progress", "xp yp wp hp hwndhPROGRESS_TitleBackground Background0b6fcc") ; Title bar background
 		Gui.Add("MyStats", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - " PROGRAM.TRANSLATIONS.TrayMenu.Stats) ; Title bar text
-		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x+0 yp w30 hp 0x200 Center hwndhBTN_MinimizeGUI", "-", Style_MinimizeBtn, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size*1.20)
-		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x+0 yp wp hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
+		Gui.Add("MyStats", "ImageButton", "x+0 yp w30 hp 0x200 Center hwndhBTN_MinimizeGUI", "-", Style_MinimizeBtn, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size*1.20)
+		Gui.Add("MyStats", "ImageButton", "x+0 yp wp hp hwndhBTN_CloseGUI", "X", Style_CloseBtn, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
 		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hTEXT_HeaderGhost", "DragGui", GuiMyStats.Handle)
 		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_MinimizeGUI", "Minimize")
 		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_CloseGUI", "Close")		
@@ -79,7 +79,7 @@
         Gui.Add("MyStats", "ListView", "x" leftMost+150 " y20 w" guiWidth-leftMost-150 " R17 hwndhLV_Stats", PROGRAM.TRANSLATIONS.GUI_MyStats.hLV_Stats), lvPos := GUI.GetControlPos("MyStats", "hLV_Stats"), Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hLV_Stats", "OnLVClick")
 		LV_SetSelColors(GuiMyStats_Controls.hLV_Stats, "0x0b6fcc", "0xFFFFFF")
 
-		imageBtnLog .= Gui.Add("MyStats", "ImageButton", "x" leftMost " y" lvPos.y+lvPos.h-25 " h25 w150 hwndhBTN_ExportAsCSV", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ExportAsCSV, Style_Button, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
+		Gui.Add("MyStats", "ImageButton", "x" leftMost " y" lvPos.y+lvPos.h-25 " h25 w150 hwndhBTN_ExportAsCSV", PROGRAM.TRANSLATIONS.GUI_MyStats.hBTN_ExportAsCSV, Style_Button, PROGRAM.FONTS[GuiMyStats.Font], GuiMyStats.Font_Size)
 		Gui.BindFunctionToControl("GUI_MyStats", "MyStats", "hBTN_ExportAsCSV", "ExportCurrentListAsCSV")
 
 		; * * Stats parse
@@ -91,6 +91,14 @@
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
 		*/
+
+		if (GuiMyStats.ImageButton_Errors) {
+			AppendToLogs(GuiMyStats.ImageButton_Errors)
+			TrayNotifications.Show("My Stats Interface - ImageButton Errors", "Some buttons failed to be created successfully."
+			. "`n" "The interface will work normally, but its appearance will be altered."
+			. "`n" "Further informations have been added to the logs file."
+			. "`n" "If this keep occuring, please join the official Discord channel.")
+		}
 
 		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x83, "WM_NCCALCSIZE")
 		Gui.OnMessageBind("GUI_MyStats", "MyStats", 0x84, "WM_NCHITTEST")

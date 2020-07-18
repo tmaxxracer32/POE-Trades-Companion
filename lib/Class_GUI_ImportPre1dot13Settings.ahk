@@ -37,7 +37,7 @@ Class GUI_ImportPre1dot13Settings {
         Gui.Add("ImportPre1dot13Settings", "Text", "x" leftMost " y" upMost " w" guiWidth-(borderSize*2)-30 " h25 hwndhTEXT_HeaderGhost BackgroundTrans ", "") ; Title bar, allow moving
 		Gui.Add("ImportPre1dot13Settings", "Progress", "xp yp wp hp Background359cfc") ; Title bar background
 		Gui.Add("ImportPre1dot13Settings", "Text", "xp yp wp hp Center 0x200 cWhite BackgroundTrans ", "POE Trades Companion - Importing pre-1.13 settings") ; Title bar text
-		imageBtnLog .= Gui.Add("ImportPre1dot13Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
+		Gui.Add("ImportPre1dot13Settings", "ImageButton", "x+0 yp w30 hp hwndhBTN_CloseGUI", "X", Style_RedBtn, PROGRAM.FONTS["Segoe UI"], 8)
 		__f := GUI_ImportPre1dot13Settings.DragGui.bind(GUI_ImportPre1dot13Settings, GuiImportPre1dot13Settings.Handle)
 		GuiControl, ImportPre1dot13Settings:+g,% GuiImportPre1dot13Settings_Controls.hTEXT_HeaderGhost,% __f
 		__f := GUI_ImportPre1dot13Settings.Close.bind(GUI_ImportPre1dot13Settings)
@@ -64,6 +64,14 @@ Class GUI_ImportPre1dot13Settings {
 		GuiControl, ImportPre1dot13Settings:+g,% GuiImportPre1dot13Settings_Controls.hBTN_Yes,% __f
 		__f := GUI_ImportPre1dot13Settings.Choice.bind(GUI_ImportPre1dot13Settings, "No")
 		GuiControl, ImportPre1dot13Settings:+g,% GuiImportPre1dot13Settings_Controls.hBTN_No,% __f
+
+        if (GuiImportPre1dot13Settings.ImageButton_Errors) {
+			AppendToLogs(GuiImportPre1dot13Settings.ImageButton_Errors)
+			TrayNotifications.Show("Import Pre-1.13 Settings Interface - ImageButton Errors", "Some buttons failed to be created successfully."
+			. "`n" "The interface will work normally, but its appearance will be altered."
+			. "`n" "Further informations have been added to the logs file."
+			. "`n" "If this keep occuring, please join the official Discord channel.")
+		}
 
         Gui.Show("ImportPre1dot13Settings", "xCenter yCenter w" guiWidth " h" guiHeight)
         SetControlDelay(delay), SetBatchLines(batch)

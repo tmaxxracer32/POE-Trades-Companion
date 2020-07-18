@@ -72,6 +72,14 @@ Class GUI_TabbedTradesCounter {
 		*	SHOW
 		*/
 
+		if (GuiTabbedTradesCounter.ImageButton_Errors) {
+			AppendToLogs(GuiTabbedTradesCounter.ImageButton_Errors)
+			TrayNotifications.Show("Tabbed Trades Counter Interface - ImageButton Errors", "Some buttons failed to be created successfully."
+			. "`n" "The interface will work normally, but its appearance will be altered."
+			. "`n" "Further informations have been added to the logs file."
+			. "`n" "If this keep occuring, please join the official Discord channel.")
+		}
+
 		AllStyles[SKIN.Skin] := ObjFullyClone(Styles)
 		GuiTabbedTradesCounter.AllStyles := ObjFullyClone(AllStyles), GuiTabbedTradesCounter.AllStylesData := ObjFullyClone(AllStylesData)
 
