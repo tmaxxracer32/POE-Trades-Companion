@@ -90,7 +90,7 @@ Start_Script() {
 	PROGRAM.NAME					:= "POE Trades Companion"
 	PROGRAM.VERSION 				:= "1.15.BETA_9992" ; code on par with 1.15.BETA_9992
 	PROGRAM.IS_BETA					:= IsContaining(PROGRAM.VERSION, "beta")?"True":"False"
-	PROGRAM.ALPHA					:= "Discord ALPHA 7"
+	PROGRAM.ALPHA					:= "Discord ALPHA 8"
 
 	PROGRAM.GITHUB_USER 			:= "lemasato"
 	PROGRAM.GITHUB_REPO 			:= "POE-Trades-Companion"
