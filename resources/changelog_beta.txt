@@ -1,3 +1,10 @@
+1.15.BETA_9992 (21 July 2020)
+
+	Fixes:
+	- Would trigger the "Hold CTRL when copying trading whisper..." feature even if the clipboard content was not a trading whisper, as long as the first character was "@"
+
+= = = = = = = = = = = = =
+
 1.15.BETA_9991 (11 May 2020)
 
 	Fixes:
