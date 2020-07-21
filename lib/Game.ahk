@@ -1040,6 +1040,11 @@ SplitNameAndGuild(str) {
 IsTradingWhisper(str) {
 	firstChar := SubStr(str, 1, 1)
 
+	; Make sure it starts with @ and doesnt contain line break
+	if InStr(str, "`n") || (firstChar != "@")  {
+		Return False
+	}
+
 	; poe.trade regex
 	poeTradeRegex := "@.* Hi, I would like to buy your .* listed for .* in .*"
 	poeTradeUnpricedRegex := "@.* Hi, I would like to buy your .* in .*"
@@ -1073,7 +1078,7 @@ IsTradingWhisper(str) {
 	SPA_gggUnpricedRegEx 	:= "@.* Hola, quisiera comprar tu .* en.*"
 	SPA_gggCurrencyRegEx	:= "@.* Hola, me gustaría comprar tu\(s\) .* por mi .* en.*"
 
-	KOR_gggRexEx			:= "@.* 안녕하세요, 환영.*에 .*\(으\)로 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
+	KOR_gggRegEx			:= "@.* 안녕하세요, 환영.*에 .*\(으\)로 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
 	KOR_gggUnpricedRegEx 	:= "@.* 스탠다드.*에 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
 	KOR_gggCurrencyRegEx	:= "@.* 안녕하세요, .*에 올려놓은.*\(을\)를 제 .*\(으\)로 구매하고 싶습니다.*"
 
@@ -1098,21 +1103,12 @@ IsTradingWhisper(str) {
 		, TWN_gggRegEx, TWN_gggUnpricedRegEx, TWN_gggCurrencyRegEx
 		, TWN_poedbRegEx, TWN_poeDbUnpricedRegEx, TWN_poeDbCurrencyRegEx)
 
-	; Make sure it starts with @ and doesnt contain line break
-	if InStr(str, "`n") || (firstChar != "@")  {
-		Return False
-	}
-
 	; Check if trading whisper
 	Loop % allRegexes.MaxIndex() { ; compare whisper with regex
-		if RegExMatch(str, "S)" allRegexes[A_Index]) { ; Trading whisper detected
-			isTradingWhisper := True
+		if (allRegexes[A_Index]) && RegExMatch(str, "iS)" allRegexes[A_Index]) { ; Trading whisper detected
+			return True
 		}
-		if (isTradingWhisper)
-			Break
 	}
-
-	Return isTradingWhisper
 }
 
 Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID) {
