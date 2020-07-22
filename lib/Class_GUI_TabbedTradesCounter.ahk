@@ -95,9 +95,6 @@ Class GUI_TabbedTradesCounter {
 		Gui.OnMessageBind("GUI_TabbedTradesCounter", "TabbedTradesCounter", 0x201, "WM_LBUTTONDOWN")
 		Gui.OnMessageBind("GUI_TabbedTradesCounter", "TabbedTradesCounter", 0x202, "WM_LBUTTONUP")
 
-		if (whichTab)
-			GUI_TabbedTradesCounter.OnTabBtnClick(whichTab)
-
 		GuiTabbedTradesCounter.Is_Created := True
 		SetControlDelay(delay), SetBatchLines(batch)
 		Return
@@ -116,6 +113,7 @@ Class GUI_TabbedTradesCounter {
 		GUI_TabbedTradesCounter.Destroy()
 		WinActivate,% "ahk_pid " GUI_Trades_V2.GetTabContent("Sell", GuiTrades.Sell.Tabs_Count).GamePID
 		GUI_Trades_V2.Maximize("Sell")
+		GUI_Trades_V2.SetActiveTab("Sell", GuiTrades.Sell.Tabs_Count)
 	}
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
