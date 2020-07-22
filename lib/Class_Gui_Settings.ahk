@@ -213,7 +213,7 @@ Class GUI_Settings {
 		
 		; * * Interface
 		Gui.Add("Settings", "CheckBox", "x" leftMost2 " y" upMost3 " hwndhCB_HideInterfaceWhenOutOfGame", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_HideInterfaceWhenOutOfGame)
-		Gui.Add("Settings", "CheckBox", "xp y+3 hwndhhCB_ShowTabbedTradesCounterButton", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ShowTabbedTradesCounterButton)
+		Gui.Add("Settings", "CheckBox", "xp y+3 hwndhCB_ShowTabbedTradesCounterButton", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_ShowTabbedTradesCounterButton)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_MinimizeInterfaceToTheBottom", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_MinimizeInterfaceToTheBottom)
 		Gui.Add("Settings", "CheckBox", "xp y+15 hwndhCB_CopyItemInfosOnTabChange", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_CopyItemInfosOnTabChange)
 		Gui.Add("Settings", "CheckBox", "xp y+5 hwndhCB_AutoFocusNewTabs", PROGRAM.TRANSLATIONS.GUI_Settings.hCB_AutoFocusNewTabs)
