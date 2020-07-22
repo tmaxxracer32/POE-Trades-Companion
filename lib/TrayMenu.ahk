@@ -26,10 +26,13 @@
 	Menu,Tray,Add,% trans.Clickthrough, Tray_ToggleClickthrough ; Clickthrough?
 	*/
 	Menu,Tray,Add,% trans.LockPosition, Tray_ToggleLockPosition ; Lock position?
+	/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
 	Menu,Tray,Add
 	Menu,Tray,Add,% trans.ModeWindow, Tray_ModeWindow ; Mode: Window
+	
 	Menu,Tray,Add,% trans.ModeDock, Tray_ModeDock ; Mode: Dock
 	Menu,Tray,Add,% trans.CycleDock, Tray_CycleDock ; Cycle Dock
+	*/
 	Menu,Tray,Add,% trans.ResetPosition, Tray_ResetPosition ; Reset Position
 	Menu,Tray,Add
 	Menu,Tray,Add,% trans.Reload, Tray_Reload ; Reload
@@ -112,15 +115,22 @@ Tray_ModeWindow() {
 }
 Tray_ModeDock() {
 	global PROGRAM
+	Tray_ModeWindow() ; BdO6CY5Oov - Getting rid of Dock mode as of 1.15 ALPHA 8
+	TrayNotifications.Show("Dock mode no longer available", "Dock mode has been removed. Please use the Lock Position option instead.")
+	return
 
+	/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
 	GUI_Trades_V2.Use_DockMode()
 	Tray_ToggleLockPosition("Check")
 	Declare_LocalSettings()
 	trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ModeDockEnabled_Msg, "%cycleDock%", PROGRAM.TRANSLATIONS.TrayMenu.CycleDock)
 	TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ModeDockEnabled_Title, trayMsg)
+	*/
 }
 Tray_CycleDock() {
+	/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
 	GUI_Trades_V2.DockMode_Cycle()
+	*/
 }
 Tray_ToggleClickthrough() {
 	global PROGRAM, GuiSettings_Controls

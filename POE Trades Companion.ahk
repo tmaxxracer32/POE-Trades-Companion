@@ -493,3 +493,8 @@ if (A_IsCompiled) {
 	1.15.BETA_xxx Trades Overhaul: Interface always minimize itself when the last tab is closed.
 	This change is due to the interface header being a toolbar.
 */
+
+/* BdO6CY5Oov
+	Getting rid of Dock mode completely as of 1.15 ALPHA 8
+	Window mode will now be default - Dock was always buggy and unreliable and "Lock Position" with Window is better anyways
+*/

@@ -1308,16 +1308,23 @@
 			Save_LocalSettings()
 		}
 
-		Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
-		Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.ModeWindow
-		Menu, Tray, Disable,% PROGRAM.TRANSLATIONS.TrayMenu.CycleDock
+		/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
+			Menu, Tray, UnCheck,% PROGRAM.TRANSLATIONS.TrayMenu.ModeDock
+			Menu, Tray, Check,% PROGRAM.TRANSLATIONS.TrayMenu.ModeWindow
+			Menu, Tray, Disable,% PROGRAM.TRANSLATIONS.TrayMenu.CycleDock
 
-		Menu, Tray, Enable,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
+			Menu, Tray, Enable,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
+		}
+		*/
 	}
 
 	Use_DockMode(checkOnly=False) {
 		global PROGRAM, GuiTrades
+		TrayNotifications.Show("Dock mode no longer available", "Dock mode has been removed. Please use the Lock Position option instead.")
+		GUI_Trades_V2.Use_WindowMode() ; On purpose. Disabling Dock mode as of 1.15 ALPHA 8
+		return
 
+		/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
 		if (checkOnly=False) {
 			PROGRAM.SETTINGS.SETTINGS_MAIN.TradesGUI_Mode := "Dock"
 			GuiTrades.Sell.Docked_Window_Handle := ""
@@ -1335,9 +1342,11 @@
 		Menu, Tray, Disable,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition
 
 		GUI_Trades_V2.DockMode_Cycle()
+		*/
 	}
 
 	DockMode_Cycle(dontSetPos=False) {
+		/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
 		global GuiTrades
 
 		gameInstances := Get_RunningInstances()
@@ -1350,11 +1359,12 @@
 
 		if (dontSetPos=False)
 			GUI_Trades_V2.DockMode_SetPosition()
+		*/
 	}
 
 	DockMode_SetPosition() {
+		/* BdO6CY5Oov - Intentionally disabled - Getting rid of Dock mode as of 1.15 ALPHA 8
 		global GuiTrades
-		; TO_DO_V2 maybe just get rid of "dock" mode it sucks
 		TrayNotications.Show("Dock mode disabled.", "Dock mode has been disabled for now. It may actually be completely be scrapped off in the future.")
 		GUI_Trades_V2.Use_WindowMode()
 		return
@@ -1403,6 +1413,7 @@
 		}
 		
 		DetectHiddenWindows(hw)
+		*/
 	}
 
 	SetOrUnsetTabStyle(setOrUnset="", styleToApply="", playerOrTab="", applyToThisTabOnly=False) {
