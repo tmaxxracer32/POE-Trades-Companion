@@ -3,6 +3,7 @@ Class GUI_TabbedTradesCounter {
 	Create(whichTab="") {
 		global PROGRAM, GAME, SKIN
 		global GuiTabbedTradesCounter, GuiTabbedTradesCounter_Controls, GuiTabbedTradesCounter_Submit
+		global GuiTrades
 		static AllStyles, AllStylesData
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		prevCounter := IsNum(GuiTabbedTradesCounter.Counter) ? GuiTabbedTradesCounter.Counter : 0
@@ -32,10 +33,6 @@ Class GUI_TabbedTradesCounter {
 
 		counterBtn_x := leftMost, counterBtn_y := upMost, counterBtn_w := guiWidth, counterBtn_h := guiHeight
 
-		GuiTabbedTradesCounter.Style_Button := Style_Button := [ [0, "0x274554", "", "0xebebeb", , , "0xd6d6d6"] ; normal
-			, [0, "0x355e73"] ; hover
-			, [0, "0x122630"] ] ; press
-
 		; = = Creating styles obj
 		if !IsObject(AllStyles)
 			AllStyles := {}, AllStylesData := {}
@@ -49,8 +46,8 @@ Class GUI_TabbedTradesCounter {
 		*/
 
 		Gui.Margin("TabbedTradesCounter", 0, 0)
-		Gui.Color("TabbedTradesCounter", "0x1c4563", "0x274554")
-		Gui.Font("TabbedTradesCounter", "Fontin SmallCaps", 20*scaleMult, "4", "0x80c4ff")
+		Gui.Color("TabbedTradesCounter", GuiTrades.Sell.Background_Color, GuiTrades.Sell.Controls_Color)
+		Gui.Font("TabbedTradesCounter", GuiTrades.Sell.Font, GuiTrades.Sell.Font_Size*2, GuiTrades.Sell.Font_Quality, GuiTrades.Sell.Font_Color)
 		Gui, TabbedTradesCounter:Default ; Required for LV_ cmds
 
 		; *	* Borders
@@ -61,12 +58,12 @@ Class GUI_TabbedTradesCounter {
 
 		; * * Button
 		
-		if !IsObject(Styles.TabbedButton) {
-			GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, "TabbedButton", guiWidth, guiHeight)
-			AllStylesData["TabbedButton"] := {Width:guiWidth, Height:guiHeight}
+		if !IsObject(Styles.TabbedTradesCounterButton) {
+			GUI_Trades_V2.CreateGenericTextButtonStyle(Styles, "TabbedTradesCounterButton", guiWidth, guiHeight)
+			AllStylesData["TabbedTradesCounterButton"] := {Width:guiWidth, Height:guiHeight}
 		}
-		Gui.Add("TabbedTradesCounter", "ImageButton", "x" counterBtn_x " y" counterBtn_y " w" counterBtn_w " h" counterBtn_h " hwndhBTN_Counter c" SKIN.Settings.COLORS.Trade_Info_2, GuiTabbedTradesCounter.Counter, Styles.TabbedButton, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
-		Gui.BindFunctionToControl("GUI_TabbedTradesCounter", "TabbedTradesCounter", "hBTN_Counter", "OnTabbedButtonClick") 
+		Gui.Add("TabbedTradesCounter", "ImageButton", "x" counterBtn_x " y" counterBtn_y " w" counterBtn_w " h" counterBtn_h " hwndhBTN_Counter c" SKIN.Settings.COLORS.Trade_Info_2, GuiTabbedTradesCounter.Counter, Styles.TabbedTradesCounterButton, PROGRAM.FONTS[GuiTabbedTradesCounter.Font], GuiTabbedTradesCounter.Font_Size)
+		Gui.BindFunctionToControl("GUI_TabbedTradesCounter", "TabbedTradesCounter", "hBTN_Counter", "OnTabbedTradesCounterButtonClick") 
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 		*	SHOW
@@ -108,7 +105,7 @@ Class GUI_TabbedTradesCounter {
 		return
 	}
 
-	OnTabbedButtonClick() {
+	OnTabbedTradesCounterButtonClick() {
 		global GuiTrades
 		GUI_TabbedTradesCounter.Destroy()
 		WinActivate,% "ahk_pid " GUI_Trades_V2.GetTabContent("Sell", GuiTrades.Sell.Tabs_Count).GamePID
