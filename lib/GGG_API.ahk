@@ -15,13 +15,9 @@ GGG_API_GetLastActiveCharacter(accName) {
 	
 	poeURL := GetPoeDotComUrlBasedOnLanguage("ENG")
 	url := poeURL "/character-window/get-characters?accountName=" UriEncode(accName)
-    headers := "Host: " poeURL
-    . "`n" "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
-    . "`n" "Accept-Language: en-US,en;q=0.5"
-    ; . "`n" "Accept-Encoding: gzip, deflate, br"
-    . "`n" "Upgrade-Insecure-Requests: 1"
+    headers := "Accept: application/json"
+    . "`n" "Content-Type: application/json"
     . "`n" "Cache-Control: max-age=0"
-    . "`n" "TE: Trailers"
     options := "TimeOut: 7"
     . "`n"     "Charset: UTF-8"
     WinHttpRequest_cURL(url, data:="", headers, options), charsJSON := JSON.Load(data)
