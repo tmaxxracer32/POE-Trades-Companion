@@ -37,7 +37,7 @@ GitHubAPI_GetReleases(user, repo, which="releases_only", latestOnly=False, pageI
 	if GitHubAPI_IsRateLimitExceeded(html, reqHeaders)
 		Return
 
-	parsedJSON  	:= JSON.Load(html)
+	parsedJSON  	:= JSON_Load(html)
 
     if (which="releases_only" && latestOnly) {
         relInfos := parsedJSON

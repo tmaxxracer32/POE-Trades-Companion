@@ -449,7 +449,7 @@ Get_LocalSettings_DefaultValues() {
 	settings := StrReplace(settings, "%poeSettingsColors%", fullAppend)
 	
 	; Loading json obj, return
-	return JSON.Load(settings)	
+	return JSON_Load(settings)	
 }
 
 LocalSettings_VerifyValuesValidity(ByRef userSettingsObj, defaultSettingsObj, nextObj="", key="", ByRef invalidLogs="") {

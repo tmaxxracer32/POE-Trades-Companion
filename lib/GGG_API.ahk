@@ -20,7 +20,7 @@ GGG_API_GetLastActiveCharacter(accName) {
     . "`n" "Cache-Control: max-age=0"
     options := "TimeOut: 7"
     . "`n"     "Charset: UTF-8"
-    WinHttpRequest_cURL(url, data:="", headers, options), charsJSON := JSON.Load(data)
+    WinHttpRequest_cURL(url, data:="", headers, options), charsJSON := JSON_Load(data)
 
     if !IsObject(charsJSON) {
         static accNameCopy

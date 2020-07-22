@@ -7,7 +7,7 @@
 
     WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
-    mapsJSON := JSON.Load(html)
+    mapsJSON := JSON_Load(html)
     return mapsJSON
 }
 
@@ -21,7 +21,7 @@ PoeNinja_GetUniqueMapOverview(league) {
 
     WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
-    uniqueMapsJSON := JSON.Load(html)
+    uniqueMapsJSON := JSON_Load(html)
     return uniqueMapsJSON
 }
 
@@ -32,7 +32,7 @@ PoeNinja_GetCurrencyOverview(league) {
 
     WinHttpRequest_cURL(url, data:="", headers, options), html := data
 
-    currencyJSON := JSON.Load(html)
+    currencyJSON := JSON_Load(html)
     return currencyJSON
 }
 

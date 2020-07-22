@@ -295,11 +295,11 @@ Start_Script() {
 	StringTrimRight, currencyList, currencyList, 1 ; Remove last comma
 	PROGRAM.DATA.CURRENCY_LIST := currencyList
 	FileRead, poeTradeCurrencyData,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
-    PROGRAM.DATA.POETRADE_CURRENCY_DATA := JSON.Load(poeTradeCurrencyData), poeTradeCurrencyData := ""
+    PROGRAM.DATA.POETRADE_CURRENCY_DATA := JSON_Load(poeTradeCurrencyData), poeTradeCurrencyData := ""
 
 	; Loading maps data for item grid
 	FileRead, mapsData,% PROGRAM.DATA_FOLDER "\mapsData.json"
-	PROGRAM.DATA.MAPS_DATA := JSON.Load(mapsData)
+	PROGRAM.DATA.MAPS_DATA := JSON_Load(mapsData)
 	FileRead, uniqueMapsList,% PROGRAM.DATA_FOLDER "\UniqueMaps.txt"
 	PROGRAM.DATA.UNIQUE_MAPS_LIST := uniqueMapsList
 

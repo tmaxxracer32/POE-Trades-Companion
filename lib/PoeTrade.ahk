@@ -97,7 +97,7 @@ PoeTrade_GetCurrencyData() {
     if !(currenciesObj["Chaos Orb"] || !IsObject(currenciesObj["Chaos Orb"])) {
         AppendToLogs(A_ThisFunc "(createData=" createData "): Couldn't retrieve currency data from poe.trade, falling back to json.")
         FileRead, JSONFile,% PROGRAM.DATA_FOLDER "\poeTradeCurrencyData.json"
-        currenciesObj := JSON.Load(JSONFile)
+        currenciesObj := JSON_Load(JSONFile)
     }
 
     Return currenciesObj
