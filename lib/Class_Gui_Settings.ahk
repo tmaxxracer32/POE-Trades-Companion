@@ -481,8 +481,8 @@ Class GUI_Settings {
 		GUI_Settings.TabsSettingsMain_SetUserSettings()
 		GUI_Settings.TabCustomizationSkins_SetUserSettings()
 		GUI_Settings.TabHotkeys_SetUserSettings()
-		GUI_Settings.TabMiscUpdating_SetUserSettings()
-		GUI_Settings.TabMiscAbout_UpdateAllOfFame()
+		GUI_Settings.TabUpdating_SetUserSettings()
+		GUI_Settings.TabAbout_UpdateAllOfFame()
 
 		GUI_Settings.TabSettingsMain_SetSubroutines()
 		GUI_Settings.TabCustomizationSkins_SetSubroutines()
@@ -512,7 +512,7 @@ Class GUI_Settings {
 		; Gui_Settings.OnTabBtnClick("Hotkeys Advanced")
 		; Gui_Settings.OnTabBtnClick("Misc Updating")
 		; Gui_Settings.OnTabBtnClick("Misc About")
-		; GUI_Settings.TabMiscAbout_UpdateAllOfFame()
+		; GUI_Settings.TabAbout_UpdateAllOfFame()
 
 		GuiSettings.Is_Created := True
 		SetControlDelay(delay), SetBatchLines(batch)
@@ -2283,18 +2283,18 @@ Class GUI_Settings {
 			ctrlName := A_LoopField, ctrlSplit := StrSplit(ctrlName, "_"), ctrlType := ctrlSplit.1, settingsKey := ctrlSplit.2
 
 			if (ctrlType="hCB")
-				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabMiscUpdating_OnCheckboxToggle", ctrlName)
+				Gui.BindFunctionToControl("GUI_Settings", "Settings", ctrlName, "TabUpdating_OnCheckboxToggle", ctrlName)
 		}
 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CheckForUpdates", "TabMiscUpdating_CheckForUpdates")
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CheckForUpdate", "TabMiscUpdating_OnCheckForUpdatesDDLChange", GuiSettings_Controls.hDDL_CheckForUpdate)
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CheckForUpdates", "TabUpdating_CheckForUpdates")
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CheckForUpdate", "TabUpdating_OnCheckForUpdatesDDLChange", GuiSettings_Controls.hDDL_CheckForUpdate)
 	}
 
-	TabMiscUpdating_SetUserSettings() {
+	TabUpdating_SetUserSettings() {
 		global PROGRAM, GuiSettings_Controls
 		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.UPDATING)
 
-		GUI_Settings.TabMiscUpdating_UpdateVersionsText()
+		GUI_Settings.TabUpdating_UpdateVersionsText()
 		; Set checkbox state
 		for key, value in thisTabSettings {
 			if IsIn(key, "AllowToUpdateAutomaticallyOnStart,AllowPeriodicUpdateCheck,UseBeta,DownloadUpdatesAutomatically") {
@@ -2316,7 +2316,7 @@ Class GUI_Settings {
 		GuiControl, Settings:,% GuiSettings_Controls.hCB_DownloadUpdatesAutomatically,% thisTabSettings.DownloadUpdatesAutomatically
 	}
 
-	TabMiscUpdating_UpdateVersionsText() {
+	TabUpdating_UpdateVersionsText() {
 		global PROGRAM, GuiSettings_Controls, UPDATE_TAGNAME
 		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.UPDATING)
 
@@ -2344,7 +2344,7 @@ Class GUI_Settings {
 		GuiControl, Settings:Move,% GuiSettings_Controls.hTEXT_MinsAgo,% "w" Get_TextCtrlSize(StrReplace(PROGRAM.TRANSLATIONS.GUI_Settings.hTEXT_MinsAgo, "%time%", timeDiff), "Segoe UI", "8").W
 	}
 
-	TabMiscUpdating_OnCheckboxToggle(CtrlName) {
+	TabUpdating_OnCheckboxToggle(CtrlName) {
 		global PROGRAM
 
 		iniKey := SubStr(CtrlName, 5)
@@ -2356,15 +2356,15 @@ Class GUI_Settings {
 		Save_LocalSettings()
 	}
 
-	TabMiscUpdating_CheckForUpdates() {
+	TabUpdating_CheckForUpdates() {
 		global PROGRAM, GuiSettings_Controls
 		thisTabSettings := ObjFullyClone(PROGRAM.SETTINGS.UPDATING)
 
 		UpdateCheck(checkType:="forced", notifOrBox:="box")
-		GUI_Settings.TabMiscUpdating_UpdateVersionsText()
+		GUI_Settings.TabUpdating_UpdateVersionsText()
 	}
 
-	TabMiscUpdating_OnCheckForUpdatesDDLChange(CtrlName, CtrlHwnd) {
+	TabUpdating_OnCheckForUpdatesDDLChange(CtrlName, CtrlHwnd) {
 		global PROGRAM, GuiSettings_Controls
 	
 		ddlVal := GUI_Settings.Submit(CtrlName)
@@ -2381,24 +2381,24 @@ Class GUI_Settings {
 	*	Tab MISC ABOUT
 	*/
 
-	TabMiscAbout_UpdateAllOfFame() {
-		SetTimer, GUI_Setting_TabMiscAbout_UpdateAllOfFame_Timer, -10
+	TabAbout_UpdateAllOfFame() {
+		SetTimer, GUI_Setting_TabAbout_UpdateAllOfFame_Timer, -10
 		Return
 
-		GUI_Setting_TabMiscAbout_UpdateAllOfFame_Timer:
-			hof := GUI_Settings.TabMiscAbout_GetHallOfFame()
-			GUI_Settings.TabMiscAbout_SetHallOfFame(hof)
+		GUI_Setting_TabAbout_UpdateAllOfFame_Timer:
+			hof := GUI_Settings.TabAbout_GetHallOfFame()
+			GUI_Settings.TabAbout_SetHallOfFame(hof)
 		Return
 	}
 
-	TabMiscAbout_SetHallOfFame(hof) {
+	TabAbout_SetHallOfFame(hof) {
 		global GuiSettings_Controls
 
 		txt := "Hall of Fame`nThank you for your support!`n`n" hof
 		GuiControl, Settings:,% GuiSettings_Controls.hEDIT_HallOfFame,% txt
 	}
 
-	TabMiscAbout_GetHallOfFame() {
+	TabAbout_GetHallOfFame() {
 		global PROGRAM
 
 		url := "https://github.com/lemasato/POE-Trades-Companion/wiki/Support"
