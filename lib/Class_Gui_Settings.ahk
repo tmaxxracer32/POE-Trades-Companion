@@ -3139,7 +3139,7 @@ Class GUI_Settings {
 	HideFadeout(fadeOutCode) {
 		global GuiSettings, GuiSettingsFadeout
 
-		if (fadeOutCode != GuiSettingsFadeout.FadeoutCode)
+		if (!fadeOutCode) || (fadeOutCode != GuiSettingsFadeout.FadeoutCode)
 			return
 
 		Gui, Settings:-Disabled

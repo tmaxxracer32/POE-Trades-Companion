@@ -555,7 +555,7 @@
 	HideFadeout(fadeOutCode) {
 		global GuiMyStats
 
-		if (fadeOutCode != GuiMyStats.FadeOut.FadeoutCode)
+		if (!fadeOutCode) || (fadeOutCode != GuiMyStats.FadeOut.FadeoutCode)
 			return
 
 		Gui, MyStats:-Disabled
