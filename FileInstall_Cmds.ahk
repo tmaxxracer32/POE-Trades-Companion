@@ -604,6 +604,31 @@ if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
 	FileCreateDir,% PROGRAM.DATA_FOLDER ""
 
 if (A_IsCompiled) {
+	sourceFileSize := Get_ResourceSize("data\tradingRegexes.json")
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\tradingRegexes.json"
+}
+else {
+	FileGetSize, sourceFileSize, data\tradingRegexes.json
+	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\tradingRegexes.json"
+}
+if (sourceFileSize != destFileSize)
+	FileInstall, data\tradingRegexes.json, % PROGRAM.DATA_FOLDER "\tradingRegexes.json", 1
+if (ErrorLevel) {
+	AppendToLogs("Failed to extract file!"
+	.	"`nSource: data\tradingRegexes.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\tradingRegexes.json"
+	.	"`nFlag: " 2)
+	errorLog .= "`n`n""Failed to extract file!"
+	.	"`nSource: data\tradingRegexes.json"
+	.	"`nDest: " PROGRAM.DATA_FOLDER "\tradingRegexes.json"
+	.	"`nFlag: " 2
+}
+
+; ----------------------------
+if !InStr(FileExist(PROGRAM.DATA_FOLDER ""), "D")
+	FileCreateDir,% PROGRAM.DATA_FOLDER ""
+
+if (A_IsCompiled) {
 	sourceFileSize := Get_ResourceSize("data\TWN_poeDotComItemsData.json")
 	FileGetSize, destFileSize, % PROGRAM.DATA_FOLDER "\TWN_poeDotComItemsData.json"
 }

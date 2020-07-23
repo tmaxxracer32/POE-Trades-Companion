@@ -303,6 +303,10 @@ Start_Script() {
 	FileRead, uniqueMapsList,% PROGRAM.DATA_FOLDER "\UniqueMaps.txt"
 	PROGRAM.DATA.UNIQUE_MAPS_LIST := uniqueMapsList
 
+	; Loading whisper regexes data
+	FileRead, whisperRegexes,% PROGRAM.DATA_FOLDER "\tradingRegexes.json"
+	PROGRAM.DATA.TRADING_REGEXES := JSON_Load(whisperRegexes)
+
 	; Game settings
 	Declare_GameSettings(gameSettings)
 	GGG_API_Get_ActiveTradingLeagues()

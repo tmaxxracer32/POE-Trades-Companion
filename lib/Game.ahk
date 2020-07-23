@@ -333,209 +333,29 @@ Monitor_GameLogs() {
 
 Parse_GameLogs(strToParse, preview=False) {
 	global PROGRAM, GuiTrades, GAME
-
-	; poe.trade
-	static poeTradeRegex 			:= {String:"(.*)Hi, I would like to buy your (.*) listed for (.*) in (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static poeTradeUnpricedRegex 	:= {String:"(.*)Hi, I would like to buy your (.*) in (.*)"
-										, Other:1, Item:2, League:3}
-	static poeTradeCurrencyRegex	:= {String:"(.*)Hi, I'd like to buy your (.*) for my (.*) in (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static poeTradeStashRegex 		:= {String:"\(stash tab ""(.*)""; position: left (\d+), top (\d+)\)(.*)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static poeTradeQualityRegEx 		:= {String:"level (\d+) (\d+)% (.*)"
-										, Level:1, Quality:2, Item:3}
-	; poeapp.com
-	static poeAppRegEx 				:= {String:"(.*)wtb (.*) listed for (.*) in (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static poeAppUnpricedRegex 		:= {String:"(.*)wtb (.*) in (.*)"
-										, Other:1, Item:2, League:3}
-	static poeAppCurrencyRegex		:= {String:"(.*)I'd like to buy your (.*) for my (.*) in (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static poeAppStashRegex 		:= {String:"\(stash ""(.*)""; left (\d+), top (\d+)\)(.*)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static poeAppQualityRegEx 		:= {String:"(.*) \((\d+)/(\d+)%\)"
-										, Item:1, Level:2, Quality:3}
-	; pathofexile.com/trade
-	; doesn't need ENG str as its same than poe.trade
-	static RUS_gggRegEx				:= {String:"(.*)Здравствуйте, хочу купить у вас (.*) за (.*) в лиге (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static RUS_gggUnpricedRegEx		:= {String:"(.*)Здравствуйте, хочу купить у вас (.*) в лиге (.*)"
-                                        , Other:1, Item:2, League:3}
-	static RUS_gggCurrencyRegEx		:= {String:"(.*)Здравствуйте, хочу купить у вас (.*) за (.*) в лиге (.*)"
-                                        , Other:1, Item:2, Price:3, League:4}
-	static RUS_gggStashRegEx		:= {String:"\(секция ""(.*)""; позиция: (\d+) столбец, (\d+) ряд\)(.*)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static RUS_gggQualityRegEx 		 := {String:"уровень (\d+) (\d+)% (.*)"
-										, Level:1, Quality:2, Item:3}
-
-	static POR_gggRegEx 			:= {String:"(.*)Olá, eu gostaria de comprar o seu item (.*) listado por (.*) na (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static POR_gggUnpricedRegEx 	:= {String:"(.*)Olá, eu gostaria de comprar o seu item (.*) na (.*)"
-											, Other:1, Item:2, League:3}
-	static POR_gggCurrencyRegEx 	:= {String:"(.*)Olá, eu gostaria de comprar seu\(s\) (.*) pelo\(s\) meu\(s\) (.*) na (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static POR_gggStashRegEx 		:= {String:"\(aba do baú: ""(.*)""; posição: esquerda (\d+), topo (\d+)\)(.*)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static POR_gggQualityRegEx 		:= {String:"nível (\d+) (\d+)% (.*)"
-										, Level:1, Quality:2, Item:3}
-
-	static THA_gggRegEx				:= {String:"(.*)สวัสดี, เราต้องการจะชื้อของคุณ (.*) ใน ราคา (.*) ใน (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static THA_gggUnpricedRegEx		:= {String:"(.*)สวัสดี, เราต้องการจะชื้อของคุณ (.*) ใน (.*)"
-										, Other:1, Item:2, League:3}
-	static THA_gggCurrencyRegEx		:= {String:"(.*)สวัสดี เรามีความต้องการจะชื้อ (.*) ของคุณ ฉันมี (.*) ใน (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static THA_gggStashRegEx		:= {String:"\(stash tab ""(.*)""; ตำแหน่ง: ซ้าย (\d+), บน (.*)\)(.*)" ; Top position is bugged from GGG side and appears as {{TOP}) for priced items, so we use (.*) instead of (\d+)
-										, Tab:1, Left:2, Top:3, Other:4}
-	static THA_gggQualityRegEx		:= {String:"level (\d+) (\d+)% (.*)"
-										, Level:1, Quality:2, Item:3}
-
-	static GER_gggRegEx 			:= {String:"(.*)Hi, ich möchte '(.*)' zum angebotenen Preis von (.*) in der '(.*)'-Liga kaufen(.*)"
-										, Other:1, Item:2, Price:3, League:4, Other2:5}
-	static GER_gggUnpricedRegEx		:= {String:"(.*)Hi, ich möchte '(.*)' in der '(.*)'-Liga kaufen(.*)"
-										, Other:1, Item:2, League:3, Other2:4}
-	static GER_gggCurrencyRegEx		:= {String:"(.*)Hi, ich möchte '(.*)' zum angebotenen Preis von '(.*)' in der '(.*)'-Liga kaufen(.*)"
-										, Other:1, Item:2, Price:3, League:4, Other2:5}
-	static GER_gggStashRegEx		:= {String:"\(Truhenfach ""(.*)""; Position: (\d+). von links, (\d+). von oben\)(.*)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static GER_gggQualityRegEx		:= {String:"Stufe (\d+) (\d+)% (.*)"
-										, Level:1, Quality:2, Item:3} 
-
-	static FRE_gggRegEx				:= {String:"(.*)Bonjour, je souhaiterais t'acheter (.*) pour (.*) dans la ligue (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static FRE_gggUnpricedRegEx		:= {String:"(.*)Bonjour, je souhaiterais t'acheter (.*) dans la ligue (.*)"
-										, Other:1, Item:2, League:3}
-	static FRE_gggCurrencyRegEx		:= {String:"(.*)Bonjour, je voudrais t'acheter (.*) contre (.*) dans la ligue (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static FRE_gggStashRegEx		:= {String:"\(onglet de réserve ""(.*)"" \; (\d+)e en partant de la gauche, (\d+)e en partant du haut\)(.*)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static FRE_gggQualityRegEx		:= {String:"(.*) de niveau (\d+) à (\d+)% de qualité"
-										, Item:1, Level:2, Quality:3}
-
-	static SPA_gggRegEx				:= {String:"(.*)Hola, quisiera comprar tu (.*) listado por (.*) en (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static SPA_gggUnpricedRegEx 	:= {String:"(.*)Hola, quisiera comprar tu (.*) en (.*)"
-										, Other:1, Item:2, League:3}
-	static SPA_gggCurrencyRegEx		:= {String:"(.*)Hola, me gustaría comprar tu\(s\) (.*) por mi (.*) en (.*)"
-										, Other:1, Item:2, Price:3, League:4}
-	static SPA_gggStashRegEx		:= {String:"\(pestaña de alijo ""(.*)""; posición: izquierda(\d+), arriba (\d+)\)"
-										, Tab:1, Left:2, Top:3, Other:4}
-	static SPA_gggQualityRegEx		:= {String:"(.*) nivel (\d+) (\d+)%"
-										, Item:1, Level:2, Quality:3}
-										
-	static KOR_gggRegEx				:= {String:"(.*)안녕하세요, 환영(.*)에 (.*)\(으\)로 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
-										, Other:1, League:2, Price:3, Item:4, Other2:5}
-	static KOR_gggUnpricedRegEx 	:= {String:"(.*)안녕하세요, 스탠다드(.*)에 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
-										, Other:1, League:2, Item:3, Other2:4}
-	static KOR_gggCurrencyRegEx		:= {String:"(.*)안녕하세요, (.*)에 올려놓은(.*)\(을\)를 제 (.*)\(으\)로 구매하고 싶습니다(.*)"
-										, Other:1, League:2, Item:3, Price:4, Other2:5}
-	static KOR_gggStashRegEx		:= {String:"\(보관함 탭 ""(.*)"", 위치: 왼쪽 (\d+), 상단 (\d+)\)"
-										, Tab:1, Left:2, Top:3}
-	static KOR_gggQualityRegEx		:= {String:"(\d+) (\d+)% (.*)"
-										, Level:1, Quality:2, Item:3}
-
-	static TWN_gggRegEx             := {String:"(.*)你好，我想購買 (.*) 標價 (.*) 在 (.*)"
-                                        , Other:1, Item:2, Price:3, League:4}
-    static TWN_gggUnpricedRegEx     := {String:"(.*)你好，我想購買 (.*) 在 (.*)"
-                                        , Other:1, Item:2, League:3}
-    static TWN_gggCurrencyRegEx     := {String:"(.*)你好，我想用 (.*) 購買 (.*) in (.*)"
-                                        , Other:1, Item:2, Price:3, League:4} 										
-    static TWN_gggStashRegEx        := {String:"\(倉庫頁 ""(.*)""; 位置: 左 (\d+), 上 (\d+)\)"
-                                        , Tab:1, Left:2, Top:3}
-    static TWN_gggQualityRegEx     	:= {String:"等級 (\d+) (\d+)% (.*)"
-                                        , Level:1, Quality:2, Item:3}
-	; huge thanks to orzmashi for helping me understand twn patterns
-	static TWN_poedbRegEx			:= {String:"(.*)您好，我想買在 (.*) 的 (.*) 價格 (.*)" ; poedb twn have some useless quote before the actual whisper
-										, UselessQuote:1, League:2, Item:3, Price: 4}
-	static TWN_poeDbUnpricedRegEx	:= {String:"(.*)您好，我想買在 (.*) 的 (.*)"
-										, UselessQuote:1, League:2, Item:3}
-	static TWN_poeDbCurrencyRegEx 	:= {String:"(.*)您好，我想買在 (.*) 的 (.*) 個 (.*) 直購價 (.*)"
-										, UselessQuote:1, League:2, Item:3, Item2:4, Price:5}
-	static TWN_poeDbStashRegEx		:= {String:"\[倉庫:(.*) 位置: 左(\d+), 上 (\d+)\]"
-										, Tab:1, Left:2, Top:3}
-	static TWN_poeDbQualityRegEx	:= {String:"的 (.*) \(等級(\d+)\/(\d+)%)"
-										, Item:1, Level:2, Quality:3}
-
-	static allTradingRegex := {"poeTrade":poeTradeRegex
-		,"poeTrade_Unpriced":poeTradeUnpricedRegex
-		,"currencyPoeTrade":poeTradeCurrencyRegex
-		,"poeApp":poeAppRegEx
-		,"poeApp_Unpriced":poeAppUnpricedRegex
-		,"poeApp_Currency":poeAppCurrencyRegex}
-
-	langs := "RUS,POR,THA,GER,FRE,SPA,KOR,TWN"
-	Loop, Parse, langs,% "," ; Adding ggg trans regex to allTradingRegEx
-	{
-		allTradingRegex["ggg_" A_LoopField] := %A_LoopField%_gggRegEx
-		allTradingRegex["ggg_" A_LoopField "_unpriced"] := %A_LoopField%_gggUnpricedRegEx
-		allTradingRegex["ggg_" A_LoopField "_currency"] := %A_LoopField%_gggCurrencyRegEx
+	static logPrefix := "^(?:[^ ]+ ){6}(\d+)\]"
+	static fromVariants, toVariants, tradingWhisperRegexes
+	if !(fromVariants)
+		for lang, variant in PROGRAM.DATA.TRADING_REGEXES.From
+			fromVariants .= fromVariants ? "|" variant : variant
+	if !(toVariants)
+		for lang, variant in PROGRAM.DATA.TRADING_REGEXES.To
+			toVariants .= toVariants ? "|" variant : variant
+	if !(tradingWhisperRegexes) {
+		tradingWhisperRegexes := {}
+		for regexName in PROGRAM.DATA.TRADING_REGEXES
+			if (PROGRAM.DATA.TRADING_REGEXES[regexName].Regular) {
+				tradingWhisperRegexes[regexName] := ObjFullyClone(PROGRAM.DATA.TRADING_REGEXES[regexName])
+			}
 	}
-	allTradingRegEx["poeDb_TWN"] := TWN_poedbRegEx
-	allTradingRegEx["poeDb_TWN_unpriced"] := TWN_poeDbUnpricedRegEx
-	allTradingRegEx["poeDb_TWN_currency"] := TWN_poeDbCurrencyRegEx
-
-	static ENG_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) has joined the area.*") 
-	static ENG_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) has left the area.*") 
-	static ENG_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : AFK mode is now ON.*") 
-	static ENG_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : AFK mode is now OFF.*") 
-
-	static FRE_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) a rejoint la zone.*") 
-	static FRE_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) a quitté la zone.*") 
-	static FRE_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : Le mode Absent \(AFK\) est désormais activé.*") 
-	static FRE_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : Le mode Absent \(AFK\) est désactivé.*") 
-
-	static GER_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) hat das Gebiet betreten.*") 
-	static GER_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) hat das Gebiet verlassen.*")
-	static GER_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : AFK-Modus ist nun AN.*") 
-	static GER_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : AFK-Modus ist nun AUS.*") 
-
-	static POR_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) entrou na área.*") 
-	static POR_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) saiu da área.*") 
-	static POR_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : Modo LDT Ativado.*") 
-	static POR_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : Modo LDT Desativado.*") 
-
-	static RUS_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) присоединился.*") 
-	static RUS_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) покинул область.*") 
-	static RUS_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : Режим ""отошёл"" включён.*") 
-	static RUS_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : Режим ""отошёл"" выключен.*") 
-
-	static THA_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) เข้าสู่พื้นที่.*") 
-	static THA_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) ออกจากพื้นที่.*") 
-	static THA_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : เปิดโหมด AFK แล้ว.*") 
-	static THA_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : ปิดโหมด AFK แล้ว.*") 
-
-	static SPA_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) se unió al área.*") 
-	static SPA_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) abandonó el área.*") 
-	static SPA_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : El modo Ausente está habilitado.*") 
-	static SPA_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : El modo Ausente está deshabilitado.*")
-
-	static KOR_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?)(이)가 구역에 들어왔습니다.*") 
-	static KOR_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?)(이)가 구역에서 나갔습니다.*") 
-	static KOR_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : 자리 비움 모드를 설정했습니다.*") 
-	static KOR_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : 자리 비움 모드를 해제했습니다.*")
-
-	static TWN_areaJoinedRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) 進入了此區域.*")
-    static TWN_areaLeftRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : (.*?) 離開了此區域.*")
-    static TWN_afkOnRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : 暫離模式啟動.*")
-    static TWN_afkOffRegexStr := ("^(?:[^ ]+ ){6}(\d+)\] : 暫離模式關閉.*")
-
-	allAreaJoinedRegEx := [ENG_areaJoinedRegexStr, FRE_areaJoinedRegexStr, GER_areaJoinedRegexStr, POR_areaJoinedRegexStr
-		, RUS_areaJoinedRegexStr, THA_areaJoinedRegexStr, SPA_areaJoinedRegexStr, KOR_areaJoinedRegexStr, TWN_areaJoinedRegexStr]
-	allAreaLeftRegEx := [ENG_areaLeftRegexStr, FRE_areaLeftRegexStr, GER_areaLeftRegexStr, POR_areaLeftRegexStr
-		, RUS_areaLeftRegexStr, THA_areaLeftRegexStr, SPA_areaLeftRegexStr, KOR_areaLeftRegexStr, TWN_areaLeftRegexStr]
-	allAfkOnRegEx := [ENG_afkOnRegexStr, FRE_afkOnRegexStr, GER_afkOnRegexStr, POR_afkOnRegexStr
-		, RUS_afkOnRegexStr, THA_afkOnRegexStr, SPA_afkOnRegexStr, KOR_afkOnRegexStr, TWN_afkOnRegexStr]
-	allAfkOffRegEx := [ENG_afkOffRegexStr, FRE_afkOffRegexStr, GER_afkOffRegexStr, POR_afkOffRegexStr
-		, RUS_afkOffRegexStr, THA_afkOffRegexStr, SPA_afkOffRegexStr, KOR_afkOffRegexStr, TWN_afkOffRegexStr]
 
 	Loop, Parse,% strToParse,`n,`r ; For each line
 	{
 		parsedLogsMsg := A_LoopField
 		
 		; Check if area joined
-		for index, regexStr in allAreaJoinedRegEx {
-			if RegExMatch(parsedLogsMsg, "SO)" regexStr, joinedPat) {
+		for lang, regexStr in PROGRAM.DATA.TRADING_REGEXES.JoinedArea {
+			if RegExMatch(parsedLogsMsg, "SO)" logPrefix " : " regexStr, joinedPat) {
 				instancePID := joinedPat.1, playerName := joinedPat.2
 				success := GUI_Trades_V2.SetTabStyleJoinedArea(playerName)
 				if (success && PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXToggle = "True" && FileExist(PROGRAM.SETTINGS.SETTINGS_MAIN.BuyerJoinedAreaSFXPath)) {
@@ -547,8 +367,8 @@ Parse_GameLogs(strToParse, preview=False) {
 				break
 			}
 		}
-		for index, regexStr in allAreaLeftRegEx {
-			if RegExMatch(parsedLogsMsg, "SO)" regexStr, leftPat) {
+		for lang, regexStr in PROGRAM.DATA.TRADING_REGEXES.LeftArea {
+			if RegExMatch(parsedLogsMsg, "SO)" logPrefix " : " regexStr, leftPat) {
 				instancePID := leftPat.1, playerName := leftPat.2
 				GUI_Trades_V2.UnSetTabStyleJoinedArea(playerName)
 				break
@@ -556,16 +376,16 @@ Parse_GameLogs(strToParse, preview=False) {
 		}
 
 		; Check if afk mode
-		for index, regexStr in allAfkOnRegEx {
-			if RegExMatch(parsedLogsMsg, "iSO)" regexStr, afkOnPat) {
+		for lang, regexStr in PROGRAM.DATA.TRADING_REGEXES.AfkOn {
+			if RegExMatch(parsedLogsMsg, "iSO)" logPrefix . regexStr, afkOnPat) {
 				instancePID := afkOnPat.1
 				GuiTrades.Sell[instancePID "_AfkState"] := True
 				AppendToLogs("AFK mode for instance PID """ instancePID """ set to ON.")
 				break
 			}
 		}
-		for index, regexStr in allAfkOffRegEx {
-			if RegExMatch(parsedLogsMsg, "iSO)" regexStr, afkOffPat) {
+		for lang, regexStr in PROGRAM.DATA.TRADING_REGEXES.AfkOn {
+			if RegExMatch(parsedLogsMsg, "iSO)" logPrefix . regexStr, afkOffPat) {
 				instancePID := afkOffPat.1
 				GuiTrades.Sell[instancePID "_AfkState"] := False
 				AppendToLogs("AFK mode for instance PID """ instancePID """ set to OFF.")
@@ -575,14 +395,14 @@ Parse_GameLogs(strToParse, preview=False) {
 
 		; Check if whisper sent
 		isWhisperSent := isWhisper := isWhisperReceived := False
-		if RegExMatch(parsedLogsMsg, "SO)^(?:[^ ]+ ){6}(\d+)\] (?=[^#$&%]).*@(?:To|À|An|Para|Кому|ถึง|발신|向) (.*?): (.*)", whisperPat) {
+		if RegExMatch(parsedLogsMsg, "SO)" logPrefix " (?=[^#$&%]).*@(?:" toVariants ") (.*?): (.*)", whisperPat) {
 			isWhisperSent := True, isWhisper := True
 			instancePID := whisperPat.1, whispNameFull := whisperPat.2, whispMsg := whisperPat.3
 			nameAndGuild := SplitNameAndGuild(whispNameFull), whispName := nameAndGuild.Name, whispGuild := nameAndGuild.Guild
 			GuiTrades.Last_Whisper_Sent_Name := whispName
 		}
 		; Check if whisper received
-		else if RegExMatch(parsedLogsMsg, "SO)^(?:[^ ]+ ){6}(\d+)\] (?=[^#$&%]).*@(?:From|De|От кого|จาก|Von|Desde|수신|來自) (.*?): (.*)", whisperPat ) {
+		else if RegExMatch(parsedLogsMsg, "SOi)" logPrefix " (?=[^#$&%]).*@(?:" fromVariants ") (.*?): (.*)", whisperPat) {
 			isWhisperReceived := True, isWhisper := True
 			instancePID := whisperPat.1, whispNameFull := whisperPat.2, whispMsg := whisperPat.3
 			nameAndGuild := SplitNameAndGuild(whispNameFull), whispName := nameAndGuild.Name, whispGuild := nameAndGuild.Guild
@@ -591,75 +411,34 @@ Parse_GameLogs(strToParse, preview=False) {
 
 		; Retrieve the regEx pattern specific to the whisper type
 		if (isWhisper=True) {
-			for subRegEx, nothing in allTradingRegex {
-				if RegExMatch(whispMsg, "iS)" allTradingRegex[subRegEx]["String"]) { ; Match found
-					matchingRegEx := allTradingRegex[subRegEx]
-					tradeRegExStr := allTradingRegex[subRegEx]["String"]
-					tradeRegExName := subRegEx
-					Break
+			matchingRegEx := ""
+			for regexName in tradingWhisperRegexes {
+				for subRegexName in tradingWhisperRegexes[regexName] {
+					if IsIn(subRegexName, "GemQuality,StashLocation")
+						Continue
+
+					if RegExMatch(whispMsg, "SO)" tradingWhisperRegexes[regexName][subRegexName].String, matchObj) { ; Match found
+						matchingRegEx := ObjFullyClone(tradingWhisperRegexes[regexName][subRegexName])
+						matchingRegex.Name := regexName, matchingRegex.SubName := subRegexName
+						qualityRegEx := ObjFullyClone(tradingWhisperRegexes[regexName].GemQuality)
+						stashRegEx := ObjFullyClone(tradingWhisperRegexes[regexName].StashLocation)
+						Break
+					}
 				}
+				if (matchingRegEx)
+					break
 			}
 		}
 
-		if (matchingRegEx) { ; Trade whisper match
-			RegExMatch(whispMsg, "iSO)" tradeRegExStr, tradePat)
-
-			isPoeTrade := IsIn(tradeRegExName, "poeTrade,poeTrade_Unpriced,currencyPoeTrade")
-			isPoeApp := IsIn(tradeRegExName, "poeApp,poeApp_Currency,poeApp_Unpriced")
-			isGGGRus := IsContaining(tradeRegExName, "ggg_rus")
-			isGGGPor := IsContaining(tradeRegExName, "ggg_por")
-			isGGGTha := IsContaining(tradeRegExName, "ggg_tha")
-			isGGGGer := IsContaining(tradeRegExName, "ggg_ger")
-			isGGGFre := IsContaining(tradeRegExName, "ggg_fre")
-			isGGGSpa := IsContaining(tradeRegExName, "ggg_spa")
-			isGGGKor := Iscontaining(tradeRegExName, "ggg_kor")
-			isGGGTwn := IsContaining(tradeRegExName, "ggg_twn")
-			isPoeDbTwn := IsContaining(tradeRegExName, "poeDb_twn")
-			
-			qualRegEx := isPoeTrade ? poeTradeQualityRegEx
-				: isPoeApp ? poeAppQualityRegEx
-				: isGGGRus ? RUS_gggQualityRegEx
-				: isGGGPor ? POR_gggQualityRegEx
-				: isGGGTha ? THA_gggQualityRegEx
-				: isGGGGer ? GER_gggQualityRegEx
-				: isGGGFre ? FRE_gggQualityRegEx
-				: isGGGSpa ? SPA_gggQualityRegEx
-				: isGGGKor ? KOR_gggQualityRegEx
-				: isGGGTwn ? TWN_gggQualityRegEx
-				: isPoeDbTwn ? TWN_poeDbQualityRegEx
-				: ""
-			stashRegEx := isPoeTrade ? poeTradeStashRegex
-				: isPoeApp ? poeAppStashRegex
-				: isGGGRus ? RUS_gggStashRegEx
-				: isGGGPor ? POR_gggStashRegEx
-				: isGGGTha ? THA_gggStashRegEx
-				: isGGGGer ? GER_gggStashRegEx
-				: isGGGFre ? FRE_gggStashRegEx
-				: isGGGSpa ? SPA_gggStashRegEx
-				: isGGGKor ? KOR_gggStashRegEx
-				: isGGGTwn ? TWN_gggStashRegEx
-				: isPoeDbTwn ? TWN_poeDbStashRegEx
-				: ""
-
-			whisperLang := isPoeTrade ? "ENG"
-				: isPoeApp ? "ENG"
-				: isGGGRus ? "RUS"
-				: isGGGPor ? "POR"
-				: isGGGTha ? "THA"
-				: isGGGGer ? "GER"
-				: isGGGFre ? "FRE"
-				: isGGGSpa ? "SPA"
-				: isGGGKor ? "KOR"
-				: isGGGTwn ? "TWN"
-				: isPoeDbTwn ? "TWN"
-				: ""
+		if IsIn(matchingRegex.SubName, "Regular,Currency,RegularUnpriced") { ; Trade whisper match
+			whisperLang := RegExMatch(matchingRegex.Name, "_(\D+)$").1
 
 			tradeBuyerName := whispName, tradeBuyerGuild := whispGuild
-			tradeOtherStart := tradePat[matchingRegEx["Other"]]
-			tradeItem := tradePat[matchingRegEx["Item"]], tradeItem .= tradePat[matchingRegEx["Item2"]] ? " " tradePat[matchingRegEx["Item2"]] : "", AutoTrimStr(tradeItem)
-			tradePrice := tradePat[matchingRegEx["Price"]]
-			tradeLeagueAndMore := tradePat[matchingRegEx["League"]]
-			tradeLeagueAndMore .= tradePat[matchingRegEx["Other2"]]
+			tradeOtherStart := matchObj[matchingRegEx.Other]
+			tradeItem := matchObj[matchingRegEx.Item], tradeItem .= matchObj[matchingRegEx.Item2] ? " " matchObj[matchingRegEx.Item2] : "", AutoTrimStr(tradeItem)
+			tradePrice := matchObj[matchingRegEx.Price]
+			tradeLeagueAndMore := matchObj[matchingRegEx.League]
+			tradeLeagueAndMore .= matchObj[matchingRegEx.Other2]
 
 			; German priced whisper is the same as currency whisper. Except that currency whisper has '' between price name
 			; while the normal whisper doesn't have them. Fix: Remove '' in price if detected
@@ -691,10 +470,10 @@ Parse_GameLogs(strToParse, preview=False) {
 			if (!tradeLeague)
 				restOfWhisper := tradeLeagueAndMore
 
-			if RegExMatch(tradeItem, "iSO)" qualRegEx.String, qualPat) && (qualRegEx.String) {
-				tradeItem := qualPat[qualRegEx["Item"]]
-				tradeItemLevel := qualPat[qualRegEx["Level"]]
-				tradeItemQual := qualPat[qualregEx["Quality"]]
+			if RegExMatch(tradeItem, "iSO)" qualityRegEx.String, qualPat) && (qualityRegEx.String) {
+				tradeItem := qualPat[qualityRegEx.Item]
+				tradeItemLevel := qualPat[qualityRegEx.Level]
+				tradeItemQual := qualPat[qualityRegEx.Quality]
 				AutoTrimStr(tradeItem, tradeItemLevel, tradeItemQual)
 
 				tradeItemFull := tradeItem " (Lvl:" tradeItemLevel " / Qual:" tradeItemQual "%)"
@@ -704,10 +483,10 @@ Parse_GameLogs(strToParse, preview=False) {
 				AutoTrimStr(tradeItemFull)
 			}
 			if RegExMatch(restOfWhisper, "iSO)" stashRegEx.String, stashPat) && (stashRegEx.String) {
-				tradeStashTab := stashPat[stashRegEx["Tab"]]
-				tradeStashLeft := stashPat[stashRegEx["Left"]]
-				tradeStashTop := stashPat[stashRegEx["Top"]]
-				tradeOtherEnd := stashPat[stashRegEx["Other"]]
+				tradeStashTab := stashPat[stashRegEx.Tab]
+				tradeStashLeft := stashPat[stashRegEx.Left]
+				tradeStashTop := stashPat[stashRegEx.Top]
+				tradeOtherEnd := stashPat[stashRegEx.Other]
 				AutoTrimStr(tradeStashTab, tradeStashLeft, tradeStashTop, tradeOtherEnd)
 
 				tradeStashLeftAndTop := tradeStashLeft ";" tradeStashTop
@@ -933,75 +712,30 @@ SplitNameAndGuild(str) {
 }
 
 IsTradingWhisper(str) {
-	firstChar := SubStr(str, 1, 1)
-
+	global PROGRAM
+	static tradingWhisperRegexes
+	
 	; Make sure it starts with @ and doesnt contain line break
+	firstChar := SubStr(str, 1, 1)
 	if InStr(str, "`n") || (firstChar != "@")  {
 		Return False
 	}
 
-	; poe.trade regex
-	poeTradeRegex := "@.* Hi, I would like to buy your .* listed for .* in .*"
-	poeTradeUnpricedRegex := "@.* Hi, I would like to buy your .* in .*"
-	currencyPoeTradeRegex := "@.* Hi, I'd like to buy your .* for my .* in .*"
-	; poeapp.com regex
-	poeAppRegex := "@.* wtb .* listed for .* in .*"
-	poeAppUnpricedRegex := "@.* wtb .* in .*"
-	poeAppCurrencyRegex := "@.* I'd like to buy your .* for my .* in .*"
-	; ggg regex
-	RUS_gggRegEx			:= "@.* Здравствуйте, хочу купить у вас .* за .* в лиге.*"
-	RUS_gggUnpricedRegEx	:= "@.* Здравствуйте, хочу купить у вас .* в лиге.*"
-	RUS_gggCurrencyRegEx	:= "@.* Здравствуйте, хочу купить у вас .* за .* в лиге.*"
+	if !(tradingWhisperRegexes) {
+		tradingWhisperRegexes := {}
+		for regexName in PROGRAM.DATA.TRADING_REGEXES
+			if (PROGRAM.DATA.TRADING_REGEXES[regexName].Regular) {
+				tradingWhisperRegexes[regexName] := ObjFullyClone(PROGRAM.DATA.TRADING_REGEXES[regexName])
+			}
+	}
 
-	POR_gggRegEx 			:= "@.* Olá, eu gostaria de comprar o seu item .* listado por .* na.*"
-	POR_gggUnpricedRegEx 	:= "@.* Olá, eu gostaria de comprar o seu item .* na.*"
-	POR_gggCurrencyRegEx 	:= "@.* Olá, eu gostaria de comprar seu\(s\) .* pelo\(s\) meu\(s\).*"
+	for regexName in tradingWhisperRegexes {
+		for subRegexName in tradingWhisperRegexes[regexName] {
+			if IsIn(subRegexName, "GemQuality,StashLocation")
+				Continue
 
-	THA_gggRegEx			:= "@.* สวัสดี, เราต้องการจะชื้อของคุณ .* ใน ราคา .* ใน.*"
-	THA_gggUnpricedRegEx	:= "@.* สวัสดี, เราต้องการจะชื้อของคุณ .* ใน.*"
-	THA_gggCurrencyRegEx	:= "@.* สวัสดี เรามีความต้องการจะชื้อ .* ของคุณ ฉันมี .* ใน.*"
-
-	GER_gggRegEx 			:= "@.* Hi, ich möchte '.*' zum angebotenen Preis von .* in der '.*'-Liga kaufen.*"
-	GER_gggUnpricedRegEx	:= "@.* Hi, ich möchte '.*' in der '.*'-Liga kaufen.*"
-	GER_gggCurrencyRegEx	:= "@.* Hi, ich möchte '.*' zum angebotenen Preis von '.*' in der '.*'-Liga kaufen.*"
-
-	FRE_gggRegEx			:= "@.* Bonjour, je souhaiterais t'acheter .* pour .* dans la ligue.*"
-	FRE_gggUnpricedRegEx	:= "@.* Bonjour, je souhaiterais t'acheter .* dans la ligue.*"
-	FRE_gggCurrencyRegEx	:= "@.* Bonjour, je voudrais t'acheter .* contre .* dans la ligue.*"
-
-	SPA_gggRegEx			:= "@.* Hola, quisiera comprar tu .* listado por .* en.*"
-	SPA_gggUnpricedRegEx 	:= "@.* Hola, quisiera comprar tu .* en.*"
-	SPA_gggCurrencyRegEx	:= "@.* Hola, me gustaría comprar tu\(s\) .* por mi .* en.*"
-
-	KOR_gggRegEx			:= "@.* 안녕하세요, 환영.*에 .*\(으\)로 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
-	KOR_gggUnpricedRegEx 	:= "@.* 스탠다드.*에 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
-	KOR_gggCurrencyRegEx	:= "@.* 안녕하세요, .*에 올려놓은.*\(을\)를 제 .*\(으\)로 구매하고 싶습니다.*"
-
-	TWN_gggRegEx            := "@.* 你好，我想購買 .* 標價 .* 在.*"
-    TWN_gggUnpricedRegEx    := "@.* 你好，我想購買 .* 在.*"
-    TWN_gggCurrencyRegEx    := "@.* 你好，我想用 .* 購買 .* in.*"
-
-	TWN_poedbRegEx			:= "@.* .*您好，我想買在 .* 的 .* 價格.*"
-	TWN_poeDbUnpricedRegEx	:= "@.* .*您好，我想買在 .* 的.*"
-	TWN_poeDbCurrencyRegEx 	:= "@.* .*您好，我想買在 .* 的 .* 個 .* 直購價.*"
-
-	allRegexes := []
-	allRegexes.Push(poeTradeRegex, poeTradeUnpricedRegex, currencyPoeTradeRegex
-		, poeAppRegex, poeAppUnpricedRegex, poeAppCurrencyRegex
-		, RUS_gggRegEx, RUS_gggUnpricedRegEx, RUS_gggCurrencyRegEx
-		, POR_gggRegEx, POR_gggUnpricedRegEx, POR_gggCurrencyRegEx
-		, THA_gggRegEx, THA_gggUnpricedRegEx, THA_gggCurrencyRegEx
-		, GER_gggRegEx, GER_gggUnpricedRegEx, GER_gggCurrencyRegEx
-		, FRE_gggRegEx, FRE_gggUnpricedRegEx, FRE_gggCurrencyRegEx
-		, SPA_gggRegEx, SPA_gggUnpricedRegEx, SPA_gggCurrencyRegEx
-		, KOR_gggRegEx, KOR_gggUnpricedRegEx, KOR_gggCurrencyRegEx
-		, TWN_gggRegEx, TWN_gggUnpricedRegEx, TWN_gggCurrencyRegEx
-		, TWN_poedbRegEx, TWN_poeDbUnpricedRegEx, TWN_poeDbCurrencyRegEx)
-
-	; Check if trading whisper
-	Loop % allRegexes.MaxIndex() { ; compare whisper with regex
-		if (allRegexes[A_Index]) && RegExMatch(str, "iS)" allRegexes[A_Index]) { ; Trading whisper detected
-			return True
+			if RegExMatch(str, "S)" tradingWhisperRegexes[regexName][subRegexName].String)
+				return True
 		}
 	}
 }
