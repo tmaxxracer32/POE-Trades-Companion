@@ -14,7 +14,7 @@ Load_Or_Unload_Fonts(whatDo) {
 
 	if (whatDo = "LOAD") {
 		PROGRAM["FONTS"] := {}
-		DllCall("gdiplus\GdipNewPrivateFontCollection", "uint*", hCollection)
+		DllCall("gdiplus\GdipNewPrivateFontCollection", "Ptr*", hCollection)
 	}
 
 	Loop, Files, %fontsFolder%\*.ttf
@@ -32,7 +32,7 @@ Load_Or_Unload_Fonts(whatDo) {
 		}
 		else if ( whatDo="UNLOAD") {
 			Gdip_DeleteFontFamily(PROGRAM.FONTS[fontTitle])
-			DllCall("gdi32\RemoveFontResourceEx", Str, A_LoopFileFullPath, UInt, FR_PRIVATE:=0x10, Int, 0)
+			DllCall("gdi32\RemoveFontResourceEx", "Str", A_LoopFileFullPath, "UInt", FR_PRIVATE:=0x10, "Int", 0)
 			AppendToLogs(A_ThisFunc "(): Unloaded font with title """ fontTitle ".")
 		}
 	}

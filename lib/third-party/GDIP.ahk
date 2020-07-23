@@ -29,34 +29,30 @@ Gdip_Shutdown(pToken="")
 }
 
 Gdip_PrivateFontFamilyCreate(ByRef hCollection, fontFile, fontTitle="") {
-	/*
-		DllCall("gdi32\AddFontResourceEx", Str, fontFile, UInt, (FR_PRIVATE:=0x10), Int, 0)
-		DllCall("gdiplus\GdipPrivateAddFontFile", "uint", hCollection, "uint", &fontFile)
-		DllCall("gdiplus\GdipCreateFontFamilyFromName", "uint", &fontTitle, "uint", hCollection, "uint*", hFamily)
-	*/
+
 	if (!hCollection)
-		DllCall("gdiplus\GdipNewPrivateFontCollection", "uint*", hCollection)
+		DllCall("gdiplus\GdipNewPrivateFontCollection", "Ptr*", hCollection)
 	if (!fontTitle)
 		fontTitle := FGP_Value(fontFile, 21) ; 21 = Title
 
 	DllCall("gdi32\AddFontResourceEx", "Str", fontFile, "UInt", FR_PRIVATE:=0x10, "UInt", 0)
 
 	if (!A_IsUnicode) {
-		nSize := DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontFile, "int", -1, "Uint", 0, "int", 0)
+		nSize := DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Ptr", &fontFile, "int", -1, "Uint", 0, "int", 0)
 		VarSetCapacity(wFontfile, nSize * 2 + 1)
-		DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontFile, "int", -1, "Uint", &wFontfile, "int", nSize + 1)
+		DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Ptr", &fontFile, "int", -1, "Ptr", &wFontfile, "int", nSize + 1)
 
-		nSize := DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontTitle, "int", -1, "Uint", 0, "int", 0)
+		nSize := DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Ptr", &fontTitle, "int", -1, "Uint", 0, "int", 0)
 		VarSetCapacity(wFontTitle, nSize * 2 + 1)
-		DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Uint", &fontTitle, "int", -1, "Uint", &wFontTitle, "int", nSize + 1)
+		DllCall("kernel32\MultiByteToWideChar", "Uint", 0, "Uint", 0, "Ptr", &fontTitle, "int", -1, "Ptr", &wFontTitle, "int", nSize + 1)
 
-		DllCall("gdiplus\GdipNewPrivateFontCollection", "uint*", hCollection)
-		DllCall("gdiplus\GdipPrivateAddFontFile", "uint", hCollection, "uint", &wFontfile)
-		DllCall("gdiplus\GdipCreateFontFamilyFromName", "uint", &wFontTitle, "uint", hCollection, "uint*", hFamily)
+		DllCall("gdiplus\GdipNewPrivateFontCollection", "Ptr*", hCollection)
+		DllCall("gdiplus\GdipPrivateAddFontFile", "Ptr", hCollection, "Ptr", &wFontfile)
+		DllCall("gdiplus\GdipCreateFontFamilyFromName", "Ptr", &wFontTitle, "Ptr", hCollection, "Ptr*", hFamily)
 	}
 	else {
-		DllCall("gdiplus\GdipPrivateAddFontFile", "uint", hCollection, "uint", &fontFile)
-		DllCall("gdiplus\GdipCreateFontFamilyFromName", "uint", &fontTitle, "uint", hCollection, "uint*", hFamily)
+		DllCall("gdiplus\GdipPrivateAddFontFile", "Ptr", hCollection, "Ptr", &fontFile)
+		DllCall("gdiplus\GdipCreateFontFamilyFromName", "Ptr", &fontTitle, "Ptr", hCollection, "Ptr*", hFamily)
 	}
 
 	return hFamily
