@@ -540,9 +540,9 @@ Parse_GameLogs(strToParse) {
 	static SPA_gggQualityRegEx		:= {String:"(.*) nivel (\d+) (\d+)%"
 										, Item:1, Level:2, Quality:3}
 
-	static KOR_gggRegEx				:= {String:"(.*)안녕하세요, 환영(.*)에 (.*)\(으\)로 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
+	static KOR_gggRegEx				:= {String:"(.*)안녕하세요, (.*)에 (.*)\(으\)로 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
 										, Other:1, League:2, Price:3, Item:4, Other2:5}
-	static KOR_gggUnpricedRegEx 	:= {String:"(.*)안녕하세요, 스탠다드(.*)에 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
+	static KOR_gggUnpricedRegEx 	:= {String:"(.*)안녕하세요, (.*)에 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
 										, Other:1, League:2, Item:3, Other2:4}
 	static KOR_gggCurrencyRegEx		:= {String:"(.*)안녕하세요, (.*)에 올려놓은(.*)\(을\)를 제 (.*)\(으\)로 구매하고 싶습니다(.*)"
 										, Other:1, League:2, Item:3, Price:4, Other2:5}
@@ -1038,74 +1038,49 @@ SplitNameAndGuild(str) {
 }
 
 IsTradingWhisper(str) {
-	firstChar := SubStr(str, 1, 1)
-
 	; Make sure it starts with @ and doesnt contain line break
+	firstChar := SubStr(str, 1, 1)
 	if InStr(str, "`n") || (firstChar != "@")  {
 		Return False
 	}
 
-	; poe.trade regex
-	poeTradeRegex := "@.* Hi, I would like to buy your .* listed for .* in .*"
-	poeTradeUnpricedRegex := "@.* Hi, I would like to buy your .* in .*"
-	currencyPoeTradeRegex := "@.* Hi, I'd like to buy your .* for my .* in .*"
-	; poeapp.com regex
-	poeAppRegex := "@.* wtb .* listed for .* in .*"
-	poeAppUnpricedRegex := "@.* wtb .* in .*"
-	poeAppCurrencyRegex := "@.* I'd like to buy your .* for my .* in .*"
-	; ggg regex
-	RUS_gggRegEx			:= "@.* Здравствуйте, хочу купить у вас .* за (.*) в лиге.*"
-	RUS_gggUnpricedRegEx	:= "@.* Здравствуйте, хочу купить у вас .* в лиге.*"
-	RUS_gggCurrencyRegEx	:= "@.* Здравствуйте, хочу купить у вас .* за (.*) в лиге.*"
-
-	POR_gggRegEx 			:= "@.* Olá, eu gostaria de comprar o seu item .* listado por .* na.*"
-	POR_gggUnpricedRegEx 	:= "@.* Olá, eu gostaria de comprar o seu item .* na.*"
-	POR_gggCurrencyRegEx 	:= "@.* Olá, eu gostaria de comprar seu\(s\) .* pelo\(s\) meu\(s\).*"
-
-	THA_gggRegEx			:= "@.* สวัสดี, เราต้องการจะชื้อของคุณ .* ใน ราคา .* ใน.*"
-	THA_gggUnpricedRegEx	:= "@.* สวัสดี, เราต้องการจะชื้อของคุณ .* ใน.*"
-	THA_gggCurrencyRegEx	:= "@.* สวัสดี เรามีความต้องการจะชื้อ .* ของคุณ ฉันมี .* ใน.*"
-
-	GER_gggRegEx 			:= "@.* Hi, ich möchte '.*' zum angebotenen Preis von .* in der '.*'-Liga kaufen.*"
-	GER_gggUnpricedRegEx	:= "@.* Hi, ich möchte '.*' in der '.*'-Liga kaufen.*"
-	GER_gggCurrencyRegEx	:= "@.* Hi, ich möchte '.*' zum angebotenen Preis von '(.*)' in der '(.*)'-Liga kaufen(.*)"
-
-	FRE_gggRegEx			:= "@.* Bonjour, je souhaiterais t'acheter .* pour .* dans la ligue.*"
-	FRE_gggUnpricedRegEx	:= "@.* Bonjour, je souhaiterais t'acheter .* dans la ligue.*"
-	FRE_gggCurrencyRegEx	:= "@.* Bonjour, je voudrais t'acheter .* contre .* dans la ligue.*"
-
-	SPA_gggRegEx			:= "@.* Hola, quisiera comprar tu .* listado por .* en.*"
-	SPA_gggUnpricedRegEx 	:= "@.* Hola, quisiera comprar tu .* en.*"
-	SPA_gggCurrencyRegEx	:= "@.* Hola, me gustaría comprar tu\(s\) .* por mi .* en.*"
-
-	KOR_gggRegEx			:= "@.* 안녕하세요, 환영.*에 .*\(으\)로 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
-	KOR_gggUnpricedRegEx 	:= "@.* 스탠다드.*에 올려놓은 .*\(을\)를 구매하고 싶습니다.*"
-	KOR_gggCurrencyRegEx	:= "@.* 안녕하세요, .*에 올려놓은.*\(을\)를 제 .*\(으\)로 구매하고 싶습니다.*"
-
-	TWN_gggRegEx            := "@.* 你好，我想購買 .* 標價 .* 在 .*"
-    TWN_gggUnpricedRegEx    := "@.* 你好，我想購買 .* 在 .*"
-    TWN_gggCurrencyRegEx    := "@.* 你好，我想用 .* 購買 .* in .*"
-
-	TWN_poedbRegEx			:= "@.* .*您好，我想買在 .* 的 .* 價格"
-	TWN_poeDbUnpricedRegEx	:= "@.* .*您好，我想買在 .* 的 .*"
-	TWN_poeDbCurrencyRegEx 	:= "@.* .*您好，我想買在 .* 的 .* 個 .* 直購價 .*"
-
-	allRegexes := []
-	allRegexes.Push(poeTradeRegex, poeTradeUnpricedRegex, currencyPoeTradeRegex
-		, poeAppRegex, poeAppUnpricedRegex, poeAppCurrencyRegex
-		, RUS_gggRegEx, RUS_gggUnpricedRegEx, RUS_gggCurrencyRegEx
-		, POR_gggRegEx, POR_gggUnpricedRegEx, POR_gggCurrencyRegEx
-		, THA_gggRegEx, THA_gggUnpricedRegEx, THA_gggCurrencyRegEx
-		, GER_gggRegEx, GER_gggUnpricedRegEx, GER_gggCurrencyRegEx
-		, FRE_gggRegEx, FRE_gggUnpricedRegEx, FRE_gggCurrencyRegEx
-		, SPA_gggRegEx, SPA_gggUnpricedRegEx, SPA_gggCurrencyRegEx
-		, KOR_gggRegEx, KOR_gggUnpricedRegEx, KOR_gggCurrencyRegEx
-		, TWN_gggRegEx, TWN_gggUnpricedRegEx, TWN_gggCurrencyRegEx
-		, TWN_poedbRegEx, TWN_poeDbUnpricedRegEx, TWN_poeDbCurrencyRegEx)
+	allTradingRegEx := { "currencyPoeTrade": "(.*)Hi, I'd like to buy your (.*) for my (.*) in (.*)"
+		, "ggg_FRE": "(.*)Bonjour, je souhaiterais t'acheter (.*) pour (.*) dans la ligue (.*)"
+		, "ggg_FRE_currency": "(.*)Bonjour, je voudrais t'acheter (.*) contre (.*) dans la ligue (.*)"
+		, "ggg_FRE_unpriced": "(.*)Bonjour, je souhaiterais t'acheter (.*) dans la ligue (.*)"
+		, "ggg_GER": "(.*)Hi, ich möchte '(.*)' zum angebotenen Preis von (.*) in der '(.*)'-Liga kaufen(.*)"
+		, "ggg_GER_currency": "(.*)Hi, ich möchte '(.*)' zum angebotenen Preis von '(.*)' in der '(.*)'-Liga kaufen(.*)"
+		, "ggg_GER_unpriced": "(.*)Hi, ich möchte '(.*)' in der '(.*)'-Liga kaufen(.*)"
+		, "ggg_KOR": "(.*)안녕하세요, (.*)에 (.*)\(으\)로 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
+		, "ggg_KOR_currency": "(.*)안녕하세요, (.*)에 올려놓은(.*)\(을\)를 제 (.*)\(으\)로 구매하고 싶습니다(.*)"
+		, "ggg_KOR_unpriced": "(.*)안녕하세요, (.*)에 올려놓은 (.*)\(을\)를 구매하고 싶습니다(.*)"
+		, "ggg_POR": "(.*)Olá, eu gostaria de comprar o seu item (.*) listado por (.*) na (.*)"
+		, "ggg_POR_currency": "(.*)Olá, eu gostaria de comprar seu\(s\) (.*) pelo\(s\) meu\(s\) (.*) na (.*)"
+		, "ggg_POR_unpriced": "(.*)Olá, eu gostaria de comprar o seu item (.*) na (.*)"
+		, "ggg_RUS": "(.*)Здравствуйте, хочу купить у вас (.*) за (.*) в лиге (.*)"
+		, "ggg_RUS_currency": "(.*)Здравствуйте, хочу купить у вас (.*) за (.*) в лиге (.*)"
+		, "ggg_RUS_unpriced": "(.*)Здравствуйте, хочу купить у вас (.*) в лиге (.*)"
+		, "ggg_SPA": "(.*)Hola, quisiera comprar tu (.*) listado por (.*) en (.*)"
+		, "ggg_SPA_currency": "(.*)Hola, me gustaría comprar tu\(s\) (.*) por mi (.*) en (.*)"
+		, "ggg_SPA_unpriced": "(.*)Hola, quisiera comprar tu (.*) en (.*)"
+		, "ggg_THA": "(.*)สวัสดี, เราต้องการจะชื้อของคุณ (.*) ใน ราคา (.*) ใน (.*)"
+		, "ggg_THA_currency": "(.*)สวัสดี เรามีความต้องการจะชื้อ (.*) ของคุณ ฉันมี (.*) ใน (.*)"
+		, "ggg_THA_unpriced": "(.*)สวัสดี, เราต้องการจะชื้อของคุณ (.*) ใน (.*)"
+		, "ggg_TWN": "(.*)你好，我想購買 (.*) 標價 (.*) 在 (.*)"
+		, "ggg_TWN_currency": "(.*)你好，我想用 (.*) 購買 (.*) in (.*)"
+		, "ggg_TWN_unpriced": "(.*)你好，我想購買 (.*) 在 (.*)"
+		, "poeApp": "(.*)wtb (.*) listed for (.*) in (.*)"
+		, "poeApp_Currency": "(.*)I'd like to buy your (.*) for my (.*) in (.*)"
+		, "poeApp_Unpriced": "(.*)wtb (.*) in (.*)"
+		, "poeDb_TWN": "(.*)您好，我想買在 (.*) 的 (.*) 價格 (.*)"
+		, "poeDb_TWN_currency": "(.*)您好，我想買在 (.*) 的 (.*) 個 (.*) 直購價 (.*)"
+		, "poeDb_TWN_unpriced": "(.*)您好，我想買在 (.*) 的 (.*)"
+		, "poeTrade": "(.*)Hi, I would like to buy your (.*) listed for (.*) in (.*)"
+		, "poeTrade_Unpriced": "(.*)Hi, I would like to buy your (.*) in (.*)" }	
 
 	; Check if trading whisper
-	Loop % allRegexes.MaxIndex() { ; compare whisper with regex
-		if (allRegexes[A_Index]) && RegExMatch(str, "iS)" allRegexes[A_Index]) { ; Trading whisper detected
+	for regexName in allTradingRegEx { ; compare whisper with regex
+		if (allTradingRegEx[regexName]) && RegExMatch(str, "iS)" allTradingRegEx[regexName]) { ; Trading whisper detected
 			return True
 		}
 	}
