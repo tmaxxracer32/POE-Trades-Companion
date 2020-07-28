@@ -536,7 +536,7 @@ Parse_GameLogs(strToParse, preview=False) {
 				,Guild:tradeBuyerGuild
 				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual
 				,TimeReceived:A_Hour ":" A_Min, TimeStamp:A_YYYY A_MM A_DD A_Hour A_Min A_Sec
-				,WhisperMsg:whispMsg, WhisperRegEx:tradeRegExName, WhisperLanguage:whisperLang
+				,WhisperMsg:whispMsg, WhisperRegEx:matchingRegex.Name, WhisperLanguage:whisperLang
 				,GamePID:instancePID
 				,UniqueID:GUI_Trades_V2.GenerateUniqueID()}
 				
@@ -597,7 +597,7 @@ Parse_GameLogs(strToParse, preview=False) {
 				,Guild:tradeBuyerGuild
 				,GemLevel:tradeItemLevel, GemQuality:tradeItemQual
 				,TimeSent:A_Hour ":" A_Min, TimeStamp:A_YYYY A_MM A_DD A_Hour A_Min A_Sec
-				,WhisperMsg:whispMsg, WhisperRegEx:tradeRegExName, WhisperLanguage:whisperLang
+				,WhisperMsg:whispMsg, WhisperRegEx:matchingRegex.Name, WhisperLanguage:whisperLang
 				,GamePID:instancePID
 				,UniqueID:GUI_Trades_V2.GenerateUniqueID()}
 				
