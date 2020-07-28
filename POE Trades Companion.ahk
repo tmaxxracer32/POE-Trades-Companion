@@ -14,7 +14,7 @@
 
 ; #Warn LocalSameAsGlobal, StdOut
 ; #ErrorStdOut
-#SingleInstance, Force
+#SingleInstance, Off
 #KeyHistory 0
 #Persistent
 #NoEnv
