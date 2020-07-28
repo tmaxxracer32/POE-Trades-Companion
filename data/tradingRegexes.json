@@ -419,5 +419,20 @@
 			"Tab": 1,
 			"Top": 3
 		}
+	},
+	"poe_reforge_ENG": {
+		"Regular": {
+			"Other": 1,
+			"Item": 2,
+			"Price": 3,
+			"String": "(.*)Hi from PoE Reforge, I WTB (.*) for (.*)"
+		},
+		"RegularUnpriced": {
+			"Other": 1,
+			"Item": 2,
+			"PriceSuggested": 3,
+			"Other2": 4,
+			"String": "(.*)Hi from PoE Reforge, I WTB (.*), how much\\? \\(suggest fee: (.*)\\)(.*)"
+		}
 	}
 }
