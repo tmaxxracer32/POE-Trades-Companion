@@ -21,15 +21,19 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 
 	if (gamePID) {
 		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
-		WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
-		waitActiveErrLvl := ErrorLevel
+		if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
+			WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
+			waitActiveErrLvl := ErrorLevel
+		}
 		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
 	}
 	else {
 		WinGet, gamePID, PID, [a-zA-Z0-9_] ahk_group POEGameGroup
-		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup
-		WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup, ,2
-		waitActiveErrLvl := ErrorLevel
+		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
+		if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
+			WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
+			waitActiveErrLvl := ErrorLevel
+		}
 		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
 	}
 	if (waitActiveErrLvl) {
