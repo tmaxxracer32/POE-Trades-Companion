@@ -737,7 +737,7 @@ IsTradingWhisper(str) {
 		for subRegexName in tradingWhisperRegexes[regexName] {
 			if IsIn(subRegexName, "GemQuality,StashLocation")
 				Continue
-
+			
 			if RegExMatch(str, "S)" tradingWhisperRegexes[regexName][subRegexName].String)
 				return True
 		}
@@ -789,7 +789,7 @@ Get_CurrencyEnglishName(currencyName, lang) {
 	}
 }
 
-Get_CurrencyFullName(currencyName, lang="ENG") {
+Get_CurrencyFullName(currencyName, lang="ENG", lastResort=True) {
 	global PROGRAM
 	; Checking if currency isn't already full name
 	if IsIn(currencyName, PROGRAM.DATA.CURRENCY_LIST)
@@ -825,5 +825,16 @@ Get_CurrencyFullName(currencyName, lang="ENG") {
 		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
 			return currencyNameTemp
 	}
+
+	if (lastResort=True) {
+		Loop, Parse, currencyName,% A_Space
+		{
+			str := str ? str " " A_LoopField : A_LoopField
+			currencyNameTemp := Get_CurrencyFullName(str, lang, lastResort=False)
+			if (currencyNameTemp)
+				return currencyNameTemp
+		}
+	}
+
 	return ""
 }
