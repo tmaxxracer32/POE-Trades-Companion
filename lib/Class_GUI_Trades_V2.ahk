@@ -880,8 +880,8 @@
 		if !IsBetween(tabNum, 1, GuiTrades[_buyOrSell].Tabs_Count)
 			return
 		
-		if WinExist("ahk_group POEGameGroup ahk_pid " tabGamePID) && (tabGamePID) {
 		prevTitleMatchMode := SetTitleMatchMode("RegEx")
+		if WinExist("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " tabGamePID) && (tabGamePID) {
 			uniqueNum := !uniqueNum
 			keysState := GetKeyStateFunc("Ctrl,LCtrl,RCtrl")
 
