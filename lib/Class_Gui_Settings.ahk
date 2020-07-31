@@ -3286,6 +3286,9 @@ Class GUI_Settings {
 		global GuiSettings, GuiSettings_Controls
 		static prevTab
 
+		if (whichTab = GUI_Settings.GetSelectedTab())
+			return
+
 		GuiControl, Settings:ChooseString,% GuiSettings_Controls.hTab_AllTabs,% whichTab
 
 		GuiControl, Settings:+Disabled,% GuiSettings_Controls["hBTN_Tab" whichTab]
