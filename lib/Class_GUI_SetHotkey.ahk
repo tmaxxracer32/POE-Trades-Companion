@@ -116,7 +116,7 @@ Class GUI_SetHotkey {
 		Gui.BindFunctionToControl("GUI_SetHotkey", "SetHotkey", "hBTN_Remove", "UnsetHotkey")
 
 		Gui.OnMessageBind("GUI_SetHotkey", "SetHotkey", 0x202, "WM_LBUTTONUP") ; Allows to always focus the Hotkey control when releasing click on gui 
-		Gui.OnMessageBind("GUI_SetHotkey", "SetHotkey", 0x06, "WM_ACTIVATE") ; Allows to always focus the Hotkey control when releasing click on gui 
+		Gui.OnMessageBind("GUI_SetHotkey", "SetHotkey", 0x06, "WM_ACTIVATE") ; Allows to always focus the Hotkey control when activating gui
 		
 		GuiControl, SetHotkey:Focus,% GuiSetHotkey_Controls.hHK_Hotkey		
         Gui.Show("SetHotkey", "w" guiFullWidth " h" guiFullHeight)
