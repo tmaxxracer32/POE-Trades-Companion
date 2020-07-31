@@ -2174,6 +2174,7 @@
 
 	EnableHotkeys(_buyOrSell) {
 		global GuiTrades, PROGRAM
+		return
 
 		for hk, value in PROGRAM.HOTKEYS {
 			noModsHKArr := RemoveModifiersFromHotkeyStr(hk, returnMods:=True), noModsHK := noModsHKArr.1, onlyModsHK := noModsHKArr.2
@@ -3062,7 +3063,7 @@
 	}
 
 	WM_MOUSEWHEEL(wParam, lParam) {
-		if !IsContaining(A_Gui, "Trades")
+		if !IsIn(A_Gui, "TradesSell,TradesBuy")
 			return
 
 		WheelDelta := 120 << 16
