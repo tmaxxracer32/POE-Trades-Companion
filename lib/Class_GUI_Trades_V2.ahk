@@ -2152,7 +2152,7 @@
 
 		if (tabsCount > activeTab)
 			GUI_Trades_V2.SetActiveTab(_buyOrSell, activeTab+1)
-		else if (tabsCount = activeTab)
+		else ; if (tabsCount = activeTab)
 			GUI_Trades_V2.SetActiveTab(_buyOrSell, 1)
 	}
 
@@ -2166,9 +2166,9 @@
 		if !IsNum(activeTab)
 			Return
 
-		if (activeTab != 1)
+		if (activeTab > 1)
 			GUI_Trades_V2.SetActiveTab(_buyOrSell, activeTab-1)
-		else if (activeTab = 1)
+		else ; if (activeTab = 1)
 			GUI_Trades_V2.SetActiveTab(_buyOrSell, tabsCount)
 	}
 
@@ -3065,7 +3065,15 @@
 	WM_MOUSEWHEEL(wParam, lParam) {
 		; A_EventInfo: Contains 0 if the message was sent via SendMessage. If sent via PostMessage, it contains the tick-count time the message was posted.
 		; For some reason this function is always triggering twice upon scrolling once. Most likely related to my limited understanding of this message
-		
+		static MK_CONTROL 	:= 0x0008
+		static MK_LBUTTON 	:= 0x0001
+		static MK_MBUTTON 	:= 0x0010
+		static MK_RBUTTON 	:= 0x0002
+		static MK_SHIFT 	:= 0x0004
+		static MK_XBUTTON1 	:= 0x0020
+		static MK_XBUTTON2 	:= 0x0040
+		static WheelDelta := 120 << 16
+
 		static eventInfoBak
 		if (A_EventInfo=eventInfoBak) {
 			; Prevent from running the function multiple times from a single scroll
@@ -3079,15 +3087,29 @@
 			eventInfoBak := A_EventInfo
 			return
 		}
-
-		WheelDelta := 120 << 16
-		isWheelUp := WheelDelta=wParam?True:False
 		_buyOrSell := IsContaining(A_Gui, "Buy") ? "Buy" : "Sell"
 
-		if (isWheelUp)
-			GUI_Trades_V2.ScrollUp(_buyOrSell)
-		else
-			GUI_Trades_V2.ScrollDown(_buyOrSell)
+		ctrl_pressed := wParam & MK_CONTROL ? True : False
+		mks := ["CONTROL","LBUTTON","MBUTTON","RBUTTON","SHIFT","XBUTTON1","XBUTTON2"]
+		Loop % mks.Count() {
+			thisMK := mks[A_Index]
+			if (wParam & MK_%thisMK%)
+				wParam := wParam - MK_%thisMK%
+		}
+		isWheelUp := WheelDelta = wParam ? True : False
+
+		if (isWheelUp) {
+			if (ctrl_pressed) ; ctrl pressed
+				GUI_Trades_V2.SelectPreviousTab(_buyOrSell)
+			else
+				GUI_Trades_V2.ScrollUp(_buyOrSell)
+		}
+		else {
+			if (ctrl_pressed) ; ctrl pressed
+				GUI_Trades_V2.SelectNextTab(_buyOrSell)
+			else 
+				GUI_Trades_V2.ScrollDown(_buyOrSell)
+		}
 
 		eventInfoBak := A_EventInfo
 	}
