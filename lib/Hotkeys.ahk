@@ -60,9 +60,9 @@ DisableHotkeys() {
 	global PROGRAM
 
 	; Disable hotkeys
+	Hotkey, IfWinActive, [a-zA-Z0-9_] ahk_group POEGameGroup ; Useless to change TitleMatchMode to RegEx here, bcs hotkeys will always use the "default" that was given during autorun - which is RegEx in this case, so it works
 	for hk, nothing in PROGRAM.HOTKEYS {
 		if (hk != "") {
-			Hotkey, IfWinActive, [a-zA-Z0-9_] ahk_group POEGameGroup
 			try {
 				Hotkey,% hk, OnHotkeyPress, Off
 				Hotkey,% hk, Off
@@ -86,10 +86,9 @@ DisableHotkeys() {
 EnableHotkeys() {
 	global PROGRAM, POEGameGroup
 	programName := PROGRAM.NAME
-	prevTitleMatchMode := SetTitleMatchMode("RegEx")
-
 	PROGRAM.HOTKEYS := {}
 
+	Hotkey, IfWinActive, [a-zA-Z0-9_] ahk_group POEGameGroup ; Useless to change TitleMatchMode to RegEx here, bcs hotkeys will always use the "default" that was given during autorun - which is RegEx in this case, so it works
 	Loop % PROGRAM.SETTINGS.HOTKEYS.Count() {
 		hkIndex := A_Index
 		loopedHKSection := PROGRAM.SETTINGS.HOTKEYS[hkIndex]
@@ -105,7 +104,6 @@ EnableHotkeys() {
 			
 		PROGRAM.HOTKEYS[hkSC] := {}
 		PROGRAM.HOTKEYS[hkSC].Actions := ObjFullyClone(loopedHKSection.Actions)
-		Hotkey, IfWinActive, [a-zA-Z0-9_] ahk_group POEGameGroup
 		try {
 			Hotkey,% hkSC, OnHotkeyPress, On
 			logsStr := "Enabled hotkey with key """ hkReadable """ (sc/vk: """ hkSC """)"
@@ -116,9 +114,8 @@ EnableHotkeys() {
 			logsAppend .= logsAppend ? "`n" logsStr : logsStr
 		}
 	}
+	Hotkey, IfWinActive
 
 	if (logsAppend)
 		AppendToLogs(logsAppend)
-		
-	SetTitleMatchMode(prevTitleMatchMode)
 }

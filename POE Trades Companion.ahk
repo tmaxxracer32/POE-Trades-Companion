@@ -25,6 +25,7 @@ DetectHiddenWindows, Off
 FileEncoding, UTF-8 ; Cyrilic characters
 SetWinDelay, 0
 ListLines, Off
+SetTitleMatchMode("RegEx", "Fast")
 
 ; Basic tray menu
 if ( !A_IsCompiled && FileExist(A_ScriptDir "\resources\icon.ico") )
@@ -41,7 +42,7 @@ Menu,Tray,Icon
 ; Left click
 OnMessage(0x404, "AHK_NOTIFYICON") 
 
-Hotkey, IfWinActive, ahk_group POEGameGroup
+Hotkey, IfWinActive,[a-zA-Z0-9_] ahk_group POEGameGroup
 Hotkey, ^RButton, StackClick
 
 Hotkey, IfWinActive,% "ahk_pid " DllCall("GetCurrentProcessId")
