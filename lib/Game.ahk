@@ -16,23 +16,15 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 	prevTitleMatchMode := SetTitleMatchMode("RegEx") ; RegEx = Fix some case where specifying only the pid does not work
 	firstChar := SubStr(msgString, 1, 1) ; Get first char, to compare if its a special chat command
 
-	if (gamePID) {
-		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
-		if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
-			WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
-			waitActiveErrLvl := ErrorLevel
-		}
-		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
-	}
-	else {
+	if !(gamePID)
 		WinGet, gamePID, PID, [a-zA-Z0-9_] ahk_group POEGameGroup
-		WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
-		if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
-			WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
-			waitActiveErrLvl := ErrorLevel
-		}
-		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
+
+	WinActivate,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
+	if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
+		WinWaitActive,[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,2
+		waitActiveErrLvl := ErrorLevel
 	}
+
 	if (waitActiveErrLvl) {
 		SetTitleMatchMode(prevTitleMatchMode) 
 		AppendToLogs(A_ThisFunc "(actionType=" actionType ", msgString=" msgString ", gamePID=" gamePID "): WinWaitActive timed out.")
@@ -40,6 +32,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 		return "WINWAITACTIVE_TIMEOUT"
 	}
 
+	isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
 	if (!isToolSameElevation) {
 		MsgBox(4096+48+4, PROGRAM.NAME " - " PROGRAM.TRANSLATIONS.MessageBoxes.ReloadAsAdmin_Title, PROGRAM.TRANSLATIONS.MessageBoxes.ReloadAsAdmin_Msg)
 
