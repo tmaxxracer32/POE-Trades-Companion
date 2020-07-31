@@ -697,15 +697,15 @@ Set_Format(_NumberType="", _Format="") {
 		SetFormat, %_NumberType%, %_Format%
 }
 
-SetTitleMatchMode(matchMode="") {
-	static prevMode
-	prevMode := A_TitleMatchMode
+SetTitleMatchMode(matchMode, matchSpeed="") {
+	prevMatchMode := A_TitleMatchMode, prevMatchSpeed := A_TitleMatchModeSpeed
 
-	if (matchMode)
-		SetTitleMatchMode,% matchMode
-	else
-		SetTitleMatchMode,% prevMode
-	return prevMode
+	SetTitleMatchMode,% matchMode
+	if (matchSpeed) && IsIn(matchSpeed, "Fast,Slow") {
+		SetTitleMatchMode,% matchSpeed
+		return [prevMatchMode, prevMatchSpeed]
+	}
+	return prevMatchMode
 }
 
 MsgBox(_opts="", _title="", _text="", _timeout="") {
