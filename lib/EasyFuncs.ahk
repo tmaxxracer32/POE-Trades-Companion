@@ -91,6 +91,18 @@ SetControlDelay(value) {
 	return current
 }
 
+SetKeyDelay(delay, duration, play=False) {
+	if (play=True) {
+		currentDelay := A_KeyDelayPlay, currentDuration := A_KeyDurationPlay
+		SetKeyDelay,%delay%,%duration%,Play
+	}
+	else {
+		currentDelay := A_KeyDelay, currentDuration := A_KeyDuration
+		SetKeyDelay,%delay%,%duration%
+	}
+	return [currentDelay, currentDuration]
+}
+
 WinHttpRequest_cURL(URL, ByRef data="", ByRef headers="", options="", isBinaryDL=false) {
 	sentData := data, sentHeaders := headers, sentOptions := options
 	httpRet := WinHttpRequest(URL, data, headers, options)
