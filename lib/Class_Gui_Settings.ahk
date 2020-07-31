@@ -1339,7 +1339,7 @@ Class GUI_Settings {
 			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationBuyingButtonPlusRow" A_Index, "Customization_Buying_AddOneButtonToRow", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
 		}
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingButtonType", "Customization_Buying_OnButtonTypeChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingButtonName", "Customization_Buying_OnButtonNameChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationBuyingButtonName", "Customization_Buying_OnButtonNameChange", doAgainAfter100ms:=True) 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingButtonIcon", "Customization_Buying_OnButtonIconChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationBuyingActionType", "Customization_Buying_OnActionTypeChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_CustomizationBuyingActionTypeTip", "Universal_OnActionTypeTipLinkClick") 
@@ -1353,7 +1353,7 @@ Class GUI_Settings {
 			Gui.BindFunctionToControl("GUI_Settings", "Settings", "hBTN_CustomizationSellingButtonPlusRow" A_Index, "Customization_Selling_AddOneButtonToRow", A_Index, skipCreateStyle:=False, dontActivateButton:=False)
 		}
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonType", "Customization_Selling_OnButtonTypeChange") 
-		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange") 
+		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hEDIT_CustomizationSellingButtonName", "Customization_Selling_OnButtonNameChange", doAgainAfter100ms:=True) 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingButtonIcon", "Customization_Selling_OnButtonIconChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hDDL_CustomizationSellingActionType", "Customization_Selling_OnActionTypeChange") 
 		Gui.BindFunctionToControl("GUI_Settings", "Settings", "hTEXT_CustomizationSellingActionTypeTip", "Universal_OnActionTypeTipLinkClick") 
@@ -1675,7 +1675,7 @@ Class GUI_Settings {
 		}
 	}
 
-	Customization_SellingBuying_OnButtonNameChange(whichTab) {
+	Customization_SellingBuying_OnButtonNameChange(whichTab, doAgainAfter100ms=False) {
 		global PROGRAM
 		global GuiTrades, GuiSettings, GuiSettings_Controls
 		_buyOrSell := whichTab="Selling"?"Sell":"Buy", _buyOrSell .= "Preview"
@@ -1716,6 +1716,13 @@ Class GUI_Settings {
 				else
 					Gui.ImageButtonChangeCaption(btnHwnd, btnName, GuiTrades.AllStyles[guiSkin][styleName], PROGRAM.FONTS[GuiTrades[_buyOrSell].Font], GuiTrades[_buyOrSell].Font_Size)
 			}
+		}
+
+		if (doAgainAfter100ms=True) {
+			if (whichTab="Selling")
+				GoSub, GUI_Settings_Customization_Selling_OnButtonNameChange_Timer
+			else if (whichTab="Buying")
+				GoSub, GUI_Settings_Customization_Buying_OnButtonNameChange_Timer
 		}
 	}
 
@@ -1904,11 +1911,11 @@ Class GUI_Settings {
 	Customization_Buying_SetButtonName(params*) {
 		return GUI_Settings.Customization_SellingBuying_SetButtonName("Buying", params*)
 	}
-    Customization_Selling_OnButtonNameChange() {
-		return GUI_Settings.Customization_SellingBuying_OnButtonNameChange("Selling")
+    Customization_Selling_OnButtonNameChange(params*) {
+		return GUI_Settings.Customization_SellingBuying_OnButtonNameChange("Selling", params*)
 	}
-	Customization_Buying_OnButtonNameChange() {
-		return GUI_Settings.Customization_SellingBuying_OnButtonNameChange("Buying")
+	Customization_Buying_OnButtonNameChange(params*) {
+		return GUI_Settings.Customization_SellingBuying_OnButtonNameChange("Buying", params*)
 	}
     Customization_Selling_OnButtonIconChange() {
 		return GUI_Settings.Customization_SellingBuying_OnButtonIconChange("Selling")
@@ -2140,7 +2147,7 @@ Class GUI_Settings {
 		GUI_Settings.TabHotkeys_UpdateAvailableProfiles()
 
 		if (doAgainAfter100ms=True)
-			GoSub, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange
+			GoSub, GUI_Settings_Hotkeys_OnHotkeyProfileNameChange_Timer
 	}
 
 	TabHotkeys_GetHotkeyProfileHotkey() {
@@ -3564,6 +3571,22 @@ GUI_Settings_Hotkeys_SaveAllActions_Timer_2:
 	SetTimer, GUI_Settings_Hotkeys_SaveAllActions, -100
 return
 
+
+GUI_Settings_Customization_Selling_OnButtonNameChange:
+	GUI_Settings.Customization_Selling_OnButtonNameChange(doAgainAfter100ms:=False)
+return
+GUI_Settings_Customization_Selling_OnButtonNameChange_Timer:
+	SetTimer, GUI_Settings_Customization_Selling_OnButtonNameChange, Delete
+	SetTimer, GUI_Settings_Customization_Selling_OnButtonNameChange, -100
+return
+
+GUI_Settings_Customization_Buying_OnButtonNameChange:
+	GUI_Settings.Customization_Buying_OnButtonNameChange(doAgainAfter100ms:=False)
+return
+GUI_Settings_Customization_Buying_OnButtonNameChange_Timer:
+	SetTimer, GUI_Settings_Customization_Buying_OnButtonNameChange, Delete
+	SetTimer, GUI_Settings_Customization_Buying_OnButtonNameChange, -100
+return
 
 GUI_Settings_Customization_Selling_OnActionContentChange:
 	GUI_Settings.Customization_Selling_OnActionContentChange(doAgainAfter100ms:=False)
