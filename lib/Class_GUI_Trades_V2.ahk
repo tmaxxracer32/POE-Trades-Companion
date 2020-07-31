@@ -2174,8 +2174,7 @@
 
 	EnableHotkeys(_buyOrSell) {
 		global GuiTrades, PROGRAM
-		return
-
+		
 		for hk, value in PROGRAM.HOTKEYS {
 			noModsHKArr := RemoveModifiersFromHotkeyStr(hk, returnMods:=True), noModsHK := noModsHKArr.1, onlyModsHK := noModsHKArr.2
 			hkKeyName := GetKeyName(noModsKey)
@@ -2184,10 +2183,12 @@
 				hasCtrlTabHK := True
 			if (keyName = "Tab") && IsContaining(onlyModsHK, "^") && IsContaining(onlyModsHK, "+") && !IsContaining(onlyModsHK, "#,!")
 				hasCTrlShiftTabHK := True
-			if (keyName = "WheelDown") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
-				hasCtrlWheelDownHK := True
-			if (keyName = "WheelUp") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
-				hasCtrlWheelUpHK := True
+			/* Disabled in favour of WM_MOUSEWHEEL
+			; if (keyName = "WheelDown") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
+			; 	hasCtrlWheelDownHK := True
+			; if (keyName = "WheelUp") && IsContaining(onlyModsHK, "^") && !IsContaining(onlyModsHK, "+,#,!")
+			; 	hasCtrlWheelUpHK := True
+			*/
 		}
 
 		GuiTrades[_buyOrSell].HOTKEYS := {}
@@ -2195,10 +2196,12 @@
 			GuiTrades[_buyOrSell].HOTKEYS.Push("^SC00F")
 		if (!hasCTrlShiftTabHK)
 			GuiTrades[_buyOrSell].HOTKEYS.Push("^+SC00F")
+		/* Disabled in favour of WM_MOUSEWHEEL
 		if (!hasCtrlWheelDownHK)
 			GuiTrades[_buyOrSell].HOTKEYS.Push("^WheelDown")
 		if (!hasCtrlWheelUpHK)
 			GuiTrades[_buyOrSell].HOTKEYS.Push("^WheelUp")
+		*/
 		
 		Loop % GuiTrades[_buyOrSell].HOTKEYS.MaxIndex() {
 			Hotkey, IfWinActive
@@ -3145,6 +3148,8 @@ GUI_Trades_V2_Sell_RefreshIgnoreList:
 return
 
 GUI_Trades_V2_SelectTab_Hotkey:
+	; Ctrl+WheelDown hotkey was disabled in favour of WM_MOUSEWHEEL
+	; Ctrl+Tab and Ctrl+Shift+Tab still work
 	global GuiTrades
 	MouseGetPos, , , undermouseWinHwnd
 	if IsIn(underMouseWinHwnd, GuiTrades.Buy.Handle "," GuiTrades.Sell.Handle) {
@@ -3155,7 +3160,7 @@ GUI_Trades_V2_SelectTab_Hotkey:
 			else if (underMouseWinHwnd=GuiTrades.Sell.Handle)
 				GUI_Trades_V2.SelectNextTab("Sell")
 		}
-		else if IsIn(thishotkey, "^+SC00F,^WheelUp") { ; Ctrl+Tab / Ctrl+WheelUp
+		else if IsIn(thishotkey, "^+SC00F,^WheelUp") { ; Ctrl+Shift+Tab / Ctrl+WheelUp
 			if (underMouseWinHwnd=GuiTrades.Buy.Handle)
 				GUI_Trades_V2.SelectPreviousTab("Buy")
 			else if (underMouseWinHwnd=GuiTrades.Sell.Handle)
