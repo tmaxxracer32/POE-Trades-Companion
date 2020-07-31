@@ -7,6 +7,8 @@
 Send_GameMessage(actionType, msgString, gamePID="") {
 	global PROGRAM, GAME
 	global MyDocuments
+	static openChatStr, clearChatStr
+	openChatStr := "", clearChatStr := ""
 	scanCode_v := PROGRAM.SCANCODES.v, scanCode_Enter := PROGRAM.SCANCODES.Enter
 
 	Thread, NoTimers
@@ -47,100 +49,74 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 		}
 	}
 
-	GoSub, Send_GameMessage_OpenChat
-	GoSub, Send_GameMessage_ClearChat
-
-	if (actionType = "WRITE_SEND") {
-		While (Clipboard != msgString) {
-			Set_Clipboard(msgString)
-
-			if (Clipboard = msgString)
-				break
-
-			else if (A_Index > 100) {
-				err := True
-				break
-			}
-			Sleep 50
-		}
-		if (!err)
-			SendEvent, {Ctrl Down}{%scanCode_v%}{Ctrl Up}
-		else
-			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-
-		SendEvent,{%scanCode_Enter%}
+	if (actionType = "WRITE_DONT_SEND") && IsContaining(msgString, "%goBackHere%") {
+		foundPos := InStr(msgString, "%goBackHere%"), _strLen := StrLen(msgString), leftPresses := _strLen-foundPos+1-StrLen("%goBackHere%")
+		msgString := StrReplace(msgString, "%goBackHere%", "")
 	}
-	else if (actionType = "WRITE_DONT_SEND") {
-		if IsContaining(msgString, "%goBackHere%") {
-			foundPos := InStr(msgString, "%goBackHere%"), _strLen := StrLen(msgString), leftPresses := _strLen-foundPos+1-StrLen("%goBackHere%")
-			msgString := StrReplace(msgString, "%goBackHere%", "")
-		}
 
-		While (Clipboard != msgString) {
-			Set_Clipboard(msgString)
+	GoSub, Send_GameMessage_GetOpenChatStr
+	GoSub, Send_GameMessage_GetClearChatStr
 
-			if (Clipboard = msgString)
-				break
+	clipCount := 0, tickCount := A_TickCount
+	while (Clipboard != msgString) {
+		Set_Clipboard(msgString)
+		clipCount++
 
-			else if (A_Index > 100) {
-				err := True
-				break
-			}
-			Sleep 50
-		}
-		if (!err) {
-			SendEvent, {Ctrl Down}{%scanCode_v%}{Ctrl Up}
-			if (leftPresses)
-				SendInput {Left %leftPresses%}
-		}
-		else
+		if (clipCount > 10) || (A_TickCount-tickCount > 2000) {
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
+			SetTitleMatchMode(prevTitleMatchMode)
+			return
+		}
 	}
+
+	pasteMsgStr := "{Ctrl Down}{" scanCode_v "}{Ctrl Up}"
+	if (leftPresses)
+		pressLeftStr := "{Left " leftPresses "}"
+	if (actionType = "WRITE_SEND")
+		pressEnterStr := "{" scanCode_Enter "}"
+	SendInput,% openChatStr . clearChatStr . pasteMsgStr . pressLeftStr . pressEnterStr
 
 	SetTitleMatchMode(prevTitleMatchMode) 
 	Return
 
-	Send_GameMessage_ClearChat:
-		if !IsIn(firstChar, "/,%,&,#,@") { ; Not a command. We send / then remove it to make sure chat is empty
-			SendEvent,{Space}/{BackSpace}
-		}
+	Send_GameMessage_GetClearChatStr:
+		if !IsIn(firstChar, "/,%,&,#,@") ; Not a command. We send / then remove it to make sure chat is empty
+			clearChatStr := "{Space}/{BackSpace}"
 	Return
 
-	Send_GameMessage_OpenChat:
+	Send_GameMessage_GetOpenChatStr:
 		if IsIn(chatVK, "0x1,0x2,0x4,0x5,0x6,0x9C,0x9D,0x9E,0x9F") { ; Mouse buttons
 			keyName := chatVK="0x1"?"L" : chatVk="0x2"?"R" : chatVK="0x4"?"M" ; Left,Right,Middle
 				: chatVK="0x5"?"X1" : chatVK="0x6"?"X2" ; XButton1,XButton2
 				: chatVK="0x9C"?"WL" : chatVK="0x9D"?"WR" ; WheelLeft,WheelRight
 				: chatVK="0x9E"?"WD" : chatVK="0x9F"?"WU" ; WheelDown,WheelUp
 				: ""
-				
-			keyDelay := SetKeyDelay(10, 10), prevTitleMatchMode_oc := SetTitleMatchMode("RegEx"), ctrlDelay := SetControlDelay(-1)
-			if WinExist("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
-				if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
-					WinActivate, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
-					WinWaitActive, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, , 3
-				}
-				ControlClick, , [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%, ,%keyName%, 1, NA
-				/* Old way that seemed to be a bit buggy for some reason after creating the Settings GUI.
-				Sending the hotkey before the Settings GUI was created would make things work correctly.
-				But sending it after would effectively send the chat key, but not keep the chat window activated.
-				Probably related to some internal ahk variable or something. Doesn't matter, ControlClick is more reliable.
-				
-				ControlSend, ,{VK%chatVK%}, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID% ; Mouse buttons tend to activate the window under the cursor.
-																								  ;  Therefore, we need to send the key to the actual game window.
-				*/
-			}
+			
+			if WinExist("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID)
+				winRegex := "[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID
 			else {
 				WinGet, activeWinHandle, ID, A
-				WinActivate, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%
-				WinWaitActive, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, , 3
-				ControlClick, , [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, ,%keyName%, 1, NA
+				winRegex := "[a-zA-Z0-9_] ahk_group POEGameGroup ahk_id " activeWinHandle
 			}
+
+			keyDelay := SetKeyDelay(10, 10), prevTitleMatchMode_oc := SetTitleMatchMode("RegEx"), ctrlDelay := SetControlDelay(-1)
+			if !WinActive(winRegex) {
+				WinActivate,%winRegex%
+				WinWaitActive,%winRegex%, , 3
+			}
+			ControlClick, ,%winRegex%, ,%keyName%, 1, NA
+			/* Old way that seemed to be a bit buggy for some reason after creating the Settings GUI.
+			Sending the hotkey before the Settings GUI was created would make things work correctly.
+			But sending it after would effectively send the chat key, but not keep the chat window activated.
+			Probably related to some internal ahk variable or something. Doesn't matter, ControlClick is more reliable.
+			
+			ControlSend, ,{VK%chatVK%}, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID% ; Mouse buttons tend to activate the window under the cursor.
+																								;  Therefore, we need to send the key to the actual game window.
+			*/
 			SetKeyDelay(keyDelay.1, keyDelay.2), SetTitleMatchMode(prevTitleMatchMode_oc), SetControlDelay(ctrlDelay)
 		}
 		else
-			SendEvent,{VK%chatVK%}
-		Sleep 10
+			openChatStr := "{VK" chatVK "}"
 	Return
 }
 
