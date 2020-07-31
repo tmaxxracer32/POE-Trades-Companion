@@ -3063,8 +3063,22 @@
 	}
 
 	WM_MOUSEWHEEL(wParam, lParam) {
-		if !IsIn(A_Gui, "TradesSell,TradesBuy")
+		; A_EventInfo: Contains 0 if the message was sent via SendMessage. If sent via PostMessage, it contains the tick-count time the message was posted.
+		; For some reason this function is always triggering twice upon scrolling once. Most likely related to my limited understanding of this message
+		
+		static eventInfoBak
+		if (A_EventInfo=eventInfoBak) {
+			; Prevent from running the function multiple times from a single scroll
 			return
+		}
+
+		if !IsIn(A_Gui, "TradesSell,TradesBuy") {
+			; Scrolling on a child element somehow triggers the function for the child and then the parent
+			;	We block it here for the child, so that it only runs once for the parent 
+			; Update the backup value so that next scroll will be blocked if it's the same
+			eventInfoBak := A_EventInfo
+			return
+		}
 
 		WheelDelta := 120 << 16
 		isWheelUp := WheelDelta=wParam?True:False
@@ -3074,6 +3088,8 @@
 			GUI_Trades_V2.ScrollUp(_buyOrSell)
 		else
 			GUI_Trades_V2.ScrollDown(_buyOrSell)
+
+		eventInfoBak := A_EventInfo
 	}
 }
 
