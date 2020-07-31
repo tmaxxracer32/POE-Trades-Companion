@@ -759,6 +759,22 @@ Get_CurrencyFullName(currencyName, lang="ENG", lastResort=True) {
 	; Checking if currency isn't already full name
 	if IsIn(currencyName, PROGRAM.DATA.CURRENCY_LIST)
 		return currencyName
+	; Checking in poetrade currency data
+	if (PROGRAM.DATA.POETRADE_CURRENCY_DATA[currencyName])	
+		return PROGRAM.DATA.POETRADE_CURRENCY_DATA[currencyName]
+	; Checking for poeapp.com, which sometimes add 's' as plural
+	lastChar := SubStr(currencyName, 0, 1)
+	if (lastChar = "s") {
+		currencyNameTemp := StrTrimRight(currencyName, 1)
+		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
+			return currencyNameTemp
+	}
+	else if RegExMatch(currencyName, "iO) Map$", matchObj) {
+		currencyNameTemp := StrTrimRight(currencyName, StrLen(matchObj.0))
+		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
+			return currencyNameTemp
+	}
+
 	; Checking in poedotcom currency data
 	langs := lang ? [lang,"ENG"] : ["ENG"]
 	Loop % langs.Count() {
@@ -774,21 +790,6 @@ Get_CurrencyFullName(currencyName, lang="ENG", lastResort=True) {
 					return thisEntry.text
 			}
 		}
-	}
-	; Checking in poetrade currency data
-	if (PROGRAM.DATA.POETRADE_CURRENCY_DATA[currencyName])	
-		return PROGRAM.DATA.POETRADE_CURRENCY_DATA[currencyName]
-	; Checking for poeapp.com, which sometimes add 's' as plural
-	lastChar := SubStr(currencyName, 0, 1)
-	if (lastChar = "s") {
-		currencyNameTemp := StrTrimRight(currencyName, 1)
-		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
-			return currencyNameTemp
-	}
-	else if RegExMatch(currencyName, "iO) Map$", matchObj) {
-		currencyNameTemp := StrTrimRight(currencyName, StrLen(matchObj.0))
-		if ( currencyNameTemp := Get_CurrencyFullName(currencyNameTemp,lang) )
-			return currencyNameTemp
 	}
 
 	if (lastResort=True) {
