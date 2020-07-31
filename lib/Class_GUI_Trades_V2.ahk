@@ -529,9 +529,9 @@
                 Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabJoinedArea" A_Index " Hidden", A_Index, Styles.Tab_Joined, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
                 Gui.Add(guiName, "ImageButton", "x" xpos " y" TabButton1_Y " w" TabButton1_W " h" TabButton1_H " hwndhBTN_TabWhisperReceived" A_Index " Hidden", A_Index, Styles.Tab_Whisper, PROGRAM.FONTS[Gui%guiName%.Font], Gui%guiName%.Font_Size)
 
-                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabDefault" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
-                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabJoinedArea" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
-                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabWhisperReceived" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True, skipError:=False, styleChanged:=False)
+                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabDefault" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True)
+                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabJoinedArea" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True)
+                Gui.BindFunctionToControl("GUI_Trades_V2", guiName, "hBTN_TabWhisperReceived" A_Index, "SetActiveTab", _buyOrSell, tabName:=A_Index, autoScroll:=True)
 
                 Gui%guiName%["Tab_" A_Index] := Gui%guiName%_Controls["hBTN_TabDefault" A_Index]
             }            
@@ -1498,7 +1498,7 @@
 		}
 
 ;		if (styleChanged = True) {
-;			GUI_Trades_V2.SetActiveTab( tabName:=GUI_Trades_V2.GetActiveTab(), autoScroll:=True, skipError:=False, styleChanged:=True )
+;			GUI_Trades_V2.SetActiveTab( tabName:=GUI_Trades_V2.GetActiveTab(), autoScroll:=True)
 ;		}
 
 		return styleChanged
@@ -2017,7 +2017,7 @@
 		GUI_Trades_V2.ResetPositionIfOutOfBounds(_buyOrSell)
 	}
 
-	SetActiveTab(_buyOrSell, tabName, autoScroll=True, skipError=False, styleChanged=False) {
+	SetActiveTab(_buyOrSell, tabName, autoScroll=True) {
 		global PROGRAM, GuiTrades, GuiTrades_Controls
         prevActiveTab   := GuiTrades[_buyOrSell].Active_Tab
 		tabsCount       := GuiTrades[_buyOrSell].Tabs_Count
@@ -2026,9 +2026,8 @@
 
         ; Invalid tab name
 		if IsNum(tabName) && !IsBetween(tabName, 1, tabsCount) {
-			if (skipError=False)
-				MsgBox(48, "", "Cannot select tab """ tabName """ because it exceed the tabs count (" tabsCount ")")
-			return
+			AppendToLogs("Cannot select tab """ tabName """ because it exceed the tabs count (" tabsCount "). Selecting tab """ tabsCount """ instead.")
+			tabName := tabsCount
 		}
 
         ; Need to scroll to make tab visible
