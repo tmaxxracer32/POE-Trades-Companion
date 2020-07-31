@@ -114,7 +114,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 				: chatVK="0x9E"?"WD" : chatVK="0x9F"?"WU" ; WheelDown,WheelUp
 				: ""
 				
-			keyDelay := SetKeyDelay(10, 10), prevTitleMatchMode := SetTitleMatchMode("RegEx"), ctrlDelay := SetControlDelay(-1)
+			keyDelay := SetKeyDelay(10, 10), prevTitleMatchMode_oc := SetTitleMatchMode("RegEx"), ctrlDelay := SetControlDelay(-1)
 			if WinExist("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
 				if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
 					WinActivate, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid %gamePID%
@@ -136,7 +136,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 				WinWaitActive, [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, , 3
 				ControlClick, , [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, ,%keyName%, 1, NA
 			}
-			SetKeyDelay(keyDelay.1, keyDelay.2), SetTitleMatchMode(prevTitleMatchMode), SetControlDelay(ctrlDelay)
+			SetKeyDelay(keyDelay.1, keyDelay.2), SetTitleMatchMode(prevTitleMatchMode_oc), SetControlDelay(ctrlDelay)
 		}
 		else
 			SendEvent,{VK%chatVK%}
