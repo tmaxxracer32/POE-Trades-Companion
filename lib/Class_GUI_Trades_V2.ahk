@@ -875,14 +875,13 @@
 		global GuiTrades, GuiTrades_Controls
 		static uniqueNum
 		tabGamePID := GUI_Trades_V2.GetTabContent(_buyOrSell, tabNum).GamePID
-		titleMatchMode := A_TitleMatchMode
 		guiIniSection := _buyOrSell="Sell"?"SELL_INTERFACE":"BUY_INTERFACE"
 
 		if !IsBetween(tabNum, 1, GuiTrades[_buyOrSell].Tabs_Count)
 			return
 		
-		SetTitleMatchMode, RegEx
 		if WinExist("ahk_group POEGameGroup ahk_pid " tabGamePID) && (tabGamePID) {
+		prevTitleMatchMode := SetTitleMatchMode("RegEx")
 			uniqueNum := !uniqueNum
 			keysState := GetKeyStateFunc("Ctrl,LCtrl,RCtrl")
 
@@ -925,7 +924,7 @@
 			}
 			GUI_Trades_V2.DoCustomButtonAction(_buyOrSell, rowNum, btnNum, tabNum)
 		}
-		SetTitleMatchMode, %titleMatchMode%
+		SetTitleMatchMode(prevTitleMatchMode)
 	}
 
     SaveStats(_buyOrSell, tabNum) {

@@ -86,7 +86,7 @@ DisableHotkeys() {
 EnableHotkeys() {
 	global PROGRAM, POEGameGroup
 	programName := PROGRAM.NAME
-	Set_TitleMatchMode("RegEx")
+	prevTitleMatchMode := SetTitleMatchMode("RegEx")
 
 	PROGRAM.HOTKEYS := {}
 
@@ -120,5 +120,5 @@ EnableHotkeys() {
 	if (logsAppend)
 		AppendToLogs(logsAppend)
 		
-	Set_TitleMatchMode()
+	SetTitleMatchMode(prevTitleMatchMode)
 }

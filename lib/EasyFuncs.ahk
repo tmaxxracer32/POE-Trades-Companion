@@ -685,14 +685,15 @@ Set_Format(_NumberType="", _Format="") {
 		SetFormat, %_NumberType%, %_Format%
 }
 
-Set_TitleMatchMode(_MatchMode="") {
+SetTitleMatchMode(matchMode="") {
 	static prevMode
 	prevMode := A_TitleMatchMode
 
-	if !(_MatchMode)
-		SetTitleMatchMode, %prevMode%
+	if (matchMode)
+		SetTitleMatchMode,% matchMode
 	else
-		SetTitleMatchMode, %_MatchMode%
+		SetTitleMatchMode,% prevMode
+	return prevMode
 }
 
 MsgBox(_opts="", _title="", _text="", _timeout="") {

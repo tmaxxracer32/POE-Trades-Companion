@@ -13,10 +13,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 
 ;	Retrieve the virtual key id for chat opening
 	chatVK := GAME.SETTINGS.ChatKey_VK ? GAME.SETTINGS.ChatKey_VK : "0xD"
-
-	titleMatchMode := A_TitleMatchMode
-	SetTitleMatchMode, RegEx ; RegEx = Fix some case where specifying only the pid does not work
-
+	prevTitleMatchMode := SetTitleMatchMode("RegEx") ; RegEx = Fix some case where specifying only the pid does not work
 	firstChar := SubStr(msgString, 1, 1) ; Get first char, to compare if its a special chat command
 
 	if (gamePID) {
@@ -37,6 +34,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 		isToolSameElevation := Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID)
 	}
 	if (waitActiveErrLvl) {
+		SetTitleMatchMode(prevTitleMatchMode) 
 		AppendToLogs(A_ThisFunc "(actionType=" actionType ", msgString=" msgString ", gamePID=" gamePID "): WinWaitActive timed out.")
 		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.GameWindowFocusTimedOut_Title, PROGRAM.TRANSLATIONS.TrayNotifications.GameWindowFocusTimedOut_Msg)
 		return "WINWAITACTIVE_TIMEOUT"
@@ -50,7 +48,10 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 			GUI_Trades_V2.SaveBackup("Sell")
 			ReloadWithParams(" /MyDocuments=""" MyDocuments """", getCurrentParams:=True, asAdmin:=True)
 		}
-		else return
+		else {
+			SetTitleMatchMode(prevTitleMatchMode) 
+			return
+		}
 	}
 
 	GoSub, Send_GameMessage_OpenChat
@@ -103,7 +104,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
 	}
 
-	SetTitleMatchMode, %titleMatchMode%
+	SetTitleMatchMode(prevTitleMatchMode) 
 	Return
 
 	Send_GameMessage_ClearChat:
@@ -114,7 +115,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 
 	Send_GameMessage_OpenChat:
 		if IsIn(chatVK, "0x1,0x2,0x4,0x5,0x6,0x9C,0x9D,0x9E,0x9F") { ; Mouse buttons
-			keyDelay := A_KeyDelay, keyDuration := A_KeyDuration, titleMatchMode := A_TitleMatchMode, controlDelay := A_ControlDelay
+			keyDelay := A_KeyDelay, keyDuration := A_KeyDuration, controlDelay := A_ControlDelay
 			keyName := chatVK="0x1"?"L" : chatVk="0x2"?"R" : chatVK="0x4"?"M" ; Left,Right,Middle
 				: chatVK="0x5"?"X1" : chatVK="0x6"?"X2" ; XButton1,XButton2
 				: chatVK="0x9C"?"WL" : chatVK="0x9D"?"WR" ; WheelLeft,WheelRight
@@ -122,7 +123,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 				: ""
 				
 			SetKeyDelay, 10, 10
-			SetTitleMatchMode, RegEx
+			prevTitleMatchMode := SetTitleMatchMode("RegEx")
 			SetControlDelay, -1
 			if WinExist("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
 				if !WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup ahk_pid " gamePID) {
@@ -146,7 +147,7 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 				ControlClick, , [a-zA-Z0-9_] ahk_group POEGameGroup ahk_id %activeWinHandle%, ,%keyName%, 1, NA
 			}
 			SetKeyDelay,% keyDelay,% keyDuration
-			SetTitleMatchMode,% titleMatchMode
+			SetTitleMatchMode(prevTitleMatchMode)
 			SetControlDelay,% controlDelay
 		}
 		else
