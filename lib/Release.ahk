@@ -1,4 +1,4 @@
-﻿CreateRelease() {
+﻿CompileExe() {
 	global PROGRAM
 
 	if (A_IsCompiled) {
@@ -6,87 +6,97 @@
 		ExitApp
 	}
 
-	doTranslations := True
-	doDataFiles := True
-	doLeagueFile := True
-	doExecutable := True
-	doZipRelease := True
-
 	_coordMode := CoordMode()
 	CoordMode({"ToolTip":"Screen"})
 	
-	; Translation files
-	if (doTranslations) {
-		ToolTip, Updating translation files, 0, 0
-		; First loading eng json and re-saving it to make it ordered
-		FileRead, engJSON,% PROGRAM.TRANSLATIONS_FOLDER "\english.json"
-		engJSON := JSON_Load(engJSON)
-		jsonText := JSON_Dump(engJSON, dontReplaceUnicode:=True)
-		hFile := FileOpen(A_ScriptDir "\resources\translations\english.json", "w", "UTF-8")
-		hFile.Write(jsonText)
-		hFile.Close()
+	ToolTip, Compiling executable, 0, 0
+	upxFullPath := A_ScriptDir "\lib\third-party\upx.exe"
+	CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe")
+	cmds = 
+	(
+	@echo off
+	cd %A_ScriptDir%
+	"%upxFullPath%" "POE Trades Companion.exe"
+	)
+	if !FileExist(upxFullPath)
+		MsgBox(4096+16, PROGRAM.NAME, "upx.exe missing in " upxFullPath ". Executable will not be compiled.")
+	else
+		RunWaitMany(cmds)
 
-		; Then going through other languages and adding non-existent keys
-		Loop, Files,% PROGRAM.TRANSLATIONS_FOLDER "\*.json"
-		{
-			if (A_LoopFileName="english.json")
-				Continue
-			else if !Is_Json(A_LoopFileFullPath) {
-				MsgBox(4096+16, PROGRAM.NAME, A_ThisFunc "(): Building translation files. This file is not JSON format. It will be ignored." A_LoopFileFullPath)
-				Continue
-			}
-			ToolTip, Updating translation files`n%A_LoopFileName%, 0 ,0
+	CoordMode(_coordMode)
+}
 
-			thisLangJSON := JSON_Load(A_LoopFileFullPath)
-			thisLangJSON := ObjReplace(engJSON, thisLangJSON)
-			jsonText := JSON_Dump(thisLangJSON, dontReplaceUnicode:=True)
+UpdateDataFiles() {
+	global PROGRAM
 
-			hFile := FileOpen(A_LoopFileFullPath, "w", "UTF-8")
-			hFile.Write(jsonText)
-			hFile.Close()
-		}
-	}
+	_coordMode := CoordMode()
+	CoordMode({"ToolTip":"Screen"})
 
 	; Data files
-	if (doDataFiles) {
-		ToolTip, Updating data files, 0, 0
-		ToolTip, Updating data files`nPoeTrade, 0, 0
-		PoeTrade_GenerateCurrencyData()
+	ToolTip, Updating data files, 0, 0
+	ToolTip, Updating data files`nPoeTrade, 0, 0
+	PoeTrade_GenerateCurrencyData()
 
-		ToolTip, Updating data files`nPoeDotCom, 0, 0
-		GGG_API_CreateDataFiles()
-	}
+	ToolTip, Updating data files`nPoeDotCom, 0, 0
+	GGG_API_CreateDataFiles()
 
 	; League names file
-	if (doLeagueFile) {
-		ToolTip, Updating league names file, 0, 0
-		GGG_API_Generate_TradingLeaguesJson()
-	}
+	ToolTip, Updating league names file, 0, 0
+	GGG_API_Generate_TradingLeaguesJson()
 
-	; Building executable
-	if (doExecutable) {
-		ToolTip, Compiling executable, 0, 0
-		upxFullPath := A_ScriptDir "\lib\third-party\upx.exe"
-		CompileFile(A_ScriptDir "\POE Trades Companion.ahk", A_ScriptDir "\POE Trades Companion.exe")
-		cmds = 
-		(
-		@echo off
-		cd %A_ScriptDir%
-		"%upxFullPath%" "POE Trades Companion.exe"
-		)
-		if !FileExist(upxFullPath)
-			MsgBox(4096+16, PROGRAM.NAME, "upx.exe missing in " upxFullPath ". Executable will not be compiled.")
-		else
-			RunWaitMany(cmds)
-	}
+	CoordMode(_coordMode)
+}
 
-	; Building zip release
-	if (doZipRelease) {
-		ToolTip, Building zip release based on active git branch, 0, 0
-		CreateZipRelease()
+UpdateTranslations() {
+	global PROGRAM
+
+	_coordMode := CoordMode()
+	CoordMode({"ToolTip":"Screen"})
+
+	ToolTip, Updating translation files, 0, 0
+	; First loading eng json and re-saving it to make it ordered
+	FileRead, engJSON,% PROGRAM.TRANSLATIONS_FOLDER "\english.json"
+	engJSON := JSON_Load(engJSON)
+	jsonText := JSON_Dump(engJSON, dontReplaceUnicode:=True)
+	hFile := FileOpen(A_ScriptDir "\resources\translations\english.json", "w", "UTF-8")
+	hFile.Write(jsonText)
+	hFile.Close()
+
+	; Then going through other languages and adding non-existent keys
+	Loop, Files,% PROGRAM.TRANSLATIONS_FOLDER "\*.json"
+	{
+		if (A_LoopFileName="english.json")
+			Continue
+		else if !Is_Json(A_LoopFileFullPath) {
+			MsgBox(4096+16, PROGRAM.NAME, A_ThisFunc "(): Building translation files. This file is not JSON format. It will be ignored." A_LoopFileFullPath)
+			Continue
+		}
+		ToolTip, Updating translation files`n%A_LoopFileName%, 0 ,0
+
+		thisLangJSON := JSON_Load(A_LoopFileFullPath)
+		thisLangJSON := ObjReplace(engJSON, thisLangJSON)
+		jsonText := JSON_Dump(thisLangJSON, dontReplaceUnicode:=True)
+
+		hFile := FileOpen(A_LoopFileFullPath, "w", "UTF-8")
+		hFile.Write(jsonText)
+		hFile.Close()
 	}
 
 	CoordMode(_coordMode)
+}
+
+CreateRelease() {
+	global PROGRAM
+
+	if (A_IsCompiled) {
+		MsgBox(4096+16, PROGRAM.NAME, "Cannot create release while using the executable. This parameter can only be used with the .ahk script.")
+		ExitApp
+	}
+	
+	UpdateTranslations()
+	UpdateDataFiles()
+	CompileExe()		
+	CreateZipRelease()
 }
 
 CreateZipRelease() {
@@ -105,7 +115,11 @@ CreateZipRelease() {
 		return
 	}
 
+	_coordMode := CoordMode()
+	CoordMode({"ToolTip":"Screen"})
+
 	; Creating ZIP archive
+	ToolTip, Building zip release based on active git branch, 0, 0
 	ver := PROGRAM.VERSION, ver .= PROGRAM.ALPHA ? " " PROGRAM.ALPHA : ""
 	ver := StrReplace(ver, ".", "-")
 	ver := StrReplace(ver, " ", "-")
@@ -131,10 +145,15 @@ CreateZipRelease() {
 	%deleteCmds%
 	)
 	RunWaitMany(cmds)
+
+	CoordMode(_coordMode)
 }
 
 CompileFile(source, dest, fileDesc="NONE", fileVer="NONE", fileCopyright="NONE") {
     Run_Ahk2Exe(source, ,A_ScriptDir "\resources\icon.ico")
+
+	_coordMode := CoordMode()
+	CoordMode({"ToolTip":"Screen"})
 
 	if (fileDesc != "NONE" || fileVer != "NONE" || fileCopyright != "NONE") {
 		StringReplace fileVer,fileVer,`.,`.,UseErrorLevel
@@ -166,6 +185,8 @@ CompileFile(source, dest, fileDesc="NONE", fileVer="NONE", fileCopyright="NONE")
 		ToolTip
 		fileInfos := ""
 	}
+
+	CoordMode(_coordMode)
 }
 
 RunWaitMany(commands) {

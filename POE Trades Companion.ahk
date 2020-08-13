@@ -175,10 +175,20 @@ Start_Script() {
 		}
 	}
 
-	if (RUNTIME_PARAMETERS.CreateRelease) {
+	if (RUNTIME_PARAMETERS.CreateRelease)
 		CreateRelease()
+	if (RUNTIME_PARAMETERS.CreateZip)
+		CreateZipRelease()
+	if (RUNTIME_PARAMETERS.CompileExecutable)
+		CompileExe()
+	if (RUNTIME_PARAMETERS.CreateRelease || RUNTIME_PARAMETERS.CreateZip || RUNTIME_PARAMETERS.CompileExecutable)
 		ExitApp
-	}
+	
+	if (RUNTIME_PARAMETERS.UpdateDataFiles)
+		UpdateDataFiles()
+	if (RUNTIME_PARAMETERS.UpdateTranslations)
+		UpdateTranslations()
+	
 
 	; Extracting assets
 	if !(DEBUG.settings.skip_assets_extracting)
