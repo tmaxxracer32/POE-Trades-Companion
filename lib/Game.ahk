@@ -710,12 +710,11 @@ IsTradingWhisper(str) {
 }
 
 Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID) {
-	isElevated := Is_Game_Elevated(gamePID)
-	
-	isSameLevel := (isElevated = True) && (A_IsAdmin) ? True
-		: (isElevated = False) ? True
-		: (isElevated = True) ? False
-		: False
+	if (A_IsAdmin)
+		return True
+
+	if Is_Game_Elevated(gamePID)
+		return False
 
 	return isSameLevel
 }
