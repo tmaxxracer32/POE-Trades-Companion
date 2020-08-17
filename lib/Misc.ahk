@@ -183,12 +183,12 @@ Set_Clipboard(str) {
 	global PROGRAM
 	global SET_CLIPBOARD_CONTENT
 
-	Clipboard := msgString, tickCount := A_TickCount
-	while (Clipboard != msgString) {
+	Clipboard := str, tickCount := A_TickCount
+	while (Clipboard != str) {
 		Clipboard := ""
-		Clipboard := msgString
+		Clipboard := str
 		ClipWait, 2
-		if (Clipboard = msgString)
+		if (Clipboard = str)
 			break
 
 		if (A_TickCount-tickCount > 2000) {

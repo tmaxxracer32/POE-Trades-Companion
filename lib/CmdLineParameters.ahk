@@ -44,9 +44,9 @@ Handle_CmdLineParameters() {
 		param := %A_Index%
 
 		; User params
-		if IsIn(param="/NoAdmin,/SkipAdmin")
+		if IsIn(param,"/NoAdmin,/SkipAdmin")
 			RUNTIME_PARAMETERS["SkipAdmin"] := True
-		else if IsIn(param="/NoReplace,/NewInstance")
+		else if IsIn(param,"/NoReplace,/NewInstance")
 			RUNTIME_PARAMETERS["NewInstance"] := True
 		else if RegExMatch(param, "iO)/InstanceName=(.*)", found)
 			RUNTIME_PARAMETERS["InstanceName"] := found.1, found := ""
