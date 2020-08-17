@@ -19,6 +19,7 @@
 	Menu,TraySheetSub,Add,Betrayal, Tray_OpenSheet
 	Menu,TraySheetSub,Add,Delve, Tray_OpenSheet
 	Menu,TraySheetSub,Add,Essence, Tray_OpenSheet
+	Menu,TraySheetSub,Add,Harvest, Tray_OpenSheet
 	Menu,TraySheetSub,Add,Incursion, Tray_OpenSheet
 	Menu,Tray,Add,Leagues Sheets, :TraySheetSub
 	Menu,Tray,Add
@@ -69,15 +70,7 @@
 }
 
 Tray_OpenSheet() {
-	which := A_ThisMenuItem="Betrayal"?"Betrayal"
-		: A_ThisMenuItem="Delve"?"Delve"
-		: A_ThisMenuItem="Essence"?"Essence"
-		: A_ThisMenuItem="Incursion"?"Incursion"
-		: ""
-	if (!which)
-		return
-
-	GUI_CheatSheet.Show(which)
+	GUI_CheatSheet.Show(A_ThisMenuItem)
 }
 
 Tray_OpenBetaTasks() {

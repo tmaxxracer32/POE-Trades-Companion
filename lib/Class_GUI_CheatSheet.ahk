@@ -4,13 +4,8 @@
         global PROGRAM
         global GuiCheatSheet, GuiCheatSheet_Controls
 
-        filePng := which="Betrayal"?"Betrayal.png"
-        : which="Delve"?"Delve.png"
-        : which="Essence"?"Essence.png"
-        : which="Incursion"?"Incursion.png"
-        : ""
-
-        if (!filePng)
+        filePng := which ".png"
+        if !FileExist(filePng)
             return
         
         delay := SetControlDelay(0), batch := SetBatchLines(-1)

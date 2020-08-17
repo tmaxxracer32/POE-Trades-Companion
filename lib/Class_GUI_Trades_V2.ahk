@@ -1597,6 +1597,7 @@
 			Menu, HelpMenu, Add, Betrayal, GUI_Trades_V2_LeagueHelpMenu
 			Menu, HelpMenu, Add, Delve, GUI_Trades_V2_LeagueHelpMenu
 			Menu, HelpMenu, Add, Essence, GUI_Trades_V2_LeagueHelpMenu
+			Menu, HelpMenu, Add, Harvest, GUI_Trades_V2_LeagueHelpMenu
 			Menu, HelpMenu, Add, Incursion, GUI_Trades_V2_LeagueHelpMenu
 			Menu, HelpMenu, Show
 		}
@@ -1636,15 +1637,7 @@
 		return
 
 		GUI_Trades_V2_LeagueHelpMenu:
-			which := A_ThisMenuItem="Betrayal"?"Betrayal"
-				: A_ThisMenuItem="Delve"?"Delve"
-				: A_ThisMenuItem="Essence"?"Essence"
-				: A_ThisMenuItem="Incursion"?"Incursion"
-				: ""
-			if (!which)
-				return
- 
-			GUI_CheatSheet.Show(which)
+			GUI_CheatSheet.Show(A_ThisMenuItem)
 		return
 	}
 
