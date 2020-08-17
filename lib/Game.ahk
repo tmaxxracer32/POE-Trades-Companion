@@ -57,25 +57,14 @@ Send_GameMessage(actionType, msgString, gamePID="") {
 	GoSub, Send_GameMessage_GetOpenChatStr
 	GoSub, Send_GameMessage_GetClearChatStr
 
-	clipCount := 0, tickCount := A_TickCount
-	while (Clipboard != msgString) {
-		Set_Clipboard(msgString)
-		clipCount++
-
-		if (clipCount > 10) || (A_TickCount-tickCount > 2000) {
-			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Title, PROGRAM.TRANSLATIONS.TrayNotifications.FailedToSendMessage_Msg)
-			SetTitleMatchMode(prevTitleMatchMode)
-			return
-		}
-	}
-
+	Set_Clipboard(msgString)
 	pasteMsgStr := "{Ctrl Down}{" scanCode_v "}{Ctrl Up}"
 	if (leftPresses)
 		pressLeftStr := "{Left " leftPresses "}"
 	if (actionType = "WRITE_SEND")
 		pressEnterStr := "{" scanCode_Enter "}"
 	SendInput,% openChatStr . clearChatStr . pasteMsgStr . pressLeftStr . pressEnterStr
-
+	Sleep 100 ; Giving time to process Ctrl+V - If clipboard were to be changed too soon, it would be reflected on our Ctrl+V. Strange stuff
 	SetTitleMatchMode(prevTitleMatchMode) 
 	Return
 
