@@ -816,7 +816,7 @@
 	}
 
     ContextMenu(_buyOrSell, CtrlName) {
-		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings
+		global PROGRAM, GuiTrades, GuiTrades_Controls, GuiSettings, RUNTIME_PARAMETERS
 		isStack := GuiTrades[_buyOrSell].Is_Stack
 		isTabs := GuiTrades[_buyOrSell].Is_Tabs
 		if (isStack) {
@@ -831,8 +831,14 @@
 		try Menu, RClickMenu, DeleteAll
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.LockPosition, GUI_Trades_V2_ContextMenu_LockPosition
 		Menu, RClickMenu, Add
-		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
-		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
+		if (RUNTIME_PARAMETERS.MiniFrizzle) { ; Switch RMENU_CloseAllTabs and RMENU_CloseOtherTabsForSameItem
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
+		}
+		else {
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseAllTabs, GUI_Trades_V2_ContextMenu_CloseAllTabs
+			Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.GUI_Trades.RMENU_CloseOtherTabsForSameItem, GUI_Trades_V2_ContextMenu_CloseOtherTabsWithSameItem
+		}
 		Menu, RClickMenu, Add
 		Menu, RClickMenu, Add,% PROGRAM.TRANSLATIONS.TrayMenu.Settings, GUI_Trades_V2_ContextMenu_OpenTrayMenu
 		; Check - Disable - etc
