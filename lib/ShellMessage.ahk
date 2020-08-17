@@ -20,7 +20,7 @@ ShellMessage(wParam,lParam) {
 /*			Triggered upon activating a window
  *			Is used to correctly position the Trades GUI while in Overlay mode
 */
-	global PROGRAM
+	global PROGRAM, GAME
 	global GuiTrades, GuiTrades_Controls
 	global GuiSettings, GuiSettings_Controls
 	global GuiTabbedTradesCounter
@@ -41,7 +41,7 @@ ShellMessage(wParam,lParam) {
 	}
 
 	if IsIn(activeWinExe, POEGameList) {
-		LASTACTIVATED_GAMEPID := activeWinPID
+		GAME.LastActivePID := activeWinPID
 		if (GuiTabbedTradesCounter.Handle)
 			GUI_TabbedTradesCounter.Destroy()
 	}

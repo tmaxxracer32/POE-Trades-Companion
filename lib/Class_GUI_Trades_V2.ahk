@@ -1585,13 +1585,11 @@
 	}
 
     HotBarButton(_buyOrSell, btnType) {
-		global PROGRAM
-		global LASTACTIVATED_GAMEPID
-
+		global PROGRAM, GAME
 		
 		if (btnType="Hideout") {
 			keysState := GetKeyStateFunc("Ctrl,LCtrl,RCtrl")
-			Send_GameMessage("WRITE_SEND", "/hideout", LASTACTIVATED_GAMEPID)
+			Send_GameMessage("WRITE_SEND", "/hideout", GAME.LastActivePID)
 			SetKeyStateFunc(keysState)
 		}
 		else if (btnType="LeagueHelp") {
