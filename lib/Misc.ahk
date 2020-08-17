@@ -183,17 +183,23 @@ Set_Clipboard(str) {
 	global PROGRAM
 	global SET_CLIPBOARD_CONTENT
 
-	Clipboard := ""
-	Sleep 10
-	Clipboard := str
-	ClipWait, 2, 1
-	if (ErrorLevel) {
-		trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ClipboardFailedToUpdate_Msg, "%message%", str)
-		TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ClipboardFailedToUpdate_Title, trayMsg)
-		return 1
+	Clipboard := msgString, tickCount := A_TickCount
+	while (Clipboard != msgString) {
+		Clipboard := ""
+		Clipboard := msgString
+		ClipWait, 2
+		if (Clipboard = msgString)
+			break
+
+		if (A_TickCount-tickCount > 2000) {
+			trayMsg := StrReplace(PROGRAM.TRANSLATIONS.TrayNotifications.ClipboardFailedToUpdate_Msg, "%message%", str)
+			TrayNotifications.Show(PROGRAM.TRANSLATIONS.TrayNotifications.ClipboardFailedToUpdate_Title, trayMsg)
+			return
+		}
+		Sleep 100
 	}
+
 	SET_CLIPBOARD_CONTENT := str
-	Sleep 20
 }
 
 Reset_Clipboard() {
