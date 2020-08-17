@@ -705,7 +705,7 @@ Is_Tool_Elevation_SameLevel_As_GameInstance(gamePID) {
 	if Is_Game_Elevated(gamePID)
 		return False
 
-	return isSameLevel
+	return True
 }
 
 Is_Game_Elevated(gamePID) {
