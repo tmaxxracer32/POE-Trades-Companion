@@ -209,7 +209,7 @@ Reset_Clipboard() {
 }
 
 Replace_TradeVariables(_buyOrSell, tabNum="", string="") {
-	global PROGRAM, GuiTrades
+	global PROGRAM, GuiTrades, GAME
 	static lastCharacterLogged, timeSinceRetrievedChar
 
 	if (tabNum) {
@@ -230,6 +230,22 @@ Replace_TradeVariables(_buyOrSell, tabNum="", string="") {
 		lastCharacterLogged := poeLoggedChar?poeLoggedChar:lastCharacterLogged
 
 		string := StrReplace(string, "%myself%", lastCharacterLogged)
+	}
+
+	if IsContaining(string, "%myzone%") {
+		if (tabNum)
+			playerZone := GAME[tabContent.GamePID].PlayerZone
+		else {
+			prevTitleMatchMode := SetTitleMatchMode("RegEx")
+			if WinActive("[a-zA-Z0-9_] ahk_group POEGameGroup")
+				WinGet, activePID, PID, A
+			else
+				WinGet, activePID, PID,% "[a-zA-Z0-9_] ahk_group POEGameGroup"
+			SetTitleMatchMode(prevTitleMatchMode)
+			playerZone := GAME[activePID].PlayerZone
+		}
+		playerZone := playerZone ? playerZone : "Undefined Area"
+		string := StrReplace(string, "%myzone%", playerZone)
 	}
 
 	return string

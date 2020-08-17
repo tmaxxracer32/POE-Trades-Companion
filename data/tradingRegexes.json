@@ -1,5 +1,17 @@
 ﻿{
-    "To": {
+	"ZoneEntered": {
+		"ENG": "You have entered (.*).",
+        "FRE": "Vous êtes à présent dans : (.*).",
+        "GER": "Ihr habt '(.*)' betreten.",
+        "POR": "Você entrou em: (.*)",
+        "SPA": "Has entrado a (.*)",
+        "RUS":"Вы вошли в область (.*).",
+        "THA":"คุณเข้าสู่ (.*)",
+        "KOR":"(.*)에 진입했습니다.",
+        "TWN":"你已進入：(.*)。"
+	},
+	
+	"To": {
         "ENG": "To",
         "FRE": "À",
         "GER": "An",

@@ -310,6 +310,17 @@ Parse_GameLogs(strToParse, preview=False) {
 	Loop, Parse,% strToParse,`n,`r ; For each line
 	{
 		parsedLogsMsg := A_LoopField
+
+		; Check if entered zone
+		for lang, regexStr in PROGRAM.DATA.TRADING_REGEXES.ZoneEntered {
+			if RegExMatch(parsedLogsMsg, "SO)" logPrefix " : " regexStr, zonePat) {
+				instancePID := zonePat.1, zone := zonePat.2
+				if !IsObject(GAME[instancePID])
+					GAME[instancePID] := {}
+				GAME[instancePID].PlayerZone := zone
+				break
+			}
+		}
 		
 		; Check if area joined
 		for lang, regexStr in PROGRAM.DATA.TRADING_REGEXES.JoinedArea {
