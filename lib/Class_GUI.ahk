@@ -1,386 +1,621 @@
-﻿/*
-	GUI.New("MyGui", ,"Window Title")
-	GUI.Font("MyGui", "Segoe UI", 10)
-	GUI.Add("MyGui", "Text", "x10 y10 FontArial FontSize20 hwndhTEXT_SomeText", "Some text in another font")
-	GUI.Add("MyGui", "Text", "xp y+10 ", "Some text in default font")
-	GUI.Show("MyGui")
+﻿/*	Class GUI by lemasato
+	www.github.com/lemasato
 
-	MsgBox % GuiMyGui_Controls["hTEXT_SomeText"]
-	ListVars
+	Usage example:
+class CUSTOM_GUI {
+    Create() {
+        this.CustomGui := new GUI("CustomGui", "HwndhCustomGui", "My Custom Gui")
+        this.CustomGui.Add("Button", "x5 y5 hwndhBTN_MyButton w150 h30", "My Button")
+        this.CustomGui.Add("Edit", "xp y+5 hwndhEDIT_MyEdit wp R1", "Edit Field")
+        this.CustomGui.BindWindowsMessage(this.__class, 0x200, "WM_MOUSEMOVE")
+        this.CustomGui.BindFunctionToControl(this.__class, "hBTN_MyButton", "ShowMsgBox", "It's working!")
+        this.CustomGui.BindFunctionToControl(this.__class, "hEDIT_MyEdit", "ShowEditBoxToolTip", "Edit box content:`n%content%")
+        this.CustomGui.Show("xCenter yCenter")
+    }
 
-	Esc::ExitApp
+    ShowMsgBox(msg) {
+        MsgBox,% msg
+    }
+
+    ShowEditBoxToolTip(str) {
+        str := StrReplace(str, "%content%", this.CustomGui.GetControlContent("hEDIT_MyEdit"))
+        ShowToolTip(str)
+    }
+    
+    ShowToolTip(msg) {
+        ToolTip % msg
+    }
+
+    WM_MOUSEMOVE() {
+        if !(A_Gui)
+            return
+        static prev_mouseX, prev_MouseY
+        MouseGetPos, mouseX, mouseY
+        if (mouseX = prev_mouseX && mouseY = prev_mouseY)
+            return
+
+        prev_mouseX := mouseX, prev_mouseY := mouseY
+        this.ShowToolTip("You are now hovering the`nmouse across GUI " A_Gui)
+        __f := this["ShowToolTip"].bind(this, "")
+        SetTimer,% __f, Delete
+        SetTimer,% __f, -1200
+        return
+    }
+}
+
+	Changelogs:
+	1.1		/   07 Aug 2018   / Completely adapted for usage of the "this" variable
+								One benefit is that global scope with dynamic variable names is no longer neccessary
+								Added ThrowError() function
+								Instead of having multiple global variables for Controls,Functions,Etc... it's now all into a single nested object
+	1.0.?	/ 	     ?		  / Various undocumented changes
+	1.0		/ 	     ?		  / Initial release
 */
 
-Class GUI {
+/*
+    TO_DO
+    Bold,Italic,Etc
+*/
 
-	Destroy(name) {
-		global
-		local msgID
+class GUI {
 
-		Gui, %name%:Hide
+	__New(guiName, opts="", title="") {
 
-		for msgID in Gui%name%_OnMessageObjs
-			OnMessage(msgID, Gui%name%_OnMessageObjs[msgID], 0)
+        separated_opts := this.SeparateSpecialParamsAndValue(opts)
+        normal_opts := separated_opts.NormalOpts, special_opts := separated_opts.SpecialOpts
 
-		Gui%name% := ""
-		Gui%name%_Controls := ""
-		Gui%name%_Submit := ""
-		Gui%name%_ControlFunctions := ""
-		Gui%name%_OnMessageObjs := ""
+        Loop, Parse, normal_opts,% A_Space
+        {
+            thisOpt := A_LoopField
+            if ( SubStr(thisOpt, 1, 4) = "hwnd" ) ; Retrieve handle name for later usage
+                guiHandleName := SubStr(thisOpt, 5)
+            else if ( SubStr(thisOpt, 1, 1) = "w" ) && ( IsNum(SubStr(thisOpt, 2)) ) ; Retrieve width for later usage
+                guiWidth := SubStr(thisOpt, 2)
+            else if ( SubStr(thisOpt, 1, 1) = "h" ) && ( IsNum(SubStr(thisOpt, 2)) ) ; Retrieve height for later usage
+                guiHeight := SubStr(thisOpt, 2)
+        }
+        if (guiHandleName = "") ; Make sure GUI has associated handle name
+            guiHandleName := guiName, normal_opts .= " hwnd" guiHandleName
+        if IsNum(guiWidth)
+            normal_opts := StrReplace(normal_opts, "w" guiWidth), this.Width := guiWidth
+        if IsNum(guiHeight)
+            normal_opts := StrReplace(normal_opts, "h" guiHeight), this.Height := guiHeight
 
-		Gui, %name%:Destroy
+        ; ; Reset the GUI
+        if ( this.Name )
+		    this.Destroy()
+		Gui, %guiName%:New, %normal_opts%, %title%
+
+        ; Reset its associated arrays
+        this.Controls := {}, this.ControlsContents := {}, this.BoundFunctions := {}, this.BoundWindowsMessages := {}, this.ImageButtonErrors := {}
+		this.Name := guiName, this.Title := title, this.Handle := %guiHandleName%, this.Children := {}
+
+        ; Set default stuff
+        if (special_opts.Font)
+            this.SetFont(special_opts.Font)
+        else this.SetFont("Segoe UI")
+        
+        if (special_opts.FontSize)
+            this.SetFontSize(special_opts.FontSize)
+        else this.SetFontSize(8)
+        
+        if (special_opts.FontQuality)
+            this.SetFontQuality(special_opts.FontQuality)
+        else this.SetFontQuality(5)
 	}
+    
+    NewChild(childName, childOpts="", childTitle="") {
+        return this.Children[childName] := new GUI(this.Name childName, childOpts " +Parent" this.Name, childTitle)
+    }
 
-	New(name, opts="", title="") {
-		global
-
-		local handleName, guiHandle, guiHandleBak
-		local subPat := {}
-
-		; Reset the gui
-		Gui, %name%:Destroy
-		Gui, %name%:New, %opts%, %title%
-
-		if RegExMatch(opts, "O)\+Hwnd(.*?) ", subPat) { ; Mid parameter
-			handleName := subPat.1
-			guiHandleBak := guiHandle := %handleName% ; For some reason the value doesn't stay as hex after doing if (guiHandle)
-		}
-		else if RegExMatch(opts, "O)\+Hwnd(.*)", subPat) { ; End parameter
-			handleName := subPat.1
-			guiHandleBak :=	guiHandle := %handleName%
-		}
-
-		; Reset its associated arrays
-		Gui%name% := {}
-		Gui%name%_Controls := {}
-		Gui%name%_Submit := {}
-		Gui%name%_ControlFunctions := {}
-		Gui%name%_OnMessageObjs := {}
-
-		if (title)
-			Gui%name%["Title"] := title
-
-		if (handleName) {
-			if (guiHandle) {
-				Gui%name%["Handle"] := guiHandleBak
-				Gui%name%["Hwnd"] 	:= guiHandleBak
-			}
-			else
-				MsgBox Class_GUI.ahk: Failed to retrieve the GUI handle.`nGUI: %name%`nOpts: %opts%
-		}
-	}
-
-	Submit(name, opts="") {
-		global
-
-		Gui%name%_Submit := {}
-		for ctrlName, ctrlHandle in Gui%name%_Controls {
-			GuiControlGet, ctrlcontent, %name%:,% ctrlHandle
-			Gui%name%_Submit[ctrlName] := ctrlContent
-		}
-		Return Gui%name%_Submit
-	}
-
-	Font(name, font, size="", qual="", col="") {
-		global
-		local opts
-
-		; Set values
-		size := (size)?(size):(10)
-		qual := (qual)?(qual):(5)
-		col := (col!="")?(col):("Black")
-
-		; Add the prefixes
-		opts .= " S" size " Q" qual " c" col
-
-		; Set the default font settings
-		Gui, %name%:Font, %opts%, %font%
-
-		; Add the default font settings values
-		Gui%name%["Font"] := font
-		Gui%name%["Font_Size"] := size
-		Gui%name%["Font_Qual"] := qual
-		Gui%name%["Font_Quality"] := qual
-		Gui%name%["Font_Color"] := col
-	}
-
-	Margin(name, xMargin, yMargin) {
-		global
-
-		Gui, %name%:Margin, %xMargin%, %yMargin%
-	}
-
-	Color(name, _winColor="", _ctrlColor="") {
-		global
-
-		if (_winColor != "" && _ctrlColor="")
-			Gui, %name%:Color, %_winColor%
-		else if (_winColor = "" && _ctrlColor != "")
-			Gui, %name%:Color, , %_ctrlColor%
-		else if (_winColor != "" && _ctrlColor != "")
-			Gui, %name%:Color, %_winColor%, %_ctrlColor%
-
-		Gui%name%["Background_Color"] := _winColor!=""?_winColor : Gui%name%["Background_Color"]
-		Gui%name%["Controls_Color"] := _ctrlColor!=""?_ctrlColor : Gui%name%["Controls_Color"]
-	}
-
-	Add(name, type, opts="", content="", imageBtnStyle="", imageBtnFontHandle="", imageBtnFontSize="") {
-		static
-		local Specials := ["FontSize", "FontQual", "Font", "CheckState", "ControlChooseString"]
-		local SpecialParams := {}
-
-		local Statics := ["Hwnd", "V"]
-		local pHwnd, pV
-		static vHwnd, vV
-		pHwnd := "", pV := "", vHwnd := "", vV := ""
+    SeparateSpecialParamsAndValue(opts) {
+        SpecialOptsAvailable := ["FontSize", "FontQuality", "Font", "ControlChooseString", "CenterVertical", "Bold", "Italic", "Strike", "Underline"]
+        SpecialOpts := {}, opts_original := opts
 
 		; Parsing parameters
-		Loop, Parse, opts,% A_Space
+		Loop, Parse, opts_original,% A_Space
 		{
-			local opt := A_LoopField
+			thisOpt := A_LoopField
+            thisOpt_end += StrLen(A_LoopField)
+            thisOpt_start := thisOpt_end - StrLen(A_LoopField) + 1
+            
+			; SpecialOpts
+			for index, sOpt in SpecialOptsAvailable {
+                
+                if IsIn( SubStr(thisOpt, 1, 1), "+" ) ; Remove + or - if part of param
+                    thisOpt := SubStr(thisOpt, 2)
 
-			; Special parameters
-			local id, special
-			for id, special in Specials {
-				local len := StrLen(special)
-				local paramName := SubStr(opt, 1, len)
-				local paramValue := SubStr(opt, len+1)
-
-				if (paramName = special) {
-					opts := StrReplace(opts, opt, "")
-					if (paramName = "CheckedState") ; Make sure to have 0 or 1
-						paramValue := (paramValue=1)?(1):(0)
-					SpecialParams[paramName] := paramValue
+                len := StrLen(sOpt), param := SubStr(thisOpt, 1, len)
+				if (param = sOpt) {
+                    if (sOpt = "Font") {
+                        RegExMatch(opts_original,"iO)" param "'(.*?)'", out, thisOpt_start) ; Font name needs to be between ''
+                        value := out.1, thisOpt := out.0
+                    }
+                    else
+                        value := SubStr(thisOpt, len+1) ; Separate param and value
+					opts := StrReplace(opts, thisOpt, "")
+					SpecialOpts[param] := value
 					Break
 				}
 			}
-
-			; Static parameters
-			local id, _static
-			for id, _static in Statics {
-				local len := StrLen(_static)
-				local paramName := SubStr(opt, 1, len)
-				local paramValue := SubStr(opt, len+1)
-
-				if (paramName = _static) {
-					opts := StrReplace(opts, opt, "")
-					p%paramName% := paramName
-					v%paramName% := paramValue
-					Break
-				}
-			}
-
 		}
-		; Adding var name if hwnd provided but no var name
-		if (vHwnd)
-			pV := "v", vV := vHwnd
+        return {SpecialOpts:SpecialOpts, NormalOpts:opts}
+    }
 
-		; Font special parameter
-		local hasFontParams := (SpecialParams.Font || SpecialParams.FontSize || SpecialParams.FontQual)?(True):(False)
-		if (hasFontParams) {
-			if (SpecialParams.FontSize)
-				SpecialParams.FontSize := "S" SpecialParams.FontSize
-			if (SpecialParams.FontQual)
-				SpecialParams.FontQual := "Q" SpecialParams.FontQual
-			
-			if !(SpecialParams.Font) && (SpecialParams.FontSize || SpecialParams.FontQual) ; No font. Has size/qual.
-				Gui, %name%:Font,% SpecialParams.FontSize " " SpecialParams.FontQual
-			else if (SpecialParams.Font) && !(SpecialParams.FontSize || SpecialParams.FontQual) ; Has font. No size/qual.
-				Gui, %name%:Font,,% SpecialParams.Font
-			else if (SpecialParams.Font) && (SpecialParams.FontSize || SpecialParams.FontQual) ; Has font. Has size/qual.
-				Gui, %name%:Font,% SpecialParams.FontSize " " SpecialParams.FontQual,% SpecialParams.Font
-		}
+    __Delete() {
+        ; this.Destroy()
+    }
 
-		; Add gui control
-		try {
-			if (type = "ImageButton") {
-				Gui, %name%:Add, Button, %opts% %pHwnd%%vHwnd% %pV%%vV%, %content%
-			}
-			else
-				Gui, %name%:Add, %type%, %opts% %pHwnd%%vHwnd% %pV%%vV%, %content%
-		}
-		catch e {
-			MsgBox,% 4096+16, %A_ScriptName%,% "Class_GUI.ahk:" . "`nFailed to create control."	. "`n" . "`nMessage: " e.Message . "`nExtra: " e.Extra
-				. "`n" . "`nGUI Name: " name . "`nControl type: " type . "`nOptions: " opts . "`nControl handle: " vHwnd . "`nControl variable: " vV . "`nContent: " content
-		}
+    AddImageButton(opts="", content="", imgBtnStyle="", imageBtnFontHandle="", imageBtnFontSize="") {
+        this.Add("ImageButton", opts, content, imgBtnStyle, imageBtnFontHandle, imageBtnFontSize)
+    }
 
-		; Add handle if existing
-		if (vHwnd) {
-			GUI.SetGlobal(name, "Controls", vHwnd, %vHwnd%)
-		}
+    ThrowError(errors) {
+        if IsObject(errors)
+            if (errors.1.1)
+                Loop % errors.Count()
+                    msg := A_Index ". " errors[A_Index].1 " (" errors[A_Index].2 ")", fullMsg .= fullMsg ? "`n" msg : msg
+            else
+                fullMsg := errors.1 " (" errors.2 ")"
+        else
+            fullMsg := errors
+        Throw Exception(fullMsg, -2)
+    }
 
-		; Restore font
-		if (hasFontParams) {
-			Gui, %name%:Font,% "S" Gui%name%.Font_Size " Q" Gui%name%.Font_Qual,% Gui%name%.Font
-		}
+    ImageButtonUpdate(ctrlHandleName="", imageBtnStyle="", imageBtnFontHandle="", imageBtnFontSize="") {
+        errorsObj := []
+        if !(this.Controls[ctrlHandleName])
+            errorsObj.Push(["Handle name does not refer to any existing control", ctrlHandleName])
+        if !IsObject(imageBtnStyle)
+            errorsObj.Push(["ImageButton Style is not an array", imageBtnStyle])
+        if (imageBtnFontHandle != "" && !imageBtnFontHandle)
+            errorsObj.Push(["ImageButton Font Handle is invalid", imageBtnFontHandle])
+        if (imageBtnFontSize && !IsNum(imageBtnFontSize))
+            errorsObj.Push(["ImageButton Font Size is not a number", imageBtnFontSize])
+        if (errorsObj)
+            this.ThrowError(errorsObj)
 
-		; Check box
-		if (SpecialParams.CheckState = 0 || SpecialParams.CheckState = 1) {
-			GuiControl, %name%:,% Gui%name%_Controls[vHwnd],% SpecialParams.CheckState
-		}
-
-		; Control choose
-		if (SpecialParams.ControlChooseString) {
-			param := SpecialParams.ControlChooseString
-			param := StrReplace(param, "%A_Space%", " ")
-			GuiControl, %name%:ChooseString,% Gui%name%_Controls[vHwnd],% param
-		}
-
-		if (type = "ImageButton") {
-			if !ImageButton.Create(GUI.GetGlobal(name, "Controls", vHwnd), imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-				Gui%name%["ImageButton_Errors"] .= "GUI: """ name """"
-				. "`n" "Error: """ ImageButton.LastError """"
-				. "`n" "Control: """ vHwnd """ - Control Handle: """ Gui%name%_Controls[vHwnd] """"
-				. "`n" "Options: """ opts """"
-				. "`n" "ImageButton Font Handle: """ imageBtnFontHandle """"
-				. "`n" "ImageButton Font Size: """ imageBtnFontSize """"
-				. "`n" "ImageButton Style: """ JSON.Dump(imageBtnStyle) """"
-				. "`n`n"
-		}
+		success := ImageButton.Create(this.Controls[ctrlHandleName], imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
+        if !(success)
+            this.ThrowError([["ImageButton.LastError", ImageButton.LastError]
+            , ["Control", ctrlHandleName]
+            , ["Handle", this.Controls[ctrlHandleName]]
+            , ["ImageButton Font Handle", imageBtnFontHandle]
+            , ["ImageButton Font Size", imageBtnFontSize]
+            , ["ImageButton Style", JSON_Dump(imageBtnStyle)]])
 	}
 
-	ImageButtonUpdate(btnHwnd, imageBtnStyle, imageBtnFontHandle="", imageBtnFontSize="") {
-		if !ImageButton.Create(btnHwnd, imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-			MsgBox % "Class_GUI.ahk: ImageButtonUpdate error."
-			. "`n" "Error: " ImageButton.LastError
-			. "`n"
-			. "`n" "Function parameters:"
-			. "`n" "Button Handle: """ btnHwnd """"
-			. "`n" "ImageButton Style: """ JSON_Dump(imageBtnStyle) """"
-			. "`n" "Font Handle: """ imageBtnFontHandle """"
-			. "`n" "Font Size: """ imageBtnFontSize """"
-	}
+	ImageButtonChangeCaption(ctrlHandleName="", btnCaption="", imageBtnStyle="", imageBtnFontHandle="", imageBtnFontSize="") {
+        errorsObj := []
+        if !(this.Controls[ctrlHandleName])
+            errorsObj.Push(["Handle name does not refer to any existing control", ctrlHandleName])
+        if !IsObject(imageBtnStyle)
+            errorsObj.Push(["ImageButton Style is not an array", imageBtnStyle])
+        if (imageBtnFontHandle != "" && !imageBtnFontHandle)
+            errorsObj.Push(["ImageButton Font Handle is invalid", imageBtnFontHandle])
+        if (imageBtnFontSize && !IsNum(imageBtnFontSize))
+            errorsObj.Push(["ImageButton Font Size is not a number", imageBtnFontSize])
+        if (errorsObj)
+            this.ThrowError(errorsObj)
 
-	ImageButtonChangeCaption(btnHwnd, btnCaption, imageBtnStyle, imageBtnFontHandle="", imageBtnFontSize="") {
-		; Set caption text
-		ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
-		; Make sure that caption is changed before continuing
-		triesBeforeSetAgain := 3
-		while (curCaption != btnCaption) {
-			ControlGetText, curCaption, , ahk_id %btnHwnd%
-			ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
-			/*
-			triesBeforeSetAgain--
-			if (triesBeforeSetAgain=0) {
-				triesBeforeSetAgain := 3
-				ControlSetText, , %btnCaption%, ahk_id %btnHwnd%
-			}
-			*/
+		ControlSetText, , %btnCaption%,% "ahk_id " this.Controls[ctrlHandleName] ; Set caption text
+		while (curCaption != btnCaption) { ; Make sure that caption is changed before continuing
+			ControlGetText, curCaption, ,% "ahk_id " this.Controls[ctrlHandleName]
+			ControlSetText, , %btnCaption%,% "ahk_id " this.Controls[ctrlHandleName]
 			Sleep 1
 		}
 		; Calling imagebutton to set new caption
-		if !ImageButton.Create(btnHwnd, imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-			MsgBox % "Class_GUI.ahk: ImageButtonChangeCaption error."
-			. "`n" "Error: " ImageButton.LastError
-			. "`n"
-			. "`n" "Function parameters:"
-			. "`n" "Button Handle: """ btnHwnd """"
-			. "`n" "ImageButton Style: """ JSON_Dump(imageBtnStyle) """"
-			. "`n" "Font Handle: """ imageBtnFontHandle """"
-			. "`n" "Font Size: """ imageBtnFontSize """"
+		success := !ImageButton.Create(btnHwnd, imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
+		if !(success)
+            this.ThrowError([["ImageButton.LastError", ImageButton.LastError]
+            , ["Control", ctrlHandleName]
+            , ["Handle", this.Controls[ctrlHandleName]]
+            , ["Caption", btnCaption]
+            , ["ImageButton Font Handle", imageBtnFontHandle]
+            , ["ImageButton Font Size", imageBtnFontSize]
+            , ["ImageButton Style", JSON_Dump(imageBtnStyle)]])
 	}
 
-	Show(name, opts="", title="") {
-		try
-			Gui, %name%:Show, %opts%, %title%
-		catch e
-			AppendToLogs(A_ThisFunc " failed with params:"
-			. "`nname: """ name """`nopts: """ opts """`ntitle: """ title """"
-			. "`nAdditional informations: what: """ e.what """`nfile: """ e.file """"
-			. "`nline: """ e.line """`nmessage: """ e.message """`nextra: """ e.extra """")
-	}
+    Add(ctrlType="", opts="", content="", imageBtnStyle="", imageBtnFontHandle="", imageBtnFontSize="") {
+        if !IsIn(ctrlType,"Text,Edit,UpDown,Picture,Button,Checkbox,Radio,DropDownList,ComboBox,ListBox,ListView,TreeView,Link,Hotkey"
+        . ",DateTime,MonthCal,Slider,Progress,GroupBox,Tab,Tab2,Tab3,StatusBar,ActiveX,Custom,Picture,ImageButton")
+            this.ThrowError(["Control type is not alllowed", ctrlType])
 
-	GetGlobal(guiName, type="", key="") {
-		global
+        guiName := this.Name
 
-		if type in Controls,Submit
-		{
-			if (key)
-				return Gui%guiName%_%Type%[key]
+        separated_opts := this.SeparateSpecialParamsAndValue(opts)
+        normal_opts := separated_opts.NormalOpts, special_opts := separated_opts.SpecialOpts
 
-			return Gui%guiName%_%Type%
+        Loop, Parse, normal_opts,% A_Space
+        {
+            thisOpt := A_LoopField
+            ; Getting handle and var name for later use
+            if ( SubStr(thisOpt, 1, 4) = "hwnd" )
+                ctrlHandleName := SubStr(thisOpt, 5)
+            else if ( SubStr(thisOpt, 1, 2) = "v" )
+                ctrlVariableName := SubStr(thisOpt, 5)
+        }
+
+		; Changing font based on special opt
+		if (special_opts.Font)
+            font_bak := this.Font, this.SetFont(special_opts.Font)
+        if (special_opts.FontSize)
+            fontsize_bak := this.FontSize, this.SetFontSize(special_opts.FontSize)
+        if (special_opts.FontQuality)
+            fontquality_bak := this.FontQuality, this.SetFontQuality(special_opts.FontQuality)
+        if (special_opts.FontQuality)
+            fontquality_bak := this.FontQuality, this.SetFontQuality(special_opts.FontQuality)
+        if (special_opts.FontQuality)
+            fontquality_bak := this.FontQuality, this.SetFontQuality(special_opts.FontQuality)
+        if (special_opts.FontQuality)
+            fontquality_bak := this.FontQuality, this.SetFontQuality(special_opts.FontQuality)
+
+        if (special_opts.CenterVertical)
+            normal_opts .= " +0x200"
+
+        if (ctrlType = "Text" && !IsContaining(normal_opts, "-BackgroundTrans"))
+            normal_opts .= " +BackgroundTrans"
+
+		; Add gui control
+        try Gui, %guiName%:Add,% ctrlType="ImageButton"?"Button":ctrlType,%normal_opts%, %content%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+
+		; Add handle if existing
+		if (ctrlHandleName)
+            this.Controls[ctrlHandleName] := %ctrlHandleName%
+
+		; Restore font
+		if (special_opts.Font)
+            this.SetFont(font_bak)
+        if (special_opts.FontSize)
+            this.SetFontSize(fontsize_bak)
+        if (special_opts.FontQuality)
+            this.SetFontQuality(fontquality_bak)
+
+		; Control choose
+		if (special_opts.ControlChooseString) {
+			param := StrReplace(special_opts.ControlChooseString, "%A_Space%", " ")
+            try GuiControl, %guiName%:ChooseString,% this.Controls[ctrlHandleName],% param
+            catch e
+                this.ThrowError(e.Message "`n" e.Extra)
 		}
-		else
-			return Gui%guiName%[key]
 
-	}
-	SetGlobal(guiName, type, key, value) {
-		global
-
-		if type in Controls,Submit
-		{
-			if (Gui%guiName%_%Type%)
-				Gui%guiName%_%Type%[key] := value
+        ; Creating ImageButton
+		if (ctrlType = "ImageButton") {
+			success := ImageButton.Create(this.Controls[ctrlHandleName], imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
+			if !(success)
+                this.ThrowError([["ImageButton.LastError", ImageButton.LastError]
+                , ["Control", ctrlHandleName]
+                , ["Handle", this.Controls[ctrlHandleName]]
+                , ["ImageButton Font Handle", imageBtnFontHandle]
+                , ["ImageButton Font Size", imageBtnFontSize]
+                , ["ImageButton Style", JSON_Dump(imageBtnStyle)]])
 		}
 	}
 
-	GetControlPos(guiName, ctrlName) {
-		global
-		local ctrlPos, ctrlPosX, ctrlPosY, ctrlPosW, ctrlPosH
-		GuiControlGet, ctrlPos , %guiName%:Pos,% Gui%guiname%_Controls[ctrlName]
+    GetComboBoxList(ctrlHandleName) {
+        ControlGet, comboBoxList, List, , ,% "ahk_id " this.Controls[ctrlHandleName]
+        comboBoxList := StrReplace(comboBoxList, "`n", "|")
+        return comboBoxList
+    }
+
+    ControlChoose(ctrlHandleName, chooseWhat) {
+        guiName := this.Name
+        GuiControl, %guiName%:Choose,% this.Controls[ctrlHandleName],% chooseWhat
+    }
+
+    ControlChooseString(ctrlHandleName, chooseWhat) {
+        guiName := this.Name
+        GuiControl, %guiName%:ChooseString,% this.Controls[ctrlHandleName],% chooseWhat
+    }
+
+	GetControlContent(ctrlHandleName) {
+		this.GetControlsContents()
+		return this.ControlsContents[ctrlHandleName]
+	}
+
+    GetControlsContents() {
+		guiName := this.Name, this.ControlsContents := {}
+		for ctrlHandleName, ctrlHandle in this.Controls {
+			GuiControlGet, ctrlContent,%guiName%:,% ctrlHandle
+            this.ControlsContents[ctrlHandleName] := ctrlContent
+		}
+        return this.ControlsContents
+	}
+
+    SetControlContent(ctrlHandleName, ctrlContent) {
+        guiName := this.Name
+        GuiControl, %guiName%:,% this.Controls[ctrlHandleName],% ctrlContent
+    }
+
+    SetMargins(xMargin, yMargin) {
+        guiName := this.Name
+        try Gui,%guiName%:Margin, %xMargin%, %yMargin%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+	}
+
+    SetBackgroundColor(bckColor) {
+        guiName := this.Name
+        try Gui,%guiName%:Color,%bckColor%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+        this.BackgroundColor := bckColor
+    }
+
+    SetControlsColor(ctrlColor) {
+        guiName := this.Name
+        try Gui,%guiName%:Color,,%ctrlColor%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+        this.ControlsColor := ctrlColor
+    }
+
+    SetFont(fontName) {
+        guiName := this.Name
+        try Gui,%guiName%:Font,,%fontName%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+        this.Font := fontName
+    }
+
+    SetFontSize(fontSize) {
+        guiName := this.Name
+        try Gui,%guiName%:Font,s%fontSize%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+        this.FontSize := fontSize
+    }
+
+    SetFontQuality(fontQuality) {
+        guiName := this.Name
+        try Gui,%guiName%:Font,q%fontQuality%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+        this.FontQuality := fontQuality
+    }
+
+    SetFontColor(fontColor) {
+        guiName := this.Name
+        try Gui,%guiName%:Font,c%fontColor%
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+        this.FontColor := fontColor
+    }
+
+    GetControlPos(ctrlHandleName) {
+        guiName := this.Name
+		GuiControlGet, ctrlPos , %guiName%:Pos,% this.Controls[ctrlHandleName]
 		return {X:ctrlPosX,Y:ctrlPosY,W:ctrlPosW,H:ctrlPosH}
 	}
 
-	MoveControl(guiName, ctrlName, opts="") { 
-		global
+    AddColoredBorder(borderSize, borderColor) {
+        guiName := this.Name
+        size := this.GetPosition(), gui_width := size.Width, gui_height := size.Height
+        
+        try {
+            Gui, %guiName%:Add, Progress,% "x0 y0 w" gui_width " h" borderSize " Background" borderColor ; Top
+		    Gui, %guiName%:Add, Progress,% "x0 y0 w" borderSize " h" gui_height " Background" borderColor ; Left
+		    Gui, %guiName%:Add, Progress,% "x" gui_width-borderSize " y0" " w" borderSize " h" gui_height " Background" borderColor ; Right
+		    Gui, %guiName%:Add, Progress,% "x0 y" gui_height-borderSize " w" gui_width " h" borderSize " Background" borderColor ; Bottom
+        }
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+    }
+
+    PredictControlHeight(ctrlType, ctrlOpts, ctrlContent) {
+        guiName := this.Name
+        predict_gui := new GUI("PredictControlHeight")
+    
+		predict_gui.Add(ctrlType, ctrlOpts " hwndhControlHandle", ctrlContent)
+        controlPosition := predict_gui.GetControlPos("hControlHandle")
+		predict_gui.Destroy()
+
+        return controlPosition.H
+    }
+
+    GetControlText(ctrlHandleName) {
+        ControlGetText, ctrlText, ,% "ahk_id " this.Controls[ctrlHandleName]
+        return ctrlText
+    }
+
+    GetPosition(onlyIfVisible=False) {
+        
+        hw := DetectHiddenWindows("Off")
+        if WinExist("ahk_id " this.Handle) {
+            WinGetPos, X, Y, Width, Height,% "ahk_id " this.Handle
+            DetectHiddenWindows(hw)
+            return {X:X, Y:Y, Width:Width, Height:Height}
+        }
+        if (onlyIfVisible) {
+            DetectHiddenWindows(hw)
+            return
+        }
+
+        DetectHiddenWindows("On")
+        WinGetPos, X, Y, Width, Height,% "ahk_id " this.Handle
+        if (Width = 0 && Height = 0) {
+            this.Show("AutoSize Hide")
+            WinGetPos, X, Y, Width, Height,% "ahk_id " this.Handle
+        }
+        DetectHiddenWindows(hw)
+        return {X:X, Y:Y, Width:Width, Height:Height}
+    }
+
+    MoveControl(ctrlHandleName, opts="") { 
+		guiName := this.Name
 		; if IsContaining(opts, "Center")
 		; 	centerCtrl := True, opts := StrReplace(opts, "Center", "")
-		GuiControl, %guiName%:Move,% Gui%guiName%_Controls[ctrlName],% opts
+		try GuiControl, %guiName%:Move,% this.Controls[ctrlHandleName],% opts
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 		; if (centerCtrl)
-			; GuiControl, %guiName%:+Center,% Gui%guiName%_Controls[ctrlName]
+			; GuiControl, %guiName%:+Center,% Gui%guiName%["Controls"][ctrlName]
 	}
 
-	OnMessageBind(guiClass, guiName, msgID, funcName, params*) {
-		global
-		local __f
+    ; ===============================================================================================================================
+    ; https://www.autohotkey.com/boards/viewtopic.php?t=70852
+    ; Message ..................:  EM_SETCUEBANNER
+    ; Minimum supported client .:  Windows Vista
+    ; Minimum supported server .:  Windows Server 2003
+    ; Links ....................:  https://docs.microsoft.com/en-us/windows/win32/controls/em-setcuebanner
+    ; Description ..............:  Sets the textual cue, or tip, that is displayed by the edit control to prompt the user for information.
+    ; Option ...................:  True  -> if the cue banner should show even when the edit control has focus
+    ;                              False -> if the cue banner disappears when the user clicks in the control
+    ; ===============================================================================================================================
+    EM_SETCUEBANNER(handle, string, option := true)
+    {
+        static ECM_FIRST       := 0x1500 
+        static EM_SETCUEBANNER := ECM_FIRST + 1
+        if (DllCall("user32\SendMessage", "ptr", this.Controls[handle], "uint", EM_SETCUEBANNER, "int", option, "str", string, "int"))
+            return true
+        return false
+    }
 
-		if ( params.Count() )
-			Gui%guiName%_OnMessageObjs[msgID] := %guiClass%[funcName].Bind(guiClass, params*)
-		else
-			Gui%guiName%_OnMessageObjs[msgID] := %guiClass%[funcName].Bind(guiClass)
+    ; ===============================================================================================================================
+    ; https://www.autohotkey.com/boards/viewtopic.php?t=70852
+    ; Message ..................:  CB_SETCUEBANNER
+    ; Minimum supported client .:  Windows Vista
+    ; Minimum supported server .:  Windows Server 2008
+    ; Links ....................:  https://docs.microsoft.com/en-us/windows/win32/controls/cb-setcuebanner
+    ; Description ..............:  Sets the cue banner text that is displayed for the edit control of a combo box.
+    ; ===============================================================================================================================
+    CB_SETCUEBANNER(handle, string)
+    {
+        static CBM_FIRST       := 0x1700
+        static CB_SETCUEBANNER := CBM_FIRST + 3
+        if (DllCall("user32\SendMessage", "ptr", this.Controls[handle], "uint", CB_SETCUEBANNER, "int", 0, "str", string, "int"))
+            return true
+        return false
+    }
 
-		OnMessage(msgID, Gui%guiName%_OnMessageObjs[msgID])
+; ===============================================================================================================================
+
+; ===============================================================================================================================
+
+    Show(opts="", title="") {
+        guiName := this.Name
+
+        Loop, Parse, opts,% A_Space
+        {
+            thisOpt := A_LoopField
+            if ( SubStr(thisOpt, 1, 1) = "w" ) && ( IsNum(SubStr(thisOpt, 2)) ) ; Retrieve width for later usage
+                guiWidth := SubStr(thisOpt, 2)
+            else if ( SubStr(thisOpt, 1, 1) = "h" ) && ( IsNum(SubStr(thisOpt, 2)) ) ; Retrieve height for later usage
+                guiHeight := SubStr(thisOpt, 2)
+            else if ( SubStr(thisOpt, 1, 1) = "x" ) && ( IsNum(SubStr(thisOpt, 2)) ) ; Retrieve x for later usage
+                guiX := SubStr(thisOpt, 2)
+            else if ( SubStr(thisOpt, 1, 1) = "y" ) && ( IsNum(SubStr(thisOpt, 2)) ) ; Retrieve y for later usage
+                guiY := SubStr(thisOpt, 2)
+        }
+        this.Width := IsNum(guiWidth) ? guiWidth : this.Width
+        opts .= IsNum(this.Width) ? " w" this.Width : ""
+        this.Height := IsNum(guiHeight) ? guiHeight : this.Height
+        opts .= IsNum(this.Height) ? " h" this.Height : ""
+        ; this.X := IsNum(guiX) ? guiX : this.X
+        ; opts .= IsNum(this.X) ? " h" this.X : ""
+        ; this.Y := IsNum(guiY) ? guiY : this.Y
+        ; opts .= IsNum(this.Y) ? " h" this.Y : ""
+
+        ; msgbox % opts
+
+        title := title ? title : this.Title
+        this.Title := title ? title : this.Title
+        
+		try
+			Gui, %guiName%:Show,% opts,% this.Title
+		catch e
+			this.ThrowError(e.Message "`n" e.Extra)
 	}
 
-	BindFunctionToControl(guiClass, guiName, ctrlName, funcName, params*) {
-		global
-		local __f
+    BindWindowsMessage(msgID, funcName, params*) {
+        if IsContaining(funcName, ".") {
+            split := StrSplit(funcName, ".")
+            className := split.1
+            funcName := split.2
+        }
 
-		if ( params.Count() ) {
-			__f := %guiClass%[funcName].Bind(guiClass, params*)
-			Gui%guiName%_ControlFunctions[ctrlName] := {Function: funcName, Params: [params*]}
-		}
-		else {
-			__f := %guiClass%[funcName].Bind(guiClass)
-			Gui%guiName%_ControlFunctions[ctrlName] := {Function: funcName}
-		}
-		
-		GuiControl, %guiName%:+g,% Gui%guiName%_Controls[ctrlName],% __f
+        if ( params.Count() ) {
+            if (className)
+                __f := ObjBindMethod(%className%, funcName, params*)
+            else
+                __f := Func(funcName).Bind(params*)
+        }
+        else {
+            if (className)
+                __f := ObjBindMethod(%className%, funcName)
+            else
+                __f := Func(funcName).Bind()
+        }
+            
+        this.BoundWindowsMessages[msgID] := {Function: funcName, Params: [params*]}
+		OnMessage(msgID, __f)
 	}
 
-	DisableControlFunction(guiClass, guiName, ctrlName) {
-		global
-		GuiControl, %guiName%:-g,% Gui%guiName%_Controls[ctrlName]
+    BindFunctionToControl(ctrlName, funcName, params*) {
+        guiName := this.Name
+
+        if IsContaining(funcName, ".") {
+            split := StrSplit(funcName, ".")
+            className := split.1
+            funcName := split.2
+        }
+
+        if ( params.Count() ) {
+            if (className)
+                __f := ObjBindMethod(%className%, funcName, params*)
+            else
+                __f := Func(funcName).Bind(params*)
+        }
+        else {
+            if (className)
+                __f := ObjBindMethod(%className%, funcName)
+            else
+                __f := Func(funcName).Bind()
+        }
+
+        this.BoundFunctions[ctrlName] := {Function: funcName, Params: [params*]}
+		GuiControl, %guiName%:+g,% this.Controls[ctrlName],% __f
 	}
 
-	EnableControlFunction(guiClass, guiName, ctrlName) {
-		global
-
-		if IsObject(Gui%guiName%_ControlFunctions[ctrlName].Params)
-			__f := %guiClass%[Gui%guiName%_ControlFunctions[ctrlName].Function].Bind(guiclass, Gui%guiName%_ControlFunctions[ctrlName].Params*)
-		else
-			__f := %guiClass%[Gui%guiName%_ControlFunctions[ctrlName].Function].Bind(guiclass)
-			
-		GuiControl, %guiName%:+g,% Gui%guiName%_Controls[ctrlName],% __f
+	DisableControlFunction(className, ctrlName) {
+        guiName := this.Name
+		GuiControl, %guiName%:-g,% this.Controls[ctrlName]
 	}
 
-	Get_CtrlVarName_From_Hwnd(guiName, ctrlHwnd) {
-	GuiControlGet, ctrlName, %guiName%:Name,% ctrlHwnd
-	return ctrlName
-}
+	EnableControlFunction(className, ctrlName) {
+        guiName := this.Name
+        funcName := this.BoundFunctions[ctrlName].Function
+        params := this.BoundFunctions[ctrlName].Params
+        __f := ObjBindMethod(%className%, funcName, params*)
+		GuiControl, %guiName%:+g,% this.Controls[ctrlName],% __f
+	}
 
-	SetDefault(guiName) {
-		global
+    Get_CtrlVarName_From_Hwnd(ctrlHwnd) {
+        guiName := this.Name
+		GuiControlGet, ctrlName, %guiName%:Name,% ctrlHwnd
+		return ctrlName
+	}
+
+	SetDefault() {
+		guiName := this.Name
 		Gui,%guiName%:Default
+	}
+
+    Destroy() {
+        guiName := this.Name
+
+		Gui,%guiName%:Hide
+		for msgID in this.BoundWindowsMessages
+			OnMessage(msgID, this.BoundWindowsMessages[msgID], 0)
+        for ctrlName, ctrlHandle in this.Controls
+			if ( SubStr(ctrlName, 1, 5) = "hBTN_" )
+				ImageButton.DestroyBtnImgList(value)
+
+		Gui,%guiName%:Destroy
+        this.Remove("", Chr(255))
+        this.SetCapacity(0)
+        this.base := ""
 	}
 }
