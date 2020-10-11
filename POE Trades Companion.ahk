@@ -148,7 +148,7 @@ Start_Script() {
 	GAME.MAIN_FOLDER 				:= MyDocuments "\my games\Path of Exile"
 	GAME.INI_FILE 					:= GAME.MAIN_FOLDER "\production_Config.ini"
 	GAME.INI_FILE_COPY 		 		:= PROGRAM.MAIN_FOLDER "\production_Config.ini"
-	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe"
+	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe,PathOfExileEGS.exe,PathOfExile_x64EGS.exe"
 	GAME.LEAGUES		 			:= []
 
 	PROGRAM.PID 					:= DllCall("GetCurrentProcessId")
