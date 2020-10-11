@@ -1,3 +1,78 @@
+SplitPath(fileOrPath) {
+	SplitPath, fileOrPath, fileName, fileDir, fileExt, fileNameNoExt, fileDrive
+	
+    returnObj := {}
+	if RegExMatch(fileName, "iO)(.*)\.(.*) (.*)|(.*)\.(.*)", match)
+        fileName := match.1 "." match.2, fileNameNoExt := match.1, fileExt := match.2, fileParams := match.3
+	else if (!fileExt) && (fileName)
+		fileDir := fileDir "\" fileName, fileName := ""
+
+    returnObj := {FileName: fileName, FileExt: fileExt, FileParams: fileParams, FileNameNoExt: fileNameNoExt
+    ,Folder: fileDir, Drive: fileDrive}
+	return returnObj
+}
+
+EnvGet(var) {
+	EnvGet, ret, %var%
+	return ret
+}
+
+VerifyAHKVersion() {
+	global PROGRAM
+	requiredVer := "1.1.30.03", unicodeOrAnsi := A_IsUnicode?"Unicode":"ANSI", 32or64bits := A_PtrSize=4?"32bits":"64bits"
+
+	if (!A_IsUnicode) {
+		Run,% "https://www.autohotkey.com/"
+		MsgBox(4096+48,PROGRAM.NAME " - Wrong AutoHotKey Version"
+		, "/!\ PLEASE READ CAREFULLY /!\"
+		. "`n"
+		. "`n" "This application isn't compatible with ANSI versions of AutoHotKey."
+		. "`n" "You are using v" A_AhkVersion " " unicodeOrAnsi " " 32or64bits
+		. "`n" "Please download and install AutoHotKey Unicode 32/64 or use the compiled executable."
+		. "`n"
+		. "`n" "If you need help, you can contact me on GitHub / Discord / POE Forums. Links are available on the GitHub repository."
+		. "`n" "The application will terminate upon closing this box."
+		. "`n"
+		. "`n" PROGRAM.LINK_GITHUB)
+		ExitApp
+	}
+	if (A_AhkVersion < "1.1") ; Smaller than 1.1.00.00
+	|| (A_AhkVersion < "1.1.00.00")
+	|| (A_AhkVersion < requiredVer) { ; Smaller than required
+		Run,% "https://www.autohotkey.com/"
+		MsgBox(4096+48,PROGRAM.NAME " - Wrong AutoHotKey Version"
+		, "/!\ PLEASE READ CAREFULLY /!\"
+		. "`n"
+		. "`n" "This application requires AutoHotKey v" requiredVer " or higher."
+		. "`n" "You are using v" A_AhkVersion " " unicodeOrAnsi " " 32or64bits
+		. "`n" "AutoHotKey website has been opened, please update to the latest version."
+		. "`n"
+		. "`n" "If you need help, you can contact me on GitHub / Discord / POE Forums. Links are available on the GitHub repository."
+		. "`n" "The application will terminate upon closing this box."
+		. "`n"
+		. "`n" PROGRAM.LINK_GITHUB)
+		ExitApp
+	}
+	if (A_AhkVersion >= "2.0")
+	|| (A_AhkVersion >= "2.0.00.00") { ; Higher or equal to 2.0.00.00
+		Run,% "https://www.autohotkey.com/"
+		MsgBox(4096+48,PROGRAM.NAME " - Wrong AutoHotKey Version"
+		, "/!\ PLEASE READ CAREFULLY /!\"
+		. "`n"
+		. "`n" "This application isn't compatible with AutoHotKey v2."
+		. "`n" "You are using v" A_AhkVersion " " unicodeOrAnsi " " 32or64bits
+		. "`n" "AutoHotKey v" requiredVer " or higher is required."
+		. "`n" "Please downgrade, or compile the executable with v" requiredVer "."
+		. "`n" "AutoHotKey website has been opened, please update to the latest version."
+		. "`n"
+		. "`n" "If you need help, you can contact me on GitHub / Discord / POE Forums. Links are available on the GitHub repository."
+		. "`n" "The application will terminate upon closing this box."
+		. "`n"
+		. "`n" PROGRAM.LINK_GITHUB)
+		ExitApp
+	}
+}
+
 FileDelete(filePath) {
 	while FileExist(filePath) {
 		FileDelete,% filePath
@@ -829,6 +904,9 @@ IsIn(_string, _list) {
 }
 
 IsContaining(_string, _keyword) {
+	if (_keyword = ",")
+		_keyword := ",," ; Need two commas to detect a literal comma
+
 	if _string contains %_keyword%
 		return True
 }
