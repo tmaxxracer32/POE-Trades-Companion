@@ -1,12 +1,8 @@
 ﻿class GUI_CheatSheet {
 
-    Show(which) {
+    Show(pngFilePath) {
         global PROGRAM
         global GuiCheatSheet, GuiCheatSheet_Controls
-
-        filePng := which ".png"
-        if !FileExist(filePng)
-            return
         
         delay := SetControlDelay(0), batch := SetBatchLines(-1)
         GUI_CheatSheet.Destroy()
@@ -15,7 +11,7 @@
         WinSet, TransColor, EEAA99
 
         Gui.Add("CheatSheet", "Picture", "0xE BackgroundTrans hwndhIMG_CheatSheet")
-        hBitMap := Gdip_CreateResizedHBITMAP_FromFile(PROGRAM.CHEATSHEETS_FOLDER "\" filePng, A_ScreenWidth*0.90, A_ScreenHeight*0.80, keepRatio:=True)
+        hBitMap := Gdip_CreateResizedHBITMAP_FromFile(pngFilePath, A_ScreenWidth*0.90, A_ScreenHeight*0.80, keepRatio:=True)
         SetImage(GuiCheatSheet_Controls.hIMG_CheatSheet, hBitmap)
 
         __f := GUI_CheatSheet.CheatSheetRemove.bind(GUI_CheatSheet)

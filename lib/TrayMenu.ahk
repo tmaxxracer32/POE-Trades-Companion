@@ -16,11 +16,12 @@
 	; if (PROGRAM.IS_BETA = "True")
 		; Menu,Tray,Add,Beta tasks, Tray_OpenBetaTasks 
 	Menu,Tray,Add
-	Menu,TraySheetSub,Add,Betrayal, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Delve, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Essence, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Harvest, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Incursion, Tray_OpenSheet
+	Loop, Files,% PROGRAM.CHEATSHEETS_FOLDER "\*.png"
+	{
+		SplitPath,% A_LoopFileName, , , , fileNameNoExt
+		__f := ObjBindMethod(GUI_CheatSheet, "Show", A_LoopFileFullPath)
+		Menu, TraySheetSub, Add,% fileNameNoExt,% __f
+	}
 	Menu,Tray,Add,Leagues Sheets, :TraySheetSub
 	Menu,Tray,Add
 	/* Disabled - Search ID H5auEc7KA0 in POE Trades Companion.ahk for infos
@@ -67,10 +68,6 @@
 	Menu, Tray, Icon,% trans.Stats,% PROGRAM.ICONS_FOLDER "\chart.ico"
 	Menu, Tray, Icon,% trans.Reload,% PROGRAM.ICONS_FOLDER "\refresh.ico"
 	Menu, Tray, Icon,% trans.Close,% PROGRAM.ICONS_FOLDER "\x.ico"
-}
-
-Tray_OpenSheet() {
-	GUI_CheatSheet.Show(A_ThisMenuItem)
 }
 
 Tray_OpenBetaTasks() {

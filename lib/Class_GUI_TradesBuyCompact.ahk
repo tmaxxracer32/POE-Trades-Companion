@@ -651,28 +651,18 @@
 		}
 		else if (btnType="LeagueHelp") {
 			try Menu, HelpMenu, DeleteAll
-			Menu, HelpMenu, Add, Betrayal, GUI_TradesBuyCompact_LeagueHelpMenu
-			Menu, HelpMenu, Add, Delve, GUI_TradesBuyCompact_LeagueHelpMenu
-			Menu, HelpMenu, Add, Essence, GUI_TradesBuyCompact_LeagueHelpMenu
-			Menu, HelpMenu, Add, Incursion, GUI_TradesBuyCompact_LeagueHelpMenu
+			Loop, Files,% PROGRAM.CHEATSHEETS_FOLDER "\*.png"
+			{
+				SplitPath,% A_LoopFileName, , , , fileNameNoExt
+				__f := ObjBindMethod(GUI_CheatSheet, "Show", A_LoopFileFullPath)
+				Menu, HelpMenu, Add,% fileNameNoExt,% __f
+			}
 			Menu, HelpMenu, Show
 		}
 		else {
 			ShowToolTip("This button isn't implemented yet.")
 			SetTimer, RemoveToolTip, -2000
 		}		
-		return
-
-		GUI_TradesBuyCompact_LeagueHelpMenu:
-			which := A_ThisMenuItem="Betrayal"?"Betrayal"
-				: A_ThisMenuItem="Delve"?"Delve"
-				: A_ThisMenuItem="Essence"?"Essence"
-				: A_ThisMenuItem="Incursion"?"Incursion"
-				: ""
-			if (!which)
-				return
- 
-			GUI_CheatSheet.Show(which)
 		return
 	}
 
