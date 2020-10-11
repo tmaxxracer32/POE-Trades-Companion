@@ -413,28 +413,8 @@ Return
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #Include %A_ScriptDir%\lib\
-
-#Include Class_Gui_Trades_V2.ahk
-
-#Include Class_GUI.ahk
-#Include Class_GUI_BetaTasks.ahk
-#Include Class_GUI_CheatSheet.ahk
-#Include Class_GUI_ImportPre1dot13Settings.ahk
-#Include Class_GUI_SimpleWarn.ahk
-#Include Class_Gui_ChooseInstance.ahk
-#Include Class_GUI_ChooseLang.ahk
-#Include Class_Gui_ItemGrid.ahk
-#Include Class_Gui_MyStats.ahk
-#Include Class_GUI_SetHotkey.ahk
-#Include Class_Gui_Settings.ahk
-#Include Class_GUI_TabbedTradesCounter.ahk
-#Include Class_Gui_Trades.ahk
-#Include Class_Gui_TradesMinimized.ahk
-#Include Class_GUI_TradesBuyCompact.ahk
-#Include Intercom_Receiver.ahk
-#Include WM_Messages.ahk
-
 #Include AssetsExtract.ahk
+#Include Class_GUI.ahk
 #Include Class_INI.ahk
 #Include CmdLineParameters.ahk
 #Include CompileAhk2Exe.ahk
@@ -446,7 +426,19 @@ Return
 #Include Game_File.ahk
 #Include GGG_API.ahk
 #Include GitHubAPI.ahk
+#Include GUI_CheatSheet.ahk
+#Include GUI_ImportPre1dot13Settings.ahk
+#Include GUI_SimpleWarn.ahk
+#Include GUI_ChooseInstance.ahk
+#Include GUI_ChooseLang.ahk
+#Include GUI_ItemGrid.ahk
+#Include GUI_MyStats.ahk
+#Include GUI_SetHotkey.ahk
+#Include GUI_Settings.ahk
+#Include GUI_TabbedTradesCounter.ahk
+#Include GUI_Trades.ahk
 #Include Hotkeys.ahk
+#Include Intercom_Receiver.ahk
 #Include Local_File.ahk
 #Include Logs.ahk
 #Include ManageFonts.ahk
@@ -467,6 +459,7 @@ Return
 #Include TrayRefresh.ahk
 #Include Updating.ahk
 #Include WindowsSettings.ahk
+#Include WM_Messages.ahk
 
 #Include %A_ScriptDir%\lib\third-party\
 #Include AddToolTip.ahk
