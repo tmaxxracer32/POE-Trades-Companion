@@ -1,13 +1,3 @@
-StrTrimLeft(var, trimCount) {
-	StringTrimLeft, var, var, %trimCount%
-	return var
-}
-
-StrTrimRight(var, trimCount) {
-	StringTrimRight, var, var, %trimCount%
-	return var
-}
-
 Get_HotkeyString(_hotkey, simpleString=False) {
 	Loop 3 {
 		char := SubStr(_hotkey, A_Index, 1)
