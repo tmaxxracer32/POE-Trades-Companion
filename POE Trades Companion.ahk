@@ -109,6 +109,7 @@ Start_Script() {
 	PROGRAM.TRANSLATIONS_FOLDER		:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\Translations":"\resources\translations")
 	PROGRAM.CURRENCY_IMGS_FOLDER	:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\CurrencyImages":"\resources\currency_imgs")
 	PROGRAM.CHEATSHEETS_FOLDER		:= (A_IsCompiled?PROGRAM.MAIN_FOLDER:A_ScriptDir) . (A_IsCompiled?"\Cheatsheets":"\resources\cheatsheets")
+	PROGRAM.AUTOHOTKEY_EXECUTABLE 	:= A_IsCompiled ? "" : (A_ScriptDir "\resources\AutoHotKey.exe")
 
 	prefsFileName 					:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Preferences"):("Preferences")
 	sellBackupFileName 				:= (RUNTIME_PARAMETERS.InstanceName)?(RUNTIME_PARAMETERS.InstanceName "_Sell_Trades_Backup"):("Sell_Trades_Backup")
@@ -154,9 +155,9 @@ Start_Script() {
 
 	SetWorkingDir,% PROGRAM.MAIN_FOLDER
 
-	; Auto admin reload
-	if (!A_IsAdmin && !RUNTIME_PARAMETERS.SkipAdmin && !DEBUG.SETTINGS.skip_admin) {
-		ReloadWithParams(" /MyDocuments=""" MyDocuments """", getCurrentParams:=True, asAdmin:=True)
+	if !(RUNTIME_PARAMETERS.IsRanThroughBundledAhkExecutable) {
+		asAdminOrNot := RUNTIME_PARAMETERS.SkipAdmin || DEBUG.SETTINGS.skip_admin ? False : True
+		ReloadWithParams(" /IsRanThroughBundledAhkExecutable /MyDocuments=""" MyDocuments """", getCurrentParams:=True, asAdminOrNot)
 	}
 
 	; Create local directories - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 

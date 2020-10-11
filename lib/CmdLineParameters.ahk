@@ -74,6 +74,8 @@ Handle_CmdLineParameters() {
 		; Other params
 		else if (param="/MiniFrizzle")
 			RUNTIME_PARAMETERS["MiniFrizzle"] := True
+		else if (param="/IsRanThroughBundledAhkExecutable")
+			RUNTIME_PARAMETERS["IsRanThroughBundledAhkExecutable"] := True
 
 		; Dead params
 		else if RegExMatch(param, "i)/Screen_DPI=.*")
