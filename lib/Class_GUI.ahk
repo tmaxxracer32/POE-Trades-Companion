@@ -286,13 +286,16 @@ class GUI {
             if !IsContaining(this.ImageButtonControlsList, ctrlName)
                 this.ImageButtonControlsList .= this.ImageButtonControlsList ? "," ctrlName : ctrlName
 			success := ImageButton.Create(this.Controls[ctrlHandleName], imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
-			if !(success)
-                this.ThrowError([["ImageButton.LastError", ImageButton.LastError]
+			if !(success) {
+                errorObj := [["ImageButton.LastError", ImageButton.LastError]
                 , ["Control", ctrlHandleName]
                 , ["Handle", this.Controls[ctrlHandleName]]
                 , ["ImageButton Font Handle", imageBtnFontHandle]
                 , ["ImageButton Font Size", imageBtnFontSize]
-                , ["ImageButton Style", JSON_Dump(imageBtnStyle)]])
+                , ["ImageButton Style", JSON_Dump(imageBtnStyle)]]
+                this.ImageButtonErrors.Push(errorObj)
+                this.ThrowError(errorObj)
+            }
 		}
 	}
 
