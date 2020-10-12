@@ -603,6 +603,18 @@ class GUI {
         Gui, %guiName%:+LastFound
         WinSet, TransColor,% _color
     }
+
+    SetHbitmapToControl(ctrlName, hBitmap) {
+        ; Full credits of this function to Gdi+
+        if !IsContaining(this.BitMapsControlsList, ctrlName)
+            this.BitMapsControlsList .= this.BitMapsControlsList ? "," ctrlName : ctrlName
+        SendMessage, 0x172, 0x0, hBitmap,,% "ahk_id " this.Controls[ctrlName]
+	    E := ErrorLevel
+	    DeleteObject(E)
+        DeleteObject(hBitmap)
+	    return E
+    }
+
 	SetDefault() {
 		guiName := this.Name
 		Gui,%guiName%:Default
