@@ -7,7 +7,7 @@
         global PROGRAM
 
         delay := SetControlDelay(0), batch := SetBatchLines(-1)
-        this.sGUI := new GUI(this.guiName, "HwndhGui" this.guiName " +AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000", PROGRAM.NAME . this.guiName)
+        this.sGUI := new GUI(this.guiName, "HwndhGui" this.guiName " +AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000 +Label" this.__class ".", PROGRAM.NAME . this.guiName)
         this.sGUI.SetBackgroundColor("EEAA99"), this.sGUI.TransColor("EEAA99")
 
         this.sGUI.Add("Picture", "0xE hwndhIMG_CheatSheet"), this.sGUI.BindFunctionToControl("hIMG_CheatSheet", this.__class ".Destroy")
@@ -19,9 +19,13 @@
         Hotkey, *Esc,% __f, On
         this.sGUI.BindWindowsMessage("0x0201", this.__class ".WM_LBUTTONDOWN")
 
-        this.sGUI.Show("xCenter yCenter AutoSize NoActivate")
         SetControlDelay(delay), SetBatchLines(batch)
         return this.sGUI
+    }
+
+    Show(pngFilePath) {
+        this.sGUI.Create(pngFilePath)
+        this.sGUI.Show("xCenter yCenter AutoSize NoActivate")
     }
 
     Destroy() {
