@@ -598,6 +598,11 @@ class GUI {
 		return ctrlName
 	}
 
+    TransColor(_color) {
+        guiName := this.Name
+        Gui, %guiName%:+LastFound
+        WinSet, TransColor,% _color
+    }
 	SetDefault() {
 		guiName := this.Name
 		Gui,%guiName%:Default
