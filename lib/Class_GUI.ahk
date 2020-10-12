@@ -283,6 +283,8 @@ class GUI {
 
         ; Creating ImageButton
 		if (ctrlType = "ImageButton") {
+            if !IsContaining(this.ImageButtonControlsList, ctrlName)
+                this.ImageButtonControlsList .= this.ImageButtonControlsList ? "," ctrlName : ctrlName
 			success := ImageButton.Create(this.Controls[ctrlHandleName], imageBtnStyle, imageBtnFontHandle, imageBtnFontSize)
 			if !(success)
                 this.ThrowError([["ImageButton.LastError", ImageButton.LastError]
@@ -626,9 +628,17 @@ class GUI {
 		Gui,%guiName%:Hide
 		for msgID in this.BoundWindowsMessages
 			OnMessage(msgID, this.BoundWindowsMessages[msgID], 0)
-        for ctrlName, ctrlHandle in this.Controls
-			if ( SubStr(ctrlName, 1, 5) = "hBTN_" )
-				ImageButton.DestroyBtnImgList(value)
+        
+        ImageButtonControlsList := this.ImageButtonControlsList
+        Loop, Parse,% ImageButtonControlsList,% ","
+        {
+            ImageButton.DestroyBtnImgList(this.Controls[A_LoopField])
+        }
+        BitMapsControlsList := this.BitMapsControlsList
+        Loop, Parse,% BitMapsControlsList,% ","
+        {
+            DeleteObject(this.Controls[A_LoopField])
+        }			
 
 		Gui,%guiName%:Destroy
         this.Remove("", Chr(255))
