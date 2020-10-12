@@ -445,6 +445,16 @@ class GUI {
         return {X:X, Y:Y, Width:Width, Height:Height}
     }
 
+    ShowControl(ctrlHandleName) {
+        guiName := this.Name
+        GuiControl, %guiName%:Show
+    }
+
+    HideControl(ctrlHandleName) {
+        guiName := this.Name
+        GuiControl, %guiName%:Hide
+    }
+
     MoveControl(ctrlHandleName, opts="") { 
 		guiName := this.Name
 		; if IsContaining(opts, "Center")
