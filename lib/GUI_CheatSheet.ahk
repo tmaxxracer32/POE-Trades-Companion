@@ -1,48 +1,37 @@
 ﻿class GUI_CheatSheet {
 
-    Show(pngFilePath) {
+    static guiName := "CheatSheet"
+    static sGUI := {}
+
+    Create(pngFilePath) {
         global PROGRAM
-        global GuiCheatSheet, GuiCheatSheet_Controls
-        
+
         delay := SetControlDelay(0), batch := SetBatchLines(-1)
-        GUI_CheatSheet.Destroy()
-        Gui.New("CheatSheet", "+AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000 +HwndhGuiCheatSheet", "POE TC - CheatSheet")
-        Gui.Color("CheatSheet","EEAA99")
-        WinSet, TransColor, EEAA99
+        this.sGUI := new GUI(this.guiName, "HwndhGui" this.guiName " +AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +E0x08000000", PROGRAM.NAME . this.guiName)
+        this.sGUI.SetBackgroundColor("EEAA99"), this.sGUI.TransColor("EEAA99")
 
-        Gui.Add("CheatSheet", "Picture", "0xE BackgroundTrans hwndhIMG_CheatSheet")
+        this.sGUI.Add("Picture", "0xE hwndhIMG_CheatSheet"), this.sGUI.BindFunctionToControl("hIMG_CheatSheet", this.__class ".Destroy")
         hBitMap := Gdip_CreateResizedHBITMAP_FromFile(pngFilePath, A_ScreenWidth*0.90, A_ScreenHeight*0.80, keepRatio:=True)
-        SetImage(GuiCheatSheet_Controls.hIMG_CheatSheet, hBitmap)
-
-        __f := GUI_CheatSheet.CheatSheetRemove.bind(GUI_CheatSheet)
-        GuiControl, CheatSheet:+g,% GuiCheatSheet_Controls.hIMG_CheatSheet,% __f
+        this.sGUI.SetHbitmapToControl("hIMG_CheatSheet", hBitmap)
 
         Hotkey, IfWinActive
-        Hotkey, *Esc, GUI_CheatSheet_Hotkey_CloseOnEsc, On
+        this.sGUI.EscapeFuncObj := __f := ObjBindMethod(GUI_CheatSheet, "Destroy")
+        Hotkey, *Esc,% __f, On
+        this.sGUI.BindWindowsMessage("0x0201", this.__class ".WM_LBUTTONDOWN")
 
-        Gui.Show("CheatSheet", "xCenter yCenter AutoSize NoActivate")
+        this.sGUI.Show("xCenter yCenter AutoSize NoActivate")
         SetControlDelay(delay), SetBatchLines(batch)
-    }
-
-    CheatSheetRemove() {
-        GUI_CheatSheet.Destroy()
-
-        Hotkey, IfWinActive
-        Hotkey, *Esc, GUI_CheatSheet_Hotkey_CloseOnEsc, Off
+        return this.sGUI
     }
 
     Destroy() {
-        Gui.Destroy("CheatSheet")
+        __f := this.sGUI.EscapeFuncObj
+        Hotkey, IfWinActive
+        Hotkey, *Esc,% __f, Off
+        this.sGUI.Destroy() 
     }
 
-    Hotkey_CloseOnEsc() {
-        GUI_CheatSheet.CheatSheetRemove()
-
-        Hotkey, IfWinActive
-        Hotkey, *Esc, GUI_CheatSheet_Hotkey_CloseOnEsc, Off
+    WM_LBUTTONDOWN() {
+        this.Destroy()
     }
 }
-
-GUI_CheatSheet_Hotkey_CloseOnEsc:
-    GUI_CheatSheet.Hotkey_CloseOnEsc()
-return
