@@ -17,10 +17,12 @@
 		; Menu,Tray,Add,Beta tasks, Tray_OpenBetaTasks 
 	Menu,Tray,Add
 	Menu,Tray,Add,Disable buy interface?, Tray_ToggleDisableBuyInterface
-	Menu,TraySheetSub,Add,Betrayal, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Delve, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Essence, Tray_OpenSheet
-	Menu,TraySheetSub,Add,Incursion, Tray_OpenSheet
+	Loop, Files,% PROGRAM.CHEATSHEETS_FOLDER "\*.png"
+	{
+		SplitPath,% A_LoopFileName, , , , fileNameNoExt
+		__f := ObjBindMethod(GUI_CheatSheet, "Show", A_LoopFileFullPath)
+		Menu, TraySheetSub, Add,% fileNameNoExt,% __f
+	}
 	Menu,Tray,Add,Leagues Sheets, :TraySheetSub
 	Menu,Tray,Add
 	Menu,Tray,Add,% trans.Clickthrough, Tray_ToggleClickthrough ; Clickthrough?
@@ -82,17 +84,6 @@ Tray_ToggleDisableBuyInterface() {
 		GUI_TradesBuyCompact.Destroy()
 	else
 		GUI_TradesBuyCompact.RecreateGUI()
-}
-Tray_OpenSheet() {
-	which := A_ThisMenuItem="Betrayal"?"Betrayal"
-		: A_ThisMenuItem="Delve"?"Delve"
-		: A_ThisMenuItem="Essence"?"Essence"
-		: A_ThisMenuItem="Incursion"?"Incursion"
-		: ""
-	if (!which)
-		return
-
-	GUI_CheatSheet.Show(which)
 }
 
 Tray_OpenBetaTasks() {
