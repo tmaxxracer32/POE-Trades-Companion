@@ -141,7 +141,7 @@ Start_Script() {
 	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe,PathOfExileEGS.exe,PathOfExile_x64EGS.exe"
 	GAME.CHALLENGE_LEAGUE 			:= "Delirium"
 	GAME.STANDARD_LEAGUE_TRANS		:= {RUS:["Стандарт","Одна жизнь"], KOR:["스탠다드","하드코어"], TWN:["標準模式","專家模式"]} ; STD, HC
-	GAME.CHALLENGE_LEAGUE_TRANS		:= {RUS:["Делириум","Делириум Одна жизнь"], KOR:["환영","하드코어 환영"], TWN:["譫妄聯盟","譫妄聯盟（專家）"]} ; Rest don't have translations. Translated whispers suck and are inconsistent
+	GAME.CHALLENGE_LEAGUE_TRANS		:= {RUS:["Кража","Кража Одна жизнь"], KOR:["강탈","하드코어 강탈"], TWN:["劫盜聯盟","劫盜聯盟（專家）"]} ; Rest don't have translations. Translated whispers suck and are inconsistent
 
 	PROGRAM.SETTINGS.SUPPORT_MESSAGE 	:= "@%buyerName% " PROGRAM.NAME ": view-thread/1755148"
 
@@ -155,14 +155,12 @@ Start_Script() {
 	}
 
 	; Game executables groups - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	global POEGameArr := ["PathOfExile.exe", "PathOfExile_x64.exe", "PathOfExileSteam.exe", "PathOfExile_x64Steam.exe", "PathOfExile_KG.exe", "PathOfExile_x64_KG.exe", "PathOfExileEGS.exe", "PathOfExile_x64EGS.exe"]
-
-	global POEGameList := ""
-	for nothing, executable in POEGameArr {
+	global POEGameArr := []
+	Loop, Parse,% GAME.EXECUTABLES, % ","
+		POEGameArr.Push(A_LoopField)
+	global POEGameList := GAME.EXECUTABLES	
+	for nothing, executable in POEGameArr
 		GroupAdd, POEGameGroup, ahk_exe %executable%
-		POEGameList .= executable ","
-	}
-	StringTrimRight, POEGameList, POEGameList, 1
 
 	; Create local directories - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	directories := PROGRAM.MAIN_FOLDER "`n" PROGRAM.SFX_FOLDER "`n" PROGRAM.LOGS_FOLDER "`n" PROGRAM.SKINS_FOLDER
