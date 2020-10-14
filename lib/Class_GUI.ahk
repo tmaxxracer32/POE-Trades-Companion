@@ -450,12 +450,23 @@ class GUI {
 
     ShowControl(ctrlHandleName) {
         guiName := this.Name
-        GuiControl, %guiName%:Show
+        try GuiControl, %guiName%:Show,% this.sGUI.Controls[ctrlHandleName]
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
     }
 
     HideControl(ctrlHandleName) {
         guiName := this.Name
-        GuiControl, %guiName%:Hide
+        try GuiControl, %guiName%:Hide,% this.sGUI.Controls[ctrlHandleName]
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
+    }
+
+    FocusControl(ctrlHandleName) {
+        guiName := this.Name
+        try GuiControl, %guiName%:Focus,% this.sGUI.Controls[ctrlHandleName]
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
     }
 
     MoveControl(ctrlHandleName, opts="") { 
@@ -545,78 +556,100 @@ class GUI {
 	}
 
     BindWindowsMessage(msgID, funcName, params*) {
-        if IsContaining(funcName, ".") {
-            split := StrSplit(funcName, ".")
-            className := split.1
-            funcName := split.2
-        }
+        try {
+            if IsContaining(funcName, ".") {
+                split := StrSplit(funcName, ".")
+                className := split.1
+                funcName := split.2
+            }
 
-        if ( params.Count() ) {
-            if (className)
-                __f := ObjBindMethod(%className%, funcName, params*)
-            else
-                __f := Func(funcName).Bind(params*)
+            if ( params.Count() ) {
+                if (className)
+                    __f := ObjBindMethod(%className%, funcName, params*)
+                else
+                    __f := Func(funcName).Bind(params*)
+            }
+            else {
+                if (className)
+                    __f := ObjBindMethod(%className%, funcName)
+                else
+                    __f := Func(funcName).Bind()
+            }
+                
+            this.BoundWindowsMessages[msgID] := {Function: funcName, Params: [params*]}
+            OnMessage(msgID, __f)
         }
-        else {
-            if (className)
-                __f := ObjBindMethod(%className%, funcName)
-            else
-                __f := Func(funcName).Bind()
-        }
-            
-        this.BoundWindowsMessages[msgID] := {Function: funcName, Params: [params*]}
-		OnMessage(msgID, __f)
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 	}
 
     BindFunctionToControl(ctrlName, funcName, params*) {
         guiName := this.Name
 
-        if IsContaining(funcName, ".") {
-            split := StrSplit(funcName, ".")
-            className := split.1
-            funcName := split.2
-        }
+        try {
+            if IsContaining(funcName, ".") {
+                split := StrSplit(funcName, ".")
+                className := split.1
+                funcName := split.2
+            }
 
-        if ( params.Count() ) {
-            if (className)
-                __f := ObjBindMethod(%className%, funcName, params*)
-            else
-                __f := Func(funcName).Bind(params*)
-        }
-        else {
-            if (className)
-                __f := ObjBindMethod(%className%, funcName)
-            else
-                __f := Func(funcName).Bind()
-        }
+            if ( params.Count() ) {
+                if (className)
+                    __f := ObjBindMethod(%className%, funcName, params*)
+                else
+                    __f := Func(funcName).Bind(params*)
+            }
+            else {
+                if (className)
+                    __f := ObjBindMethod(%className%, funcName)
+                else
+                    __f := Func(funcName).Bind()
+            }
 
-        this.BoundFunctions[ctrlName] := {Function: funcName, Params: [params*]}
-		GuiControl, %guiName%:+g,% this.Controls[ctrlName],% __f
+            this.BoundFunctions[ctrlName] := {Function: funcName, Params: [params*]}
+            GuiControl, %guiName%:+g,% this.Controls[ctrlName],% __f
+        }
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 	}
 
 	DisableControlFunction(className, ctrlName) {
         guiName := this.Name
-		GuiControl, %guiName%:-g,% this.Controls[ctrlName]
+        try GuiControl, %guiName%:-g,% this.Controls[ctrlName]
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 	}
 
 	EnableControlFunction(className, ctrlName) {
         guiName := this.Name
-        funcName := this.BoundFunctions[ctrlName].Function
-        params := this.BoundFunctions[ctrlName].Params
-        __f := ObjBindMethod(%className%, funcName, params*)
-		GuiControl, %guiName%:+g,% this.Controls[ctrlName],% __f
+        try {
+            funcName := this.BoundFunctions[ctrlName].Function
+            params := this.BoundFunctions[ctrlName].Params
+            __f := ObjBindMethod(%className%, funcName, params*)
+            GuiControl, %guiName%:+g,% this.Controls[ctrlName],% __f
+        }
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 	}
 
     Get_CtrlVarName_From_Hwnd(ctrlHwnd) {
         guiName := this.Name
-		GuiControlGet, ctrlName, %guiName%:Name,% ctrlHwnd
+        try {
+		    GuiControlGet, ctrlName, %guiName%:Name,% ctrlHwnd
+        }
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 		return ctrlName
 	}
 
     TransColor(_color) {
         guiName := this.Name
-        Gui, %guiName%:+LastFound
-        WinSet, TransColor,% _color
+        try {
+            Gui, %guiName%:+LastFound
+            WinSet, TransColor,% _color
+        }
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
     }
 
     SetHbitmapToControl(ctrlName, hBitmap) {
@@ -632,30 +665,36 @@ class GUI {
 
 	SetDefault() {
 		guiName := this.Name
-		Gui,%guiName%:Default
+        try Gui,%guiName%:Default
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 	}
 
     Destroy() {
         guiName := this.Name
-
-		Gui,%guiName%:Hide
-		for msgID in this.BoundWindowsMessages
-			OnMessage(msgID, this.BoundWindowsMessages[msgID], 0)
         
-        ImageButtonControlsList := this.ImageButtonControlsList
-        Loop, Parse,% ImageButtonControlsList,% ","
-        {
-            ImageButton.DestroyBtnImgList(this.Controls[A_LoopField])
-        }
-        BitMapsControlsList := this.BitMapsControlsList
-        Loop, Parse,% BitMapsControlsList,% ","
-        {
-            DeleteObject(this.Controls[A_LoopField])
-        }			
+        try {
+            Gui,%guiName%:Hide
+            for msgID in this.BoundWindowsMessages
+                OnMessage(msgID, this.BoundWindowsMessages[msgID], 0)
+            
+            ImageButtonControlsList := this.ImageButtonControlsList
+            Loop, Parse,% ImageButtonControlsList,% ","
+            {
+                ImageButton.DestroyBtnImgList(this.Controls[A_LoopField])
+            }
+            BitMapsControlsList := this.BitMapsControlsList
+            Loop, Parse,% BitMapsControlsList,% ","
+            {
+                DeleteObject(this.Controls[A_LoopField])
+            }			
 
-		Gui,%guiName%:Destroy
-        this.Remove("", Chr(255))
-        this.SetCapacity(0)
-        this.base := ""
+            Gui,%guiName%:Destroy
+            this.Remove("", Chr(255))
+            this.SetCapacity(0)
+            this.base := ""
+        }
+        catch e
+            this.ThrowError(e.Message "`n" e.Extra)
 	}
 }
