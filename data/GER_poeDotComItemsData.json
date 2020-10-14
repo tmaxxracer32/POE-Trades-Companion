@@ -253,6 +253,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Fesseln der Befreiung",
+				"text": "Fesseln der Befreiung Kettengürtel",
+				"type": "Kettengürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Chor des Sturms",
 				"text": "Chor des Sturms Lapisamulett",
 				"type": "Lapisamulett"
@@ -461,6 +469,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Schicksalhaftes Ende",
+				"text": "Schicksalhaftes Ende Pauaring",
+				"type": "Pauaring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Festmahlbinde",
 				"text": "Festmahlbinde Bauernschärpe",
 				"type": "Bauernschärpe"
@@ -608,6 +624,14 @@
 				"name": "Kikazaru",
 				"text": "Kikazaru Topasring",
 				"type": "Topasring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Preis des Anführers",
+				"text": "Preis des Anführers Onyxamulett",
+				"type": "Onyxamulett"
 			},
 			{
 				"flags": {
@@ -901,6 +925,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Pyroschockklammer",
+				"text": "Pyroschockklammer Ledergürtel",
+				"type": "Ledergürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Rashkaldors Geduld",
 				"text": "Rashkaldors Geduld Jadeamulett",
 				"type": "Jadeamulett"
@@ -912,6 +944,118 @@
 				"name": "Rotklingen-Band",
 				"text": "Rotklingen-Band Sockelring",
 				"type": "Sockelring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Atziris Eigenheit",
+				"text": "Replik: Atziris Eigenheit Pauaamulett",
+				"type": "Pauaamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Angehaltener Atem",
+				"text": "Replik: Angehaltener Atem Kettengürtel",
+				"type": "Kettengürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Doedres Verdammung",
+				"text": "Replik: Doedres Verdammung Pauaring",
+				"type": "Pauaring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Glutwacht",
+				"text": "Replik: Glutwacht Rubinring",
+				"type": "Rubinring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Kopfjäger",
+				"text": "Replik: Kopfjäger Ledergürtel",
+				"type": "Ledergürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Hyrris Wahrheit",
+				"text": "Replik: Hyrris Wahrheit Jadeamulett",
+				"type": "Jadeamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Karui-Wacht",
+				"text": "Replik: Karui-Wacht Jadeamulett",
+				"type": "Jadeamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Malachais Geschick",
+				"text": "Replik: Malachais Geschick Sockelring",
+				"type": "Sockelring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Prismenweber",
+				"text": "Replik: Prismenweber Bauernschärpe",
+				"type": "Bauernschärpe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Verbrannte Erde",
+				"text": "Replik: Verbrannte Erde Robuster Gürtel",
+				"type": "Robuster Gürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Seelenleine",
+				"text": "Replik: Seelenleine Stoffgürtel",
+				"type": "Stoffgürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Tasalios Zeichen",
+				"text": "Replik: Tasalios Zeichen Saphirring",
+				"type": "Saphirring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Auge der Leere",
+				"text": "Replik: Auge der Leere Sockelring",
+				"type": "Sockelring"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Winterherz",
+				"text": "Replik: Winterherz Goldamulett",
+				"type": "Goldamulett"
 			},
 			{
 				"flags": {
@@ -1141,9 +1285,25 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Das Apothekarium",
+				"text": "Das Apothekarium Stoffgürtel",
+				"type": "Stoffgürtel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Das Effigon",
 				"text": "Das Effigon Goldamulett",
 				"type": "Goldamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Die vergängliche Bindung",
+				"text": "Die vergängliche Bindung Lapisamulett",
+				"type": "Lapisamulett"
 			},
 			{
 				"flags": {
@@ -1168,6 +1328,14 @@
 				"name": "Eisvogel",
 				"text": "Eisvogel Jadeamulett",
 				"type": "Jadeamulett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Der Wegelagerer",
+				"text": "Der Wegelagerer Goldring",
+				"type": "Goldring"
 			},
 			{
 				"flags": {
@@ -1554,6 +1722,14 @@
 				"type": "Achatamulett"
 			},
 			{
+				"text": "Astrolabium-Amulett",
+				"type": "Astrolabium-Amulett"
+			},
+			{
+				"text": "Simplex-Amulett",
+				"type": "Simplex-Amulett"
+			},
+			{
 				"text": "Schwarzschlund-Talisman",
 				"type": "Schwarzschlund-Talisman"
 			},
@@ -1706,6 +1882,14 @@
 				"type": "Goldener Gürtel"
 			},
 			{
+				"text": "Mikrodestille-Gürtel",
+				"type": "Mikrodestille-Gürtel"
+			},
+			{
+				"text": "Mechalarm-Gürtel",
+				"type": "Mechalarm-Gürtel"
+			},
+			{
 				"text": "Riss-Ring",
 				"type": "Riss-Ring"
 			},
@@ -1780,6 +1964,18 @@
 			{
 				"text": "Goldenes Band",
 				"type": "Goldenes Band"
+			},
+			{
+				"text": "Zahnradring",
+				"type": "Zahnradring"
+			},
+			{
+				"text": "Geodätischer Ring",
+				"type": "Geodätischer Ring"
+			},
+			{
+				"text": "Dieb-Schmuckstück",
+				"type": "Dieb-Schmuckstück"
 			}
 		],
 		"label": "Schmuck"
@@ -2070,6 +2266,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Goliath",
+				"text": "Goliath Astralpanzer",
+				"type": "Astralpanzer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Gebeine des Ullr",
 				"text": "Gebeine des Ullr Seidenpantinen",
 				"type": "Seidenpantinen"
@@ -2230,6 +2434,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Leichenmarsch",
+				"text": "Leichenmarsch Fleischstiefel",
+				"type": "Fleischstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Cospris Wille",
 				"text": "Cospris Wille Assassinenrock",
 				"type": "Assassinenrock"
@@ -2305,6 +2517,14 @@
 				"name": "Craiceanns Spuren",
 				"text": "Craiceanns Spuren Goliath-Beinschienen",
 				"type": "Goliath-Beinschienen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Haube der Sehnsucht",
+				"text": "Haube der Sehnsucht Gewellte Beckenhaube",
+				"type": "Gewellte Beckenhaube"
 			},
 			{
 				"flags": {
@@ -2686,6 +2906,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Das Ende der Expedition",
+				"text": "Das Ende der Expedition Wachenwams",
+				"type": "Wachenwams"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Auge der Bosheit",
 				"text": "Auge der Bosheit Starre Maske",
 				"type": "Starre Maske"
@@ -2809,6 +3037,14 @@
 				"name": "Fleischformer",
 				"text": "Fleischformer Nekromantenseide",
 				"type": "Nekromantenseide"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Zeichen des Donners",
+				"text": "Zeichen des Donners Spiegelnder Stachelschild",
+				"type": "Spiegelnder Stachelschild"
 			},
 			{
 				"flags": {
@@ -3510,6 +3746,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Schlund des Verderbens",
+				"text": "Schlund des Verderbens Knochenhelm",
+				"type": "Knochenhelm"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Meginords Stolz",
 				"text": "Meginords Stolz Stahlpanzerhandschuhe",
 				"type": "Stahlpanzerhandschuhe"
@@ -3521,6 +3765,14 @@
 				"name": "Gedächtnispalast",
 				"text": "Gedächtnispalast Prätorkrone",
 				"type": "Prätorkrone"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Schicksal des Söldners",
+				"text": "Schicksal des Söldners Geschmeidige Handschuhe",
+				"type": "Geschmeidige Handschuhe"
 			},
 			{
 				"flags": {
@@ -3750,6 +4002,254 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Replik: Abyssus",
+				"text": "Replik: Abyssus Ezomytische Burgunderhaube",
+				"type": "Ezomytische Burgunderhaube"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Alberons Kriegspfad",
+				"text": "Replik: Alberons Kriegspfad Soldatenstiefel",
+				"type": "Soldatenstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Allelopathie",
+				"text": "Replik: Allelopathie Hexer-Handschuhe",
+				"type": "Hexer-Handschuhe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Heulen des Alphas",
+				"text": "Replik: Heulen des Alphas Sünder-Dreispitz",
+				"type": "Sünder-Dreispitz"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Ambus Ansturm",
+				"text": "Replik: Ambus Ansturm Kreuzfahrer-Kettenpanzer",
+				"type": "Kreuzfahrer-Kettenpanzer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Atziris Schärfe",
+				"text": "Replik: Atziris Schärfe Vaal-Panzerhandschuhe",
+				"type": "Vaal-Panzerhandschuhe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Gebeine des Ullr",
+				"text": "Replik: Gebeine des Ullr Seidenpantinen",
+				"type": "Seidenpantinen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Der Schleier der Ewigkeit",
+				"text": "Replik: Der Schleier der Ewigkeit Bluttracht",
+				"type": "Bluttracht"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Farruls Pelz",
+				"text": "Replik: Farruls Pelz Triumphaler Lamellenpanzer",
+				"type": "Triumphaler Lamellenpanzer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Verbotener Tschako",
+				"text": "Replik: Verbotener Tschako Große Krone",
+				"type": "Große Krone"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Griff des Rates",
+				"text": "Replik: Griff des Rates Arkanisten-Handschuhe",
+				"type": "Arkanisten-Handschuhe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Inyas Offenbarung",
+				"text": "Replik: Inyas Offenbarung Arkanistenstiefel",
+				"type": "Arkanistenstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Kalisas Anmut",
+				"text": "Replik: Kalisas Anmut Samit-Handschuhe",
+				"type": "Samit-Handschuhe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Kaoms Herz",
+				"text": "Replik: Kaoms Herz Prachtpanzer",
+				"type": "Prachtpanzer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Anzüglicher Blick",
+				"text": "Replik: Anzüglicher Blick Festtagsmaske",
+				"type": "Festtagsmaske"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Löwenauges Pranken",
+				"text": "Replik: Löwenauges Pranken Bronzeschuppenstiefel",
+				"type": "Bronzeschuppenstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Sagenumwoben",
+				"text": "Replik: Sagenumwoben Eleganter Ringpanzer",
+				"type": "Eleganter Ringpanzer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Maloneys Mechanismus",
+				"text": "Replik: Maloneys Mechanismus Verzierter Köcher",
+				"type": "Verzierter Köcher"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Nebelwall",
+				"text": "Replik: Nebelwall Lackierter Faustschild",
+				"type": "Lackierter Faustschild"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Die vollendete Form",
+				"text": "Replik: Die vollendete Form Sternengewand",
+				"type": "Sternengewand"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Der rote Pfad",
+				"text": "Replik: Der rote Pfad Titan-Beinschienen",
+				"type": "Titan-Beinschienen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Der rastlose Schützer",
+				"text": "Replik: Der rastlose Schützer Fleischrüstung",
+				"type": "Fleischrüstung"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Schleier der Lichtlosen",
+				"text": "Replik: Schleier der Lichtlosen Fleischrüstung",
+				"type": "Fleischrüstung"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Seelenschlag",
+				"text": "Replik: Seelenschlag Stachelpfeilköcher",
+				"type": "Stachelpfeilköcher"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Die Stampede",
+				"text": "Replik: Die Stampede Assassinenstiefel",
+				"type": "Assassinenstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Angriff in drei Schritten",
+				"text": "Replik: Angriff in drei Schritten Narbenlederstiefel",
+				"type": "Narbenlederstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Tukohamas Feste",
+				"text": "Replik: Tukohamas Feste Ebenholz-Turmschild",
+				"type": "Ebenholz-Turmschild"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Schleier der Nacht",
+				"text": "Replik: Schleier der Nacht Großer Helm",
+				"type": "Großer Helm"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Victarios Barmherzigkeit",
+				"text": "Replik: Victarios Barmherzigkeit Laminierter Drachenschild",
+				"type": "Laminierter Drachenschild"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Leerenwanderer",
+				"text": "Replik: Leerenwanderer Meuchelstiefel",
+				"type": "Meuchelstiefel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Volkuurs Weisung",
+				"text": "Replik: Volkuurs Weisung Fanatiker-Handschuhe",
+				"type": "Fanatiker-Handschuhe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Rigwalds Stachel",
 				"text": "Rigwalds Stachel Doppelspitzenpfeilköcher",
 				"type": "Doppelspitzenpfeilköcher"
@@ -3897,6 +4397,14 @@
 				"name": "Berührung des Schöpfers",
 				"text": "Berührung des Schöpfers Kreuzfahrer-Handschuhe",
 				"type": "Kreuzfahrer-Handschuhe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Splitterscherbe",
+				"text": "Splitterscherbe Blutroter Rundschild",
+				"type": "Blutroter Rundschild"
 			},
 			{
 				"flags": {
@@ -4126,6 +4634,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Der Admiral",
+				"text": "Der Admiral Lackwams",
+				"type": "Lackwams"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Die Vorahnung",
 				"text": "Die Vorahnung Ezomyten-Turmschild",
 				"type": "Ezomyten-Turmschild"
@@ -4246,6 +4762,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Der Grünschnabel",
+				"text": "Der Grünschnabel Lackierter Helm",
+				"type": "Lackierter Helm"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Die gestaltlose Flamme",
 				"text": "Die gestaltlose Flamme Belagerungshelm",
 				"type": "Belagerungshelm"
@@ -4265,6 +4789,14 @@
 				"name": "Der zerberstende Wirbler",
 				"text": "Der zerberstende Wirbler Stumpfpfeilköcher",
 				"type": "Stumpfpfeilköcher"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Das grauenhafte Theater",
+				"text": "Das grauenhafte Theater Teakholz-Rundschild",
+				"type": "Teakholz-Rundschild"
 			},
 			{
 				"flags": {
@@ -4737,6 +5269,14 @@
 				"name": "Wildriemen",
 				"text": "Wildriemen Schnürwams",
 				"type": "Schnürwams"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Gedankenkonflikt",
+				"text": "Gedankenkonflikt Goldmaske",
+				"type": "Goldmaske"
 			},
 			{
 				"flags": {
@@ -6011,6 +6551,18 @@
 				"type": "Gewellter Faustschild"
 			},
 			{
+				"text": "Endothermer Faustschild",
+				"type": "Endothermer Faustschild"
+			},
+			{
+				"text": "Polar-Faustschild",
+				"type": "Polar-Faustschild"
+			},
+			{
+				"text": "Kälterobuster Turmschild",
+				"type": "Kälterobuster Turmschild"
+			},
+			{
 				"text": "Stachelbündel",
 				"type": "Stachelbündel"
 			},
@@ -6125,6 +6677,18 @@
 			{
 				"text": "Uralter Geistschild",
 				"type": "Uralter Geistschild"
+			},
+			{
+				"text": "Kraftraubender Geistschild",
+				"type": "Kraftraubender Geistschild"
+			},
+			{
+				"text": "Assimilierender Geistschild",
+				"type": "Assimilierender Geistschild"
+			},
+			{
+				"text": "Wechselrobuster Geistschild",
+				"type": "Wechselrobuster Geistschild"
 			},
 			{
 				"text": "Gesplitterter Turmschild",
@@ -6245,6 +6809,18 @@
 			{
 				"text": "Barocker Rundschild",
 				"type": "Barocker Rundschild"
+			},
+			{
+				"text": "Exothermer Turmschild",
+				"type": "Exothermer Turmschild"
+			},
+			{
+				"text": "Magmatischer Turmschild",
+				"type": "Magmatischer Turmschild"
+			},
+			{
+				"text": "Hitzerobuster Turmschild",
+				"type": "Hitzerobuster Turmschild"
 			},
 			{
 				"text": "Holz-Drachenschild",
@@ -6452,6 +7028,10 @@
 				"type": "Der Traum des Bogenmachers"
 			},
 			{
+				"text": "Des Bruders Schatz",
+				"type": "Des Bruders Schatz"
+			},
+			{
 				"text": "Der vergrabene Schatz",
 				"type": "Der vergrabene Schatz"
 			},
@@ -6484,6 +7064,10 @@
 				"type": "Der begehrte Besitz"
 			},
 			{
+				"text": "Verfluchte Worte",
+				"type": "Verfluchte Worte"
+			},
+			{
 				"text": "Die dunklen Träume",
 				"type": "Die dunklen Träume"
 			},
@@ -6502,6 +7086,10 @@
 			{
 				"text": "Glück des Halbgottes",
 				"type": "Glück des Halbgottes"
+			},
+			{
+				"text": "Entweihte Tugend",
+				"type": "Entweihte Tugend"
 			},
 			{
 				"text": "Zur Vergänglichkeit verdammt",
@@ -6764,6 +7352,10 @@
 				"type": "Beistand der Sündlosen"
 			},
 			{
+				"text": "Der Akademiker",
+				"type": "Der Akademiker"
+			},
+			{
 				"text": "Der Verehrer",
 				"type": "Der Verehrer"
 			},
@@ -6812,6 +7404,10 @@
 				"type": "Der Verrat"
 			},
 			{
+				"text": "Die bittere Blüte",
+				"type": "Die bittere Blüte"
+			},
+			{
 				"text": "Das lodernde Feuer",
 				"type": "Das lodernde Feuer"
 			},
@@ -6830,6 +7426,10 @@
 			{
 				"text": "Der spröde Kaiser",
 				"type": "Der spröde Kaiser"
+			},
+			{
+				"text": "Der Schatz",
+				"type": "Der Schatz"
 			},
 			{
 				"text": "Die Dissonanz",
@@ -7068,6 +7668,10 @@
 				"type": "Die besten Absichten"
 			},
 			{
+				"text": "Die Kluft",
+				"type": "Die Kluft"
+			},
+			{
 				"text": "Das rüstige Herz",
 				"type": "Das rüstige Herz"
 			},
@@ -7126,6 +7730,10 @@
 			{
 				"text": "Die Gabe des Juweliers",
 				"type": "Die Gabe des Juweliers"
+			},
+			{
+				"text": "Der Journalist",
+				"type": "Der Journalist"
 			},
 			{
 				"text": "Die Reise",
@@ -7464,6 +8072,10 @@
 				"type": "Unumstritten"
 			},
 			{
+				"text": "Der unerwartete Preis",
+				"type": "Der unerwartete Preis"
+			},
+			{
 				"text": "Die Vereinigung",
 				"type": "Die Vereinigung"
 			},
@@ -7580,12 +8192,24 @@
 				"type": "Der Schatzjäger"
 			},
 			{
+				"text": "Triskaidekaphobie",
+				"type": "Triskaidekaphobie"
+			},
+			{
 				"text": "Die andere Wange hinhalten",
 				"type": "Die andere Wange hinhalten"
 			},
 			{
+				"text": "Entfesselt",
+				"type": "Entfesselt"
+			},
+			{
 				"text": "Der unterirdische Wald",
 				"type": "Der unterirdische Wald"
+			},
+			{
+				"text": "Unerwiderte Liebe",
+				"type": "Unerwiderte Liebe"
 			},
 			{
 				"text": "Die Eitelkeit",
@@ -8549,6 +9173,14 @@
 				"type": "Elektroschock-Rolle"
 			},
 			{
+				"text": "Sphäre der Gewandung",
+				"type": "Sphäre der Gewandung"
+			},
+			{
+				"text": "Sphäre der Vergütung",
+				"type": "Sphäre der Vergütung"
+			},
+			{
 				"text": "Identifikationsrolle",
 				"type": "Identifikationsrolle"
 			},
@@ -8817,6 +9449,10 @@
 				"type": "Chaosscherbe "
 			},
 			{
+				"text": "Primäre Refraktionslinse",
+				"type": "Primäre Refraktionslinse"
+			},
+			{
 				"text": "Färbungssphäre",
 				"type": "Färbungssphäre"
 			},
@@ -8827,6 +9463,10 @@
 			{
 				"text": "Sphäre des Goldschmieds",
 				"type": "Sphäre des Goldschmieds"
+			},
+			{
+				"text": "Sekundäre Refraktionslinse",
+				"type": "Sekundäre Refraktionslinse"
 			},
 			{
 				"text": "Uralte Sphäre",
@@ -9237,6 +9877,198 @@
 				"type": "Samen des wilden Dornenwolfs"
 			},
 			{
+				"text": "Signum der Abtrünnigen",
+				"type": "Signum der Abtrünnigen"
+			},
+			{
+				"text": "Urne von Farud",
+				"type": "Urne von Farud"
+			},
+			{
+				"text": "Kandelaber von Ogham",
+				"type": "Kandelaber von Ogham"
+			},
+			{
+				"text": "Menschenschädel mit Stoßzähnen",
+				"type": "Menschenschädel mit Stoßzähnen"
+			},
+			{
+				"text": "Himmlischer Stein",
+				"type": "Himmlischer Stein"
+			},
+			{
+				"text": "Urne der Ersten Asche",
+				"type": "Urne der Ersten Asche"
+			},
+			{
+				"text": "Herzspule",
+				"type": "Herzspule"
+			},
+			{
+				"text": "Rätselhafte Konstruktion A4",
+				"type": "Rätselhafte Konstruktion A4"
+			},
+			{
+				"text": "Rätselhafte Konstruktion B2",
+				"type": "Rätselhafte Konstruktion B2"
+			},
+			{
+				"text": "Rätselhafte Konstruktion C5",
+				"type": "Rätselhafte Konstruktion C5"
+			},
+			{
+				"text": "Rätselhafte Konstruktion D1",
+				"type": "Rätselhafte Konstruktion D1"
+			},
+			{
+				"text": "Spiegel von Teklatipitzi",
+				"type": "Spiegel von Teklatipitzi"
+			},
+			{
+				"text": "Kiste von Tripyxis",
+				"type": "Kiste von Tripyxis"
+			},
+			{
+				"text": "Büste von Kaiser Caspiro",
+				"type": "Büste von Kaiser Caspiro"
+			},
+			{
+				"text": "Goldene Statue von Hetzapal",
+				"type": "Goldene Statue von Hetzapal"
+			},
+			{
+				"text": "Fläschchen von Welakath",
+				"type": "Fläschchen von Welakath"
+			},
+			{
+				"text": "Verbotene Lampe",
+				"type": "Verbotene Lampe"
+			},
+			{
+				"text": "Die Göttin des Wassers",
+				"type": "Die Göttin des Wassers"
+			},
+			{
+				"text": "Der goldene Ibis",
+				"type": "Der goldene Ibis"
+			},
+			{
+				"text": "Unmöglicher Kristall",
+				"type": "Unmöglicher Kristall"
+			},
+			{
+				"text": "Lebendes Eis",
+				"type": "Lebendes Eis"
+			},
+			{
+				"text": "Siegel von Lunaris",
+				"type": "Siegel von Lunaris"
+			},
+			{
+				"text": "Goldene Statue von Matatl",
+				"type": "Goldene Statue von Matatl"
+			},
+			{
+				"text": "Weihrauchgefäß von Keth",
+				"type": "Weihrauchgefäß von Keth"
+			},
+			{
+				"text": "Das Perlen-Erbstück",
+				"type": "Das Perlen-Erbstück"
+			},
+			{
+				"text": "Siegel von Solaris",
+				"type": "Siegel von Solaris"
+			},
+			{
+				"text": "Goldene Statue von Napuatzi",
+				"type": "Goldene Statue von Napuatzi"
+			},
+			{
+				"text": "Duftrauchbrenner",
+				"type": "Duftrauchbrenner"
+			},
+			{
+				"text": "Uraltes Siegel",
+				"type": "Uraltes Siegel"
+			},
+			{
+				"text": "Blut von Innocence",
+				"type": "Blut von Innocence"
+			},
+			{
+				"text": "Entschluss der Dekhara",
+				"type": "Entschluss der Dekhara"
+			},
+			{
+				"text": "Orbalas fünftes Abenteuer",
+				"type": "Orbalas fünftes Abenteuer"
+			},
+			{
+				"text": "Stab des ersten Sündenfressers",
+				"type": "Stab des ersten Sündenfressers"
+			},
+			{
+				"text": "Schwert des inversen Relikts",
+				"type": "Schwert des inversen Relikts"
+			},
+			{
+				"text": "Wappen von Ezomyr",
+				"type": "Wappen von Ezomyr"
+			},
+			{
+				"text": "Goldene Sklavenstatue ",
+				"type": "Goldene Sklavenstatue "
+			},
+			{
+				"text": "Goldene Statue von Xoplotli",
+				"type": "Goldene Statue von Xoplotli"
+			},
+			{
+				"text": "Zeremonieller Kelch",
+				"type": "Zeremonieller Kelch"
+			},
+			{
+				"text": "Verzierte goldene Statue",
+				"type": "Verzierte goldene Statue"
+			},
+			{
+				"text": "Goldene zeremonielle Maske",
+				"type": "Goldene zeremonielle Maske"
+			},
+			{
+				"text": "Goldene Gebetsstatue",
+				"type": "Goldene Gebetsstatue"
+			},
+			{
+				"text": "Goldene Groteske",
+				"type": "Goldene Groteske"
+			},
+			{
+				"text": "Goldene Glyphe der Opferung",
+				"type": "Goldene Glyphe der Opferung"
+			},
+			{
+				"text": "Foliant von Ez Myrae",
+				"type": "Foliant von Ez Myrae"
+			},
+			{
+				"text": "Hand von Arimor",
+				"type": "Hand von Arimor"
+			},
+			{
+				"text": "Abberathische Hörner",
+				"type": "Abberathische Hörner"
+			},
+			{
+				"text": "Admiral Proclars Pfeife",
+				"type": "Admiral Proclars Pfeife"
+			},
+			{
+				"text": "Alchemistischer Kelch",
+				"type": "Alchemistischer Kelch"
+			},
+			{
 				"text": "Eingefangene Seele von Mephod dem Erdenversenger",
 				"type": "Eingefangene Seele von Mephod dem Erdenversenger"
 			},
@@ -9249,8 +10081,8 @@
 				"type": "Eingefangene Seele von Glace"
 			},
 			{
-				"text": "Eingefangene Seele des Schattens der Vaal",
-				"type": "Eingefangene Seele des Schattens der Vaal"
+				"text": "Eingefangene Seele des Streiters der Höhlen",
+				"type": "Eingefangene Seele des Streiters der Höhlen"
 			},
 			{
 				"text": "Eingefangene Seele der Pirscherin der endlosen Wüste",
@@ -9392,6 +10224,30 @@
 				"name": "Brüllen des Löwen",
 				"text": "Brüllen des Löwen Granitfläschchen",
 				"type": "Granitfläschchen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Laviangas Seele",
+				"text": "Replik: Laviangas Seele Sakrales Manafläschchen",
+				"type": "Sakrales Manafläschchen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Rumis Machwerk",
+				"text": "Replik: Rumis Machwerk Granitfläschchen",
+				"type": "Granitfläschchen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Göttlicher Kummer",
+				"text": "Replik: Göttlicher Kummer Schwefelfläschchen",
+				"type": "Schwefelfläschchen"
 			},
 			{
 				"flags": {
@@ -9771,6 +10627,10 @@
 				"type": "Explosionsregen"
 			},
 			{
+				"text": "Feurige Salve",
+				"type": "Feurige Salve"
+			},
+			{
 				"text": "Pesthauch",
 				"type": "Pesthauch"
 			},
@@ -9857,6 +10717,10 @@
 			{
 				"text": "Reinkarnation",
 				"type": "Reinkarnation"
+			},
+			{
+				"text": "Blitzlanze",
+				"type": "Blitzlanze"
 			},
 			{
 				"text": "Mal des Assassinen",
@@ -10015,6 +10879,10 @@
 				"type": "Heiliges Flammentotem"
 			},
 			{
+				"text": "Feuerwall",
+				"type": "Feuerwall"
+			},
+			{
 				"text": "Feuerschwall",
 				"type": "Feuerschwall"
 			},
@@ -10071,6 +10939,10 @@
 				"type": "Frostbombe"
 			},
 			{
+				"text": "Frostschild",
+				"type": "Frostschild"
+			},
+			{
 				"text": "Frostmauer",
 				"type": "Frostmauer"
 			},
@@ -10125,6 +10997,10 @@
 			{
 				"text": "Herold des Donners",
 				"type": "Herold des Donners"
+			},
+			{
+				"text": "Explodierende Verhexung",
+				"type": "Explodierende Verhexung"
 			},
 			{
 				"text": "Eishieb",
@@ -10291,8 +11167,8 @@
 				"type": "Stolz"
 			},
 			{
-				"text": "Projektilempfindlichkeit",
-				"type": "Projektilempfindlichkeit"
+				"text": "Mal des Scharfschützen",
+				"type": "Mal des Scharfschützen"
 			},
 			{
 				"text": "Durchstoßen",
@@ -10399,6 +11275,10 @@
 				"type": "Belagerungsballiste"
 			},
 			{
+				"text": "Rune der Macht",
+				"type": "Rune der Macht"
+			},
+			{
 				"text": "Zerschmettern",
 				"type": "Zerschmettern"
 			},
@@ -10429,6 +11309,10 @@
 			{
 				"text": "Pfeilfächer",
 				"type": "Pfeilfächer"
+			},
+			{
+				"text": "Zersplitternder Stahl",
+				"type": "Zersplitternder Stahl"
 			},
 			{
 				"text": "Geladener Schlag",
@@ -10699,6 +11583,10 @@
 				"type": "Vitalität"
 			},
 			{
+				"text": "Sphäre der Leere",
+				"type": "Sphäre der Leere"
+			},
+			{
 				"text": "Explosiver Tod",
 				"type": "Explosiver Tod"
 			},
@@ -10951,8 +11839,8 @@
 				"type": "Unterstützung: Todesstoß"
 			},
 			{
-				"text": "Unterstützung: Verfluchen bei Treffer",
-				"type": "Unterstützung: Verfluchen bei Treffer"
+				"text": "Unterstützung: Verhexende Berührung",
+				"type": "Unterstützung: Verhexende Berührung"
 			},
 			{
 				"text": "Erweckte Unterstützung: Verfluchen bei Treffer",
@@ -10971,8 +11859,8 @@
 				"type": "Erweckte Unterstützung: Tödliche Beeinträchtigungen"
 			},
 			{
-				"text": "Unterstützung: Mal des Todes",
-				"type": "Unterstützung: Mal des Todes"
+				"text": "Unterstützung: Todfeind",
+				"type": "Unterstützung: Todfeind"
 			},
 			{
 				"text": "Unterstützung: Verfall",
@@ -10989,6 +11877,10 @@
 			{
 				"text": "Erweckte Unterstützung: Elementarfokus",
 				"type": "Erweckte Unterstützung: Elementarfokus"
+			},
+			{
+				"text": "Unterstützung: Durchdringende Elemente",
+				"type": "Unterstützung: Durchdringende Elemente"
 			},
 			{
 				"text": "Unterstützung: Elementarübertragung",
@@ -11093,6 +11985,10 @@
 			{
 				"text": "Unterstützung: Aufspießen",
 				"type": "Unterstützung: Aufspießen"
+			},
+			{
+				"text": "Unterstützung: Drohendes Unheil",
+				"type": "Unterstützung: Drohendes Unheil"
 			},
 			{
 				"text": "Unterstützung: Vergrößerter Wirkungsbereich",
@@ -11271,6 +12167,10 @@
 				"type": "Unterstützung: Durchbohren"
 			},
 			{
+				"text": "Unterstützung: Zielgenauigkeit",
+				"type": "Unterstützung: Zielgenauigkeit"
+			},
+			{
 				"text": "Unterstützung: Aus nächster Nähe",
 				"type": "Unterstützung: Aus nächster Nähe"
 			},
@@ -11446,6 +12346,14 @@
 				"name": "Uralte Wegsteine",
 				"text": "Uralte Wegsteine Blutrotes Juwel",
 				"type": "Blutrotes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Apex Mode",
+				"text": "Apex Mode Kobaltblaues Juwel",
+				"type": "Kobaltblaues Juwel"
 			},
 			{
 				"flags": {
@@ -11731,6 +12639,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Endloses Elend",
+				"text": "Endloses Elend Kobaltblaues Juwel",
+				"type": "Kobaltblaues Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Energiegeladene Rüstung",
 				"text": "Energiegeladene Rüstung Blutrotes Juwel",
 				"type": "Blutrotes Juwel"
@@ -11987,6 +12903,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Herr des Stahls",
+				"text": "Herr des Stahls Viridiangrünes Juwel",
+				"type": "Viridiangrünes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Böse Absicht",
 				"text": "Böse Absicht Kobaltblaues Juwel",
 				"type": "Kobaltblaues Juwel"
@@ -12053,6 +12977,14 @@
 				},
 				"name": "Mutiertes Wachstum",
 				"text": "Mutiertes Wachstum Kobaltblaues Juwel",
+				"type": "Kobaltblaues Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Nadir Mode",
+				"text": "Nadir Mode Kobaltblaues Juwel",
 				"type": "Kobaltblaues Juwel"
 			},
 			{
@@ -12189,6 +13121,78 @@
 				},
 				"name": "Waghalsige Verteidigung",
 				"text": "Waghalsige Verteidigung Kobaltblaues Juwel",
+				"type": "Kobaltblaues Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Blutopfer",
+				"text": "Replik: Blutopfer Blutrotes Juwel",
+				"type": "Blutrotes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Einfache Konstruktion",
+				"text": "Replik: Einfache Konstruktion Viridiangrünes Juwel",
+				"type": "Viridiangrünes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Effizienz des Eroberers",
+				"text": "Replik: Effizienz des Eroberers Blutrotes Juwel",
+				"type": "Blutrotes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Zarte Blüte",
+				"text": "Replik: Zarte Blüte Blutrotes Juwel",
+				"type": "Blutrotes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Hitzkopf",
+				"text": "Replik: Hitzkopf Viridiangrünes Juwel",
+				"type": "Viridiangrünes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Urzeitliche Macht",
+				"text": "Replik: Urzeitliche Macht Blutrotes Juwel",
+				"type": "Blutrotes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Reines Talent",
+				"text": "Replik: Reines Talent Viridiangrünes Juwel",
+				"type": "Viridiangrünes Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Waghalsige Verteidigung",
+				"text": "Replik: Waghalsige Verteidigung Kobaltblaues Juwel",
+				"type": "Kobaltblaues Juwel"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Instabile Sprengladung",
+				"text": "Replik: Instabile Sprengladung Kobaltblaues Juwel",
 				"type": "Kobaltblaues Juwel"
 			},
 			{
@@ -12803,6 +13807,33 @@
 				},
 				"name": "PoorJoys Zuflucht",
 				"text": "PoorJoys Zuflucht 'Tempel'-Karte",
+				"type": "'Tempel'-Karte"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Cortex",
+				"text": "Replik: Cortex 'Reliktkammern'-Karte",
+				"type": "'Reliktkammern'-Karte"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Säulen von Arun",
+				"text": "Replik: Säulen von Arun 'Dünen'-Karte",
+				"type": "'Dünen'-Karte"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: PoorJoys Zuflucht",
+				"text": "Replik: PoorJoys Zuflucht 'Tempel'-Karte",
 				"type": "'Tempel'-Karte"
 			},
 			{
@@ -16073,6 +17104,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Actum",
+				"text": "Actum Fleischeraxt",
+				"type": "Fleischeraxt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Schreitende Festung",
 				"text": "Schreitende Festung Bauchschlitzer",
 				"type": "Bauchschlitzer"
@@ -17281,6 +18320,254 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Replik: Schreitende Festung",
+				"text": "Replik: Schreitende Festung Bauchschlitzer",
+				"type": "Bauchschlitzer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Faszination",
+				"text": "Replik: Faszination Vaal-Klaue",
+				"type": "Vaal-Klaue"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Zittertraum",
+				"text": "Replik: Zittertraum Schattenzepter",
+				"type": "Schattenzepter"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Blutpinsel",
+				"text": "Replik: Blutpinsel Stilett",
+				"type": "Stilett"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Der Blutdorn",
+				"text": "Replik: Der Blutdorn Knorriger Ast",
+				"type": "Knorriger Ast"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Gehärtete Eisenspitze",
+				"text": "Replik: Gehärtete Eisenspitze Ezomytendolch",
+				"type": "Ezomytendolch"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Traumfeder",
+				"text": "Replik: Traumfeder Ewiges Schwert",
+				"type": "Ewiges Schwert"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Dämmergrauen",
+				"text": "Replik: Dämmergrauen Mahlstrom-Stab",
+				"type": "Mahlstrom-Stab"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Earendels Umarmung",
+				"text": "Replik: Earendels Umarmung Grinsender Fetisch",
+				"type": "Grinsender Fetisch"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Marschkeule",
+				"text": "Replik: Marschkeule Knorriger Ast",
+				"type": "Knorriger Ast"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Frosthauch",
+				"text": "Replik: Frosthauch Verzierter Streitkolben",
+				"type": "Verzierter Streitkolben"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Die Ernte",
+				"text": "Replik: Die Ernte Jaspis-Axt",
+				"type": "Jaspis-Axt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Herzensbrecher",
+				"text": "Replik: Herzensbrecher Majestätisches Dolchmesser",
+				"type": "Majestätisches Dolchmesser"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Infractem",
+				"text": "Replik: Infractem Dezimierungsbogen",
+				"type": "Dezimierungsbogen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Innsburys Schneide",
+				"text": "Replik: Innsburys Schneide Ältestenschwert",
+				"type": "Ältestenschwert"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Eiserner Kommandant",
+				"text": "Replik: Eiserner Kommandant Todesbogen",
+				"type": "Todesbogen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Kongors unsterbliche Wut",
+				"text": "Replik: Kongors unsterbliche Wut Schreckenshammer",
+				"type": "Schreckenshammer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Letzter Ausweg",
+				"text": "Replik: Letzter Ausweg Nagelfaust",
+				"type": "Nagelfaust"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Übereinkunft bei Mitternacht",
+				"text": "Replik: Übereinkunft bei Mitternacht Gravierter Zauberstab",
+				"type": "Gravierter Zauberstab"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Nebulis",
+				"text": "Replik: Nebulis Leerenzepter",
+				"type": "Leerenzepter"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Oros Opfer",
+				"text": "Replik: Oros Opfer Höllenschwert",
+				"type": "Höllenschwert"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Paradoxica",
+				"text": "Replik: Paradoxica Vaal-Rapier",
+				"type": "Vaal-Rapier"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Stachelregen",
+				"text": "Replik: Stachelregen Kurzbogen",
+				"type": "Kurzbogen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Seelenschlucker",
+				"text": "Replik: Seelenschlucker Belagerungsaxt",
+				"type": "Belagerungsaxt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Tosender Stahl",
+				"text": "Replik: Tosender Stahl Kriegsschwert",
+				"type": "Kriegsschwert"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Trypanon",
+				"text": "Replik: Trypanon Mächtiger Hammer",
+				"type": "Mächtiger Hammer"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Tuls Fall",
+				"text": "Replik: Tuls Fall Tornado-Zauberstab",
+				"type": "Tornado-Zauberstab"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Twyzel",
+				"text": "Replik: Twyzel Weisenzauberstab",
+				"type": "Weisenzauberstab"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Ungils linke Hand",
+				"text": "Replik: Ungils linke Hand Stiefelmesser",
+				"type": "Stiefelmesser"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Windschlitzer",
+				"text": "Replik: Windschlitzer Kaiserlicher Bogen",
+				"type": "Kaiserlicher Bogen"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Replik: Schwingen der Entropie",
+				"text": "Replik: Schwingen der Entropie Ezomytenaxt",
+				"type": "Ezomytenaxt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Stab des Nachhalls",
 				"text": "Stab des Nachhalls Spiralförmiger Zauberstab",
 				"type": "Spiralförmiger Zauberstab"
@@ -17601,6 +18888,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Der Drehpunkt",
+				"text": "Der Drehpunkt Ezomytenstab",
+				"type": "Ezomytenstab"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Die gefesselte Göttin",
 				"text": "Die gefesselte Göttin Walknochen-Rapier",
 				"type": "Walknochen-Rapier"
@@ -17644,6 +18939,22 @@
 				"name": "Die Ernte",
 				"text": "Die Ernte Jaspis-Axt",
 				"type": "Jaspis-Axt"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Die versteckte Klinge",
+				"text": "Die versteckte Klinge Hinterhaltdolch",
+				"type": "Hinterhaltdolch"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Die eiserne Masse",
+				"text": "Die eiserne Masse Gladius",
+				"type": "Gladius"
 			},
 			{
 				"flags": {
@@ -18102,6 +19413,18 @@
 				"type": "Drescherklaue"
 			},
 			{
+				"text": "Schatten-Reißzähne",
+				"type": "Schatten-Reißzähne"
+			},
+			{
+				"text": "Bösartige Reißzähne",
+				"type": "Bösartige Reißzähne"
+			},
+			{
+				"text": "Leeren-Reißzähne",
+				"type": "Leeren-Reißzähne"
+			},
+			{
 				"text": "Zweifachklaue",
 				"type": "Zweifachklaue"
 			},
@@ -18202,6 +19525,18 @@
 				"type": "Häutungsmesser"
 			},
 			{
+				"text": "Hohlspitz-Dolch",
+				"type": "Hohlspitz-Dolch"
+			},
+			{
+				"text": "Druckbelasteter Dolch",
+				"type": "Druckbelasteter Dolch"
+			},
+			{
+				"text": "Pneumatischer Dolch",
+				"type": "Pneumatischer Dolch"
+			},
+			{
 				"text": "Gezackter Dolch",
 				"type": "Gezackter Dolch"
 			},
@@ -18212,6 +19547,18 @@
 			{
 				"text": "Sai",
 				"type": "Sai"
+			},
+			{
+				"text": "Flammenflackern-Klinge",
+				"type": "Flammenflackern-Klinge"
+			},
+			{
+				"text": "Stichflammenklinge",
+				"type": "Stichflammenklinge"
+			},
+			{
+				"text": "Höllische Klinge",
+				"type": "Höllische Klinge"
 			},
 			{
 				"text": "Rostiges Kriegsbeil",
@@ -18302,6 +19649,18 @@
 				"type": "Jaspis-Axt"
 			},
 			{
+				"text": "Misshandelnde Axt",
+				"type": "Misshandelnde Axt"
+			},
+			{
+				"text": "Missbilligende Axt",
+				"type": "Missbilligende Axt"
+			},
+			{
+				"text": "Psychotische Axt",
+				"type": "Psychotische Axt"
+			},
+			{
 				"text": "Geätztes Kriegsbeil",
 				"type": "Geätztes Kriegsbeil"
 			},
@@ -18362,8 +19721,8 @@
 				"type": "Stammeskeule"
 			},
 			{
-				"text": "Pernarch",
-				"type": "Pernarch"
+				"text": "Pernach",
+				"type": "Pernach"
 			},
 			{
 				"text": "Güldener Streitkolben",
@@ -18400,6 +19759,18 @@
 			{
 				"text": "Versteinerte Keule",
 				"type": "Versteinerte Keule"
+			},
+			{
+				"text": "Aufbrechender Hammer",
+				"type": "Aufbrechender Hammer"
+			},
+			{
+				"text": "Zerbrechender Hammer",
+				"type": "Zerbrechender Hammer"
+			},
+			{
+				"text": "Zerstörender Hammer",
+				"type": "Zerstörender Hammer"
 			},
 			{
 				"text": "Wyrm-Streitkolben",
@@ -18500,6 +19871,18 @@
 			{
 				"text": "Grinsender Fetisch",
 				"type": "Grinsender Fetisch"
+			},
+			{
+				"text": "Schwingendes Zepter",
+				"type": "Schwingendes Zepter"
+			},
+			{
+				"text": "Stabilisierendes Zepter",
+				"type": "Stabilisierendes Zepter"
+			},
+			{
+				"text": "Rotierendes Zepter",
+				"type": "Rotierendes Zepter"
 			},
 			{
 				"text": "Gehörntes Zepter",
@@ -18604,6 +19987,18 @@
 			{
 				"text": "Charans Schwert",
 				"type": "Charans Schwert"
+			},
+			{
+				"text": "Unbeständige Geisterklinge",
+				"type": "Unbeständige Geisterklinge"
+			},
+			{
+				"text": "Unberechenbare Geisterklinge",
+				"type": "Unberechenbare Geisterklinge"
+			},
+			{
+				"text": "Anarchische Geisterklinge",
+				"type": "Anarchische Geisterklinge"
 			},
 			{
 				"text": "Hakenschwert",
@@ -18782,6 +20177,18 @@
 				"type": "Beschwörender Zauberstab"
 			},
 			{
+				"text": "Zusammenfügender Zauberstab",
+				"type": "Zusammenfügender Zauberstab"
+			},
+			{
+				"text": "Sammelnder Zauberstab",
+				"type": "Sammelnder Zauberstab"
+			},
+			{
+				"text": "Anhäufender Zauberstab",
+				"type": "Anhäufender Zauberstab"
+			},
+			{
 				"text": "Heidenzauberstab",
 				"type": "Heidenzauberstab"
 			},
@@ -18886,6 +20293,18 @@
 				"type": "Hain-Bogen"
 			},
 			{
+				"text": "Formbogen",
+				"type": "Formbogen"
+			},
+			{
+				"text": "Flächenbogen",
+				"type": "Flächenbogen"
+			},
+			{
+				"text": "Solarbogen",
+				"type": "Solarbogen"
+			},
+			{
 				"text": "Reflexbogen",
 				"type": "Reflexbogen"
 			},
@@ -18974,6 +20393,18 @@
 				"type": "Kampfstab"
 			},
 			{
+				"text": "Transformierender Stab",
+				"type": "Transformierender Stab"
+			},
+			{
+				"text": "Vergeltender Stab",
+				"type": "Vergeltender Stab"
+			},
+			{
+				"text": "Geladener Stab",
+				"type": "Geladener Stab"
+			},
+			{
 				"text": "Halbmondstab",
 				"type": "Halbmondstab"
 			},
@@ -18984,6 +20415,18 @@
 			{
 				"text": "Finsterstab",
 				"type": "Finsterstab"
+			},
+			{
+				"text": "Leistungsfähiger Stock",
+				"type": "Leistungsfähiger Stock"
+			},
+			{
+				"text": "Potenter Stock",
+				"type": "Potenter Stock"
+			},
+			{
+				"text": "Anpassungsfähiger Stock",
+				"type": "Anpassungsfähiger Stock"
 			},
 			{
 				"text": "Steinaxt",
@@ -19052,6 +20495,18 @@
 			{
 				"text": "Holzaxt",
 				"type": "Holzaxt"
+			},
+			{
+				"text": "Erstklassiger Spalter",
+				"type": "Erstklassiger Spalter"
+			},
+			{
+				"text": "Gewetzter Spalter",
+				"type": "Gewetzter Spalter"
+			},
+			{
+				"text": "Scharfer Spalter",
+				"type": "Scharfer Spalter"
 			},
 			{
 				"text": "Dolchaxt",
@@ -19142,6 +20597,18 @@
 				"type": "Mächtiger Hammer"
 			},
 			{
+				"text": "Aufprallkraft-Kondensator",
+				"type": "Aufprallkraft-Kondensator"
+			},
+			{
+				"text": "Brechkraft-Verstärker",
+				"type": "Brechkraft-Verstärker"
+			},
+			{
+				"text": "Stoßkraft-Verteiler",
+				"type": "Stoßkraft-Verteiler"
+			},
+			{
 				"text": "Morgenstern",
 				"type": "Morgenstern"
 			},
@@ -19228,6 +20695,18 @@
 			{
 				"text": "Soldatenschwert",
 				"type": "Soldatenschwert"
+			},
+			{
+				"text": "Tadelnde Klinge",
+				"type": "Tadelnde Klinge"
+			},
+			{
+				"text": "Sprengende Klinge",
+				"type": "Sprengende Klinge"
+			},
+			{
+				"text": "Verbannende Klinge",
+				"type": "Verbannende Klinge"
 			},
 			{
 				"text": "Geschwungene Klinge",
@@ -23573,6 +25052,372 @@
 			{
 				"text": "Elfenbeinfarbener Wächterstein",
 				"type": "Elfenbeinfarbener Wächterstein"
+			}
+		],
+		"label": ""
+	},
+	{
+		"entries": [
+			{
+				"text": "Aalhaut-Sohle",
+				"type": "Aalhaut-Sohle"
+			},
+			{
+				"text": "Fuchsleder-Sohle",
+				"type": "Fuchsleder-Sohle"
+			},
+			{
+				"text": "Beflügelte Sohle",
+				"type": "Beflügelte Sohle"
+			},
+			{
+				"text": "Seidengewebe-Sohle",
+				"type": "Seidengewebe-Sohle"
+			},
+			{
+				"text": "Silberne Brosche",
+				"type": "Silberne Brosche"
+			},
+			{
+				"text": "Goldene Brosche",
+				"type": "Goldene Brosche"
+			},
+			{
+				"text": "Glänzende Brosche",
+				"type": "Glänzende Brosche"
+			},
+			{
+				"text": "Blattförmige Brosche",
+				"type": "Blattförmige Brosche"
+			},
+			{
+				"text": "Lederarmschienen",
+				"type": "Lederarmschienen"
+			},
+			{
+				"text": "Beschlagene Armschienen",
+				"type": "Beschlagene Armschienen"
+			},
+			{
+				"text": "Runenverzierte Armschienen",
+				"type": "Runenverzierte Armschienen"
+			},
+			{
+				"text": "Stahlarmschienen",
+				"type": "Stahlarmschienen"
+			},
+			{
+				"text": "Fokalstein",
+				"type": "Fokalstein"
+			},
+			{
+				"text": "Verbindungsleitung",
+				"type": "Verbindungsleitung"
+			},
+			{
+				"text": "Sammler-Amulett",
+				"type": "Sammler-Amulett"
+			},
+			{
+				"text": "Explosives Band",
+				"type": "Explosives Band"
+			},
+			{
+				"text": "Zerrissener Umhang",
+				"type": "Zerrissener Umhang"
+			},
+			{
+				"text": "Zerfetzter Umhang",
+				"type": "Zerfetzter Umhang"
+			},
+			{
+				"text": "Kapuzenumhang",
+				"type": "Kapuzenumhang"
+			},
+			{
+				"text": "Dünngewebter Umhang",
+				"type": "Dünngewebter Umhang"
+			},
+			{
+				"text": "Einfache Schutzrune",
+				"type": "Einfache Schutzrune"
+			},
+			{
+				"text": "Schimmernde Schutzrune",
+				"type": "Schimmernde Schutzrune"
+			},
+			{
+				"text": "Leuchtende Schutzrune",
+				"type": "Leuchtende Schutzrune"
+			},
+			{
+				"text": "Thaumaturgische Schutzrune",
+				"type": "Thaumaturgische Schutzrune"
+			},
+			{
+				"text": "Einfache Verkleidung",
+				"type": "Einfache Verkleidung"
+			},
+			{
+				"text": "Theater-Verkleidung",
+				"type": "Theater-Verkleidung"
+			},
+			{
+				"text": "Spionage-Verkleidung",
+				"type": "Spionage-Verkleidung"
+			},
+			{
+				"text": "Königsmörder-Verkleidung",
+				"type": "Königsmörder-Verkleidung"
+			},
+			{
+				"text": "Voltaxisches Blitzpulver",
+				"type": "Voltaxisches Blitzpulver"
+			},
+			{
+				"text": "Trarthanisches Blitzpulver",
+				"type": "Trarthanisches Blitzpulver"
+			},
+			{
+				"text": "Azurit-Blitzpulver",
+				"type": "Azurit-Blitzpulver"
+			},
+			{
+				"text": "Thaumetisches Blitzpulver",
+				"type": "Thaumetisches Blitzpulver"
+			},
+			{
+				"text": "Stahlbohrer",
+				"type": "Stahlbohrer"
+			},
+			{
+				"text": "Flanschbohrer",
+				"type": "Flanschbohrer"
+			},
+			{
+				"text": "Schwefel-Gasbrenner",
+				"type": "Schwefel-Gasbrenner"
+			},
+			{
+				"text": "Thaumetischer Gasbrenner",
+				"type": "Thaumetischer Gasbrenner"
+			},
+			{
+				"text": "Einfacher Dietrich",
+				"type": "Einfacher Dietrich"
+			},
+			{
+				"text": "Standard-Dietrich",
+				"type": "Standard-Dietrich"
+			},
+			{
+				"text": "Guter Dietrich",
+				"type": "Guter Dietrich"
+			},
+			{
+				"text": "Meister-Dietrich",
+				"type": "Meister-Dietrich"
+			},
+			{
+				"text": "Grober Wetzstein",
+				"type": "Grober Wetzstein"
+			},
+			{
+				"text": "Einfacher Wetzstein",
+				"type": "Einfacher Wetzstein"
+			},
+			{
+				"text": "Feiner Wetzstein",
+				"type": "Feiner Wetzstein"
+			},
+			{
+				"text": "Obsidian-Wetzstein",
+				"type": "Obsidian-Wetzstein"
+			},
+			{
+				"text": "Einfacher Sinnesverstärker",
+				"type": "Einfacher Sinnesverstärker"
+			},
+			{
+				"text": "Edler Sinnesverstärker",
+				"type": "Edler Sinnesverstärker"
+			},
+			{
+				"text": "Polierter Sinnesverstärker",
+				"type": "Polierter Sinnesverstärker"
+			},
+			{
+				"text": "Thaumaturgischer Sinnesverstärker",
+				"type": "Thaumaturgischer Sinnesverstärker"
+			},
+			{
+				"text": "Beschlagene Pfeilspitze",
+				"type": "Beschlagene Pfeilspitze"
+			},
+			{
+				"text": "Zersplitternde Pfeilspitze",
+				"type": "Zersplitternde Pfeilspitze"
+			},
+			{
+				"text": "Hohlspitz-Pfeilspitze",
+				"type": "Hohlspitz-Pfeilspitze"
+			},
+			{
+				"text": "Präzise Pfeilspitze",
+				"type": "Präzise Pfeilspitze"
+			},
+			{
+				"text": "Einfacher Schlüsselring",
+				"type": "Einfacher Schlüsselring"
+			},
+			{
+				"text": "Vielseitiger Schlüsselring",
+				"type": "Vielseitiger Schlüsselring"
+			},
+			{
+				"text": "Provisorischer Schlüsselring",
+				"type": "Provisorischer Schlüsselring"
+			},
+			{
+				"text": "Großmeister-Schlüsselring",
+				"type": "Großmeister-Schlüsselring"
+			}
+		],
+		"label": ""
+	},
+	{
+		"entries": [
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Auftrag: Zerstörung des Unzerstörbaren",
+				"text": "Auftrag: Zerstörung des Unzerstörbaren Präventiver Auftrag",
+				"type": "Präventiver Auftrag"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Auftrag: Darnaw soll sterben",
+				"text": "Auftrag: Darnaw soll sterben Flottenauftrag",
+				"type": "Flottenauftrag"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Auftrag: Herz des Ruhmes",
+				"text": "Auftrag: Herz des Ruhmes Familiärer Auftrag",
+				"type": "Familiärer Auftrag"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Auftrag: König der Sklavenhändler",
+				"text": "Auftrag: König der Sklavenhändler Auftrag zum Selbstschutz",
+				"type": "Auftrag zum Selbstschutz"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Auftrag: Die Zwillinge",
+				"text": "Auftrag: Die Zwillinge Rachsüchtiger Auftrag",
+				"type": "Rachsüchtiger Auftrag"
+			},
+			{
+				"text": "Grundriss: Bunker",
+				"type": "Grundriss: Bunker"
+			},
+			{
+				"text": "Grundriss: Archiv",
+				"type": "Grundriss: Archiv"
+			},
+			{
+				"text": "Grundriss: Laboratorium",
+				"type": "Grundriss: Laboratorium"
+			},
+			{
+				"text": "Grundriss: Verbotene Bibliothek",
+				"type": "Grundriss: Verbotene Bibliothek"
+			},
+			{
+				"text": "Grundriss: Anwesen",
+				"type": "Grundriss: Anwesen"
+			},
+			{
+				"text": "Grundriss: Räuberhöhle",
+				"type": "Grundriss: Räuberhöhle"
+			},
+			{
+				"text": "Grundriss: Repositorium",
+				"type": "Grundriss: Repositorium"
+			},
+			{
+				"text": "Grundriss: Tunnel",
+				"type": "Grundriss: Tunnel"
+			},
+			{
+				"text": "Grundriss: Untergrund",
+				"type": "Grundriss: Untergrund"
+			},
+			{
+				"text": "Auftrag: Bunker",
+				"type": "Auftrag: Bunker"
+			},
+			{
+				"text": "Auftrag: Archiv",
+				"type": "Auftrag: Archiv"
+			},
+			{
+				"text": "Auftrag: Laboratorium",
+				"type": "Auftrag: Laboratorium"
+			},
+			{
+				"text": "Auftrag: Verbotene Bibliothek",
+				"type": "Auftrag: Verbotene Bibliothek"
+			},
+			{
+				"text": "Auftrag: Anwesen",
+				"type": "Auftrag: Anwesen"
+			},
+			{
+				"text": "Auftrag: Räuberhöhle",
+				"type": "Auftrag: Räuberhöhle"
+			},
+			{
+				"text": "Auftrag: Repositorium",
+				"type": "Auftrag: Repositorium"
+			},
+			{
+				"text": "Auftrag: Tunnel",
+				"type": "Auftrag: Tunnel"
+			},
+			{
+				"text": "Auftrag: Untergrund",
+				"type": "Auftrag: Untergrund"
+			},
+			{
+				"text": "Familiärer Auftrag",
+				"type": "Familiärer Auftrag"
+			},
+			{
+				"text": "Flottenauftrag",
+				"type": "Flottenauftrag"
+			},
+			{
+				"text": "Präventiver Auftrag",
+				"type": "Präventiver Auftrag"
+			},
+			{
+				"text": "Rachsüchtiger Auftrag",
+				"type": "Rachsüchtiger Auftrag"
+			},
+			{
+				"text": "Auftrag zum Selbstschutz",
+				"type": "Auftrag zum Selbstschutz"
 			}
 		],
 		"label": ""

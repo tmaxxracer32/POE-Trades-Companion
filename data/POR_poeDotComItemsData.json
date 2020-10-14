@@ -253,6 +253,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Grilhões da Emancipação",
+				"text": "Grilhões da Emancipação Cinto de Corrente",
+				"type": "Cinto de Corrente"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Coro da Tormenta",
 				"text": "Coro da Tormenta Amuleto de Lápis",
 				"type": "Amuleto de Lápis"
@@ -461,6 +469,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Fim Predestinado",
+				"text": "Fim Predestinado Anel de Paua",
+				"type": "Anel de Paua"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Fim do Banquete",
 				"text": "Fim do Banquete Cinto Rústico",
 				"type": "Cinto Rústico"
@@ -608,6 +624,14 @@
 				"name": "Kikazaru",
 				"text": "Kikazaru Anel de Topázio",
 				"type": "Anel de Topázio"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Preço da Liderança",
+				"text": "Preço da Liderança Amuleto de Ônix",
+				"type": "Amuleto de Ônix"
 			},
 			{
 				"flags": {
@@ -901,6 +925,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Aperto Pirotécnico Chocante",
+				"text": "Aperto Pirotécnico Chocante Cinto de Couro",
+				"type": "Cinto de Couro"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Paciência de Rashkaldor",
 				"text": "Paciência de Rashkaldor Amuleto de Jade",
 				"type": "Amuleto de Jade"
@@ -912,6 +944,118 @@
 				"name": "Faixa da Lâmina Vermelha",
 				"text": "Faixa da Lâmina Vermelha Anel Desmontado",
 				"type": "Anel Desmontado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Ponto Fraco de Atziri",
+				"text": "Réplica: Ponto Fraco de Atziri Amuleto Paua",
+				"type": "Amuleto Paua"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Sopro Suspenso",
+				"text": "Réplica: Sopro Suspenso Cinto de Corrente",
+				"type": "Cinto de Corrente"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Danação de Doedre",
+				"text": "Réplica: Danação de Doedre Anel de Paua",
+				"type": "Anel de Paua"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Brasa Desperta",
+				"text": "Réplica: Brasa Desperta Anel de Rubi",
+				"type": "Anel de Rubi"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Caçador de Cabeças",
+				"text": "Réplica: Caçador de Cabeças Cinto de Couro",
+				"type": "Cinto de Couro"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Verdade de Hyrri",
+				"text": "Réplica: Verdade de Hyrri Amuleto de Jade",
+				"type": "Amuleto de Jade"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Proteção Karui",
+				"text": "Réplica: Proteção Karui Amuleto de Jade",
+				"type": "Amuleto de Jade"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Estratagema de Malachai",
+				"text": "Réplica: Estratagema de Malachai Anel Desmontado",
+				"type": "Anel Desmontado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Tecelagem Prismática",
+				"text": "Réplica: Tecelagem Prismática Cinto Rústico",
+				"type": "Cinto Rústico"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Quebra-cercos",
+				"text": "Réplica: Quebra-cercos Cinto Pesado",
+				"type": "Cinto Pesado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Corrente Espiritual",
+				"text": "Réplica: Corrente Espiritual Cinto de Pano",
+				"type": "Cinto de Pano"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Sinete de Tasalio",
+				"text": "Réplica: Sinete de Tasalio Anel de Safira",
+				"type": "Anel de Safira"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Olho do Além",
+				"text": "Réplica: Olho do Além Anel Desmontado",
+				"type": "Anel Desmontado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Coração Invernal",
+				"text": "Réplica: Coração Invernal Amuleto de Ouro",
+				"type": "Amuleto de Ouro"
 			},
 			{
 				"flags": {
@@ -1141,9 +1285,25 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "A Drogaria",
+				"text": "A Drogaria Cinto de Pano",
+				"type": "Cinto de Pano"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "O Effigon",
 				"text": "O Effigon Amuleto de Ouro",
 				"type": "Amuleto de Ouro"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "O Vínculo Efêmero",
+				"text": "O Vínculo Efêmero Amuleto de Lápis",
+				"type": "Amuleto de Lápis"
 			},
 			{
 				"flags": {
@@ -1168,6 +1328,14 @@
 				"name": "O Halcyon",
 				"text": "O Halcyon Amuleto de Jade",
 				"type": "Amuleto de Jade"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "O Salteador",
+				"text": "O Salteador Anel de Ouro",
+				"type": "Anel de Ouro"
 			},
 			{
 				"flags": {
@@ -1554,6 +1722,14 @@
 				"type": "Amuleto de Ágata"
 			},
 			{
+				"text": "Amuleto Astrolábio",
+				"type": "Amuleto Astrolábio"
+			},
+			{
+				"text": "Amuleto Simples",
+				"type": "Amuleto Simples"
+			},
+			{
 				"text": "Talismã da Bocarra Negra",
 				"type": "Talismã da Bocarra Negra"
 			},
@@ -1706,6 +1882,14 @@
 				"type": "Obi Dourado"
 			},
 			{
+				"text": "Cinto de Micro-Destilaria",
+				"type": "Cinto de Micro-Destilaria"
+			},
+			{
+				"text": "Cinto Mecânico",
+				"type": "Cinto Mecânico"
+			},
+			{
 				"text": "Anel da Fenda",
 				"type": "Anel da Fenda"
 			},
@@ -1780,6 +1964,18 @@
 			{
 				"text": "Aro Dourado",
 				"type": "Aro Dourado"
+			},
+			{
+				"text": "Anel Engrenado",
+				"type": "Anel Engrenado"
+			},
+			{
+				"text": "Anel Geodésico",
+				"type": "Anel Geodésico"
+			},
+			{
+				"text": "Adorno do Ladrão",
+				"type": "Adorno do Ladrão"
 			}
 		],
 		"label": "Acessórios"
@@ -2070,6 +2266,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Erro Crasso",
+				"text": "Erro Crasso Placas Astrais",
+				"type": "Placas Astrais"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Ossos de Ullr",
 				"text": "Ossos de Ullr Sapatilhas de Seda",
 				"type": "Sapatilhas de Seda"
@@ -2230,6 +2434,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Andarilho Cadavérico",
+				"text": "Andarilho Cadavérico Botas Carnais",
+				"type": "Botas Carnais"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Desejo de Copri",
 				"text": "Desejo de Copri Traje do Assassino",
 				"type": "Traje do Assassino"
@@ -2305,6 +2517,14 @@
 				"name": "Rastros de Craicean",
 				"text": "Rastros de Craicean Grevas de Golias",
 				"type": "Grevas de Golias"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Ornamento do Desejo",
+				"text": "Ornamento do Desejo Bascinet Estriado",
+				"type": "Bascinet Estriado"
 			},
 			{
 				"flags": {
@@ -2686,6 +2906,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Fim da Expedição",
+				"text": "Fim da Expedição Jaqueta da Sentinela",
+				"type": "Jaqueta da Sentinela"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Olho da Malícia",
 				"text": "Olho da Malícia Máscara Insensível",
 				"type": "Máscara Insensível"
@@ -2809,6 +3037,14 @@
 				"name": "Forjador da Carne",
 				"text": "Forjador da Carne Sedas do Necromante",
 				"type": "Sedas do Necromante"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Fonte do Trovão",
+				"text": "Fonte do Trovão Escudo Cravado Espelhado",
+				"type": "Escudo Cravado Espelhado"
 			},
 			{
 				"flags": {
@@ -3510,6 +3746,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Mandíbula da Travessura",
+				"text": "Mandíbula da Travessura Elmo Ósseo",
+				"type": "Elmo Ósseo"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Torno de Meginord",
 				"text": "Torno de Meginord Manoplas de Aço",
 				"type": "Manoplas de Aço"
@@ -3521,6 +3765,14 @@
 				"name": "Cofre de Memórias",
 				"text": "Cofre de Memórias Coroa do Pretor",
 				"type": "Coroa do Pretor"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Fado do Mercenário",
+				"text": "Fado do Mercenário Luvas da Fuga",
+				"type": "Luvas da Fuga"
 			},
 			{
 				"flags": {
@@ -3750,6 +4002,254 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Réplica: Abyssus",
+				"text": "Réplica: Abyssus Elmo Ezomita com Visor",
+				"type": "Elmo Ezomita com Visor"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Trilha Guerreira de Alberon",
+				"text": "Réplica: Trilha Guerreira de Alberon Botas do Soldado",
+				"type": "Botas do Soldado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Alelopatia",
+				"text": "Réplica: Alelopatia Luvas do Feiticeiro",
+				"type": "Luvas do Feiticeiro"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Uivo do Alfa",
+				"text": "Réplica: Uivo do Alfa Pecador Tricorne",
+				"type": "Pecador Tricorne"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Investida de Ambu",
+				"text": "Réplica: Investida de Ambu Cota de Malha do Cruzado",
+				"type": "Cota de Malha do Cruzado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Acuidade de Atziri",
+				"text": "Réplica: Acuidade de Atziri Manoplas Vaal",
+				"type": "Manoplas Vaal"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Ossos de Ullr",
+				"text": "Réplica: Ossos de Ullr Sapatilhas de Seda",
+				"type": "Sapatilhas de Seda"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Mortalha da Eternidade",
+				"text": "Réplica: Mortalha da Eternidade Vestes Sangrentas",
+				"type": "Vestes Sangrentas"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Peitoral do Gato",
+				"text": "Réplica: Peitoral do Gato Lamelar Triunfante",
+				"type": "Lamelar Triunfante"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Shako Proibido",
+				"text": "Réplica: Shako Proibido Coroa Grande",
+				"type": "Coroa Grande"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Punho do Conselho",
+				"text": "Réplica: Punho do Conselho Luvas do Arcanista",
+				"type": "Luvas do Arcanista"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Epifania de Inya",
+				"text": "Réplica: Epifania de Inya Sapatilhas do Arcanista",
+				"type": "Sapatilhas do Arcanista"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Graça de Kalisa",
+				"text": "Réplica: Graça de Kalisa Luvas de Samito",
+				"type": "Luvas de Samito"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Coração de Kaom",
+				"text": "Réplica: Coração de Kaom Placas Gloriosas",
+				"type": "Placas Gloriosas"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Conjuro Estrábico",
+				"text": "Réplica: Conjuro Estrábico Máscara Festiva",
+				"type": "Máscara Festiva"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Patas de Lioneye",
+				"text": "Réplica: Patas de Lioneye Botas de Escamas de Bronze",
+				"type": "Botas de Escamas de Bronze"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Tecelão do Destino",
+				"text": "Réplica: Tecelão do Destino Cota de Anéis Elegante",
+				"type": "Cota de Anéis Elegante"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Mecanismo de Maloney",
+				"text": "Réplica: Mecanismo de Maloney Aljava Ornamentada",
+				"type": "Aljava Ornamentada"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Parede de Névoa",
+				"text": "Réplica: Parede de Névoa Broquel Laqueado",
+				"type": "Broquel Laqueado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Forma Perfeita",
+				"text": "Réplica: Forma Perfeita Couraça do Zodíaco",
+				"type": "Couraça do Zodíaco"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Trilha Vermelha",
+				"text": "Réplica: Trilha Vermelha Grevas do Titã",
+				"type": "Grevas do Titã"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: A Proteção Incansável",
+				"text": "Réplica: A Proteção Incansável Armadura Carnal",
+				"type": "Armadura Carnal"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Mortalha do Obscuro",
+				"text": "Réplica: Mortalha do Obscuro Armadura Carnal",
+				"type": "Armadura Carnal"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Golpe d'Alma",
+				"text": "Réplica: Golpe d'Alma Aljava de Flechas Pontudas",
+				"type": "Aljava de Flechas Pontudas"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: A Debandada",
+				"text": "Réplica: A Debandada Botas do Assassino",
+				"type": "Botas do Assassino"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Agressão em Três Passos",
+				"text": "Réplica: Agressão em Três Passos Botas de Chagrém",
+				"type": "Botas de Chagrém"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Fortaleza de Tukohama",
+				"text": "Réplica: Fortaleza de Tukohama Escudo Torre de Ébano",
+				"type": "Escudo Torre de Ébano"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Véu da Noite",
+				"text": "Réplica: Véu da Noite Elmo Grande",
+				"type": "Elmo Grande"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Bontade de Victario",
+				"text": "Réplica: Bontade de Victario Escudo Triangular Laminado",
+				"type": "Escudo Triangular Laminado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Caminhante do Vazio",
+				"text": "Réplica: Caminhante do Vazio Botas do Assassinato",
+				"type": "Botas do Assassinato"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Orientação de Volkuur",
+				"text": "Réplica: Orientação de Volkuur Luvas do Zelote",
+				"type": "Luvas do Zelote"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Espinhos de Rigwald",
 				"text": "Espinhos de Rigwald Aljava de Flechas de Duas Pontas",
 				"type": "Aljava de Flechas de Duas Pontas"
@@ -3897,6 +4397,14 @@
 				"name": "Toque do Criador",
 				"text": "Toque do Criador Luvas do Cruzado",
 				"type": "Luvas do Cruzado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Fragmento Fragmentado",
+				"text": "Fragmento Fragmentado Escudo Redondo Carmesim",
+				"type": "Escudo Redondo Carmesim"
 			},
 			{
 				"flags": {
@@ -4126,6 +4634,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "O Almirante",
+				"text": "O Almirante Casaco Envernizado",
+				"type": "Casaco Envernizado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "A Antecipação",
 				"text": "A Antecipação Escudo Torre Ezomita",
 				"type": "Escudo Torre Ezomita"
@@ -4246,6 +4762,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "O Inexperiente",
+				"text": "O Inexperiente Elmo Laqueado",
+				"type": "Elmo Laqueado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Chama Disforme",
 				"text": "Chama Disforme Elmo de Cerco",
 				"type": "Elmo de Cerco"
@@ -4265,6 +4789,14 @@
 				"name": "Rotação Fraturante",
 				"text": "Rotação Fraturante Aljava de Flechas Cegas",
 				"type": "Aljava de Flechas Cegas"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "O Teatro Lúrido",
+				"text": "O Teatro Lúrido Escudo Redondo de Teca",
+				"type": "Escudo Redondo de Teca"
 			},
 			{
 				"flags": {
@@ -4737,6 +5269,14 @@
 				"name": "Envolver Sombrio",
 				"text": "Envolver Sombrio Couraça Amarrada",
 				"type": "Couraça Amarrada"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Interesses Conflitantes",
+				"text": "Interesses Conflitantes Máscara Dourada",
+				"type": "Máscara Dourada"
 			},
 			{
 				"flags": {
@@ -6019,6 +6559,18 @@
 				"type": "Broquel Enrugado"
 			},
 			{
+				"text": "Broquel Endotérmico",
+				"type": "Broquel Endotérmico"
+			},
+			{
+				"text": "Broquel Polar",
+				"type": "Broquel Polar"
+			},
+			{
+				"text": "Broquel Sintonizador de Frio",
+				"type": "Broquel Sintonizador de Frio"
+			},
+			{
 				"text": "Maço de Espinhos",
 				"type": "Maço de Espinhos"
 			},
@@ -6133,6 +6685,18 @@
 			{
 				"text": "Escudo Espiritual Antigo",
 				"type": "Escudo Espiritual Antigo"
+			},
+			{
+				"text": "Escudo Espiritual Exaustivo",
+				"type": "Escudo Espiritual Exaustivo"
+			},
+			{
+				"text": "Escudo Espiritual Subordinado",
+				"type": "Escudo Espiritual Subordinado"
+			},
+			{
+				"text": "Escudo Espiritual Transferível",
+				"type": "Escudo Espiritual Transferível"
 			},
 			{
 				"text": "Escudo Torre Reduzido",
@@ -6253,6 +6817,18 @@
 			{
 				"text": "Escudo Redondo Barroco",
 				"type": "Escudo Redondo Barroco"
+			},
+			{
+				"text": "Escudo Torre Exotérmico",
+				"type": "Escudo Torre Exotérmico"
+			},
+			{
+				"text": "Escudo Torre Magmático",
+				"type": "Escudo Torre Magmático"
+			},
+			{
+				"text": "Escudo Torre Sintonizador de Calor",
+				"type": "Escudo Torre Sintonizador de Calor"
 			},
 			{
 				"text": "Escudo Triangular de Tábua",
@@ -6460,6 +7036,10 @@
 				"type": "O Sonho do Arqueiro"
 			},
 			{
+				"text": "Baú do Irmão",
+				"type": "Baú do Irmão"
+			},
+			{
 				"text": "Tesouro Enterrado",
 				"type": "Tesouro Enterrado"
 			},
@@ -6492,6 +7072,10 @@
 				"type": "A Posse Cobiçada"
 			},
 			{
+				"text": "Palavras Malditas",
+				"type": "Palavras Malditas"
+			},
+			{
 				"text": "Sonhos Obscuros",
 				"type": "Sonhos Obscuros"
 			},
@@ -6510,6 +7094,10 @@
 			{
 				"text": "Aposta do Semideus",
 				"type": "Aposta do Semideus"
+			},
+			{
+				"text": "Virtude Profanada",
+				"type": "Virtude Profanada"
 			},
 			{
 				"text": "Destinado a Desmoronar",
@@ -6772,6 +7360,10 @@
 				"type": "Ajuda do Pio"
 			},
 			{
+				"text": "O Acadêmico",
+				"type": "O Acadêmico"
+			},
+			{
 				"text": "O Admirador",
 				"type": "O Admirador"
 			},
@@ -6820,6 +7412,10 @@
 				"type": "A Traição"
 			},
 			{
+				"text": "A Flor Amarga",
+				"type": "A Flor Amarga"
+			},
+			{
 				"text": "A Trilha Flamejante",
 				"type": "A Trilha Flamejante"
 			},
@@ -6838,6 +7434,10 @@
 			{
 				"text": "O Imperador Frágil",
 				"type": "O Imperador Frágil"
+			},
+			{
+				"text": "O Tesouro",
+				"type": "O Tesouro"
 			},
 			{
 				"text": "A Cacofonia",
@@ -7072,6 +7672,10 @@
 				"type": "As Melhores Intenções"
 			},
 			{
+				"text": "O Golfo",
+				"type": "O Golfo"
+			},
+			{
 				"text": "O Coração Forte",
 				"type": "O Coração Forte"
 			},
@@ -7134,6 +7738,10 @@
 			{
 				"text": "A Dádiva do Joalheiro",
 				"type": "A Dádiva do Joalheiro"
+			},
+			{
+				"text": "O Jornalista",
+				"type": "O Jornalista"
 			},
 			{
 				"text": "A Jornada",
@@ -7472,6 +8080,10 @@
 				"type": "O Invicto"
 			},
 			{
+				"text": "O Prêmio Inesperado",
+				"type": "O Prêmio Inesperado"
+			},
+			{
 				"text": "A União",
 				"type": "A União"
 			},
@@ -7588,12 +8200,24 @@
 				"type": "Caçador de Tesouros"
 			},
 			{
+				"text": "Triskaidekafobia",
+				"type": "Triskaidekafobia"
+			},
+			{
 				"text": "Virando a Outra Face",
 				"type": "Virando a Outra Face"
 			},
 			{
+				"text": "Desacorrentado",
+				"type": "Desacorrentado"
+			},
+			{
 				"text": "Floresta Subterrânea",
 				"type": "Floresta Subterrânea"
+			},
+			{
+				"text": "Amor Não Correspondido",
+				"type": "Amor Não Correspondido"
 			},
 			{
 				"text": "Vaidade",
@@ -8565,6 +9189,14 @@
 				"type": "Pergaminho da Eletrocussão"
 			},
 			{
+				"text": "Orbe de Alfaiataria",
+				"type": "Orbe de Alfaiataria"
+			},
+			{
+				"text": "Orbe de Modificação",
+				"type": "Orbe de Modificação"
+			},
+			{
 				"text": "Pergaminho de Sabedoria",
 				"type": "Pergaminho de Sabedoria"
 			},
@@ -8833,6 +9465,10 @@
 				"type": "Fragmento do Caos"
 			},
 			{
+				"text": "Lentes de Regressão Primárias",
+				"type": "Lentes de Regressão Primárias"
+			},
+			{
 				"text": "Orbe Cromático",
 				"type": "Orbe Cromático"
 			},
@@ -8843,6 +9479,10 @@
 			{
 				"text": "Orbe do Joalheiro",
 				"type": "Orbe do Joalheiro"
+			},
+			{
+				"text": "Lentes de Regressão Secundárias",
+				"type": "Lentes de Regressão Secundárias"
 			},
 			{
 				"text": "Orbe Ancestral",
@@ -9241,6 +9881,198 @@
 				"type": "Semente de Lobinídio Selvagem"
 			},
 			{
+				"text": "Insígnia do Renegado",
+				"type": "Insígnia do Renegado"
+			},
+			{
+				"text": "Urna de Farud",
+				"type": "Urna de Farud"
+			},
+			{
+				"text": "Candelabro de Ogham",
+				"type": "Candelabro de Ogham"
+			},
+			{
+				"text": "Crânio de Hominídeo com Presas",
+				"type": "Crânio de Hominídeo com Presas"
+			},
+			{
+				"text": "Pedra Celestial",
+				"type": "Pedra Celestial"
+			},
+			{
+				"text": "Urna das Cinzas Originais",
+				"type": "Urna das Cinzas Originais"
+			},
+			{
+				"text": "Coração Enrolado",
+				"type": "Coração Enrolado"
+			},
+			{
+				"text": "Montagem Enigmática A4",
+				"type": "Montagem Enigmática A4"
+			},
+			{
+				"text": "Montagem Enigmática B2",
+				"type": "Montagem Enigmática B2"
+			},
+			{
+				"text": "Montagem Enigmática C5",
+				"type": "Montagem Enigmática C5"
+			},
+			{
+				"text": "Montagem Enigmática D1",
+				"type": "Montagem Enigmática D1"
+			},
+			{
+				"text": "Espelho de Teklatipzi",
+				"type": "Espelho de Teklatipzi"
+			},
+			{
+				"text": "Caixa de Tripyxis",
+				"type": "Caixa de Tripyxis"
+			},
+			{
+				"text": "Busto do Emperador Caspiro",
+				"type": "Busto do Emperador Caspiro"
+			},
+			{
+				"text": "Ídolo Dourado de Hetzapal",
+				"type": "Ídolo Dourado de Hetzapal"
+			},
+			{
+				"text": "Frasco de Welakath",
+				"type": "Frasco de Welakath"
+			},
+			{
+				"text": "Lâmbada Proibida",
+				"type": "Lâmbada Proibida"
+			},
+			{
+				"text": "A Deusa da Água",
+				"type": "A Deusa da Água"
+			},
+			{
+				"text": "O Íbis Dourado",
+				"type": "O Íbis Dourado"
+			},
+			{
+				"text": "Cristal Impossível",
+				"type": "Cristal Impossível"
+			},
+			{
+				"text": "Gelo Vivo",
+				"type": "Gelo Vivo"
+			},
+			{
+				"text": "Selo de Lunaris",
+				"type": "Selo de Lunaris"
+			},
+			{
+				"text": "Ídolo Dourado de Matatl",
+				"type": "Ídolo Dourado de Matatl"
+			},
+			{
+				"text": "Incenso de Keth",
+				"type": "Incenso de Keth"
+			},
+			{
+				"text": "A Herança do Mar de Pérolas",
+				"type": "A Herança do Mar de Pérolas"
+			},
+			{
+				"text": "Selo de Solaris",
+				"type": "Selo de Solaris"
+			},
+			{
+				"text": "Ídolo Dourado de Napuatzi",
+				"type": "Ídolo Dourado de Napuatzi"
+			},
+			{
+				"text": "Queimador de Essência",
+				"type": "Queimador de Essência"
+			},
+			{
+				"text": "Selo Antigo",
+				"type": "Selo Antigo"
+			},
+			{
+				"text": "Sangue de Innocence",
+				"type": "Sangue de Innocence"
+			},
+			{
+				"text": "Resolução de Dekhara",
+				"type": "Resolução de Dekhara"
+			},
+			{
+				"text": "Quinta Aventura de Orbala",
+				"type": "Quinta Aventura de Orbala"
+			},
+			{
+				"text": "Cajado do primeiro Devorador de Pecados",
+				"type": "Cajado do primeiro Devorador de Pecados"
+			},
+			{
+				"text": "Espada da Relíquia Inversa",
+				"type": "Espada da Relíquia Inversa"
+			},
+			{
+				"text": "Coroa de Ezomyr",
+				"type": "Coroa de Ezomyr"
+			},
+			{
+				"text": "Ídolo Dourado do Escravo",
+				"type": "Ídolo Dourado do Escravo"
+			},
+			{
+				"text": "Ídolo Dourado de Xoplotli",
+				"type": "Ídolo Dourado de Xoplotli"
+			},
+			{
+				"text": "Cálice Cerimonial",
+				"type": "Cálice Cerimonial"
+			},
+			{
+				"text": "Ídolo Dourado Cristado",
+				"type": "Ídolo Dourado Cristado"
+			},
+			{
+				"text": "Máscara Dourada Cerimonial",
+				"type": "Máscara Dourada Cerimonial"
+			},
+			{
+				"text": "Ídolo Dourado de Oração",
+				"type": "Ídolo Dourado de Oração"
+			},
+			{
+				"text": "Grotesco Dourado",
+				"type": "Grotesco Dourado"
+			},
+			{
+				"text": "Glifo Sacrificial Dourado",
+				"type": "Glifo Sacrificial Dourado"
+			},
+			{
+				"text": "Tomo de Ez Myrae",
+				"type": "Tomo de Ez Myrae"
+			},
+			{
+				"text": "Mão de Arimor",
+				"type": "Mão de Arimor"
+			},
+			{
+				"text": "Chifres de Abberathine",
+				"type": "Chifres de Abberathine"
+			},
+			{
+				"text": "Cachimbo do Almirante Proclar",
+				"type": "Cachimbo do Almirante Proclar"
+			},
+			{
+				"text": "Cálice Alquímico",
+				"type": "Cálice Alquímico"
+			},
+			{
 				"text": "Alma Capturada de Mephod, Abrasador da Terra",
 				"type": "Alma Capturada de Mephod, Abrasador da Terra"
 			},
@@ -9253,8 +10085,8 @@
 				"type": "Alma Capturada de Glace"
 			},
 			{
-				"text": "Alma Capturada da Sombra dos Vaal",
-				"type": "Alma Capturada da Sombra dos Vaal"
+				"text": "Alma Capturada do Campeão dos Vazios",
+				"type": "Alma Capturada do Campeão dos Vazios"
 			},
 			{
 				"text": "Alma Capturada da Espreitadora das Dunas Intermináveis",
@@ -9396,6 +10228,30 @@
 				"name": "Rugido do Leão",
 				"text": "Rugido do Leão Frasco de Granito",
 				"type": "Frasco de Granito"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Espírito de Lavianga",
+				"text": "Réplica: Espírito de Lavianga Frasco de Mana Santificado",
+				"type": "Frasco de Mana Santificado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Mistura de Rumi",
+				"text": "Réplica: Mistura de Rumi Frasco de Granito",
+				"type": "Frasco de Granito"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: O Sofrimento do Divino",
+				"text": "Réplica: O Sofrimento do Divino Frasco de Enxofre",
+				"type": "Frasco de Enxofre"
 			},
 			{
 				"flags": {
@@ -9719,8 +10575,8 @@
 				"type": "Manto Arcano"
 			},
 			{
-				"text": "Marca Arcanista",
-				"type": "Marca Arcanista"
+				"text": "Runa Arcanista",
+				"type": "Runa Arcanista"
 			},
 			{
 				"text": "Armadura Ártica",
@@ -9731,8 +10587,8 @@
 				"type": "Geada Rastejante"
 			},
 			{
-				"text": "Marca do Armagedom",
-				"type": "Marca do Armagedom"
+				"text": "Runa do Armagedom",
+				"type": "Runa do Armagedom"
 			},
 			{
 				"text": "Balista de Artilharia",
@@ -9773,6 +10629,10 @@
 			{
 				"text": "Chuva Explosiva",
 				"type": "Chuva Explosiva"
+			},
+			{
+				"text": "Salva Ardente",
+				"type": "Salva Ardente"
 			},
 			{
 				"text": "Mangra",
@@ -9861,6 +10721,10 @@
 			{
 				"text": "Troca de Corpos",
 				"type": "Troca de Corpos"
+			},
+			{
+				"text": "Lança Crepitante",
+				"type": "Lança Crepitante"
 			},
 			{
 				"text": "Marca do Assassino",
@@ -10019,6 +10883,10 @@
 				"type": "Totem Flamejante"
 			},
 			{
+				"text": "Parede Flamejante",
+				"type": "Parede Flamejante"
+			},
+			{
 				"text": "Chicote Ardente",
 				"type": "Chicote Ardente"
 			},
@@ -10075,6 +10943,10 @@
 				"type": "Bomba Congelante"
 			},
 			{
+				"text": "Escudo Gélido",
+				"type": "Escudo Gélido"
+			},
+			{
 				"text": "Parede de Gelo",
 				"type": "Parede de Gelo"
 			},
@@ -10129,6 +11001,10 @@
 			{
 				"text": "Arauto Trovejante",
 				"type": "Arauto Trovejante"
+			},
+			{
+				"text": "Feitiço Explosivo",
+				"type": "Feitiço Explosivo"
 			},
 			{
 				"text": "Pancada Glacial",
@@ -10247,8 +11123,8 @@
 				"type": "Orbe Trovejante"
 			},
 			{
-				"text": "Marca da Penitência",
-				"type": "Marca da Penitência"
+				"text": "Runa da Penitência",
+				"type": "Runa da Penitência"
 			},
 			{
 				"text": "Perfurar",
@@ -10295,8 +11171,8 @@
 				"type": "Orgulho"
 			},
 			{
-				"text": "Fraqueza a Projéteis",
-				"type": "Fraqueza a Projéteis"
+				"text": "Marca do Atirador",
+				"type": "Marca do Atirador"
 			},
 			{
 				"text": "Punctura",
@@ -10335,8 +11211,8 @@
 				"type": "Devastação"
 			},
 			{
-				"text": "Convocação de Marcas",
-				"type": "Convocação de Marcas"
+				"text": "Convocação de Runas",
+				"type": "Convocação de Runas"
 			},
 			{
 				"text": "Acerto de Contas",
@@ -10403,6 +11279,10 @@
 				"type": "Balista de Cerco"
 			},
 			{
+				"text": "Emblema do Poder",
+				"type": "Emblema do Poder"
+			},
+			{
 				"text": "Punir",
 				"type": "Punir"
 			},
@@ -10435,6 +11315,10 @@
 				"type": "Flecha Repartida"
 			},
 			{
+				"text": "Aço Violento",
+				"type": "Aço Violento"
+			},
+			{
 				"text": "Golpe Estático",
 				"type": "Golpe Estático"
 			},
@@ -10451,8 +11335,8 @@
 				"type": "Mina da Tormenta Explosiva"
 			},
 			{
-				"text": "Marca Tempestuosa",
-				"type": "Marca Tempestuosa"
+				"text": "Runa Tempestuosa",
+				"type": "Runa Tempestuosa"
 			},
 			{
 				"text": "Tormenta Explosiva",
@@ -10703,6 +11587,10 @@
 				"type": "Vitalidade"
 			},
 			{
+				"text": "Esfera do Vácuo",
+				"type": "Esfera do Vácuo"
+			},
+			{
 				"text": "Morto Volátil",
 				"type": "Morto Volátil"
 			},
@@ -10731,8 +11619,8 @@
 				"type": "Orbe Invernal"
 			},
 			{
-				"text": "Marca da Maré Invernal",
-				"type": "Marca da Maré Invernal"
+				"text": "Runa da Maré Invernal",
+				"type": "Runa da Maré Invernal"
 			},
 			{
 				"text": "Definhar",
@@ -10955,12 +11843,12 @@
 				"type": "Suporte: Golpe Abatedor"
 			},
 			{
-				"text": "Suporte: Amaldiçoar ao Acertar",
-				"type": "Suporte: Amaldiçoar ao Acertar"
+				"text": "Suporte: Toque Maldito",
+				"type": "Suporte: Toque Maldito"
 			},
 			{
-				"text": "Suporte: Amaldiçoar ao Acertar  Desperto",
-				"type": "Suporte: Amaldiçoar ao Acertar  Desperto"
+				"text": "Suporte: Toque Maldito Desperto",
+				"type": "Suporte: Toque Maldito Desperto"
 			},
 			{
 				"text": "Suporte: Hipotermia",
@@ -10975,8 +11863,8 @@
 				"type": "Suporte: Afecções Mortais  Desperto"
 			},
 			{
-				"text": "Suporte: Marca da Morte",
-				"type": "Suporte: Marca da Morte"
+				"text": "Suporte: Predador",
+				"type": "Suporte: Predador"
 			},
 			{
 				"text": "Suporte: Podridão",
@@ -10993,6 +11881,10 @@
 			{
 				"text": "Suporte: Foco Elemental  Desperto",
 				"type": "Suporte: Foco Elemental  Desperto"
+			},
+			{
+				"text": "Suporte: Penetração Elemental",
+				"type": "Suporte: Penetração Elemental"
 			},
 			{
 				"text": "Suporte: Proliferação Elemental",
@@ -11097,6 +11989,10 @@
 			{
 				"text": "Suporte: Empalar",
 				"type": "Suporte: Empalar"
+			},
+			{
+				"text": "Suporte: Destruição Iminente",
+				"type": "Suporte: Destruição Iminente"
 			},
 			{
 				"text": "Suporte: Efeito em Área Aumentado",
@@ -11275,6 +12171,10 @@
 				"type": "Suporte: Atravessar"
 			},
 			{
+				"text": "Suporte: Localizar",
+				"type": "Suporte: Localizar"
+			},
+			{
 				"text": "Suporte: Queima-Roupa",
 				"type": "Suporte: Queima-Roupa"
 			},
@@ -11375,8 +12275,8 @@
 				"type": "Suporte: Montagem Rápida"
 			},
 			{
-				"text": "Suporte: Marca Repentina",
-				"type": "Suporte: Marca Repentina"
+				"text": "Suporte: Runa Repentina",
+				"type": "Suporte: Runa Repentina"
 			},
 			{
 				"text": "Suporte: Armadilha",
@@ -11450,6 +12350,14 @@
 				"name": "Antigas Pedras do Caminho",
 				"text": "Antigas Pedras do Caminho Joia Carmesim",
 				"type": "Joia Carmesim"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Modo Alfa",
+				"text": "Modo Alfa Joia Cobalto",
+				"type": "Joia Cobalto"
 			},
 			{
 				"flags": {
@@ -11735,6 +12643,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Miséria sem Fim",
+				"text": "Miséria sem Fim Joia Cobalto",
+				"type": "Joia Cobalto"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Armadura Energizada",
 				"text": "Armadura Energizada Joia Carmesim",
 				"type": "Joia Carmesim"
@@ -11991,6 +12907,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Senhor do Aço",
+				"text": "Senhor do Aço Joia Viridiana",
+				"type": "Joia Viridiana"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Intenção Maliciosa",
 				"text": "Intenção Maliciosa Joia Cobalto",
 				"type": "Joia Cobalto"
@@ -12057,6 +12981,14 @@
 				},
 				"name": "Crescimento Modificado",
 				"text": "Crescimento Modificado Joia Cobalto",
+				"type": "Joia Cobalto"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Modo Nadir",
+				"text": "Modo Nadir Joia Cobalto",
 				"type": "Joia Cobalto"
 			},
 			{
@@ -12193,6 +13125,78 @@
 				},
 				"name": "Defesa Imprudente",
 				"text": "Defesa Imprudente Joia Cobalto",
+				"type": "Joia Cobalto"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Sacrifício de Sangue",
+				"text": "Réplica: Sacrifício de Sangue Joia Carmesim",
+				"type": "Joia Carmesim"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Construção Barata",
+				"text": "Réplica: Construção Barata Joia Viridiana",
+				"type": "Joia Viridiana"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Eficiência do Conquistador",
+				"text": "Réplica: Eficiência do Conquistador Joia Carmesim",
+				"type": "Joia Carmesim"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Florescer Frágil",
+				"text": "Réplica: Florescer Frágil Joia Carmesim",
+				"type": "Joia Carmesim"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Cabeça Quente",
+				"text": "Réplica: Cabeça Quente Joia Viridiana",
+				"type": "Joia Viridiana"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Poder Primordial",
+				"text": "Réplica: Poder Primordial Joia Carmesim",
+				"type": "Joia Carmesim"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Talento Puro",
+				"text": "Réplica: Talento Puro Joia Viridiana",
+				"type": "Joia Viridiana"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Defesa Imprudente",
+				"text": "Réplica: Defesa Imprudente Joia Cobalto",
+				"type": "Joia Cobalto"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Carga Instável",
+				"text": "Réplica: Carga Instável Joia Cobalto",
 				"type": "Joia Cobalto"
 			},
 			{
@@ -12807,6 +13811,33 @@
 				},
 				"name": "Asilo de Poorjoy",
 				"text": "Asilo de Poorjoy Mapa: Templo",
+				"type": "Mapa: Templo"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Córtex",
+				"text": "Réplica: Córtex Mapa: Câmaras de Relíquias",
+				"type": "Mapa: Câmaras de Relíquias"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Pilares de Arun",
+				"text": "Réplica: Pilares de Arun Mapa: Dunas",
+				"type": "Mapa: Dunas"
+			},
+			{
+				"disc": "warfortheatlas",
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Asilo de Poorjoy",
+				"text": "Réplica: Asilo de Poorjoy Mapa: Templo",
 				"type": "Mapa: Templo"
 			},
 			{
@@ -16077,6 +17108,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Actum",
+				"text": "Actum Machado do Açougueiro",
+				"type": "Machado do Açougueiro"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Fortaleza Avançada",
 				"text": "Fortaleza Avançada Estripador",
 				"type": "Estripador"
@@ -17285,6 +18324,254 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "Réplica: Fortaleza Avançada",
+				"text": "Réplica: Fortaleza Avançada Estripador",
+				"type": "Estripador"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Isca",
+				"text": "Réplica: Isca Garra Vaal",
+				"type": "Garra Vaal"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Sonho Cruel",
+				"text": "Réplica: Sonho Cruel Cetro Sombrio",
+				"type": "Cetro Sombrio"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Jogada Sangrenta",
+				"text": "Réplica: Jogada Sangrenta Estilete",
+				"type": "Estilete"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: O Espinho Sangrento",
+				"text": "Réplica: O Espinho Sangrento Ramo Torcido",
+				"type": "Ramo Torcido"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Ponta do Ferro Gélido",
+				"text": "Réplica: Ponta do Ferro Gélido Adaga Ezomita",
+				"type": "Adaga Ezomita"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Pena do Sonho",
+				"text": "Réplica: Pena do Sonho Espada Eterna",
+				"type": "Espada Eterna"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Manhã Sombria",
+				"text": "Réplica: Manhã Sombria Cajado do Vórtice",
+				"type": "Cajado do Vórtice"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Abraço de Earendel",
+				"text": "Réplica: Abraço de Earendel Fetiche Sorridente",
+				"type": "Fetiche Sorridente"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Bobina do Charco",
+				"text": "Réplica: Bobina do Charco Ramo Torcido",
+				"type": "Ramo Torcido"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Hálito Gélido",
+				"text": "Réplica: Hálito Gélido Maça Ornamentada",
+				"type": "Maça Ornamentada"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: A Colheita",
+				"text": "Réplica: A Colheita Corta-Jaspe",
+				"type": "Corta-Jaspe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Destruidor de Corações",
+				"text": "Réplica: Destruidor de Corações Adaga Real",
+				"type": "Adaga Real"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Infractem",
+				"text": "Réplica: Infractem Arco Dizimador",
+				"type": "Arco Dizimador"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Gume de Innsbury",
+				"text": "Réplica: Gume de Innsbury Espada Anciã",
+				"type": "Espada Anciã"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Comandante de Ferro",
+				"text": "Réplica: Comandante de Ferro Arco Mortífero",
+				"type": "Arco Mortífero"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Fúria Imortal de Kongor",
+				"text": "Réplica: Fúria Imortal de Kongor Marreta Aterrorizante",
+				"type": "Marreta Aterrorizante"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Último Recurso",
+				"text": "Réplica: Último Recurso Soqueira",
+				"type": "Soqueira"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Barganha da Meia-Noite",
+				"text": "Réplica: Barganha da Meia-Noite Varinha Entalhada",
+				"type": "Varinha Entalhada"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Nebulis",
+				"text": "Réplica: Nebulis Cetro do Além",
+				"type": "Cetro do Além"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Sacrifício de Oro",
+				"text": "Réplica: Sacrifício de Oro Espada Infernal",
+				"type": "Espada Infernal"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Paradoxica",
+				"text": "Réplica: Paradoxica Rapieira Vaal",
+				"type": "Rapieira Vaal"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Chuva de Penas",
+				"text": "Réplica: Chuva de Penas Arco Curto",
+				"type": "Arco Curto"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Ladrão de Almas",
+				"text": "Réplica: Ladrão de Almas Machado de Cerco",
+				"type": "Machado de Cerco"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: O Aço Tempestuoso",
+				"text": "Réplica: O Aço Tempestuoso Espada de Guerra",
+				"type": "Espada de Guerra"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Trefina",
+				"text": "Réplica: Trefina Marreta Grande",
+				"type": "Marreta Grande"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Queda de Tul",
+				"text": "Réplica: Queda de Tul Varinha do Tornado",
+				"type": "Varinha do Tornado"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Twyzel",
+				"text": "Réplica: Twyzel Varinha do Sábio",
+				"type": "Varinha do Sábio"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Desastre de Ungil",
+				"text": "Réplica: Desastre de Ungil Faca Pequena",
+				"type": "Faca Pequena"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Estripavento",
+				"text": "Réplica: Estripavento Arco Imperial",
+				"type": "Arco Imperial"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Réplica: Asas da Entropia",
+				"text": "Réplica: Asas da Entropia Machado Ezomita",
+				"type": "Machado Ezomita"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "Vara da Reverberação",
 				"text": "Vara da Reverberação Varinha Espiralada",
 				"type": "Varinha Espiralada"
@@ -17605,6 +18892,14 @@
 				"flags": {
 					"unique": 1
 				},
+				"name": "O Fulcro",
+				"text": "O Fulcro Cajado Ezomita",
+				"type": "Cajado Ezomita"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
 				"name": "O Vínculo da Deusa",
 				"text": "O Vínculo da Deusa Rapieira de Osso de Baleia",
 				"type": "Rapieira de Osso de Baleia"
@@ -17648,6 +18943,22 @@
 				"name": "A Colheita",
 				"text": "A Colheita Corta-Jaspe",
 				"type": "Corta-Jaspe"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "A Lâmina Escondida",
+				"text": "A Lâmina Escondida Emboscador",
+				"type": "Emboscador"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "A Confusão de Ferro",
+				"text": "A Confusão de Ferro Gládio",
+				"type": "Gládio"
 			},
 			{
 				"flags": {
@@ -18106,6 +19417,18 @@
 				"type": "Garra de Debulhador"
 			},
 			{
+				"text": "Presas Sombrias",
+				"type": "Presas Sombrias"
+			},
+			{
+				"text": "Presas Malignas",
+				"type": "Presas Malignas"
+			},
+			{
+				"text": "Presas Ocas",
+				"type": "Presas Ocas"
+			},
+			{
 				"text": "Garra Dupla",
 				"type": "Garra Dupla"
 			},
@@ -18206,6 +19529,18 @@
 				"type": "Faca Esfoladora"
 			},
 			{
+				"text": "Adaga de Ponta Oca",
+				"type": "Adaga de Ponta Oca"
+			},
+			{
+				"text": "Adaga Pressurizada",
+				"type": "Adaga Pressurizada"
+			},
+			{
+				"text": "Adaga Pneumática",
+				"type": "Adaga Pneumática"
+			},
+			{
 				"text": "Adaga Forcada",
 				"type": "Adaga Forcada"
 			},
@@ -18216,6 +19551,18 @@
 			{
 				"text": "Sai",
 				"type": "Sai"
+			},
+			{
+				"text": "Lâmina Chamuscadora",
+				"type": "Lâmina Chamuscadora"
+			},
+			{
+				"text": "Lâmina Incendiária",
+				"type": "Lâmina Incendiária"
+			},
+			{
+				"text": "Lâmina Infernal",
+				"type": "Lâmina Infernal"
 			},
 			{
 				"text": "Machadinha Enferrujada",
@@ -18304,6 +19651,18 @@
 			{
 				"text": "Machado de Jaspe",
 				"type": "Machado de Jaspe"
+			},
+			{
+				"text": "Machado Cruel",
+				"type": "Machado Cruel"
+			},
+			{
+				"text": "Machado da Desaprovação",
+				"type": "Machado da Desaprovação"
+			},
+			{
+				"text": "Machado Psicótico",
+				"type": "Machado Psicótico"
 			},
 			{
 				"text": "Machadinha Entalhada",
@@ -18406,6 +19765,18 @@
 				"type": "Maça Petrificada"
 			},
 			{
+				"text": "Maça Ardente",
+				"type": "Maça Ardente"
+			},
+			{
+				"text": "Maça Quebradora",
+				"type": "Maça Quebradora"
+			},
+			{
+				"text": "Maça Explosiva",
+				"type": "Maça Explosiva"
+			},
+			{
 				"text": "Maça do Wyrm",
 				"type": "Maça do Wyrm"
 			},
@@ -18504,6 +19875,18 @@
 			{
 				"text": "Fetiche Sorridente",
 				"type": "Fetiche Sorridente"
+			},
+			{
+				"text": "Cetro Oscilante",
+				"type": "Cetro Oscilante"
+			},
+			{
+				"text": "Cetro Estabilizador",
+				"type": "Cetro Estabilizador"
+			},
+			{
+				"text": "Cetro Alternado",
+				"type": "Cetro Alternado"
 			},
 			{
 				"text": "Cetro Chifrudo",
@@ -18608,6 +19991,18 @@
 			{
 				"text": "Espada de Charan",
 				"type": "Espada de Charan"
+			},
+			{
+				"text": "Lâmina Espiritual Instável",
+				"type": "Lâmina Espiritual Instável"
+			},
+			{
+				"text": "Lâmina Espiritual Inconstante",
+				"type": "Lâmina Espiritual Inconstante"
+			},
+			{
+				"text": "Lâmina Espiritual Anárquica",
+				"type": "Lâmina Espiritual Anárquica"
 			},
 			{
 				"text": "Espada de Gancho",
@@ -18790,6 +20185,18 @@
 				"type": "Varinha de Convocação"
 			},
 			{
+				"text": "Varinha Montadora",
+				"type": "Varinha Montadora"
+			},
+			{
+				"text": "Varinha Agregadora",
+				"type": "Varinha Agregadora"
+			},
+			{
+				"text": "Varinha Acumuladora",
+				"type": "Varinha Acumuladora"
+			},
+			{
 				"text": "Varinha Pagã",
 				"type": "Varinha Pagã"
 			},
@@ -18894,6 +20301,18 @@
 				"type": "Arco do Bosque"
 			},
 			{
+				"text": "Arco Hedron",
+				"type": "Arco Hedron"
+			},
+			{
+				"text": "Arco da Fundição",
+				"type": "Arco da Fundição"
+			},
+			{
+				"text": "Arco Solarino",
+				"type": "Arco Solarino"
+			},
+			{
 				"text": "Arco do Reflexo",
 				"type": "Arco do Reflexo"
 			},
@@ -18982,6 +20401,18 @@
 				"type": "Bastão de Ferro"
 			},
 			{
+				"text": "Cajado Transformador",
+				"type": "Cajado Transformador"
+			},
+			{
+				"text": "Cajado da Reciprocidade",
+				"type": "Cajado da Reciprocidade"
+			},
+			{
+				"text": "Cajado Batedor",
+				"type": "Cajado Batedor"
+			},
+			{
 				"text": "Cajado Crescente",
 				"type": "Cajado Crescente"
 			},
@@ -18992,6 +20423,18 @@
 			{
 				"text": "Cajado do Eclipse",
 				"type": "Cajado do Eclipse"
+			},
+			{
+				"text": "Vara da Capacidade",
+				"type": "Vara da Capacidade"
+			},
+			{
+				"text": "Vara da Potentencialidade",
+				"type": "Vara da Potentencialidade"
+			},
+			{
+				"text": "Vara da Eventualidade",
+				"type": "Vara da Eventualidade"
 			},
 			{
 				"text": "Machado de Pedra",
@@ -19068,6 +20511,18 @@
 			{
 				"text": "Machado Lenhador",
 				"type": "Machado Lenhador"
+			},
+			{
+				"text": "Cutelo Aprimorado",
+				"type": "Cutelo Aprimorado"
+			},
+			{
+				"text": "Cutelo Afiado",
+				"type": "Cutelo Afiado"
+			},
+			{
+				"text": "Cutelo do Ápice",
+				"type": "Cutelo do Ápice"
 			},
 			{
 				"text": "Machado de Adagas",
@@ -19158,6 +20613,18 @@
 				"type": "Marreta Grande"
 			},
 			{
+				"text": "Condensador de Força Bruta",
+				"type": "Condensador de Força Bruta"
+			},
+			{
+				"text": "Ampliador de Força Esmagadora",
+				"type": "Ampliador de Força Esmagadora"
+			},
+			{
+				"text": "Propagador de Força Impactante",
+				"type": "Propagador de Força Impactante"
+			},
+			{
 				"text": "Estrela D'alva",
 				"type": "Estrela D'alva"
 			},
@@ -19244,6 +20711,18 @@
 			{
 				"text": "Espada da Infantaria",
 				"type": "Espada da Infantaria"
+			},
+			{
+				"text": "Lâmina de Repreensão",
+				"type": "Lâmina de Repreensão"
+			},
+			{
+				"text": "Lâmina Detonadora",
+				"type": "Lâmina Detonadora"
+			},
+			{
+				"text": "Lâmina do Banimento",
+				"type": "Lâmina do Banimento"
 			},
 			{
 				"text": "Lâmina Curvada",
@@ -23589,6 +25068,372 @@
 			{
 				"text": "Pedra Sentinela de Marfim",
 				"type": "Pedra Sentinela de Marfim"
+			}
+		],
+		"label": ""
+	},
+	{
+		"entries": [
+			{
+				"text": "Sola de Pele de Enguia",
+				"type": "Sola de Pele de Enguia"
+			},
+			{
+				"text": "Sola de Couro de Raposa",
+				"type": "Sola de Couro de Raposa"
+			},
+			{
+				"text": "Sola Alada",
+				"type": "Sola Alada"
+			},
+			{
+				"text": "Sola de Seda",
+				"type": "Sola de Seda"
+			},
+			{
+				"text": "Broche Prateado",
+				"type": "Broche Prateado"
+			},
+			{
+				"text": "Broche Dourado",
+				"type": "Broche Dourado"
+			},
+			{
+				"text": "Broche Esmalte",
+				"type": "Broche Esmalte"
+			},
+			{
+				"text": "Broche Foliado",
+				"type": "Broche Foliado"
+			},
+			{
+				"text": "Braceletes de Couro",
+				"type": "Braceletes de Couro"
+			},
+			{
+				"text": "Braceletes Cravejados",
+				"type": "Braceletes Cravejados"
+			},
+			{
+				"text": "Braceletes Rúnicos",
+				"type": "Braceletes Rúnicos"
+			},
+			{
+				"text": "Braceletes de Aço",
+				"type": "Braceletes de Aço"
+			},
+			{
+				"text": "Pedra Focal",
+				"type": "Pedra Focal"
+			},
+			{
+				"text": "Linha Condutora",
+				"type": "Linha Condutora"
+			},
+			{
+				"text": "Figura Agregadora",
+				"type": "Figura Agregadora"
+			},
+			{
+				"text": "Pulseira Explosiva",
+				"type": "Pulseira Explosiva"
+			},
+			{
+				"text": "Manto Poído",
+				"type": "Manto Poído"
+			},
+			{
+				"text": "Manto Esfarrapado",
+				"type": "Manto Esfarrapado"
+			},
+			{
+				"text": "Manto com Capuz",
+				"type": "Manto com Capuz"
+			},
+			{
+				"text": "Manto de Tecido Sussurante",
+				"type": "Manto de Tecido Sussurante"
+			},
+			{
+				"text": "Proteção Imperfeita",
+				"type": "Proteção Imperfeita"
+			},
+			{
+				"text": "Proteção Lustrosa",
+				"type": "Proteção Lustrosa"
+			},
+			{
+				"text": "Proteção Brilhante",
+				"type": "Proteção Brilhante"
+			},
+			{
+				"text": "Proteção Taumatúrgica",
+				"type": "Proteção Taumatúrgica"
+			},
+			{
+				"text": "Kit de Disfarce Básico",
+				"type": "Kit de Disfarce Básico"
+			},
+			{
+				"text": "Kit de Disfarce Teatral",
+				"type": "Kit de Disfarce Teatral"
+			},
+			{
+				"text": "Kit de Disfarce Espião",
+				"type": "Kit de Disfarce Espião"
+			},
+			{
+				"text": "Kit de Disfarce do Regicídio",
+				"type": "Kit de Disfarce do Regicídio"
+			},
+			{
+				"text": "Pó Cegante Voltáxico",
+				"type": "Pó Cegante Voltáxico"
+			},
+			{
+				"text": "Pó Cegante Trartaniano",
+				"type": "Pó Cegante Trartaniano"
+			},
+			{
+				"text": "Pó Cegante Azurita",
+				"type": "Pó Cegante Azurita"
+			},
+			{
+				"text": "Pó Cegante Taumético",
+				"type": "Pó Cegante Taumético"
+			},
+			{
+				"text": "Furadeira de Aço",
+				"type": "Furadeira de Aço"
+			},
+			{
+				"text": "Furadeira Flangeada",
+				"type": "Furadeira Flangeada"
+			},
+			{
+				"text": "Maçarico de Enxofre",
+				"type": "Maçarico de Enxofre"
+			},
+			{
+				"text": "Maçarico Taumético",
+				"type": "Maçarico Taumético"
+			},
+			{
+				"text": "Ferramenta Simples",
+				"type": "Ferramenta Simples"
+			},
+			{
+				"text": "Ferramenta Padrão",
+				"type": "Ferramenta Padrão"
+			},
+			{
+				"text": "Ferramenta de Boa Qualidade",
+				"type": "Ferramenta de Boa Qualidade"
+			},
+			{
+				"text": "Ferramenta Maestrina",
+				"type": "Ferramenta Maestrina"
+			},
+			{
+				"text": "Pedra de Amolar Áspera",
+				"type": "Pedra de Amolar Áspera"
+			},
+			{
+				"text": "Pedra de Amolar Padrão",
+				"type": "Pedra de Amolar Padrão"
+			},
+			{
+				"text": "Pedra de Amolar Refinada",
+				"type": "Pedra de Amolar Refinada"
+			},
+			{
+				"text": "Pedra de Amolar Obsidiana",
+				"type": "Pedra de Amolar Obsidiana"
+			},
+			{
+				"text": "Figura Imperfeita da Detecção",
+				"type": "Figura Imperfeita da Detecção"
+			},
+			{
+				"text": "Figura Refinada da Detecção",
+				"type": "Figura Refinada da Detecção"
+			},
+			{
+				"text": "Figura Polida da Detecção",
+				"type": "Figura Polida da Detecção"
+			},
+			{
+				"text": "Figura Taumaturgica da Detecção",
+				"type": "Figura Taumaturgica da Detecção"
+			},
+			{
+				"text": "Flecha Flangeada",
+				"type": "Flecha Flangeada"
+			},
+			{
+				"text": "Flecha Fragmentada",
+				"type": "Flecha Fragmentada"
+			},
+			{
+				"text": "Flecha Ponta Oca",
+				"type": "Flecha Ponta Oca"
+			},
+			{
+				"text": "Flecha Precisa",
+				"type": "Flecha Precisa"
+			},
+			{
+				"text": "Chaveiro Essencial",
+				"type": "Chaveiro Essencial"
+			},
+			{
+				"text": "Chaveiro Versátil",
+				"type": "Chaveiro Versátil"
+			},
+			{
+				"text": "Chaveiro Mestre",
+				"type": "Chaveiro Mestre"
+			},
+			{
+				"text": "Chaveiro Grão-Mestre",
+				"type": "Chaveiro Grão-Mestre"
+			}
+		],
+		"label": ""
+	},
+	{
+		"entries": [
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Contrato: Quebrando o Inquebrável",
+				"text": "Contrato: Quebrando o Inquebrável Contrato Preventivo",
+				"type": "Contrato Preventivo"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Contrato: Morte à Darnaw",
+				"text": "Contrato: Morte à Darnaw Contrato Náutico",
+				"type": "Contrato Náutico"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Contrato: Coração da Glória",
+				"text": "Contrato: Coração da Glória Contrato Familiar",
+				"type": "Contrato Familiar"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Contrato: O Rei Escravocrata",
+				"text": "Contrato: O Rei Escravocrata Contrato Vigilante",
+				"type": "Contrato Vigilante"
+			},
+			{
+				"flags": {
+					"unique": 1
+				},
+				"name": "Contrato: Os Gêmeos",
+				"text": "Contrato: Os Gêmeos Contrato Vingativo",
+				"type": "Contrato Vingativo"
+			},
+			{
+				"text": "Planta: Abrigo",
+				"type": "Planta: Abrigo"
+			},
+			{
+				"text": "Planta: Escritório de Registros",
+				"type": "Planta: Escritório de Registros"
+			},
+			{
+				"text": "Planta: Laboratório",
+				"type": "Planta: Laboratório"
+			},
+			{
+				"text": "Planta: Biblioteca Proibida",
+				"type": "Planta: Biblioteca Proibida"
+			},
+			{
+				"text": "Planta: Mansão",
+				"type": "Planta: Mansão"
+			},
+			{
+				"text": "Planta: Covil do Contrabandista",
+				"type": "Planta: Covil do Contrabandista"
+			},
+			{
+				"text": "Planta: Repositório",
+				"type": "Planta: Repositório"
+			},
+			{
+				"text": "Planta: Túneis",
+				"type": "Planta: Túneis"
+			},
+			{
+				"text": "Planta: Entranhas",
+				"type": "Planta: Entranhas"
+			},
+			{
+				"text": "Contrato: Abrigo",
+				"type": "Contrato: Abrigo"
+			},
+			{
+				"text": "Contrato: Escritório de Registros",
+				"type": "Contrato: Escritório de Registros"
+			},
+			{
+				"text": "Contrato: Laboratório",
+				"type": "Contrato: Laboratório"
+			},
+			{
+				"text": "Contrato: Biblioteca Proibida",
+				"type": "Contrato: Biblioteca Proibida"
+			},
+			{
+				"text": "Contrato: Mansão",
+				"type": "Contrato: Mansão"
+			},
+			{
+				"text": "Contrato: Covil do Contrabandista",
+				"type": "Contrato: Covil do Contrabandista"
+			},
+			{
+				"text": "Contrato: Repositório",
+				"type": "Contrato: Repositório"
+			},
+			{
+				"text": "Contrato: Túneis",
+				"type": "Contrato: Túneis"
+			},
+			{
+				"text": "Contrato: Entranhas",
+				"type": "Contrato: Entranhas"
+			},
+			{
+				"text": "Contrato Familiar",
+				"type": "Contrato Familiar"
+			},
+			{
+				"text": "Contrato Náutico",
+				"type": "Contrato Náutico"
+			},
+			{
+				"text": "Contrato Preventivo",
+				"type": "Contrato Preventivo"
+			},
+			{
+				"text": "Contrato Vingativo",
+				"type": "Contrato Vingativo"
+			},
+			{
+				"text": "Contrato Vigilante",
+				"type": "Contrato Vigilante"
 			}
 		],
 		"label": ""
