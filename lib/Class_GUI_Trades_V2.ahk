@@ -1594,11 +1594,12 @@
 		}
 		else if (btnType="LeagueHelp") {
 			try Menu, HelpMenu, DeleteAll
-			Menu, HelpMenu, Add, Betrayal, GUI_Trades_V2_LeagueHelpMenu
-			Menu, HelpMenu, Add, Delve, GUI_Trades_V2_LeagueHelpMenu
-			Menu, HelpMenu, Add, Essence, GUI_Trades_V2_LeagueHelpMenu
-			Menu, HelpMenu, Add, Harvest, GUI_Trades_V2_LeagueHelpMenu
-			Menu, HelpMenu, Add, Incursion, GUI_Trades_V2_LeagueHelpMenu
+			Loop, Files,% PROGRAM.CHEATSHEETS_FOLDER "\*.png"
+			{
+				SplitPath,% A_LoopFileName, , , , fileNameNoExt
+				__f := ObjBindMethod(GUI_CheatSheet, "Show", A_LoopFileFullPath)
+				Menu, HelpMenu, Add,% fileNameNoExt,% __f
+			}
 			Menu, HelpMenu, Show
 		}
 		else if (btnType="QuickLinks") {
@@ -1634,10 +1635,6 @@
 				return
 
 			Run,% link
-		return
-
-		GUI_Trades_V2_LeagueHelpMenu:
-			GUI_CheatSheet.Show(A_ThisMenuItem)
 		return
 	}
 
