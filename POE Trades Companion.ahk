@@ -455,7 +455,6 @@ Return
 #Include StackClick.ahk
 #Include Translations.ahk
 #Include TrayMenu.ahk
-#Include TrayNotifications.ahk
 #Include TrayRefresh.ahk
 #Include Updating.ahk
 #Include WindowsSettings.ahk

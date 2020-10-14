@@ -1254,7 +1254,7 @@
 		Verify an item's price based on the information we have
 		User acc name, item name, item level & qual for gems, stash tab & stash position
 	*/
-		global PROGRAM, GuiIntercom, GuiIntercom_Controls
+		global PROGRAM
 
 		tabNum := GUI_Trades_V2.GetTabNumberFromUniqueID("Sell", tabInfos.UniqueID)
 		if (A_IsCompiled) {
@@ -1273,7 +1273,7 @@
 		intercomSlotNum := GUI_Intercom.GetNextAvailableSlot()
 		intercomSlotHandle := GUI_Intercom.GetSlotHandle(intercomSlotNum)
 		GUI_Intercom.ReserveSlot(intercomSlot)
-		cmdLineParamsObj.Intercom := {"GuiHandle": GuiIntercom.Handle, "SlotHandle": intercomSlotHandle}
+		cmdLineParamsObj.Intercom := {"GuiHandle": GUI_Intercom.sGUI.Handle, "SlotHandle": intercomSlotHandle}
 		cmdLineParamsObj.PROGRAM := {"CURL_EXECUTABLE": PROGRAM.CURL_EXECUTABLE, "LOGS_FILE": PROGRAM.LOGS_FILE, "DATA_FOLDER": PROGRAM.DATA_FOLDER}
 
 		; Adding params to temp json file

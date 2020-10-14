@@ -21,14 +21,14 @@
 		windowsDPI := Get_DpiFactor()
 
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
-		this.sGUI.New("ChooseLang", "-Caption -Border +AlwaysOnTop +HwndhGui" this.guiName " +Label" this.__class ".", PROGRAM.NAME . this.guiName)
+		this.sGUI := new GUI("ChooseLang", "-Caption -Border +AlwaysOnTop +HwndhGui" this.guiName " +Label" this.__class ".", PROGRAM.NAME . this.guiName)
 
 		guiFullHeight := 200, guiFullWidth := 320, borderSize := 1, borderColor := "Black"
 		guiHeight := guiFullHeight-(2*borderSize), guiWidth := guiFullWidth-(2*borderSize)
 		leftMost := borderSize, rightMost := guiWidth-borderSize
 		upMost := borderSize, downMost := guiHeight-borderSize
 
-		this.sGUI.Margin("ChooseLang", 0, 0), this.sGUI.SetBackgroundColor(this.Skin.BackgroundColor), this.sGUI.SetControlsColor(this.Skin.ControlsColor)
+		this.sGUI.SetMargins("ChooseLang", 0, 0), this.sGUI.SetBackgroundColor(this.Skin.BackgroundColor), this.sGUI.SetControlsColor(this.Skin.ControlsColor)
 		this.sGUI.SetFont(this.Skin.Font), this.sGUI.SetFontSize(this.Skin.FontSize), this.sGUI.SetFontColor(this.Skin.FontColor)
 		this.sGUI.AddColoredBorder(this.Skin.BorderSize, this.Skin.BorderColor)
 

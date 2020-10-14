@@ -8,18 +8,18 @@
 	static topMessage_modeFolder := "Multiple instances running in different folders were detected."
 			. "`n`nThe following icons correspond to game instances."
 			. "`nThey are grouped based on their folder."
-			. "`n`nPlease click on an icon from the folder you would like to monitor and continue.")
+			. "`n`nPlease click on an icon from the folder you would like to monitor and continue."
 	static topMessage_modePID := "The game instance for this tab does not exist anymore."
 			. "`n`nThe following icons correspond to game instances."
 			. "`nClick on them to activate their corresponding window."
-			. "`n`nPlease select the instance you would like to send this message on and continue.")
+			. "`n`nPlease select the instance you would like to send this message on and continue."
 	
 	Create(instancesInfos, mode) {
 		global PROGRAM
 
 		delay := SetControlDelay(0), batch := SetBatchLines(-1)
 		this.sGUI := new GUI(this.guiName, "HwndhGui" this.guiName " +AlwaysOnTop +ToolWindow +LastFound -SysMenu -Caption -Border +Label" this.__class ".", PROGRAM.NAME . this.guiName)
-		this.sGUI.Margin(0, 0), this.sGUI.SetFont("Segoe UI"), this.sGUI.SetFontSize(8)
+		this.sGUI.SetMargins(0, 0), this.sGUI.SetFont("Segoe UI"), this.sGUI.SetFontSize(8)
 
 		; = = FAKE "SELECTED" BORDERS = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 		fakeSelectedBordersPos := [{Position:"Top", X:0, Y:0, W:52, H:2}, {Position:"Left", X:0, Y:0, W:2, H:52} ; Top and Left
