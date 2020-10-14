@@ -138,7 +138,7 @@ Start_Script() {
 	GAME.MAIN_FOLDER 				:= MyDocuments "\my games\Path of Exile"
 	GAME.INI_FILE 					:= GAME.MAIN_FOLDER "\production_Config.ini"
 	GAME.INI_FILE_COPY 		 		:= PROGRAM.MAIN_FOLDER "\production_Config.ini"
-	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe"
+	GAME.EXECUTABLES 				:= "PathOfExile.exe,PathOfExile_x64.exe,PathOfExileSteam.exe,PathOfExile_x64Steam.exe,PathOfExile_KG.exe,PathOfExile_x64_KG.exe,PathOfExileEGS.exe,PathOfExile_x64EGS.exe"
 	GAME.CHALLENGE_LEAGUE 			:= "Delirium"
 	GAME.STANDARD_LEAGUE_TRANS		:= {RUS:["Стандарт","Одна жизнь"], KOR:["스탠다드","하드코어"], TWN:["標準模式","專家模式"]} ; STD, HC
 	GAME.CHALLENGE_LEAGUE_TRANS		:= {RUS:["Делириум","Делириум Одна жизнь"], KOR:["환영","하드코어 환영"], TWN:["譫妄聯盟","譫妄聯盟（專家）"]} ; Rest don't have translations. Translated whispers suck and are inconsistent
@@ -155,7 +155,7 @@ Start_Script() {
 	}
 
 	; Game executables groups - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	global POEGameArr := ["PathOfExile.exe", "PathOfExile_x64.exe", "PathOfExileSteam.exe", "PathOfExile_x64Steam.exe", "PathOfExile_KG.exe", "PathOfExile_x64_KG.exe"]
+	global POEGameArr := ["PathOfExile.exe", "PathOfExile_x64.exe", "PathOfExileSteam.exe", "PathOfExile_x64Steam.exe", "PathOfExile_KG.exe", "PathOfExile_x64_KG.exe", "PathOfExileEGS.exe", "PathOfExile_x64EGS.exe"]
 
 	global POEGameList := ""
 	for nothing, executable in POEGameArr {
