@@ -60,8 +60,8 @@ class GUI_ItemGrid {
     )
 */
     ; position of tab grid
-    static tab_xRoot := 17/1080
-	static tab_yRoot := 162/1080
+    static tab_xRoot := 16/1080
+	static tab_yRoot := 127/1080
     ; size of normal tab squares
     static tab_squareWRoot := 53/1080
     static tab_squareHRoot := 53/1080
@@ -79,14 +79,14 @@ class GUI_ItemGrid {
 
     ; map tab grid position and size of squares
     static map_xRoot := 45/1080
-    static map_yRoot := 501/1080
+    static map_yRoot := 466/1080
     static map_squareWRoot := 48/1080
     static map_squareHRoot := 48/1080
     static map_casesCountX := 12
     static map_casesCountY := 6
     ; map tab tier button positions and size
-    static mapTier_xpos := {1:44, 2:110, 3:176, 4:242, 5:308, 6:375, 7:441, 8:507, 9:573 , 10:82, 11:148, 12:215,13: 281, 14:347, 15:413, 16:479 , unique:545}
-    static mapTier_ypos := {1:197, 2:197, 3:197, 4:197, 5:197, 6:197, 7:197, 8:197, 9:197 , 10:264, 11:264, 12:264,13: 264, 14:264, 15:264, 16:264 , unique:264}
+    static mapTier_xpos := {1:41, 2:107, 3:173, 4:239, 5:305, 6:372, 7:438, 8:504, 9:570 , 10:79, 11:145, 12:212, 13:278, 14:244, 15:410, 16:476 , unique:542}
+    static mapTier_ypos := {1:159, 2:159, 3:159, 4:159, 5:159, 6:159, 7:159, 8:159, 9:159 , 10:227, 11:227, 12:227,13:227, 14:227, 15:227, 16:227 , unique:227}
     static mapTier_squareWRoot := 45/1080
     static mapTier_squareHRoot := 45/1080
     ; map map button positions and size
@@ -170,7 +170,7 @@ class GUI_ItemGrid {
             WinSet, TransColor, EEAA99 254 ; 254 = need to be trans to allow clickthrough style
             Gui.Add("ItemGridNormal", "Progress", "x0 y0 w" tab_pointW " h" this.gridThicc " Background" squareColor) ; ^
             Gui.Add("ItemGridNormal", "Progress", "x" tab_pointW - this.gridThicc " y0 w" this.gridThicc " h" tab_pointH " Background" squareColor) ; > 
-            Gui.Add("ItemGridNormal", "Progress", "x0 y" tab_pointH - this.gridThicc " w" tab_pointW " h" this.gridThicc " Background" squareColor) ; v 
+            Gui.Add("ItemGridNormal", "Progress", "x0 y" tab_pointH - (this.gridThicc*3) " w" tab_pointW " h" this.gridThicc*3 " Background" squareColor) ; v 
             Gui.Add("ItemGridNormal", "Progress", "x0 y0 w" this.gridThicc " h" tab_pointH " Background" squareColor) ; <
             showNormalTabGrid := True 
         }
@@ -193,7 +193,7 @@ class GUI_ItemGrid {
             WinSet, TransColor, EEAA99 254
             Gui.Add("ItemGridQuad", "Progress", "x0 y0 w" quad_pointW " h" this.gridThicc " Background" squareColor) ; ^
             Gui.Add("ItemGridQuad", "Progress", "x" quad_pointW - this.gridThicc " y0 w" this.gridThicc " h" quad_pointH " Background" squareColor) ; > 
-            Gui.Add("ItemGridQuad", "Progress", "x0 y" quad_pointH - this.gridThicc " w" quad_pointW " h" this.gridThicc " Background" squareColor) ; v 
+            Gui.Add("ItemGridQuad", "Progress", "x0 y" quad_pointH - (this.gridThicc*3) " w" quad_pointW " h" this.gridThicc*3 " Background" squareColor) ; v 
             Gui.Add("ItemGridQuad", "Progress", "x0 y0 w" this.gridThicc " h" quad_pointH " Background" squareColor) ; <
             showQuadTabGrid := True
         }
@@ -255,7 +255,7 @@ class GUI_ItemGrid {
             WinSet, TransColor, EEAA99 254
             Gui.Add("ItemGridMap", "Progress", "x0 y0 w" map_pointW " h" this.gridThicc " Background" squareColor) ; ^
             Gui.Add("ItemGridMap", "Progress", "x" map_pointW - this.gridThicc " y0 w" this.gridThicc " h" map_pointH " Background" squareColor) ; > 
-            Gui.Add("ItemGridMap", "Progress", "x0 y" map_pointH - this.gridThicc " w" map_pointW " h" this.gridThicc " Background" squareColor) ; v 
+            Gui.Add("ItemGridMap", "Progress", "x0 y" map_pointH - (this.gridThicc*3) " w" map_pointW " h" this.gridThicc*3 " Background" squareColor) ; v 
             Gui.Add("ItemGridMap", "Progress", "x0 y0 w" this.gridThicc " h" map_pointH " Background" squareColor) ; <
 
             ; Map tier case
@@ -271,7 +271,7 @@ class GUI_ItemGrid {
             WinSet, TransColor, EEAA99 254
             Gui.Add("ItemGridMapTier", "Progress", "x0 y0 w" mapTier_pointW " h" this.gridThicc " Background" squareColor) ; ^
             Gui.Add("ItemGridMapTier", "Progress", "x" mapTier_pointW - this.gridThicc " y0 w" this.gridThicc " h" mapTier_pointH " Background" squareColor) ; > 
-            Gui.Add("ItemGridMapTier", "Progress", "x0 y" mapTier_pointH - this.gridThicc " w" mapTier_pointW " h" this.gridThicc " Background" squareColor) ; v 
+            Gui.Add("ItemGridMapTier", "Progress", "x0 y" mapTier_pointH - (this.gridThicc*3) " w" mapTier_pointW " h" this.gridThicc*3 " Background" squareColor) ; v 
             Gui.Add("ItemGridMapTier", "Progress", "x0 y0 w" this.gridThicc " h" mapTier_pointH " Background" squareColor) ; <
             /* #280 - Disabled until proper solution using stash api is worked on
             ; Map map case
@@ -317,7 +317,7 @@ class GUI_ItemGrid {
                 WinSet, TransColor, EEAA99 254
                 Gui.Add("ItemGridMapMap", "Progress", "x0 y0 w" mapMap_pointW " h" this.gridThicc " Background" squareColor) ; ^
                 Gui.Add("ItemGridMapMap", "Progress", "x" mapMap_pointW - this.gridThicc " y0 w" this.gridThicc " h" mapMap_pointH " Background" squareColor) ; > 
-                Gui.Add("ItemGridMapMap", "Progress", "x0 y" mapMap_pointH - this.gridThicc " w" mapMap_pointW " h" this.gridThicc " Background" squareColor) ; v 
+                Gui.Add("ItemGridMapMap", "Progress", "x0 y" mapMap_pointH - (this.gridThicc*3) " w" mapMap_pointW " h" this.gridThicc*3 " Background" squareColor) ; v 
                 Gui.Add("ItemGridMapMap", "Progress", "x0 y0 w" this.gridThicc " h" mapMap_pointH " Background" squareColor) ; <
 
                 showMapMapGrid := True
@@ -337,7 +337,7 @@ class GUI_ItemGrid {
                 WinSet, TransColor, EEAA99 254
                 Gui.Add("ItemGridMapArrow", "Progress", "x0 y0 w" mapArrow_pointW " h" this.gridThicc " Background" squareColor) ; ^
                 Gui.Add("ItemGridMapArrow", "Progress", "x" mapArrow_pointW - this.gridThicc " y0 w" this.gridThicc " h" mapArrow_pointH " Background" squareColor) ; > 
-                Gui.Add("ItemGridMapArrow", "Progress", "x0 y" mapArrow_pointH - this.gridThicc " w" mapArrow_pointW " h" this.gridThicc " Background" squareColor) ; v 
+                Gui.Add("ItemGridMapArrow", "Progress", "x0 y" mapArrow_pointH - (this.gridThicc*3) " w" mapArrow_pointW " h" this.gridThicc*3 " Background" squareColor) ; v 
                 Gui.Add("ItemGridMapArrow", "Progress", "x0 y0 w" this.gridThicc " h" mapArrow_pointH " Background" squareColor) ; <
 
                 showMapArrowGrid := True
